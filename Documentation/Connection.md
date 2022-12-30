@@ -10,5 +10,5 @@ Check connection/database from Powershell
 `dbinfo -c "Host=192.168.0.38;UserID=****;Password=****"`  
 Replace **** with username and password
 
-## Node 
+## Node.js 
 [For connecting with Node.js see this info from microsoft:](https://learn.microsoft.com/en-us/sql/connect/node-js/step-3-proof-of-concept-connecting-to-sql-using-node-js?view=sql-server-ver16)
