@@ -1,6 +1,6 @@
 # Connection
 ## Windows
-A connection to the Catapult Database can be made SQL Anywhere  
+A connection to the Catapult Database can be made with SQL Anywhere  
   
 Run (Windows+R)
   * dbisql.exe
