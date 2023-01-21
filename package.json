@@ -1,0 +1,22 @@
+{
+  "name": "dalchemist",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
+    "inventoryItemsInPricebook": "node Generators/inventoryItemsInPricebook.js > Data/Outputs/inventoryItemsInPricebook.txt",
+    "lowerCostsInventoryPricebookComparison": "node Generators/lowerCostsInventoryPricebookComparison.js > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
+    "checkPriceChangeWorksheetsAndInventory": "node Generators/checkPriceChangeWorksheetsAndInventory.js > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
+    "checkPriceChangeWorksheetsAndInventory-AllOutput": "node Generators/checkPriceChangeWorksheetsAndInventory.js --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
+    "start": "node main.js"
+  },
+  "author": "Blake Glanville",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+   
+  }
+}
+
+
