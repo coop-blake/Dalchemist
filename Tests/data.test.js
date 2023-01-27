@@ -1,12 +1,18 @@
+import {describe, expect, test} from '@jest/globals';
 const fs = require('fs')
 
 
-test("Data Directory Present and Complete", () =>{
-    expect(fs.existsSync(`./Data/`)).toBe(true)
-   
-   
-})
+describe('Data Directory Present and Complete', () => {
+    test("Data Directory Present ", () =>{
+        expect(fs.existsSync(`./Data/`)).toBe(true)
+    })
 
-test("Inventory File Present", () =>{
-    expect(fs.existsSync(`./Data/Inputs/Inventory.txt`)).toBe(true)
+    test("Price Change Worksheet Folder Present", () =>{
+        expect(fs.existsSync(`./Data/Inputs/Price Change Worksheets/`)).toBe(true)
+    })
+    
+    test("Inventory File Present", () =>{
+        expect(fs.existsSync(`./Data/Inputs/Inventory.txt`)).toBe(true)
+    })
+
 })
