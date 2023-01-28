@@ -12,9 +12,6 @@ InventoryItemsInPricebookWithUNFIDefaultSupplier
 sameCost 
 lowerCost 
 higherCost 
-     constructor(){
-    
-     }
 
      async initialize(){
        

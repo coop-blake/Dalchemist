@@ -83,10 +83,11 @@ class PriceChangeWorksheets {
                 break;
             default:
                 //Past header lines, proccess values
-                let values = line.split("\t")
-                let entry = this.entryFromValueArray(values)
-                this.processedValues[entry.scanCode] = entry
-              
+                {
+                    let values = line.split("\t")
+                    let entry = this.entryFromValueArray(values)
+                    this.processedValues[entry.scanCode] = entry
+                }
         }
        
   

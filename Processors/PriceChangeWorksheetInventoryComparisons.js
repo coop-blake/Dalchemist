@@ -16,9 +16,7 @@ class PriceChangeWorksheetInventoryComparison {
     itemsWithHigherSalePrices = {}
     itemsWithSameSalePrices = {}
     
-     constructor(){
-    
-     }
+
 
      async initialize(){
        //load data into importers

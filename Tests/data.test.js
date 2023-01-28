@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-const fs = require('fs')
+import * as fs from 'fs'
 
 
 describe('Data Directory Present and Complete', () => {

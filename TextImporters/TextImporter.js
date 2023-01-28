@@ -13,10 +13,7 @@ class TextImporter {
    processedValues = null
    invalidLines = []
    invalidEntries = []
-     constructor(){
-   
-     }
-
+    
      async start(){
          try{
             this.fileStats = await  fs.stat(this.textFilePath)
