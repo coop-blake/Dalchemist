@@ -1,5 +1,5 @@
-import InventoryTextImporter from '../TextImporters/Inventory.js' 
-import PricebookTextImporter from '../TextImporters/Pricebook.js'
+import InventoryTextImporter from '../src/TextImporters/Inventory.js' 
+import PricebookTextImporter from '../src/TextImporters/Pricebook.js'
 
 
 class PriceChecker {
