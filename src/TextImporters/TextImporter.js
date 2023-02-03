@@ -1,5 +1,4 @@
 //Base TextImporter Class
-import { truncate } from "node:fs";
 import * as fs from "node:fs/promises";
 
 class TextImporter {
@@ -32,7 +31,7 @@ class TextImporter {
   getEntryFromScanCode(scanCode) {
     return this.processedValues[scanCode];
   }
-  processLine(line) {
+  processLine() {
     console.log("processLine should be provide by subclass");
   }
   onFinished() {

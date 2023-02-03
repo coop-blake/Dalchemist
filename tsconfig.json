@@ -1,25 +1,21 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"outDir": "./out",
-		"rootDir": "./",
-		"strict": true,
-		"allowSyntheticDefaultImports": true
-	},
-	"include": [
-		"./src/**/*.ts",
-		"./Tests/**/*.ts",
-		"./**/*.ts"
-	],
-	"typedocOptions":{
-		"entryPoints": ["./src"],
-		"entryPointStrategy": "expand",
-		"externalPattern": "Tests/**/*/*.ts",
-		"exclude": "**/*+(index|.test).ts",
-		"excludeExternals": true,
-		"out": "docs",
-		"plugin": "none"
-	}
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./out",
+    "rootDir": "./",
+    "strict": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./src/**/*.ts", "./Tests/**/*.ts", "./**/*.ts"],
+  "typedocOptions": {
+    "entryPoints": ["./src"],
+    "entryPointStrategy": "expand",
+    "externalPattern": "Tests/**/*/*.ts",
+    "exclude": "**/*+(index|.test).ts",
+    "excludeExternals": true,
+    "out": "docs",
+    "plugin": "none"
+  }
 }

@@ -2,12 +2,8 @@ import { describe, expect, test } from "@jest/globals";
 
 import TextImporter from "../src/TextImporters/TextImporter.js";
 
-let textImporter = new TextImporter();
-
 const DupCheckImport = new TextImporter();
 
-let entryDups = {};
-let dupEntries = {};
 DupCheckImport.processedValues = [];
 
 DupCheckImport.textFilePath = "./Data/Inputs/CheckForDups.txt";
