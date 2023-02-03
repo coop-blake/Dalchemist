@@ -1,31 +1,25 @@
 {
 	"compilerOptions": {
-		"declaration": false,
-		"experimentalDecorators": true,
-		"jsx": "react",
-		"jsxFactory": "tsx",
-		"lib": [
-			"dom",
-			"es5",
-			"es2015.promise",
-			"es2015.iterable",
-			"es2015.symbol",
-			"es2015.symbol.wellknown"
-		],
-		"module": "umd",
+		"target": "ES2022",
+		"module": "ESNext",
 		"moduleResolution": "node",
-		"noUnusedLocals": true,
-		"outDir": "_build/",
-		"removeComments": false,
-		"importHelpers": true,
-		"downlevelIteration": true,
-		"sourceMap": true,
+		"outDir": "./out",
+		"rootDir": "./",
 		"strict": true,
-		"target": "es5",
-		"types": [ "intern" ]
+		"allowSyntheticDefaultImports": true
 	},
 	"include": [
 		"./src/**/*.ts",
-		"./Tests/**/*.ts"
-	]
+		"./Tests/**/*.ts",
+		"./**/*.ts"
+	],
+	"typedocOptions":{
+		"entryPoints": ["./src"],
+		"entryPointStrategy": "expand",
+		"externalPattern": "Tests/**/*/*.ts",
+		"exclude": "**/*+(index|.test).ts",
+		"excludeExternals": true,
+		"out": "docs",
+		"plugin": "none"
+	}
 }
