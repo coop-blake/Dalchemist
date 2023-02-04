@@ -5,7 +5,7 @@
 //import PriceChecker processor
 import PriceChecker from "../../Processors/PriceChecker.js";
 //Create new PriceChecker
-let priceChecker = new PriceChecker();
+const priceChecker = new PriceChecker();
 //Initialize to load input files
 await priceChecker.initialize();
 //Get and print output to console

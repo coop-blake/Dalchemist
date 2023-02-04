@@ -1,0 +1,133 @@
+
+
+.backgroundImage
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+
+	width: 1.10in;
+	height: 1.01in;
+
+	opacity: .4;
+}
+.displayStrip{
+	position: relative;
+
+
+
+	border: none;
+
+	height: 1.12in;
+
+	width: 16in;
+
+	
+
+	
+
+	padding-bottom: 5px;
+
+	padding-top: 5px;
+
+
+	border-bottom: dotted rgb(222,222,222) 1px;
+
+	border-left: dotted rgb(222,222,222) 1px; 
+
+	border-right: dotted rgb(222,222,222) 1px;
+
+	
+
+	text-align: center;
+}
+.productInfo{
+
+	position: relative;
+	display: inline-block;
+	border: solid grey 4px;
+
+	width: 1.10in;
+	height: 1.01in;
+
+}
+.organicProductBorder
+{
+	position: relative;
+	display: inline-block;
+	
+	width: 1.10in;
+	height: 1.01in;
+	
+	border-radius: 15px;
+	border: solid rgba(14, 89, 39, .8) 4px;
+	background: rgba(14, 89, 39, .2)
+	
+}
+.regularProductBorder
+{
+	position: relative;
+	display: inline-block;
+	
+	width: 1.10in;
+	height: 1.01in;
+	border-radius: 15px;
+	border: solid rgba(237, 150, 11, .8) 4px;
+	background: rgba(237, 150, 11, .2);
+	
+}
+.mixProductBorder
+{
+	position: relative;
+	display: inline-block;
+	
+	width: 1.10in;
+	height: 1.01in;
+	border-radius: 15px;
+	border: solid rgba(110, 69, 173, .8) 4px;
+
+	background: rgba(110, 69, 173, .2) ;
+	
+}
+.productInfoTitleVAlign
+{
+	display:inline-block;
+	vertical-align: middle;
+padding:0px;
+margin:auto;
+position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+.productInfoTitle{
+	position: relative;
+	width: 1.10in;
+	height: .5in;
+	padding-top: 3px;
+	text-align: center;
+	font-weight: bold;
+	vertical-align: middle;
+
+}
+.productInfoSize{
+	position: relative;
+	width: 1.10in;
+	height: .10in;
+	padding-top: 10px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.productInfoPrice{
+	position: relative;
+	width: 1.10in;
+	height: .37in;
+	padding-top: 7px;
+	text-align: center;
+
+	font-weight: bold;
+
+
+}

@@ -9,7 +9,8 @@
       "request": "launch",
       "name": "Launch Duplicate Entries Program",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\Generators\\DuplicateEntriesCheck.js"
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "program": "${workspaceFolder}\\src\\Generators\\DuplicateEntriesCheck.ts"
     },
     {
       "type": "node",
@@ -24,6 +25,13 @@
       "name": "Launch lowerCostsInventoryPricebookComparison Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\src\\Generators\\lowerCostsInventoryPricebookComparison.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Create PDF From HTML",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}\\src\\ac\\createPDF.js"
     },
     {
       "type": "node",

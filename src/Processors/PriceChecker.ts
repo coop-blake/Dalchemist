@@ -15,14 +15,14 @@ class PriceChecker {
     await this.InventoryImport.start();
     await this.PricebookImport.start();
 
-    let InventoryImport = this.InventoryImport;
-    let PricebookImport = this.PricebookImport;
+    const InventoryImport = this.InventoryImport;
+    const PricebookImport = this.PricebookImport;
 
-    let InventoryItemsInPricebook = Object.entries(
+    const InventoryItemsInPricebook = Object.entries(
       InventoryImport.processedValues
     ).filter(function (InventoryEntry) {
-      let scanCode = InventoryEntry[1].scanCode;
-      let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+      const scanCode = InventoryEntry[1].scanCode;
+      const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
       return PricebookEntry ? true : false;
     });
@@ -42,8 +42,8 @@ class PriceChecker {
       this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
-        let scanCode = entry.scanCode;
-        let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const scanCode = entry.scanCode;
+        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
         return parseFloat(entry.lastCost) ==
           parseFloat(PricebookEntry.eachPrice)
@@ -55,8 +55,8 @@ class PriceChecker {
       this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
-        let scanCode = entry.scanCode;
-        let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const scanCode = entry.scanCode;
+        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
         return parseFloat(entry.lastCost) < parseFloat(PricebookEntry.eachPrice)
           ? true
@@ -67,8 +67,8 @@ class PriceChecker {
       this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
-        let scanCode = entry.scanCode;
-        let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const scanCode = entry.scanCode;
+        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
         return parseFloat(entry.lastCost) > parseFloat(PricebookEntry.eachPrice)
           ? true
@@ -79,15 +79,15 @@ class PriceChecker {
   getLowerCostOutput() {
     let outputText =
       "Scan Code\tLast Cost\tUNFI Cost \tIdeal Margin\tProposed Price \tBase Price\tDifference\tItem\t\r\n";
-    let lowerCostItems = this.lowerCost;
-    let PricebookImport = this.PricebookImport;
+    const lowerCostItems = this.lowerCost;
+    const PricebookImport = this.PricebookImport;
 
     lowerCostItems.forEach(function (entry) {
-      let scanCode = entry.scanCode;
+      const scanCode = entry.scanCode;
 
-      let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+      const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-      let proposedPriceFromUNFI =
+      const proposedPriceFromUNFI =
         parseFloat(PricebookEntry.eachPrice) / (1 - entry.idealMargin * 0.01);
 
       outputText =

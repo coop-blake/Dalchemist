@@ -9,9 +9,9 @@
 //      --hide-items-with-inconsitent-worksheets
 
 //import the data processor for price change worksheet comparisons
-import PriceChangeWorksheetInventoryComparisons from ".Processors/PriceChangeWorksheetInventoryComparisons.js";
+import PriceChangeWorksheetInventoryComparisons from "../Processors/PriceChangeWorksheetInventoryComparisons";
 //create a new price change worksheet processor
-let priceChangeWorksheetInventoryComparisons =
+const priceChangeWorksheetInventoryComparisons =
   new PriceChangeWorksheetInventoryComparisons();
 //initialize processor to load price change worksheets in directory
 await priceChangeWorksheetInventoryComparisons.initialize();

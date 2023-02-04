@@ -75,7 +75,7 @@ class PriceChangeWorksheetInventoryComparison {
             entry.scanCode.toString();
 
           //map worksheet entries and check prices on all worksheets match
-          let worksheetConsitencyCheck =
+          const worksheetConsitencyCheck =
             this.areMultipleWorksheetPricesConsitent(
               Object.entries(item.worksheetEntries).map((worksheetEntry) => {
                 return worksheetEntry[1];
@@ -116,7 +116,7 @@ class PriceChangeWorksheetInventoryComparison {
       returnText += `     ${this.items[item].inventoryEntry.basePrice} Base Price \n`;
       Object.entries(this.items[item].worksheetEntries).forEach(
         (worksheetEntryObject) => {
-          let worksheetEntry = worksheetEntryObject[1];
+          const worksheetEntry = worksheetEntryObject[1];
           returnText += `     ${worksheetEntry.modifiedPrice} ${worksheetEntry.worksheetName} \n`;
         }
       );

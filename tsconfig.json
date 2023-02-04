@@ -8,7 +8,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts", "./Tests/**/*.ts", "./**/*.ts"],
+  "include": ["./src/**/*.ts", "./Tests/**/*.ts"],
   "typedocOptions": {
     "entryPoints": ["./src"],
     "entryPointStrategy": "expand",

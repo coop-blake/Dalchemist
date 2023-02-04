@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="resources/index.css">
+        <script src="jslib/vue.js"></script>
+        <script src="jslib/jquery.min.js"> </script>
+    </head>
+    <body>        
+        <div id="tagStrips">
+           <div class="displayStrip"
+              v-for="(tags, index) in tagStrips['strips']"
+            >
+                <div class="productInfo"
+                v-bind:class="tags.type + 'ProductBorder'"
+                  v-for="(item, index) in tags['tags']"
+                >
+                    <img src="resources/AC-Logo-Positive-Change-Color.png" class="backgroundImage">
+                    </img>
+                    <div class="productInfoTitle">
+                        <div class="productInfoTitleVAlign">
+                         {{item[0]}}
+                        </div>
+                    </div>
+                    <div class="productInfoSize">
+                        {{item[1]}}
+                    </div>
+                    <div class="productInfoPrice">
+                        {{item[2]}}
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <script src="js/getTags.js"></script>
+    </body>
+</html>

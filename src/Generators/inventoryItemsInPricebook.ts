@@ -14,10 +14,12 @@ await InventoryImport.start();
 await PricebookImport.start();
 
 //Filter Inventory Entries for Items in included in the Pricebook
-let InventoryItemsInPricebook = Object.entries(InventoryImport.processedValues)
+const InventoryItemsInPricebook = Object.entries(
+  InventoryImport.processedValues
+)
   .filter(function (InventoryEntry) {
-    let scanCode = InventoryEntry[1].scanCode;
-    let PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+    const scanCode = InventoryEntry[1]?.scanCode || "";
+    const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
     return PricebookEntry ? true : false;
   }) //and map to an array of entries

@@ -7,23 +7,23 @@
 //and an argument for checking a file by path
 
 //Import the Inventory And Pricebook Importers
-import TextImporter from "../TextImporters/TextImporter.js";
+import TextImporter from "../TextImporters/TextImporter";
 
 //Create new Import object
 
 const DupCheckImport = new TextImporter();
 
-let entryDups = {};
-let dupEntries = {};
+const entryDups = {};
+const dupEntries = {};
 DupCheckImport.processedValues = {};
 
 DupCheckImport.textFilePath = "./Data/Inputs/CheckForDups.txt";
 DupCheckImport.processLine = function (line) {
-  let values = line.split("\t");
+  const values = line.split("\t");
   //Split lines into an array of values
 
-  let entry = this.entryFromValueArray(values);
-  let scanCode = entry.scanCode;
+  const entry = this.entryFromValueArray(values);
+  const scanCode = entry.scanCode;
   if (scanCode && !this.processedValues[scanCode]) {
     //There is a scancode and we haven't processed it yet
     this.processedValues[scanCode] = entry;
@@ -32,7 +32,7 @@ DupCheckImport.processLine = function (line) {
   } else {
     //Already Proccessed this scanCode
     //if there is no value stored, set to 1
-    let entrycount = entryDups[scanCode] ? entryDups[scanCode] : 1;
+    const entrycount = entryDups[scanCode] ? entryDups[scanCode] : 1;
     //Add 1 and store
     entryDups[scanCode] = entrycount + 1;
 
@@ -43,7 +43,7 @@ DupCheckImport.processLine = function (line) {
 DupCheckImport.entryFromValueArray = function (valueArray) {
   //Based off of expected Values as outlined in
   // Data/Inputs/README.md
-  let entry = {};
+  const entry = {};
 
   entry.scanCode = valueArray[0].trim();
   entry.price = valueArray[1].trim();
