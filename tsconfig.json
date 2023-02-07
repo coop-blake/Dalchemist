@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "ES2022",
     "moduleResolution": "node",
     "outDir": "./out",
     "rootDir": "./",
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts", "./Tests/**/*.ts"],
+  "include": ["./src/**/*.ts", "./Tests/**/*.ts", "./**/*.ts"],
   "typedocOptions": {
     "entryPoints": ["./src"],
     "entryPointStrategy": "expand",

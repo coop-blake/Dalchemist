@@ -3,7 +3,7 @@
 //      A tab seperated text file for importing to excel
 
 //import PriceChecker processor
-import PriceChecker from "../../Processors/PriceChecker.js";
+import PriceChecker from "../Processors/PriceChecker";
 //Create new PriceChecker
 const priceChecker = new PriceChecker();
 //Initialize to load input files

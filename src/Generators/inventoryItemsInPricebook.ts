@@ -2,8 +2,8 @@
 //found in both the Inventory and Pricebook files
 
 //Import the Inventory And Pricebook Importers
-import InventoryTextImporter from "../TextImporters/Inventory.js";
-import PricebookTextImporter from "../TextImporters/Pricebook.js";
+import InventoryTextImporter from "../TextImporters/Inventory";
+import PricebookTextImporter from "../TextImporters/Pricebook";
 
 //Create new Import objects
 const InventoryImport = new InventoryTextImporter();

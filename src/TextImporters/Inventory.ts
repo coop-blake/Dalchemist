@@ -74,7 +74,7 @@ class InventoryTextImporter extends TextImporter {
 
 export default InventoryTextImporter;
 
-type InventoryEntry = {
+export type InventoryEntry = {
   scanCode: string;
   brand: string;
   name: string;

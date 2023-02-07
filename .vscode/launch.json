@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Duplicate Entries Program",
       "skipFiles": ["<node_internals>/**"],
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "runtimeExecutable": "${workspaceFolder}\\node_modules\\.bin\\babel-node",
       "program": "${workspaceFolder}\\src\\Generators\\DuplicateEntriesCheck.ts"
     },
     {
@@ -17,14 +17,16 @@
       "request": "launch",
       "name": "Launch checkPriceChangeWorksheetsAndInventory Program",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\Generators\\checkPriceChangeWorksheetsAndInventory.js"
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "program": "${workspaceFolder}\\src\\Generators\\checkPriceChangeWorksheetsAndInventory.ts"
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Launch lowerCostsInventoryPricebookComparison Program",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\Generators\\lowerCostsInventoryPricebookComparison.js"
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "program": "${workspaceFolder}\\src\\Generators\\lowerCostsInventoryPricebookComparison.ts"
     },
     {
       "type": "node",

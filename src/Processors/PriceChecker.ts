@@ -1,15 +1,15 @@
-import InventoryTextImporter from "../src/TextImporters/Inventory.js";
-import PricebookTextImporter from "../src/TextImporters/Pricebook.js";
+import InventoryTextImporter, {InventoryEntry} from "../TextImporters/Inventory";
+import PricebookTextImporter from "../TextImporters/Pricebook";
 
 class PriceChecker {
   InventoryImport = new InventoryTextImporter();
   PricebookImport = new PricebookTextImporter();
 
   InventoryItemsInPricebook = [];
-  InventoryItemsInPricebookWithUNFIDefaultSupplier;
-  sameCost;
-  lowerCost;
-  higherCost;
+  InventoryItemsInPricebookWithUNFIDefaultSupplier = [];
+  sameCost = [];
+  lowerCost = [];
+  higherCost = [];
 
   async initialize() {
     await this.InventoryImport.start();
@@ -19,7 +19,7 @@ class PriceChecker {
     const PricebookImport = this.PricebookImport;
 
     const InventoryItemsInPricebook = Object.entries(
-      InventoryImport.processedValues
+      InventoryImport.entries
     ).filter(function (InventoryEntry) {
       const scanCode = InventoryEntry[1].scanCode;
       const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
@@ -28,8 +28,8 @@ class PriceChecker {
     });
 
     //filter Items in both files
-    this.InventoryItemsInPricebook = InventoryItemsInPricebook.map(function (
-      entry
+    this.InventoryItemsInPricebook : Array<InventoryEntry> = InventoryItemsInPricebook.map(function (
+      entry 
     ) {
       return entry[1];
     });
