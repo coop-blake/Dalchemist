@@ -6,9 +6,9 @@
   "scripts": {
     "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
     "inventoryItemsInPricebook": "npx ts-node src/Generators/inventoryItemsInPricebook.ts > Data/Outputs/inventoryItemsInPricebook.txt",
-    "lowerCostsInventoryPricebookComparison": "node src/Generators/lowerCostsInventoryPricebookComparison.js > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
-    "checkPriceChangeWorksheetsAndInventory": "node src/Generators/checkPriceChangeWorksheetsAndInventory.js > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
-    "checkPriceChangeWorksheetsAndInventory-AllOutput": "node src/Generators/checkPriceChangeWorksheetsAndInventory.js --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
+    "lowerCostsInventoryPricebookComparison": "npx ts-node src/Generators/lowerCostsInventoryPricebookComparison.ts > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
+    "checkPriceChangeWorksheetsAndInventory": "npx ts-node src/Generators/checkPriceChangeWorksheetsAndInventory.ts > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
+    "checkPriceChangeWorksheetsAndInventory-AllOutput": "npx ts-node src/Generators/checkPriceChangeWorksheetsAndInventory.ts --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
     "start": "nodemon --exec babel-node main.ts",
     "test": "jest",
     "lint": "npx eslint .",

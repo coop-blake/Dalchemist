@@ -2,7 +2,7 @@
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 
-export default class PriceChangeWorksheetImporter extends TextImporter {
+class PriceChangeWorksheetImporter extends TextImporter {
   //Set Path Of Pricebook File
   textFilePath = "";
   //Create empty Object for storing processed Values
@@ -89,3 +89,5 @@ export type PriceChangeWorksheetEntry = {
   receiptAlias: string;
   modifiedPrice: string;
 };
+
+export default PriceChangeWorksheetImporter;

@@ -46,7 +46,7 @@ export default class PriceChangeWorksheets {
     this.priceChangeWorksheets.push(newWorksheetImporter);
   }
 
-  forEachWorksheet(forEachFunction: (worksheet: TextImporter) => void) {
+  forEachWorksheet(forEachFunction: (worksheet: PriceChangeWorksheetImporter) => void) {
     //convienince function for executing a function on each worksheet
     this.priceChangeWorksheets.forEach((priceChangeWorksheet) => {
       forEachFunction(priceChangeWorksheet);

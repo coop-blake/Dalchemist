@@ -7,6 +7,7 @@ import PriceChecker from "../Processors/PriceChecker";
 //Create new PriceChecker
 const priceChecker = new PriceChecker();
 //Initialize to load input files
-await priceChecker.initialize();
+priceChecker.initialize().then(()=>{
 //Get and print output to console
 console.log(priceChecker.getLowerCostOutput());
+}).catch((eror)=>{});

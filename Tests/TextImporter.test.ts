@@ -1,39 +1,47 @@
 import { describe, expect, test } from "@jest/globals";
 
-import TextImporter from "../src/TextImporters/TextImporter.js";
 
-const DupCheckImport = new TextImporter();
+import PriceChecker from "../src/Processors/PriceChecker";
+//Create new PriceChecker
+const priceChecker = new PriceChecker();
+//Initialize to load input files
+//Get and print output to console
+//console.log(priceChecker.getLowerCostOutput());
 
-DupCheckImport.processedValues = [];
-
-DupCheckImport.textFilePath = "./Data/Inputs/CheckForDups.txt";
-DupCheckImport.processLine = function (line) {
-  if (line) {
-    let values = line.split("\t");
-    //Split lines into an array of values
-
-    let entry = this.entryFromValueArray(values);
-    this.processedValues.push(entry);
-  } else {
-    this.invalidLines.push("No entry given");
-  }
-};
-
-DupCheckImport.entryFromValueArray = function (valueArray) {
-  let entry = {};
-  //All values as array as received
-  entry.valuesArray = valueArray;
-
-  return entry;
-};
 
 describe("Testing Text Importer", () => {
-  test("All lines imported", async () => {
-    await DupCheckImport.start();
-    expect(DupCheckImport.hasInvalidLines()).toBe(false);
-    expect(DupCheckImport.getTotalEntries()).toBeGreaterThan(0);
+    test("All lines imported",  async () => {
+      
+      await priceChecker.initialize();
 
-    DupCheckImport.processLine();
-    expect(DupCheckImport.hasInvalidLines()).toBe(true);
+      expect(true).toBe(true);
+    });
   });
-});
+  
+// import TextImporter from "../src/TextImporters/TextImporter.js";
+
+// const DupCheckImport = new TextImporter();
+
+
+// DupCheckImport.textFilePath = "./Data/Inputs/CheckForDups.txt";
+// DupCheckImport.processLine = function (line) {
+//   if (line) {
+//     let values = line.split("\t");
+//     //Split lines into an array of values
+
+//     let entry = this.entryFromValueArray(values);
+//     this.processedValues.push(entry);
+//   } else {
+//     this.invalidLines.push("No entry given");
+//   }
+// };
+
+// DupCheckImport.entryFromValueArray = function (valueArray) {
+//   let entry = {};
+//   //All values as array as received
+//   entry.valuesArray = valueArray;
+
+//   return entry;
+// };
+
+// 

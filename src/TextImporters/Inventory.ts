@@ -11,6 +11,9 @@ class InventoryTextImporter extends TextImporter {
     //call TextImporter Parent Constructor
     super();
   }
+  getEntryFromScanCode(scanCode: string) {
+    return this.entries.get(scanCode);
+  }
 
   processLine(line: string): void {
     const values = line.split("\t");
