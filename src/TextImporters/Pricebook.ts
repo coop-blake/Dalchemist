@@ -1,6 +1,6 @@
 //TextImporter for UNFI Pricebook file
 //Import TextImporter Class
-import TextImporter from "./TextImporter.js";
+import TextImporter from "./TextImporter";
 
 class PricebookTextImporter extends TextImporter {
   //Set Path Of Pricebook File

@@ -14,7 +14,11 @@ import PriceChangeWorksheetInventoryComparisons from "../Processors/PriceChangeW
 const priceChangeWorksheetInventoryComparisons =
   new PriceChangeWorksheetInventoryComparisons();
 //initialize processor to load price change worksheets in directory
-await priceChangeWorksheetInventoryComparisons.initialize();
-//get the text ouput for the loaded files
-//The get output looks for the accepted arguments and adjust output accordingly
-console.log(priceChangeWorksheetInventoryComparisons.getOutput());
+priceChangeWorksheetInventoryComparisons
+  .initialize()
+  .then(() => {
+    //get the text ouput for the loaded files
+    //The get output looks for the accepted arguments and adjust output accordingly
+    console.log(priceChangeWorksheetInventoryComparisons.getOutput());
+  })
+  .catch((error) => {});

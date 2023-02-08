@@ -1,15 +1,20 @@
 import process from "node:process";
 
-import InventoryTextImporter from "../TextImporters/Inventory.js";
-import PriceChangeWorksheetsImporter from "../TextImporters/PriceChangeWorksheets.js";
+import {
+  PriceChangeWorksheetImporter,
+  PriceChangeWorksheetEntry,
+} from "../TextImporters/PriceChangeWorksheet";
+import InventoryTextImporter from "../TextImporters/Inventory";
+import PriceChangeWorksheetsImporter from "../TextImporters/PriceChangeWorksheets";
 
 class PriceChangeWorksheetInventoryComparison {
   InventoryImport = new InventoryTextImporter();
   PriceChangeWorksheetsImporter = new PriceChangeWorksheetsImporter();
 
-  worksheetsByName = {};
+  worksheetsByName = new Map<string, PriceChangeWorksheetImporter>();
 
-  items = {};
+  items = new Map<string, PriceChangeWorksheetEntry>();
+
   itemsOnMultipleSheets = {};
   itemsWithDifferentSalePrices = {};
   itemsWithHigherSalePrices = {};
@@ -22,15 +27,15 @@ class PriceChangeWorksheetInventoryComparison {
 
     //cycle through each price change worksheet
     this.PriceChangeWorksheetsImporter.forEachWorksheet((worksheet) => {
-      this.worksheetsByName[worksheet.textFilePath] = worksheet;
+      this.worksheetsByName.set(worksheet.textFilePath, worksheet);
 
       worksheet.forEachEntry((entry) => {
         //   console.log(entry)
         let item = {};
 
-        if (this.items[entry.scanCode.toString()]) {
+        if (this.items.get(entry.scanCode.toString())) {
           //already processed this item from other worksheet
-          item = this.items[entry.scanCode.toString()];
+          item = this.items.get(entry.scanCode.toString());
         } else {
           //first time we have proccessed this item, create empty worksheetEntries
           item.worksheetEntries = {};

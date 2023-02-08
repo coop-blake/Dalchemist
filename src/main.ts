@@ -13,7 +13,7 @@ console.log(
 
 import express from "express";
 
-import PriceChangeWorksheetInventoryComparisons from "./Processors/PriceChangeWorksheetInventoryComparisons.js";
+import PriceChangeWorksheetInventoryComparisons from "./Processors/PriceChangeWorksheetInventoryComparisons";
 
 const dalchemist = express();
 

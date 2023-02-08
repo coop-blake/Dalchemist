@@ -1,15 +1,17 @@
-import InventoryTextImporter, {InventoryEntry} from "../TextImporters/Inventory";
+import InventoryTextImporter, {
+  InventoryEntry,
+} from "../TextImporters/Inventory";
 import PricebookTextImporter from "../TextImporters/Pricebook";
 
 class PriceChecker {
   InventoryImport = new InventoryTextImporter();
   PricebookImport = new PricebookTextImporter();
 
-  InventoryItemsInPricebook = [];
-  InventoryItemsInPricebookWithUNFIDefaultSupplier = [];
-  sameCost = [];
-  lowerCost = [];
-  higherCost = [];
+  InventoryItemsInPricebook = Array<InventoryEntry>();
+  InventoryItemsInPricebookWithUNFIDefaultSupplier = Array<InventoryEntry>();
+  sameCost = Array<InventoryEntry>();
+  lowerCost = Array<InventoryEntry>();
+  higherCost = Array<InventoryEntry>();
 
   async initialize() {
     await this.InventoryImport.start();
@@ -28,11 +30,12 @@ class PriceChecker {
     });
 
     //filter Items in both files
-    this.InventoryItemsInPricebook : Array<InventoryEntry> = InventoryItemsInPricebook.map(function (
-      entry 
+    this.InventoryItemsInPricebook = InventoryItemsInPricebook.map(function (
+      entry
     ) {
       return entry[1];
     });
+
     this.InventoryItemsInPricebookWithUNFIDefaultSupplier =
       this.InventoryItemsInPricebook.filter(function (entry) {
         return entry.defaultSupplier == "UNFI" ? true : false;
@@ -45,8 +48,8 @@ class PriceChecker {
         const scanCode = entry.scanCode;
         const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-        return parseFloat(entry.lastCost) ==
-          parseFloat(PricebookEntry.eachPrice)
+        return PricebookEntry !== undefined &&
+          parseFloat(entry.lastCost) == parseFloat(PricebookEntry.eachPrice)
           ? true
           : false;
       });
@@ -58,7 +61,8 @@ class PriceChecker {
         const scanCode = entry.scanCode;
         const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-        return parseFloat(entry.lastCost) < parseFloat(PricebookEntry.eachPrice)
+        return PricebookEntry !== undefined &&
+          parseFloat(entry.lastCost) < parseFloat(PricebookEntry.eachPrice)
           ? true
           : false;
       });
@@ -70,7 +74,8 @@ class PriceChecker {
         const scanCode = entry.scanCode;
         const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-        return parseFloat(entry.lastCost) > parseFloat(PricebookEntry.eachPrice)
+        return PricebookEntry !== undefined &&
+          parseFloat(entry.lastCost) > parseFloat(PricebookEntry.eachPrice)
           ? true
           : false;
       });
@@ -87,18 +92,23 @@ class PriceChecker {
 
       const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-      const proposedPriceFromUNFI =
-        parseFloat(PricebookEntry.eachPrice) / (1 - entry.idealMargin * 0.01);
+      const proposedPriceFromUNFI: number =
+        PricebookEntry !== undefined && entry !== undefined
+          ? parseFloat(PricebookEntry.eachPrice) /
+            (1 - parseFloat(entry.idealMargin) * 0.01)
+          : 0;
 
       outputText =
-        outputText +
-        `${entry.scanCode}\t${parseFloat(entry.lastCost)}\t${parseFloat(
-          PricebookEntry.eachPrice
-        )}\t${entry.idealMargin}\t${parseFloat(proposedPriceFromUNFI).toFixed(
-          2
-        )}\t${entry.basePrice}\t${parseFloat(
-          entry.basePrice - proposedPriceFromUNFI
-        ).toFixed(2)}\t${entry.brand + " " + entry.name}\t\r\n`;
+        PricebookEntry !== undefined && entry !== undefined
+          ? outputText +
+            `${entry.scanCode}\t${parseFloat(entry.lastCost)}\t${parseFloat(
+              PricebookEntry.eachPrice
+            )}\t${entry.idealMargin}\t${proposedPriceFromUNFI.toFixed(2)}\t${
+              entry.basePrice
+            }\t${(parseFloat(entry.basePrice) - proposedPriceFromUNFI).toFixed(
+              2
+            )}\t${entry.brand + " " + entry.name}\t\r\n`
+          : outputText;
     });
     return outputText;
   }

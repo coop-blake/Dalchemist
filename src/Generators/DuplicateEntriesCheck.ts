@@ -11,60 +11,84 @@ import TextImporter from "../TextImporters/TextImporter";
 
 //Create new Import object
 
-const DupCheckImport = new TextImporter();
+class InventoryTextImporter extends TextImporter {
+  //Set Path Of Inventory File
+  textFilePath = "./Data/Inputs/CheckForDups.txt";
+  invalidEntries = new Array<DupCheckEntry>();
+  entries = new Map<string, DupCheckEntry>();
 
-const entryDups = {};
-const dupEntries = {};
-DupCheckImport.processedValues = {};
+  dupEntries = new Map<string, Array<DupCheckEntry>>();
 
-DupCheckImport.textFilePath = "./Data/Inputs/CheckForDups.txt";
-DupCheckImport.processLine = function (line) {
-  const values = line.split("\t");
-  //Split lines into an array of values
-
-  const entry = this.entryFromValueArray(values);
-  const scanCode = entry.scanCode;
-  if (scanCode && !this.processedValues[scanCode]) {
-    //There is a scancode and we haven't processed it yet
-    this.processedValues[scanCode] = entry;
-
-    dupEntries[scanCode] = [entry];
-  } else {
-    //Already Proccessed this scanCode
-    //if there is no value stored, set to 1
-    const entrycount = entryDups[scanCode] ? entryDups[scanCode] : 1;
-    //Add 1 and store
-    entryDups[scanCode] = entrycount + 1;
-
-    dupEntries[scanCode].push(entry);
+  constructor() {
+    //call TextImporter Parent Constructor
+    super();
   }
+
+  processLine = (line: string) => {
+    const values = line.split("\t");
+    //Split lines into an array of values
+
+    const entry = this.entryFromValueArray(values);
+    const scanCode = entry?.scanCode;
+    if (scanCode && !this.entries.get(scanCode)) {
+      //There is a scancode and we haven't processed it yet
+      this.entries.set(scanCode, entry);
+    } else {
+      //Already Proccessed this scanCode
+      //push to duplicate entries list
+      const scanCodeDupList =
+        this.dupEntries.get(scanCode) || Array<DupCheckEntry>();
+
+      scanCodeDupList.push(entry);
+      this.dupEntries.set(scanCode, scanCodeDupList);
+    }
+  };
+
+  entryFromValueArray = function (valueArray: Array<string>): DupCheckEntry {
+    //Based off of expected Values as outlined in
+    // Data/Inputs/README.md
+    const entry: DupCheckEntry = {
+      scanCode: valueArray[0].trim(),
+      price: valueArray[1].trim(),
+      //All values as array as received
+      valuesArray: valueArray,
+    };
+
+    return entry;
+  };
+}
+
+export type DupCheckEntry = {
+  scanCode: string;
+  price: string;
+
+  valuesArray: Array<string>;
 };
 
-DupCheckImport.entryFromValueArray = function (valueArray) {
-  //Based off of expected Values as outlined in
-  // Data/Inputs/README.md
-  const entry = {};
+const DupCheckImport = new InventoryTextImporter();
 
-  entry.scanCode = valueArray[0].trim();
-  entry.price = valueArray[1].trim();
-  //All values as array as received
-  entry.valuesArray = valueArray;
+DupCheckImport.start()
+  .then(() => {
+    const entries = DupCheckImport.entries;
+    DupCheckImport.dupEntries.forEach((entry) => {
+      const originalEntry = entries.get(entry[0].scanCode);
+      if (originalEntry != null) {
+        console.log(
+          `${entry[0].scanCode} was in document ${entry.length + 1} times`
+        );
+        console.log(
+          `Frist    :${originalEntry.scanCode}:${originalEntry.price} times`
+        );
 
-  return entry;
-};
-//Tell them to load their entries
-await DupCheckImport.start();
-
-// //Output the string to the console
-
-Object.entries(entryDups).forEach((entry) => {
-  console.log(`${entry[0]} was in document ${entry[1]} times`);
-
-  // console.log(JSON.stringify(dupEntries[entry[0]]))
-
-  dupEntries[entry[0]].forEach((dupEntry) => {
-    console.log(`Price: ${dupEntry.price}`);
+        entry.forEach((dupEntry) => {
+          console.log(
+            `         :${originalEntry.scanCode}:${originalEntry.price} times`
+          );
+        });
+      }
+    });
+    console.log(`${DupCheckImport.dupEntries.size} Duplicated Entries`);
+  })
+  .catch((error) => {
+    console.error;
   });
-});
-
-console.log(`${Object.entries(entryDups).length} Duplicated Entries`);

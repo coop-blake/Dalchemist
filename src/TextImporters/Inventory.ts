@@ -1,5 +1,5 @@
 //Import TextImporter Class
-import TextImporter from "./TextImporter.js";
+import TextImporter from "./TextImporter";
 
 class InventoryTextImporter extends TextImporter {
   //Set Path Of Inventory File

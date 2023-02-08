@@ -2,7 +2,7 @@
 import { stat, open } from "fs/promises";
 import { Stats } from "fs";
 
-class TextImporter {
+export default class TextImporter {
   //set this variable before starting import
   textFilePath = "";
   //set by class durring import
@@ -59,5 +59,3 @@ class TextImporter {
     });
   }
 }
-
-export default TextImporter;

@@ -10,28 +10,37 @@ const InventoryImport = new InventoryTextImporter();
 const PricebookImport = new PricebookTextImporter();
 
 //Tell them to load their entries
-await InventoryImport.start();
-await PricebookImport.start();
+InventoryImport.start()
+  .then(() => {
+    PricebookImport.start()
+      .then(() => {
+        //Filter Inventory Entries for Items in included in the Pricebook
+        const InventoryItemsInPricebook = Object.entries(
+          InventoryImport.entries
+        )
+          .filter(function (InventoryEntry) {
+            const scanCode = InventoryEntry[1]?.scanCode || "";
+            const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
 
-//Filter Inventory Entries for Items in included in the Pricebook
-const InventoryItemsInPricebook = Object.entries(
-  InventoryImport.processedValues
-)
-  .filter(function (InventoryEntry) {
-    const scanCode = InventoryEntry[1]?.scanCode || "";
-    const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+            return PricebookEntry ? true : false;
+          }) //and map to an array of entries
+          .map(function (entry) {
+            return entry[1];
+          });
 
-    return PricebookEntry ? true : false;
-  }) //and map to an array of entries
-  .map(function (entry) {
-    return entry[1];
+        //Create Comma seperated string of scancodes from the items in both files
+        let csvString = "";
+        InventoryItemsInPricebook.forEach(function (entry) {
+          csvString = csvString + `,${entry.scanCode}`;
+        });
+
+        //Output the string to the console
+        console.log(csvString.substring(1));
+      })
+      .catch((error) => {
+        console.error;
+      });
+  })
+  .catch((error) => {
+    console.error;
   });
-
-//Create Comma seperated string of scancodes from the items in both files
-let csvString = "";
-InventoryItemsInPricebook.forEach(function (entry) {
-  csvString = csvString + `,${entry.scanCode}`;
-});
-
-//Output the string to the console
-console.log(csvString.substring(1));
