@@ -1,9 +1,11 @@
 import process from "node:process";
 
 import PriceChangeWorksheetImporter, {
-  PriceChangeWorksheetEntry
+  PriceChangeWorksheetEntry,
 } from "../TextImporters/PriceChangeWorksheet";
-import InventoryTextImporter, {InventoryEntry} from "../TextImporters/Inventory";
+import InventoryTextImporter, {
+  InventoryEntry,
+} from "../TextImporters/Inventory";
 import PriceChangeWorksheetsImporter from "../TextImporters/PriceChangeWorksheets";
 
 class PriceChangeWorksheetInventoryComparison {
@@ -30,49 +32,63 @@ class PriceChangeWorksheetInventoryComparison {
 
       worksheet.forEachEntry((entry) => {
         //   console.log(entry)
-         let item  = this.items.get(entry.scanCode.toString())
-          let salePriceVsBasePrice = ""
+        let item = this.items.get(entry.scanCode.toString());
+        let salePriceVsBasePrice = "";
+        let worksheetEntries: Map<string, WorkSheetEntry>;
+        //first time we have proccessed this item, create empty worksheetEntries
 
-      
-          //first time we have proccessed this item, create empty worksheetEntries
-         let worksheetEntries =  new Map<string,WorkSheetEntry>()
-           
-          item = {worksheetEntries: worksheetEntries,
-             inventoryEntry:  this.InventoryImport.getEntryFromScanCode(entry.scanCode)}
+        if (item) {
+          worksheetEntries = item.worksheetEntries;
+        } else {
+          worksheetEntries = new Map<string, WorkSheetEntry>();
+          item = {
+            worksheetEntries: worksheetEntries,
+            inventoryEntry: this.InventoryImport.getEntryFromScanCode(
+              entry.scanCode
+            ),
+          };
+        }
 
-          if (!item.inventoryEntry) {
-            console.log("🌋🌋🌋🌋🌋Shouldn't happen!");
-          }
-        
+        if (!item.inventoryEntry) {
+          console.log("🌋🌋🌋🌋🌋Shouldn't happen!");
+          console.log(`Worksheet ${JSON.stringify(entry)}`);
+          console.log(`Worksheet ${JSON.stringify(worksheet)}`);
+          console.log("🌋🌋🌋🌋🌋");
+        }
+
         //add worksheet name to entry
         //entry.worksheetName = worksheet.textFilePath.split(`/`).pop();
 
         //check worksheet against base Price
-        if (item.inventoryEntry &&
+        if (
+          item.inventoryEntry &&
           parseFloat(item.inventoryEntry.basePrice) ==
-          parseFloat(entry.modifiedPrice)
+            parseFloat(entry.modifiedPrice)
         ) {
           salePriceVsBasePrice = "same";
           this.itemsWithSameSalePrices.push(entry.scanCode.toString());
         }
-        if (item.inventoryEntry &&
+        if (
+          item.inventoryEntry &&
           parseFloat(item.inventoryEntry.basePrice) <
-          parseFloat(entry.modifiedPrice)
+            parseFloat(entry.modifiedPrice)
         ) {
           salePriceVsBasePrice = "higher";
-          this.itemsWithHigherSalePrices.push(entry.scanCode.toString())
+          this.itemsWithHigherSalePrices.push(entry.scanCode.toString());
         }
-        let worksheetEntry = {priceChangeWorksheetEntry: entry,
-        salePriceVsBasePrice: salePriceVsBasePrice}
+        const worksheetEntry = {
+          priceChangeWorksheetEntry: entry,
+          salePriceVsBasePrice: salePriceVsBasePrice,
+        };
         //add worksheet entry to item worksheetEntries
-        item.worksheetEntries.set(worksheet.textFilePath,worksheetEntry);
+        item.worksheetEntries.set(worksheet.textFilePath, worksheetEntry);
         //add item to items
         this.items.set(entry.scanCode.toString(), item);
 
         //if more then one worksheet entry, check price consitency
         if (Object.keys(item.worksheetEntries).length > 1) {
           //add to itemsOnMultipleSheets Object
-          this.itemsOnMultipleSheets.push(entry.scanCode.toString())
+          this.itemsOnMultipleSheets.push(entry.scanCode.toString());
 
           //map worksheet entries and check prices on all worksheets match
           const worksheetConsitencyCheck =
@@ -83,7 +99,7 @@ class PriceChangeWorksheetInventoryComparison {
             );
           //if prices don't match, add to itemsWithDifferentSalePrices
           if (!worksheetConsitencyCheck) {
-            this.itemsWithDifferentSalePrices.push(entry.scanCode.toString())
+            this.itemsWithDifferentSalePrices.push(entry.scanCode.toString());
           }
         }
       });
@@ -108,25 +124,21 @@ class PriceChangeWorksheetInventoryComparison {
     return isConsitent;
   }
 
-  getTextInventoryDescriptionAndPrices(items : Array<string>) {
+  getTextInventoryDescriptionAndPrices(items: Array<string>) {
     let returnText = "";
-    Object.keys(items).forEach((itemCode) => {
-      let item = this.items.get(itemCode)
-      if(item !== undefined && item.inventoryEntry){
+    items.forEach((itemCode) => {
+      const item = this.items.get(itemCode);
+      if (item !== undefined && item.inventoryEntry) {
         returnText += `     ${item.inventoryEntry.brand} ${item.inventoryEntry.name}  ${item.inventoryEntry.size}\n`;
         returnText += `     ${item.inventoryEntry.basePrice} Base Price \n`;
 
-        let worksheetEntries = item.worksheetEntries
-      
-        Object.entries(worksheetEntries).forEach(
-          (worksheetEntryObject) => {
-            const worksheetEntry = worksheetEntryObject[1];
-            returnText += `     ${worksheetEntry.modifiedPrice} ${worksheetEntry.worksheetName} \n`;
-          }
-        );
+        const worksheetEntries = item.worksheetEntries;
+
+        Object.entries(worksheetEntries).forEach((worksheetEntryObject) => {
+          const worksheetEntry = worksheetEntryObject[1];
+          returnText += `     ${worksheetEntry.modifiedPrice} ${worksheetEntry.worksheetName} \n`;
+        });
       }
-     
-    
     });
     return returnText;
   }
@@ -179,13 +191,13 @@ class PriceChangeWorksheetInventoryComparison {
 }
 
 type ItemEntry = {
-  worksheetEntries: Map<string,WorkSheetEntry>,
-  inventoryEntry: InventoryEntry | undefined
-}
+  worksheetEntries: Map<string, WorkSheetEntry>;
+  inventoryEntry: InventoryEntry | undefined;
+};
 
 type WorkSheetEntry = {
-  priceChangeWorksheetEntry: PriceChangeWorksheetEntry,
-  salePriceVsBasePrice: string
-}
+  priceChangeWorksheetEntry: PriceChangeWorksheetEntry;
+  salePriceVsBasePrice: string;
+};
 
 export default PriceChangeWorksheetInventoryComparison;

@@ -20,20 +20,12 @@ class PriceChecker {
     const InventoryImport = this.InventoryImport;
     const PricebookImport = this.PricebookImport;
 
-    const InventoryItemsInPricebook = Object.entries(
-      InventoryImport.entries
-    ).filter(function (InventoryEntry) {
-      const scanCode = InventoryEntry[1].scanCode;
+    this.InventoryItemsInPricebook = [
+      ...InventoryImport.entries.values(),
+    ].filter(function (InventoryEntry) {
+      const scanCode = InventoryEntry.scanCode;
       const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
-
       return PricebookEntry ? true : false;
-    });
-
-    //filter Items in both files
-    this.InventoryItemsInPricebook = InventoryItemsInPricebook.map(function (
-      entry
-    ) {
-      return entry[1];
     });
 
     this.InventoryItemsInPricebookWithUNFIDefaultSupplier =

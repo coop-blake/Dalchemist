@@ -4,6 +4,11 @@ import { Stats } from "fs";
 
 /**
  * Base class for importing text data from a file
+ *
+ * Can be extended to provide custom file handling
+ *
+ * @example
+ *
  */
 export default class TextImporter {
   //set this variable before starting import

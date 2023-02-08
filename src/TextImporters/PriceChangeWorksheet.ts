@@ -49,7 +49,7 @@ class PriceChangeWorksheetImporter extends TextImporter {
         //Past header lines, proccess values
         const values = line.split("\t");
         const entry = this.entryFromValueArray(values);
-        // this.processedValues[entry.scanCode] = entry;
+        this.entries.set(entry.scanCode, entry);
       }
     }
   }

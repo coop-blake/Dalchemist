@@ -9,7 +9,7 @@
     "lowerCostsInventoryPricebookComparison": "npx ts-node src/Generators/lowerCostsInventoryPricebookComparison.ts > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
     "checkPriceChangeWorksheetsAndInventory": "npx ts-node src/Generators/checkPriceChangeWorksheetsAndInventory.ts > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
     "checkPriceChangeWorksheetsAndInventory-AllOutput": "npx ts-node src/Generators/checkPriceChangeWorksheetsAndInventory.ts --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
-    "start": "nodemon --exec babel-node main.ts",
+    "start": "nodemon --exec ts-node src/main.ts",
     "test": "jest",
     "lint": "npx eslint .",
     "docs": "typedoc",

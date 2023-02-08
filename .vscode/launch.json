@@ -36,19 +36,31 @@
       "program": "${workspaceFolder}\\src\\ac\\createPDF.js"
     },
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Main Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\main.js"
-    },
-    {
-      "name": "Launch via NPM",
+      "name": "Launch outputAll via NPM",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "outputAll"]
+    },
+    {
+      "name": "Launch checkPriceChangeWorksheetsAndInventory-AllOutput via NPM",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "checkPriceChangeWorksheetsAndInventory-AllOutput"
+      ]
+    },
+    {
+      "name": "Launch start via NPM",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"]
     }
   ]
 }

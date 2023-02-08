@@ -21,4 +21,6 @@ priceChangeWorksheetInventoryComparisons
     //The get output looks for the accepted arguments and adjust output accordingly
     console.log(priceChangeWorksheetInventoryComparisons.getOutput());
   })
-  .catch((error) => {});
+  .catch((error) => {
+    console.log(error);
+  });

@@ -46,7 +46,7 @@ class PricebookTextImporter extends TextImporter {
     valueArray: Array<string>
   ): PriceBookEntry | null {
     //Based off of expected Values of UNFI Pricebook file
-    if (valueArray.length === 17) {
+    if (valueArray.length === 18) {
       const entry: PriceBookEntry = {
         department: valueArray[0],
         brand: valueArray[1],
