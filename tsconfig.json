@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "node16",
-
+    "module": "nodenext",
+    "resolveJsonModule": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "outDir": "./out",

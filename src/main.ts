@@ -1,6 +1,6 @@
 // todo: Start a server
 // connect post requests to generators outputs
-import packageInfo from "../package.json" assert { type: "json" };
+//import packageInfo from "../package.json" assert { type: "json" };
 console.log(
   `Dalchemist Version 0.0.1
     Input files go in Data/Inputs
@@ -18,7 +18,7 @@ import PriceChangeWorksheetInventoryComparisons from "./Processors/PriceChangeWo
 const dalchemist = express();
 
 dalchemist.get("/", (request, result) => {
-  result.send(`Dalchemist Version ${packageInfo.version}`);
+  result.send(`Dalchemist Version $/*{packageInfo.version}*/`);
 });
 
 dalchemist.get(
