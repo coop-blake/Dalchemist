@@ -2,6 +2,9 @@
 import { stat, open } from "fs/promises";
 import { Stats } from "fs";
 
+/**
+ * Base class for importing text data from a file
+ */
 export default class TextImporter {
   //set this variable before starting import
   textFilePath = "";

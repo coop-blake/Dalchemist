@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 
 
-import PriceChecker from "../src/Processors/PriceChecker";
+import PriceChecker from "../src/PriceCheckerProcessors/PriceChecker";
 //Create new PriceChecker
 const priceChecker = new PriceChecker();
 //Initialize to load input files
