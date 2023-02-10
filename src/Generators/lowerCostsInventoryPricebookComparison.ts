@@ -1,5 +1,5 @@
 // Generates
-//      lowerCostsInventoryPricebookComparison.txt
+//      lowerCostsInventoryPriceBookComparison.txt
 //      A tab seperated text file for importing to excel
 
 //import PriceChecker processor

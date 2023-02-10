@@ -1,21 +1,23 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "nodenext",
-    "resolveJsonModule": true,
+    "module": "esnext",
     "moduleResolution": "node",
-    "esModuleInterop": true,
     "outDir": "./out",
-    "rootDir": "./",
+    "rootDir": "/",
     "strict": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
-  "include": ["./src/**/*.ts", "./Tests/**/*.ts", "./**/*.ts"],
+  "include": [
+    "./src/**/*.ts",
+    "./tests/**/*.ts"
+  ],
   "typedocOptions": {
-    "entryPoints": ["./src"],
+    "entryPoints": ["src/"],
     "entryPointStrategy": "expand",
-    "externalPattern": "Tests/**/*/*.ts",
-    "exclude": "**/*+(index|.test).ts",
+    "externalPattern": "tests/**/*.ts",
+    "exclude": "**/*+(index|.test|.spec|.e2e).ts",
     "excludeExternals": true,
     "out": "docs",
     "plugin": "none"

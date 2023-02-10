@@ -3,13 +3,39 @@ import process from "node:process";
 import PriceChangeWorksheetImporter, {
   PriceChangeWorksheetEntry,
 } from "../TextImporters/PriceChangeWorksheet";
-import InventoryTextImporter, {
+import InventoryImporter, {
   InventoryEntry,
 } from "../TextImporters/Inventory";
-import PriceChangeWorksheetsImporter from "../TextImporters/PriceChangeWorksheets";
-
-class PriceChangeWorksheetInventoryComparison {
-  InventoryImport = new InventoryTextImporter();
+import PriceChangeWorksheetsImporter from "./PriceChangeWorksheets";
+/**
+ *  PriceChangeWorksheetInventoryComparison
+ *
+ *  * Imports price change worksheets and inventory data and
+ *  * compares the sale prices on worksheets against the base prices in the inventory.
+ * @class PriceChangeWorksheetInventoryComparison
+ *
+ *  @example
+ * const priceChangeWorksheetInventoryComparisons =
+ *   new PriceChangeWorksheetInventoryComparisons();
+ * //initialize processor to load price change worksheets
+ * priceChangeWorksheetInventoryComparisons
+ *   .initialize()
+ *   .then(() => {
+ *     //get the text ouput for the loaded files
+ *     //getOutput looks for arguments to adjust output accordingly
+ *     console.log(priceChangeWorksheetInventoryComparisons.getOutput());
+ *   })
+ *   .catch((error) => {
+ *     console.log(error);
+ *   });
+ *
+ *
+ */
+export class PriceChangeWorksheetInventoryComparison {
+  /**
+   * Property for the Inventory
+   */
+  Inventory = new InventoryImporter();
   PriceChangeWorksheetsImporter = new PriceChangeWorksheetsImporter();
 
   worksheetsByName = new Map<string, PriceChangeWorksheetImporter>();
@@ -24,7 +50,7 @@ class PriceChangeWorksheetInventoryComparison {
   async initialize() {
     //load data into importers
     await this.PriceChangeWorksheetsImporter.initialize();
-    await this.InventoryImport.start();
+    await this.Inventory.start();
 
     //cycle through each price change worksheet
     this.PriceChangeWorksheetsImporter.forEachWorksheet((worksheet) => {
@@ -43,7 +69,7 @@ class PriceChangeWorksheetInventoryComparison {
           worksheetEntries = new Map<string, WorkSheetEntry>();
           item = {
             worksheetEntries: worksheetEntries,
-            inventoryEntry: this.InventoryImport.getEntryFromScanCode(
+            inventoryEntry: this.Inventory.getEntryFromScanCode(
               entry.scanCode
             ),
           };
@@ -142,8 +168,24 @@ class PriceChangeWorksheetInventoryComparison {
     });
     return returnText;
   }
+//   Output changes based on these flags:
+//      --show-multiple-worksheet-items
+//      --show-same-priced-items
+//      --hide-higher-priced-items
+//      --hide-items-with-inconsistent-worksheets
 
-  getOutput() {
+  /**
+   * Creates a readable string
+   *
+   * Output changes based on these flags:
+   *    --show-multiple-worksheet-items
+   *    --show-same-priced-items
+   *    --hide-higher-priced-items
+   *    --hide-items-with-inconsistent-worksheets
+   *
+   * @returns {string} - String for output
+   */
+  getOutput() : string {
     //Start with blank output
     let outputText = "";
 
@@ -190,13 +232,34 @@ class PriceChangeWorksheetInventoryComparison {
   }
 }
 
+
+
+/**
+ * Represents an item entry that contains information about a worksheet and an inventory entry.
+ */
 type ItemEntry = {
+  /**
+   * A map of worksheet entries, where the keys are the names of the worksheets.
+   */
   worksheetEntries: Map<string, WorkSheetEntry>;
+  /**
+   * The inventory entry for the item, if it exists.
+   */
   inventoryEntry: InventoryEntry | undefined;
 };
 
+/**
+ * Represents a worksheet entry for an item.
+ */
 type WorkSheetEntry = {
+  /**
+   * The price change worksheet entry for the item.
+   */
   priceChangeWorksheetEntry: PriceChangeWorksheetEntry;
+
+  /**
+   * The difference between the sale price and the base price of the item.
+   */
   salePriceVsBasePrice: string;
 };
 

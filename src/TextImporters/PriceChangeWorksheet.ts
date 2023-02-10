@@ -1,13 +1,13 @@
-//TextImporter for UNFI Pricebook file
+//TextImporter for UNFI PriceBook file
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 
-class PriceChangeWorksheetImporter extends TextImporter {
-  //Set Path Of Pricebook File
+class PriceChangeWorksheetImporter extends TextImporter<PriceChangeWorksheetEntry> {
+  //Set Path Of PriceBook File
   textFilePath = "";
   //Create empty Object for storing processed Values
-  invalidEntries = new Array<PriceChangeWorksheetEntry>();
-  entries = new Map<string, PriceChangeWorksheetEntry>();
+  //invalidEntries = new Array<PriceChangeWorksheetEntry>();
+  //entries = new Map<string, PriceChangeWorksheetEntry>();
 
   constructor(textFilePath: string) {
     //call TextImporter Parent Constructor

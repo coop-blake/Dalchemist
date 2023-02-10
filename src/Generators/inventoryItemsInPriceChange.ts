@@ -1,28 +1,28 @@
 //When ran by node this file returns a comma seperated list of items
-//found in both the Inventory and PriceBook files
+//found in both the Inventory and Pricechange files
 
-//Import the Inventory And PriceBook Importers
+//Import the Inventory And Pricechange Importers
 import InventoryImporter from "../TextImporters/Inventory";
-import PriceBookTextImporter from "../TextImporters/PriceBook";
+import PriceChangeImporter, {PriceChangeEntry}  from "../TextImporters/PriceChange";
 
 //Create new Import objects
 const InventoryImport = new InventoryImporter();
-const PriceBookImport = new PriceBookTextImporter();
+const PriceChangeImport = new PriceChangeImporter();
 
 //Tell them to load their entries
 InventoryImport.start()
   .then(() => {
-    PriceBookImport.start()
+    PriceChangeImport.start()
       .then(() => {
-        //Filter Inventory Entries for Items in included in the PriceBook
-        const InventoryItemsInPriceBook = [
+        //Filter Inventory Entries for Items in included in the Pricechange
+        const InventoryItemsInPriceChange = [
             ...InventoryImport.entries.values()
         ]
           .filter(function (InventoryEntry) {
             const scanCode = InventoryEntry.scanCode || "";
-            const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
+            const PriceChangeEntry = PriceChangeImport.getEntryFromUPC(scanCode);
 
-            return PriceBookEntry ? true : false;
+            return PriceChangeEntry ? true : false;
           }) //and map to an array of entries
           .map(function (entry) {
             return entry;
@@ -30,17 +30,17 @@ InventoryImport.start()
 
         //Create Comma seperated string of scancodes from the items in both files
         let csvString = "";
-        InventoryItemsInPriceBook.forEach(function (entry) {
+          InventoryItemsInPriceChange.forEach(function (entry) {
           csvString = csvString + `,${entry.scanCode}`;
         });
 
         //Output the string to the console
         console.log(csvString.substring(1));
       })
-      .catch((error) => {
-        console.error;
+      .catch((error: any) => {
+        console.error(error);
       });
   })
   .catch((error) => {
-    console.error;
+    console.error(error);
   });

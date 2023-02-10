@@ -1,73 +1,73 @@
-import InventoryTextImporter, {
+import InventoryImporter, {
   InventoryEntry,
 } from "../TextImporters/Inventory";
-import PricebookTextImporter from "../TextImporters/Pricebook";
+import PriceBookTextImporter from "../TextImporters/PriceBook";
 
 class PriceChecker {
-  InventoryImport = new InventoryTextImporter();
-  PricebookImport = new PricebookTextImporter();
+  InventoryImport = new InventoryImporter();
+  PriceBookImport = new PriceBookTextImporter();
 
-  InventoryItemsInPricebook = Array<InventoryEntry>();
-  InventoryItemsInPricebookWithUNFIDefaultSupplier = Array<InventoryEntry>();
+  InventoryItemsInPriceBook = Array<InventoryEntry>();
+  InventoryItemsInPriceBookWithUNFIDefaultSupplier = Array<InventoryEntry>();
   sameCost = Array<InventoryEntry>();
   lowerCost = Array<InventoryEntry>();
   higherCost = Array<InventoryEntry>();
 
   async initialize() {
     await this.InventoryImport.start();
-    await this.PricebookImport.start();
+    await this.PriceBookImport.start();
 
     const InventoryImport = this.InventoryImport;
-    const PricebookImport = this.PricebookImport;
+    const PriceBookImport = this.PriceBookImport;
 
-    this.InventoryItemsInPricebook = [
+    this.InventoryItemsInPriceBook = [
       ...InventoryImport.entries.values(),
     ].filter(function (InventoryEntry) {
       const scanCode = InventoryEntry.scanCode;
-      const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
-      return PricebookEntry ? true : false;
+      const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
+      return PriceBookEntry ? true : false;
     });
 
-    this.InventoryItemsInPricebookWithUNFIDefaultSupplier =
-      this.InventoryItemsInPricebook.filter(function (entry) {
+    this.InventoryItemsInPriceBookWithUNFIDefaultSupplier =
+      this.InventoryItemsInPriceBook.filter(function (entry) {
         return entry.defaultSupplier == "UNFI" ? true : false;
       });
 
     this.sameCost =
-      this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
+      this.InventoryItemsInPriceBookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
         const scanCode = entry.scanCode;
-        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
 
-        return PricebookEntry !== undefined &&
-          parseFloat(entry.lastCost) == parseFloat(PricebookEntry.eachPrice)
+        return PriceBookEntry !== undefined &&
+          parseFloat(entry.lastCost) == parseFloat(PriceBookEntry.eachPrice)
           ? true
           : false;
       });
 
     this.lowerCost =
-      this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
+      this.InventoryItemsInPriceBookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
         const scanCode = entry.scanCode;
-        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
 
-        return PricebookEntry !== undefined &&
-          parseFloat(entry.lastCost) < parseFloat(PricebookEntry.eachPrice)
+        return PriceBookEntry !== undefined &&
+          parseFloat(entry.lastCost) < parseFloat(PriceBookEntry.eachPrice)
           ? true
           : false;
       });
 
     this.higherCost =
-      this.InventoryItemsInPricebookWithUNFIDefaultSupplier.filter(function (
+      this.InventoryItemsInPriceBookWithUNFIDefaultSupplier.filter(function (
         entry
       ) {
         const scanCode = entry.scanCode;
-        const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+        const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
 
-        return PricebookEntry !== undefined &&
-          parseFloat(entry.lastCost) > parseFloat(PricebookEntry.eachPrice)
+        return PriceBookEntry !== undefined &&
+          parseFloat(entry.lastCost) > parseFloat(PriceBookEntry.eachPrice)
           ? true
           : false;
       });
@@ -77,24 +77,24 @@ class PriceChecker {
     let outputText =
       "Scan Code\tLast Cost\tUNFI Cost \tIdeal Margin\tProposed Price \tBase Price\tDifference\tItem\t\r\n";
     const lowerCostItems = this.lowerCost;
-    const PricebookImport = this.PricebookImport;
+    const PriceBookImport = this.PriceBookImport;
 
     lowerCostItems.forEach(function (entry) {
       const scanCode = entry.scanCode;
 
-      const PricebookEntry = PricebookImport.getEntryFromUPC(scanCode);
+      const PriceBookEntry = PriceBookImport.getEntryFromUPC(scanCode);
 
       const proposedPriceFromUNFI: number =
-        PricebookEntry !== undefined && entry !== undefined
-          ? parseFloat(PricebookEntry.eachPrice) /
+        PriceBookEntry !== undefined && entry !== undefined
+          ? parseFloat(PriceBookEntry.eachPrice) /
             (1 - parseFloat(entry.idealMargin) * 0.01)
           : 0;
 
       outputText =
-        PricebookEntry !== undefined && entry !== undefined
+        PriceBookEntry !== undefined && entry !== undefined
           ? outputText +
             `${entry.scanCode}\t${parseFloat(entry.lastCost)}\t${parseFloat(
-              PricebookEntry.eachPrice
+              PriceBookEntry.eachPrice
             )}\t${entry.idealMargin}\t${proposedPriceFromUNFI.toFixed(2)}\t${
               entry.basePrice
             }\t${(parseFloat(entry.basePrice) - proposedPriceFromUNFI).toFixed(

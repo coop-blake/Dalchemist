@@ -10,10 +10,10 @@ import { Stats } from "fs";
  * @example
  *
  */
-export default class TextImporter {
+export default class TextImporter<T> {
   //set this variable before starting import
   textFilePath = "";
-  //set by class durring import
+  //set by class during import
   lineCount = 0;
   fileCreatedDate: Date | null = null;
   fileModifiedDate: Date | null = null;
@@ -24,13 +24,15 @@ export default class TextImporter {
     null;
 
   //Entry Maps
-  entries = new Map<string, object>();
+  entries = new Map<string, T>();
   invalidLines = new Array<string>();
 
-  invalidEntries = new Array<object>();
+  invalidEntries = new Array<T>();
 
   async start() {
     this.fileStats = await stat(this.textFilePath);
+    this.fileCreatedDate = this.fileStats.ctime
+    this.fileModifiedDate = this.fileStats.mtime
     const File = await open(this.textFilePath);
     for await (const line of File.readLines()) {
       this.lineCount++;
@@ -43,26 +45,37 @@ export default class TextImporter {
     return this.entries.get(scanCode);
   }
   processLine(line: string) {
-    console.log("processLine should be provide by subclass", line);
+    console.error("processLine should be provide by subclass", line);
   }
 
   hasInvalidLines() {
     return this.invalidLines.length > 0 ? true : false;
   }
-  printInvalidEntries() {
-    console.log(JSON.stringify(this.invalidEntries, null, 4));
+getCreationDate(): Date | null{
+    return this.fileCreatedDate
+}
+  getNumberOfEntries() {
+    return this.entries.size;
   }
-
-  printInvalidLines() {
-    console.log(JSON.stringify(this.invalidLines, null, 4));
+  getNumberOfInvalidEntries() {
+    return this.invalidEntries.length;
   }
-
-  getTotalEntries() {
-    return Object.keys(this.entries).length;
+  getNumberOfInvalidLines() {
+    return this.invalidLines.length;
   }
-
-  forEachEntry(functionToCall: (entry: object) => void) {
+  forEachEntry(functionToCall: (entry: T) => void) {
     this.entries.forEach((entry) => {
+      functionToCall(entry);
+    });
+  }
+  forEachInvalidEntry(functionToCall: (entry: T) => void) {
+    this.invalidEntries.forEach((entry) => {
+      functionToCall(entry);
+    });
+  }
+
+  forEachInvalidLine(functionToCall: (line: string) => void) {
+    this.invalidLines.forEach((entry) => {
       functionToCall(entry);
     });
   }

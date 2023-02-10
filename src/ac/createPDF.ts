@@ -2,7 +2,7 @@ import { launch } from "puppeteer";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
+//const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
@@ -13,6 +13,8 @@ async function printPDF() {
   await page.goto(`http://127.0.0.1:3002/src/ac/renderTags.html`, {
     waitUntil: "networkidle0",
   });
+
+
   const pdf = await page.pdf({
     format: "TABLOID",
     landscape: true,
@@ -25,4 +27,4 @@ async function printPDF() {
   return pdf;
 }
 
-await printPDF();
+printPDF().then();

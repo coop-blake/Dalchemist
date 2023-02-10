@@ -1,11 +1,11 @@
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 
-class InventoryTextImporter extends TextImporter {
+class InventoryImporter extends TextImporter<InventoryEntry> {
   //Set Path Of Inventory File
   textFilePath = "./Data/Inputs/Inventory.txt";
-  invalidEntries = new Array<InventoryEntry>();
-  entries = new Map<string, InventoryEntry>();
+//  invalidEntries = new Array<InventoryEntry>();
+ // entries = new Map<string, InventoryEntry>();
 
   constructor() {
     //call TextImporter Parent Constructor
@@ -29,7 +29,7 @@ class InventoryTextImporter extends TextImporter {
           //There is a scancode and we haven't processed it yet
           this.entries.set(scanCode, entry);
         } else {
-          //This shouldn't happend unless there are duplicate values or no scan code
+          //This shouldn't happen unless there are duplicate values or no scan code
           this.invalidLines.push(line);
           this.invalidEntries.push(entry);
         }
@@ -44,7 +44,7 @@ class InventoryTextImporter extends TextImporter {
   ): InventoryEntry | null {
     //Based off of expected Values as outlined in
     // Data/Inputs/README.md
-    if (valueArray) {
+    if (valueArray.length === 18) {
       const entry: InventoryEntry = {
         scanCode: valueArray[0].trim(),
         brand: valueArray[1].trim(),
@@ -75,7 +75,7 @@ class InventoryTextImporter extends TextImporter {
   };
 }
 
-export default InventoryTextImporter;
+export default InventoryImporter;
 
 export type InventoryEntry = {
   scanCode: string;

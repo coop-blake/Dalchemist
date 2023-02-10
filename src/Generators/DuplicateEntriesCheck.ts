@@ -6,10 +6,10 @@
 //Todo: Add arguments to chose which column contains the unique id
 //and an argument for checking a file by path
 
-//Import the Inventory And Pricebook Importers
-import DuplicateEntryTextImporter, {DupCheckEntry} from "../TextImporters/DuplicateEntryTextImporter"
+//Import the Inventory And PriceBook Importers
+import DuplicateEntry, {DupCheckEntry} from "../TextImporters/DuplicateEntry"
 
-const DupCheckImport = new DuplicateEntryTextImporter();
+const DupCheckImport = new DuplicateEntry();
 
 DupCheckImport.start()
   .then(() => {

@@ -1,7 +1,15 @@
 # Dalchemist...
-Takes text file inputs and create text file outputs after filtering and combing data
+Transmutes text file inputs
 
-## Generate File Outputs
+## Getting Started  
+
+### Access through a web browser
+`npm install`
+`npm run start`
+
+This will start a [localhost web server on port 4848](http://localhost:4848/)
+
+### Generate File Outputs
 Make sure you have the latest versions of input data in the Data/Inputs folder
 
 To generate all output files in Data/Outputs:  

@@ -2,11 +2,11 @@ import TextImporter from "../TextImporters/TextImporter";
 
 //Create new Import object
 
-class DuplicateEntryTextImporter extends TextImporter {
+class DuplicateEntry extends TextImporter<DupCheckEntry> {
   //Set Path Of Inventory File
   textFilePath = "./Data/Inputs/CheckForDups.txt";
-  invalidEntries = new Array<DupCheckEntry>();
-  entries = new Map<string, DupCheckEntry>();
+  //invalidEntries = new Array<DupCheckEntry>();
+  //entries = new Map<string, DupCheckEntry>();
 
   dupEntries = new Map<string, Array<DupCheckEntry>>();
 
@@ -49,7 +49,7 @@ class DuplicateEntryTextImporter extends TextImporter {
   };
 }
 
-export default DuplicateEntryTextImporter;
+export default DuplicateEntry;
 
 export type DupCheckEntry = {
   scanCode: string;
