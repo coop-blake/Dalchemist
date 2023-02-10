@@ -3,17 +3,16 @@
 import TextImporter from "./TextImporter";
 
 class PriceChangeImporter extends TextImporter<PriceChangeEntry> {
-  
   constructor(textFilePath = "./Data/Inputs/pc003116.xls") {
     //call TextImporter Parent Constructor
     super();
-    this.textFilePath = textFilePath
+    this.textFilePath = textFilePath;
   }
-  
+
   processLine(line: string) {
     const values = line.split("\t");
     //Split lines into an array of values
-    if (this.lineCount == 1 && values[0] == "Dept") {
+    if (this.lineCount == 1 && values[0] == "MPW #") {
       //    header line, don't process
     } else {
       const entry: PriceChangeEntry | null = this.entryFromValueArray(values);
@@ -33,39 +32,39 @@ class PriceChangeImporter extends TextImporter<PriceChangeEntry> {
       }
     }
   }
-  
+
   getEntryFromUPC(UPC: string): PriceChangeEntry | undefined {
     //convenience function for getting entry from UPC
     return this.entries.get(UPC);
   }
-  
+
   entryFromValueArray = function (
     valueArray: Array<string>
   ): PriceChangeEntry | null {
     //Based off of expected Values of UNFI Pricechange file
     if (valueArray.length === 19) {
       const entry: PriceChangeEntry = {
-            MPW : valueArray[0],
-            PackSize: valueArray[1],
-          Brand: valueArray[2],
-          Description: valueArray[3],
-          Status: valueArray[4],
-          Dept: valueArray[5],
-          ChangeDate: valueArray[6],
-          Type: valueArray[7],
-          UPC: String(valueArray[8]).replace(/-/g, ""),
-          Taxable: valueArray[9],
-          Change: valueArray[10],
-          Pack: valueArray[11],
-          PrevEachPrice: valueArray[12],
-          PrevCasePrice: valueArray[13],
-          NewEachPrice: valueArray[14],
-          NewCasePrice: valueArray[15],
-          SRP: valueArray[16],
-          Margin: valueArray[17],
+        MPW: valueArray[0],
+        PackSize: valueArray[1],
+        Brand: valueArray[2],
+        Description: valueArray[3],
+        Status: valueArray[4],
+        Dept: valueArray[5],
+        ChangeDate: valueArray[6],
+        Type: valueArray[7],
+        UPC: String(valueArray[8]).replace(/-/g, ""),
+        Taxable: valueArray[9],
+        Change: valueArray[10],
+        Pack: valueArray[11],
+        PrevEachPrice: valueArray[12],
+        PrevCasePrice: valueArray[13],
+        NewEachPrice: valueArray[14],
+        NewCasePrice: valueArray[15],
+        SRP: valueArray[16],
+        Margin: valueArray[17],
 
-          valuesArray: valueArray,
-    };
+        valuesArray: valueArray,
+      };
       return entry;
     } else {
       return null;
@@ -75,27 +74,25 @@ class PriceChangeImporter extends TextImporter<PriceChangeEntry> {
 
 export default PriceChangeImporter;
 
-
 export type PriceChangeEntry = {
-  MPW : string,
-  PackSize: string,
-  Brand: string,
-  Description: string,
-  Status: string,
-  Dept: string,
-  ChangeDate: string,
-  Type:string,
-  UPC: string,
-  Taxable: string,
-  Change: string,
-  Pack: string,
-  PrevEachPrice: string,
-  PrevCasePrice: string,
-  NewEachPrice: string,
-  NewCasePrice: string,
-  SRP: string,
-  Margin: string,
+  MPW: string;
+  PackSize: string;
+  Brand: string;
+  Description: string;
+  Status: string;
+  Dept: string;
+  ChangeDate: string;
+  Type: string;
+  UPC: string;
+  Taxable: string;
+  Change: string;
+  Pack: string;
+  PrevEachPrice: string;
+  PrevCasePrice: string;
+  NewEachPrice: string;
+  NewCasePrice: string;
+  SRP: string;
+  Margin: string;
 
-  valuesArray: Array<string>,
-
+  valuesArray: Array<string>;
 };

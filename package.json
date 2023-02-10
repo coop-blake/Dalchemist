@@ -11,6 +11,7 @@
     "checkPriceChangeWorksheetsAndInventory": "npx babel-node -x .ts --  src/Generators/checkPriceChangeWorksheetsAndInventory.ts > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
     "checkPriceChangeWorksheetsAndInventory-AllOutput": "npx babel-node -x .ts --  src/Generators/checkPriceChangeWorksheetsAndInventory.ts --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
     "start": "nodemon --exec \"babel-node -x .ts\" src/main.ts",
+    "startPriceUpdate": "nodemon --exec \"babel-node -x .ts\" src/priceChange.ts",
     "test": "jest",
     "lint": "npx eslint .",
     "docs": "typedoc",
