@@ -29,7 +29,7 @@ To generate the above list and include all items on multiple worksheets and item
 
 `npm run checkPriceChangeWorksheetsAndInventory-AllOuput`
 
-### UNFI Price Change Vs Inventory Comparison
+### UNFI Price Book Vs Inventory Comparison
 
 To generate a comma seperated list of all items in the pricebook and inventory file:  
 `npm run inventoryItemsInPricebook`
