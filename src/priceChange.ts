@@ -1,4 +1,5 @@
 import express from "express";
+import { CoreSupport } from "./Processors/CoreSupport";
 
 import PriceChangeInventoryUpdate from "./Processors/PriceChangeInventoryUpdate";
 
@@ -6,6 +7,8 @@ async function start() {
   //Create new Import objects
   const PriceChangeUpdate = new PriceChangeInventoryUpdate();
   await PriceChangeUpdate.initialize();
+
+  const coreSupport = new CoreSupport();
 
   const priceChangeImporterNorth = PriceChangeUpdate.getNorthImporter();
   const priceChangeImporterSouth = PriceChangeUpdate.getSouthImporter();

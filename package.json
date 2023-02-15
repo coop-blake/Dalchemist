@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
+    "xlsxRead": "npx babel-node -x .ts -- src/XLSXImporter.ts > file.txt",
     "inventoryItemsInPricebook": "npx babel-node -x .ts -- src/Generators/inventoryItemsInPricebook.ts > Data/Outputs/inventoryItemsInPricebook.txt",
     "inventoryItemsInPricechange": "npx babel-node -x .ts -- src/Generators/inventoryItemsInPriceChange.ts > Data/Outputs/inventoryItemsInPricechange.txt",
     "lowerCostsInventoryPricebookComparison": "npx babel-node -x .ts --  src/Generators/lowerCostsInventoryPricebookComparison.ts > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
@@ -47,6 +48,7 @@
     "utf-8-validate": "^6.0.2"
   },
   "dependencies": {
+    "node-xlsx": "^0.21.0",
     "pino": "^8.8.0",
     "pino-elasticsearch": "^6.3.0",
     "puppeteer": "^19.6.3"

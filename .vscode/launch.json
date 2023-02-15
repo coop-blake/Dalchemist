@@ -69,6 +69,14 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "startPriceUpdate"]
+    },
+    {
+      "name": "Launch XLSX Read",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "xlsxRead"]
     }
   ]
 }
