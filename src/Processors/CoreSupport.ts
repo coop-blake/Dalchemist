@@ -3,6 +3,7 @@ import xlsx from "node-xlsx";
 export class CoreSupport {
   lineCount = 0;
   filePath = "";
+  entries = new Map<string, Array<any>>();
 
   constructor(
     filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List_2023_Feb.xlsx`
@@ -27,6 +28,9 @@ export class CoreSupport {
       //Alert that the core support file is not supported
       console.log(Error);
     }
+    console.log(this.entries);
+
+    console.log(this.entries.size);
   }
 
   processLineArray(lineArray: string[], lineNumber: number): boolean {
@@ -48,7 +52,7 @@ export class CoreSupport {
           )}`;
         }
         break;
-      case >=2:
+      default:
         {
           const lineNumberFromData = lineArray[0];
           if (
@@ -58,15 +62,11 @@ export class CoreSupport {
             throw `Second line of worksheet not expected: ${lineArray.join(
               "\t"
             )}`;
+          } else {
+            this.entries.set(lineNumber, lineArray);
           }
         }
         break;
-      default: {
-        //Past header lines, proccess values
-        const values = line.split("\t");
-        const entry = this.entryFromValueArray(values);
-        this.entries.set(entry.scanCode, entry);
-      }
     }
   }
 }
