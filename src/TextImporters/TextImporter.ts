@@ -51,9 +51,9 @@ export default class TextImporter<T> {
   hasInvalidLines() {
     return this.invalidLines.length > 0 ? true : false;
   }
-getCreationDate(): Date | null{
-    return this.fileCreatedDate
-}
+  getCreationDate(): Date | null{
+      return this.fileCreatedDate
+  }
   getNumberOfEntries() {
     return this.entries.size;
   }

@@ -9,6 +9,7 @@ async function start() {
   await PriceChangeUpdate.initialize();
 
   const coreSupport = new CoreSupport();
+  await coreSupport.start()
 
   const priceChangeImporterNorth = PriceChangeUpdate.getNorthImporter();
   const priceChangeImporterSouth = PriceChangeUpdate.getSouthImporter();
@@ -34,6 +35,14 @@ async function start() {
   dalchemist.get("/", (request, result) => {
     result.send(`<pre>
 UNFI Price Update
+    Core Support Price List: ${coreSupport
+      .getCreationDate()
+      ?.toDateString()}
+      Number of Items: ${coreSupport.getNumberOfEntries()}
+      Number of our Items: ${coreSupport.ourCoreItems.size}
+
+      <a href="/CoreInvalidEntries">Invalid Entries:</a> ${coreSupport.getNumberOfInvalidEntries()}
+      <a href="/CoreInvalidLines">Invalid Lines:</a> ${coreSupport.getNumberOfInvalidLines()}
     North PriceChange: ${priceChangeImporterNorth
       .getCreationDate()
       ?.toDateString()}
@@ -58,7 +67,7 @@ UNFI Price Update
     <a href="/NotFound">Not Found Entries: ${
       notFoundPriceChangeEntries.size
     }</a>
-    <a href="/NotFound">Found Entries By Supplier: ${
+    <a href="/FoundSupplier">Found Entries By Supplier: ${
       supplierFoundPriceChangeEntries.size
     }</a>
     
@@ -67,6 +76,32 @@ UNFI Price Update
         Invalid Entries: ${invetoryImport.getNumberOfInvalidEntries()}
         Invalid Lines: ${invetoryImport.getNumberOfInvalidLines()}
 </pre>`);
+  });
+
+
+  dalchemist.get("/CoreInvalidLines", async (request, result) => {
+    let outputText = "Core Supports with duplicate UPCs\n\n";
+
+    coreSupport.forEachInvalidLine((line) => {
+      outputText += line+ "\n";
+    });
+
+    result.send(`<pre>${outputText}</pre>`);
+  });
+
+  dalchemist.get("/CoreInvalidEntries", async (request, result) => {
+    let outputText = "Price Change Entries Not Found in Inventory\n\n";
+
+    coreSupport.forEachInvalidEntry((entry) => {
+      const existingEntry = coreSupport.getEntryFromScanCode(entry.ID)
+      outputText += "###############################################\n";
+
+      outputText += Object.values(entry).join(" | " )+ "\n";
+      outputText += Object.values(existingEntry).join(" | " )+ "\n";
+
+    });
+
+    result.send(`<pre>${outputText}</pre>`);
   });
 
   dalchemist.get("/Duplicates", async (request, result) => {
