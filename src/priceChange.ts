@@ -2,6 +2,9 @@ import express from "express";
 import { CoreSupport } from "./Processors/CoreSupport";
 
 import PriceChangeInventoryUpdate from "./Processors/PriceChangeInventoryUpdate";
+import { PriceChangeEntry } from "./TextImporters/PriceChange";
+
+import { InventoryEntry } from "./TextImporters/Inventory";
 
 async function start() {
   //Create new Import objects
@@ -9,7 +12,7 @@ async function start() {
   await PriceChangeUpdate.initialize();
 
   const coreSupport = new CoreSupport();
-  await coreSupport.start()
+  await coreSupport.start();
 
   const priceChangeImporterNorth = PriceChangeUpdate.getNorthImporter();
   const priceChangeImporterSouth = PriceChangeUpdate.getSouthImporter();
@@ -35,9 +38,7 @@ async function start() {
   dalchemist.get("/", (request, result) => {
     result.send(`<pre>
 UNFI Price Update
-    Core Support Price List: ${coreSupport
-      .getCreationDate()
-      ?.toDateString()}
+    Core Support Price List: ${coreSupport.getCreationDate()?.toDateString()}
       Number of Items: ${coreSupport.getNumberOfEntries()}
       Number of our Items: ${coreSupport.ourCoreItems.size}
 
@@ -62,7 +63,9 @@ UNFI Price Update
           duplicatedDifferentEntries.length
         }
 
-    Combined Entries: ${combinedPriceChangeEntries.size}
+        <a href="/CombinedUNFIPriceChangeEntries">Combined Entries:</a> ${
+          combinedPriceChangeEntries.size
+        }
     Checked Entries: ${checkedPriceChangeEntries.size}
     <a href="/NotFound">Not Found Entries: ${
       notFoundPriceChangeEntries.size
@@ -75,15 +78,18 @@ UNFI Price Update
         Items: ${invetoryImport.getNumberOfEntries()}
         Invalid Entries: ${invetoryImport.getNumberOfInvalidEntries()}
         Invalid Lines: ${invetoryImport.getNumberOfInvalidLines()}
+
+
+
+        <a href="/CombinedUNFIPriceChangeEntriesForImport">Get TSV Export</a>
 </pre>`);
   });
-
 
   dalchemist.get("/CoreInvalidLines", async (request, result) => {
     let outputText = "Core Supports with duplicate UPCs\n\n";
 
     coreSupport.forEachInvalidLine((line) => {
-      outputText += line+ "\n";
+      outputText += line + "\n";
     });
 
     result.send(`<pre>${outputText}</pre>`);
@@ -93,12 +99,11 @@ UNFI Price Update
     let outputText = "Price Change Entries Not Found in Inventory\n\n";
 
     coreSupport.forEachInvalidEntry((entry) => {
-      const existingEntry = coreSupport.getEntryFromScanCode(entry.ID)
+      const existingEntry = coreSupport.getEntryFromScanCode(entry.ID);
       outputText += "###############################################\n";
 
-      outputText += Object.values(entry).join(" | " )+ "\n";
-      outputText += Object.values(existingEntry).join(" | " )+ "\n";
-
+      outputText += Object.values(entry).join(" | ") + "\n";
+      outputText += Object.values(existingEntry).join(" | ") + "\n";
     });
 
     result.send(`<pre>${outputText}</pre>`);
@@ -132,9 +137,28 @@ UNFI Price Update
     [...supplierFoundPriceChangeEntries.values()].forEach((entry) => {
       outputText += entry.valuesArray.join(" ") + "\n";
     });
+  });
+
+  dalchemist.get("/CombinedUNFIPriceChangeEntries", async (request, result) => {
+    let outputText = "";
+    PriceChangeUpdate.getCombinedEntries().forEach((entry) => {
+      outputText += `${entry.valuesArray.join(" ")}\n`;
+    });
 
     result.send(`<pre>${outputText}</pre>`);
   });
+
+  dalchemist.get(
+    "/CombinedUNFIPriceChangeEntriesForImport",
+    async (request, result) => {
+      result.send(
+        `<pre>${createCombinedUNFIPriceChangeEntriesForImport(
+          PriceChangeUpdate.getCheckedPriceChangeEntries(),
+          coreSupport
+        )}</pre>`
+      );
+    }
+  );
 
   dalchemist.listen(4848, () => {
     console.log("Web Server Ready");
@@ -142,3 +166,63 @@ UNFI Price Update
 }
 
 start().then();
+
+/**
+ * Takes the Checked UNFI Price Change Entries combines
+ * with Core support and Price Change Worksheet Data to
+ * produce a tab seperated list of the combined entries
+ * for importing to a new Sheet
+ *
+ * @param checkedEntries
+ * @param coreSupport
+ * @returns
+ */
+const createCombinedUNFIPriceChangeEntriesForImport = function (
+  checkedEntries: Map<string, [PriceChangeEntry, InventoryEntry]>,
+  coreSupport: CoreSupport
+): string {
+  let outputText = "";
+
+  [...checkedEntries.values()].forEach(([priceChangeEntry, inventoryEntry]) => {
+    const coreSupportEntry = coreSupport.getEntryById(inventoryEntry.scanCode);
+    if (coreSupportEntry) {
+      // outputText += `${priceChangeEntry.valuesArray.join(
+      //   "\t"
+      // )}\t${Object.values(coreSupportEntry).join("\t")}\n`;
+    }
+
+    const exportArray = [
+      inventoryEntry.scanCode, //UPC
+      inventoryEntry.brand, //Brand
+      inventoryEntry.name, //Description
+      priceChangeEntry.MPW, //MPW #
+      priceChangeEntry.PackSize, //Pack/Size
+      priceChangeEntry.Status, //Status
+      inventoryEntry.department, //Dept
+      priceChangeEntry.ChangeDate, //Change Date
+      priceChangeEntry.Type, //Type
+      "?priceChangeEntry vs inventory cost?", //Change %
+      priceChangeEntry.Pack, //Pack
+      inventoryEntry.subdepartment, //Subdepart
+      inventoryEntry.idealMargin, //Margin
+      priceChangeEntry.PrevCasePrice, //Current Case
+      priceChangeEntry.NewCasePrice, //New Case
+      priceChangeEntry.PrevEachPrice, //Current Each
+      priceChangeEntry.NewEachPrice, //New Each
+      inventoryEntry.basePrice, //Current Retail
+      "", //Proposed Retail
+      "", //Desired price or leave blank to keep Current Retail
+      coreSupportEntry && coreSupportEntry.WestRidgefieldEDLPPrice
+        ? `Core Support ${coreSupportEntry.WestRidgefieldEDLPPrice}`
+        : "", //Notes
+      "", //Dept
+      "", //Difference
+      "", //North Done
+      "", //South Done
+    ];
+
+    outputText += exportArray.join("\t") + "\n";
+  });
+
+  return outputText;
+};

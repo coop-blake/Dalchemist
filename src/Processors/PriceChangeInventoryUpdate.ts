@@ -77,6 +77,10 @@ export default class PriceChangeInventoryUpdate {
         inventoryEntry = inventoryUNFIItems.get(entry.MPW);
 
         if (inventoryEntry) {
+          checkedPriceChangeEntries.set(inventoryEntry.scanCode, [
+            entry,
+            inventoryEntry,
+          ]);
           supplierFoundPriceChangeEntries.set(inventoryEntry.scanCode, entry);
         } else {
           notFoundPriceChangeEntries.set(entry.UPC, entry);
@@ -118,6 +122,10 @@ export default class PriceChangeInventoryUpdate {
       returnText += `${entries[1].valuesArray.join(" ")}\n`;
     });
     return returnText;
+  }
+
+  getCombinedEntries() {
+    return [...combinedPriceChangeEntries.values()];
   }
 
   getDuplicateEntries() {
