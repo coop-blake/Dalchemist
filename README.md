@@ -2,7 +2,7 @@
 
 A collection of Typescript modules for assiting POS Tasks  
 
-You'll need Node
+You'll need [current Node.js](https://nodejs.org/en/download/) 
 
 ## Getting Started
 
