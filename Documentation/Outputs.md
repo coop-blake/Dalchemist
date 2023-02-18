@@ -1,7 +1,7 @@
 # Outputs
 
 ## Generating
-These commands are ment to be issued from the [project root directory](../) that contains the [package.json](../package.json) file that contains the commands outlined below.
+These commands are ment to be issued from the [project root directory](../) that contains the [package.json](../package.json) file with the commands outlined below.
 
 The results of these commands will be output to the [Data/Ouputs](../Data/Outputs/) directory.  
 
