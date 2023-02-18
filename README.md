@@ -1,39 +1,37 @@
 # Dalchemist...
 
-Transmutes text file inputs
+A collection of Typescript modules for assiting POS Tasks  
+
+You'll need Node
 
 ## Getting Started
 
-Dalchemist expects to find a few files in the Data Directory. Once they have been placed, you can access the transformed data either directly on disk or through a web browser.
+Make sure you have the latest versions of your input data in the [Data](./Data/Readme.md) folder
 
-### Access through a web browser
+### Clone this repository  
+`git clone https://github.com/coop-blake/Dalchemist.git`  
+You could also download a Zip file from github
 
+
+### Install npm modules
+Enter the repository directory and issue  
 `npm install`
+
+
+## Generate File Outputs
+
+To generate all output files to Data/Outputs:  
+`npm run outputAll`  
+
+For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
+
+
+## Access through a web browser
+
 `npm run start`
 
 This will start a [localhost web server on port 4848](http://localhost:4848/)
 
-### Generate File Outputs
+`npm run startPriceUpdate`
 
-Make sure you have the latest versions of input data in the Data/Inputs folder
-
-To generate all output files in Data/Outputs:  
-`npm run outputAll`
-
-### Price Change Worksheets Vs Inventory Comparison
-
-To generate a list of Sale Items with higher then base prices and items on different sales worksheet with inconsitent pricing  
-`npm run checkPriceChangeWorksheetsAndInventory`
-
-To generate the above list and include all items on multiple worksheets and items with same base price vs sale price
-
-`npm run checkPriceChangeWorksheetsAndInventory-AllOuput`
-
-### UNFI Price Book Vs Inventory Comparison
-
-To generate a comma seperated list of all items in the pricebook and inventory file:  
-`npm run inventoryItemsInPricebook`
-
-For a tab seperated value file with header[scan code, Last Cost, UNFI Cost, Ideal Margin, Proposed Price, Base Price, Difference(Base price - UNFI Cost calculated proposed price), and Description]
-
-`npm run lowerCostsInventoryPricebookComparison`
+Starts the http server for a UNFI price update
