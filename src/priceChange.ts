@@ -1,41 +1,45 @@
 import express from "express";
 import { CoreSupport } from "./Processors/CoreSupport";
-
 import PriceChangeInventoryUpdate from "./Processors/PriceChangeInventoryUpdate";
 import { PriceChangeEntry } from "./TextImporters/PriceChange";
-
 import { InventoryEntry } from "./TextImporters/Inventory";
 
 async function start() {
-  //Create new Import objects
-
+  console.log("Loading Price Change Instance")
+  //Create and initialize Price Change Update
   const PriceChangeUpdate = new PriceChangeInventoryUpdate();
   await PriceChangeUpdate.initialize();
-
+  //Create and initialize Core Support
+  console.log("Loading Core Support Instance")
   const coreSupport = new CoreSupport();
   await coreSupport.start();
-
+  //Get Price change importers for each store
   const priceChangeImporterNorth = PriceChangeUpdate.getNorthImporter();
   const priceChangeImporterSouth = PriceChangeUpdate.getSouthImporter();
+  //get Inventory File Impoter
   const invetoryImport = PriceChangeUpdate.getInventoryImporter();
-
+  //get Duplicated Price Change Update Entries
   const duplicatedEntries = PriceChangeUpdate.getDuplicateEntries();
+  //get Duplicated and Different Price Change Update Entries
   const duplicatedDifferentEntries =
     PriceChangeUpdate.getDuplicatedDifferentEntries();
-
+  //get Combined Price Change Entries
   const combinedPriceChangeEntries =
     PriceChangeUpdate.getCombinedPriceChangeEntries();
+  //get checkedPriceChangeEntries
   const checkedPriceChangeEntries =
     PriceChangeUpdate.getCheckedPriceChangeEntries();
-
+  //get not Found Price Change Entries
   const notFoundPriceChangeEntries =
     PriceChangeUpdate.getNotFoundPriceChangeEntries();
-
+  //get Price Change entries matched by supplier ID
   const supplierFoundPriceChangeEntries =
     PriceChangeUpdate.getSupplierFoundPriceChangeEntries();
 
+  console.log("Creating http server")
+  //Create Express Instance
   const dalchemist = express();
-
+  //index response
   dalchemist.get("/", (request, result) => {
     result.send(`<pre>
 UNFI Price Update
@@ -104,7 +108,9 @@ UNFI Price Update
       outputText += "###############################################\n";
 
       outputText += Object.values(entry).join(" | ") + "\n";
-      outputText += Object.values(existingEntry).join(" | ") + "\n";
+      if(existingEntry){
+        outputText += Object.values(existingEntry).join(" | ") + "\n";
+      }
     });
 
     result.send(`<pre>${outputText}</pre>`);

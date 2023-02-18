@@ -1,9 +1,18 @@
+/**
+ * @class PriceChangeWorksheets
+ * @module PriceChangeWorksheets
+ * @category Processors
+ */
+
 // Importer for price change worksheets
 // creates TextImport for each worksheet in input directory
 // Loads each data line of worksheet as an entry
 import PriceChangeWorksheetImporter from "../TextImporters/PriceChangeWorksheet";
 import * as fs from "node:fs/promises";
-
+/**
+ * @class PriceChangeWorksheets
+ * @category Processors
+ */
 export default class PriceChangeWorksheets {
   lineCount = 0;
   //Set the path to the Price Change Worksheets Input Directory
