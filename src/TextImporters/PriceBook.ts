@@ -24,6 +24,8 @@ class PriceBookTextImporter extends TextImporter<PriceBookEntry> {
    * @param {string} line - A line from the UNFI PriceBook file.
    * @memberof PriceBookTextImporter
    */
+  entriesByUPC= new Map<string, PriceBookEntry>()
+  duplicatedUPCEntries = new Array<PriceBookEntry>()
   processLine(line: string) {
     const values = line.split("\t");
     //Split lines into an array of values
@@ -42,6 +44,12 @@ class PriceBookTextImporter extends TextImporter<PriceBookEntry> {
          // this.invalidLines.push(line);
           this.invalidEntries.push(entry);
         }
+
+        if(!this.entriesByUPC.has(entry.UPC) ){
+          this.entriesByUPC.set(entry.UPC, entry)
+        }else{
+          this.duplicatedUPCEntries.push(entry)
+        }
       } else {
         this.invalidLines.push(line);
       }
@@ -56,7 +64,7 @@ class PriceBookTextImporter extends TextImporter<PriceBookEntry> {
    */
   getEntryFromUPC(UPC: string): PriceBookEntry | undefined {
     //convenience function for getting entry from UPC
-    return this.entries.get(UPC);
+    return this.entriesByUPC.get(UPC);
   }
   /**
    * Converts an array of values from a line in the UNFI PriceBook file into a PriceBookEntry.

@@ -71,12 +71,12 @@
       "runtimeArgs": ["run-script", "startPriceUpdate"]
     },
     {
-      "name": "Launch XLSX Read",
+      "name": "Launch lowerCostsInventoryPricebookComparison",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "xlsxRead"]
+      "runtimeArgs": ["run-script", "lowerCostsInventoryPricebookComparison"]
     }
   ]
 }
