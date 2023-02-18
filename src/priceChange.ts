@@ -8,6 +8,7 @@ import { InventoryEntry } from "./TextImporters/Inventory";
 
 async function start() {
   //Create new Import objects
+
   const PriceChangeUpdate = new PriceChangeInventoryUpdate();
   await PriceChangeUpdate.initialize();
 
@@ -132,11 +133,18 @@ UNFI Price Update
   });
 
   dalchemist.get("/FoundSupplier", async (request, result) => {
-    let outputText = "Price Change Entries Not Found in Inventory\n\n";
+    let outputText = "Price Change Entries Found by Supplier Item ID\n\n";
 
-    [...supplierFoundPriceChangeEntries.values()].forEach((entry) => {
-      outputText += entry.valuesArray.join(" ") + "\n";
-    });
+    [...supplierFoundPriceChangeEntries.values()].forEach(
+      ([entry, inventoryEntry]) => {
+        outputText += "###############################################\n\n";
+        outputText += entry.valuesArray.join(" ") + "\n";
+
+        outputText += inventoryEntry.valuesArray.join(" ") + "\n\n";
+      }
+    );
+
+    result.send(`<pre>${outputText}</pre>`);
   });
 
   dalchemist.get("/CombinedUNFIPriceChangeEntries", async (request, result) => {
@@ -181,16 +189,45 @@ const createCombinedUNFIPriceChangeEntriesForImport = function (
   checkedEntries: Map<string, [PriceChangeEntry, InventoryEntry]>,
   coreSupport: CoreSupport
 ): string {
-  let outputText = "";
+  const exportArrayHeader = [
+    "UPC",
+    "Brand",
+    "Description",
+    "MPW #",
+    "Pack/Size",
+    "Status",
+    "Dept",
+    "Change Date",
+    "Type",
+    "Change %",
+    "Pack",
+    "Subdepart",
+    "Margin",
+    "Current Case",
+    "New Case",
+    "Current Each",
+    "New Each",
+    "Current Retail",
+    "Proposed Retail",
+    "Desired price or leave blank to keep Current Retail",
+    "Notes",
+    "Dept",
+    "Difference",
+    "North Done",
+    "South Done",
+  ];
+
+  let outputText = exportArrayHeader.join("\t") + "\n";
 
   [...checkedEntries.values()].forEach(([priceChangeEntry, inventoryEntry]) => {
+    //Get Core Support Information for the inventory entry
     const coreSupportEntry = coreSupport.getEntryById(inventoryEntry.scanCode);
-    if (coreSupportEntry) {
-      // outputText += `${priceChangeEntry.valuesArray.join(
-      //   "\t"
-      // )}\t${Object.values(coreSupportEntry).join("\t")}\n`;
-    }
+    //Create a proposed price using new Each price and Inventory ideal Margin
+    const proposedPrice =
+      parseFloat(priceChangeEntry.NewEachPrice) /
+      (1 - parseFloat(inventoryEntry.idealMargin) * 0.01);
 
+    //Create an export Array for the entry
     const exportArray = [
       inventoryEntry.scanCode, //UPC
       inventoryEntry.brand, //Brand
@@ -198,29 +235,29 @@ const createCombinedUNFIPriceChangeEntriesForImport = function (
       priceChangeEntry.MPW, //MPW #
       priceChangeEntry.PackSize, //Pack/Size
       priceChangeEntry.Status, //Status
-      inventoryEntry.department, //Dept
+      priceChangeEntry.Dept, //Dept
       priceChangeEntry.ChangeDate, //Change Date
       priceChangeEntry.Type, //Type
-      "?priceChangeEntry vs inventory cost?", //Change %
+      priceChangeEntry.Change, //Change %
       priceChangeEntry.Pack, //Pack
       inventoryEntry.subdepartment, //Subdepart
       inventoryEntry.idealMargin, //Margin
       priceChangeEntry.PrevCasePrice, //Current Case
       priceChangeEntry.NewCasePrice, //New Case
-      priceChangeEntry.PrevEachPrice, //Current Each
-      priceChangeEntry.NewEachPrice, //New Each
+      parseFloat(priceChangeEntry.PrevEachPrice).toFixed(2), //Current Each
+      parseFloat(priceChangeEntry.NewEachPrice).toFixed(2), //New Each
       inventoryEntry.basePrice, //Current Retail
-      "", //Proposed Retail
+      proposedPrice.toFixed(2), //Proposed Retail
       "", //Desired price or leave blank to keep Current Retail
       coreSupportEntry && coreSupportEntry.WestRidgefieldEDLPPrice
         ? `Core Support ${coreSupportEntry.WestRidgefieldEDLPPrice}`
         : "", //Notes
-      "", //Dept
-      "", //Difference
+      inventoryEntry.department, //Dept
+      (parseFloat(priceChangeEntry.PrevEachPrice) - proposedPrice).toFixed(2), //Difference
       "", //North Done
       "", //South Done
     ];
-
+    //Add the exportArray to the output Text as a tab seperated value line
     outputText += exportArray.join("\t") + "\n";
   });
 

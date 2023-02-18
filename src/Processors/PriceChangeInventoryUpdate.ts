@@ -27,7 +27,10 @@ const checkedPriceChangeEntries = new Map<
   [PriceChangeEntry, InventoryEntry]
 >();
 
-const supplierFoundPriceChangeEntries = new Map<string, PriceChangeEntry>();
+const supplierFoundPriceChangeEntries = new Map<
+  string,
+  [PriceChangeEntry, InventoryEntry]
+>();
 
 const notFoundPriceChangeEntries = new Map<string, PriceChangeEntry>();
 
@@ -81,7 +84,10 @@ export default class PriceChangeInventoryUpdate {
             entry,
             inventoryEntry,
           ]);
-          supplierFoundPriceChangeEntries.set(inventoryEntry.scanCode, entry);
+          supplierFoundPriceChangeEntries.set(inventoryEntry.scanCode, [
+            entry,
+            inventoryEntry,
+          ]);
         } else {
           notFoundPriceChangeEntries.set(entry.UPC, entry);
         }
