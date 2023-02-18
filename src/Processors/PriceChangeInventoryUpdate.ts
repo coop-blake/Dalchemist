@@ -1,3 +1,11 @@
+
+/**
+ * Imports and combines data from Inventory and UNFI PriceChange files, and provides methods to work with the data.
+ * 
+ * @module PriceChangeInventoryUpdate
+ * @category UNFI Price Change
+ */
+
 import InventoryImporter, { InventoryEntry } from "../TextImporters/Inventory";
 import PriceChangeImporter, {
   PriceChangeEntry,
@@ -10,33 +18,54 @@ const priceChangeImportSouth = new PriceChangeImporter(
   "./Data/Inputs/pc018620.xls"
 );
 
+/**
+ * A map of combined Price Change entries.
+ */
 const combinedPriceChangeEntries = new Map<string, PriceChangeEntry>();
-
+/**
+ * A map of combined Price Change entries.
+ */
 const duplicatePriceChangeEntries = new Map<
   string,
   [PriceChangeEntry, PriceChangeEntry]
 >();
-
+/**
+ * A map of Price Change entries with the same UPC but different values.
+ */
 const duplicatedDifferentPriceChangeEntries = new Map<
   string,
   [PriceChangeEntry, PriceChangeEntry]
 >();
-
+/**
+ * A map of Price Change and Inventory entries that match by UPC or Supplier ID.
+ */
 const checkedPriceChangeEntries = new Map<
   string,
   [PriceChangeEntry, InventoryEntry]
 >();
-
+/**
+ * A map of Price Change and Inventory entries that match by Supplier ID but not UPC.
+ */
 const supplierFoundPriceChangeEntries = new Map<
   string,
   [PriceChangeEntry, InventoryEntry]
 >();
-
+/**
+ * A map of Price Change entries with UPCs not found in Inventory.
+ */
 const notFoundPriceChangeEntries = new Map<string, PriceChangeEntry>();
-
+/**
+ * A map of Inventory entries with UNFI as default supplier.
+ */
 const inventoryUNFIItems = new Map<string, InventoryEntry>();
-
+/**
+ * The `PriceChangeInventoryUpdate` class provides methods to import and work with data from Inventory and PriceChange files.
+ * @class PriceChangeInventoryUpdate
+ */
 export default class PriceChangeInventoryUpdate {
+   /**
+   * Initializes the `PriceChangeInventoryUpdate` object by importing data from Inventory and PriceChange files.
+   */
   async initialize() {
     await inventoryImport.start();
     await priceChangeImportNorth.start();
