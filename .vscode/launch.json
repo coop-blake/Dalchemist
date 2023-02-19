@@ -77,6 +77,14 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "lowerCostsInventoryPricebookComparison"]
+    },
+    {
+      "name": "Launch checkSubdepartmentMargins",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "checkSubdepartmentMargins"]
     }
   ]
 }

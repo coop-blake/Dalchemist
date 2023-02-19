@@ -208,7 +208,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     switch (lineNumber) {
       case 0:
         //First line
-        if (lineArray[0] !== undefined && lineArray[18].trim() != "East") {
+        if (lineArray[0] !== "undefined" && lineArray[18].trim() != "East") {
           throw `First line of worksheet not expected: ${lineArray.join("\t")}`;
         }
         break;

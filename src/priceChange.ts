@@ -1,3 +1,10 @@
+/**
+ * UNFI Price Change
+ *
+ *
+ * @category UNFI Price Change
+ */
+
 import express from "express";
 import { CoreSupport } from "./Processors/CoreSupport";
 import PriceChangeInventoryUpdate from "./Processors/PriceChangeInventoryUpdate";
@@ -5,12 +12,12 @@ import { PriceChangeEntry } from "./TextImporters/PriceChange";
 import { InventoryEntry } from "./TextImporters/Inventory";
 
 async function start() {
-  console.log("Loading Price Change Instance")
+  console.log("Loading Price Change Instance");
   //Create and initialize Price Change Update
   const PriceChangeUpdate = new PriceChangeInventoryUpdate();
   await PriceChangeUpdate.initialize();
   //Create and initialize Core Support
-  console.log("Loading Core Support Instance")
+  console.log("Loading Core Support Instance");
   const coreSupport = new CoreSupport();
   await coreSupport.start();
   //Get Price change importers for each store
@@ -36,7 +43,7 @@ async function start() {
   const supplierFoundPriceChangeEntries =
     PriceChangeUpdate.getSupplierFoundPriceChangeEntries();
 
-  console.log("Creating http server")
+  console.log("Creating http server");
   //Create Express Instance
   const dalchemist = express();
   //index response
@@ -108,7 +115,7 @@ UNFI Price Update
       outputText += "###############################################\n";
 
       outputText += Object.values(entry).join(" | ") + "\n";
-      if(existingEntry){
+      if (existingEntry) {
         outputText += Object.values(existingEntry).join(" | ") + "\n";
       }
     });
@@ -132,7 +139,7 @@ UNFI Price Update
     let outputText = "Price Change Entries Not Found in Inventory\n\n";
 
     [...notFoundPriceChangeEntries.values()].forEach((entry) => {
-      outputText += entry.valuesArray.join(" ") + "\n";
+      outputText += entry.valuesArray.join("\t") + "\n";
     });
 
     result.send(`<pre>${outputText}</pre>`);
@@ -229,9 +236,13 @@ const createCombinedUNFIPriceChangeEntriesForImport = function (
     //Get Core Support Information for the inventory entry
     const coreSupportEntry = coreSupport.getEntryById(inventoryEntry.scanCode);
     //Create a proposed price using new Each price and Inventory ideal Margin
+    //Remove the Penny Value and replace with a 9
+    //todo: Add Rounding module to repository
     const proposedPrice =
-      parseFloat(priceChangeEntry.NewEachPrice) /
-      (1 - parseFloat(inventoryEntry.idealMargin) * 0.01);
+      (
+        parseFloat(parseFloat(priceChangeEntry.NewEachPrice).toFixed(2)) /
+        (1 - parseInt(inventoryEntry.idealMargin) * 0.01)
+      ).toFixed(1) + "9";
 
     //Create an export Array for the entry
     const exportArray = [
@@ -253,13 +264,15 @@ const createCombinedUNFIPriceChangeEntriesForImport = function (
       parseFloat(priceChangeEntry.PrevEachPrice).toFixed(2), //Current Each
       parseFloat(priceChangeEntry.NewEachPrice).toFixed(2), //New Each
       inventoryEntry.basePrice, //Current Retail
-      proposedPrice.toFixed(2), //Proposed Retail
+      proposedPrice, //Proposed Retail
       "", //Desired price or leave blank to keep Current Retail
       coreSupportEntry && coreSupportEntry.WestRidgefieldEDLPPrice
         ? `Core Support ${coreSupportEntry.WestRidgefieldEDLPPrice}`
         : "", //Notes
       inventoryEntry.department, //Dept
-      (parseFloat(priceChangeEntry.PrevEachPrice) - proposedPrice).toFixed(2), //Difference
+      (
+        parseFloat(proposedPrice) - parseFloat(inventoryEntry.basePrice)
+      ).toFixed(2), //Difference
       "", //North Done
       "", //South Done
     ];
