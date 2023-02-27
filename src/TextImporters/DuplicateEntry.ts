@@ -1,3 +1,8 @@
+/**
+ * @module DuplicateEntry
+ * @category Utility
+ */
+
 import TextImporter from "../TextImporters/TextImporter";
 
 //Create new Import object

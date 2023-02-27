@@ -1,4 +1,10 @@
-//TextImporter for UNFI PriceBook file
+/**
+ * TextImporter for UNFI PriceBook file
+ * @module CoreSupport
+ * @category Core Support
+ */
+
+
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 /**

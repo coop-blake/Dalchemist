@@ -1,3 +1,7 @@
+/**
+ * @module Main
+ * @category Executable
+ */
 // todo: Start a server
 // connect post requests to generators outputs
 import packageInfo from "../package.json" assert { type: "json" };

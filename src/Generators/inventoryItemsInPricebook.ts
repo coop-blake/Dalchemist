@@ -1,7 +1,15 @@
-//When ran by node this file returns a comma seperated list of items
-//found in both the Inventory and PriceBook files
+/**
+ 
+ * 
+ * When ran by node this file returns a comma seperated list of items
+ * found in both the Inventory and PriceBook files
+ * 
+ * Import the Inventory And PriceBook Importers
+ * 
+ * @module InventoryItemsInPricebook
+ * @category UNFI Price Check
+ */
 
-//Import the Inventory And PriceBook Importers
 import InventoryImporter from "../TextImporters/Inventory";
 import PriceBookTextImporter from "../TextImporters/PriceBook";
 

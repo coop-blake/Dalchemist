@@ -7,10 +7,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Duplicate Entries Program",
-      "skipFiles": ["<node_internals>/**"],
-      "runtimeExecutable": "${workspaceFolder}\\node_modules\\.bin\\ts-node",
-      "program": "${workspaceFolder}\\src\\Generators\\DuplicateEntriesCheck.ts"
+      "name": "Output UNFI price change item list",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "inventoryItemsInPricechange"]
     },
     {
       "type": "node",

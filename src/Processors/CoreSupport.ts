@@ -1,3 +1,8 @@
+/**
+ * @module CoreSupport
+ * @category Core Support
+ */
+
 import TextImporter from "../TextImporters/TextImporter";
 
 import xlsx from "node-xlsx";

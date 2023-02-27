@@ -1,3 +1,9 @@
+/**
+ * TextImporter for Catapult Price Change Worksheet export file
+ * @module PriceChangeWorksheetImporter
+ * @category Utility
+ */
+
 //TextImporter for UNFI PriceBook file
 //Import TextImporter Class
 import TextImporter from "./TextImporter";

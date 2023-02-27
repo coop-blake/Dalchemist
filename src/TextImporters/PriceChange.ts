@@ -1,4 +1,9 @@
-//TextImporter for UNFI PriceBook file
+/**
+ * TextImporter for UNFI PriceChange report file
+ * @module PriceChangeImporter
+ * @category UNFI Price Change
+ */
+
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 

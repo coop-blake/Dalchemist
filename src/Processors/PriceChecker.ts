@@ -1,3 +1,8 @@
+/**
+ * @module PriceChecker
+ * @category Price Checks
+ */
+
 import InventoryImporter, {
   InventoryEntry,
 } from "../TextImporters/Inventory";

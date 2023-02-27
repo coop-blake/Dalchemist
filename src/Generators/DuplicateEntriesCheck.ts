@@ -1,12 +1,23 @@
-//When ran this file returns a list of lines with duplicate Values
-//in the first coloumn of a tab seperated file
-//
-//Can be used to check Sale imports that are copied from NCG files
-//
-//Todo: Add arguments to chose which column contains the unique id
-//and an argument for checking a file by path
+/**
+ 
+ * When ran this file returns a list of lines with duplicate Values
+ * in the first coloumn of a tab seperated file
+ * 
+ * Can be used to check Sale imports that are copied from NCG files
+ * 
+ * Todo: Add arguments to chose which column contains the unique id
+ * and an argument for checking a file by path
+ * 
+ * Import the Inventory And PriceBook Importers
+ * 
+ * @module DuplicateEntriesCheck
+ * @category Utility
+ * 
+ */
 
-//Import the Inventory And PriceBook Importers
+
+
+
 import DuplicateEntry, {DupCheckEntry} from "../TextImporters/DuplicateEntry"
 
 const DupCheckImport = new DuplicateEntry();

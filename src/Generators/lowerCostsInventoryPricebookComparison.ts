@@ -1,6 +1,10 @@
-// Generates
-//      lowerCostsInventoryPriceBookComparison.txt
-//      A tab seperated text file for importing to excel
+/**
+ * Generates
+ *    lowerCostsInventoryPriceBookComparison.txt
+ *   A tab seperated text file for importing to excel
+ *@module lowerCostsInventoryPriceBookComparison
+ *@category UNFI Price Check
+ */
 
 //import PriceChecker processor
 import PriceChecker from "../Processors/PriceChecker";

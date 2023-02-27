@@ -1,3 +1,8 @@
+/**
+ * @module Inventory
+ * @category Utility
+ */
+
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 

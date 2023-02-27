@@ -1,3 +1,8 @@
+/**
+ * @module PriceChangeWorksheetInventoryComparison
+ * @exports PriceChangeWorksheetInventoryComparison
+ * @category Price Checks
+ */
 import process from "node:process";
 
 import PriceChangeWorksheetImporter, {
@@ -10,7 +15,7 @@ import PriceChangeWorksheetsImporter from "./PriceChangeWorksheets";
 /**
  *  PriceChangeWorksheetInventoryComparison
  *
- *  * Imports price change worksheets and inventory data and
+ *  * Imports price change worksheets and inventory data
  *  * compares the sale prices on worksheets against the base prices in the inventory.
  * @class PriceChangeWorksheetInventoryComparison
  *

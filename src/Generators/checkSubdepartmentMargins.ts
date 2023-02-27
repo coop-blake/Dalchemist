@@ -1,6 +1,6 @@
 /**
  * @module subDepartmentMarginCheck
- * @catagory Data Tests
+ * @category Data Tests
  */
 
 //When ran by node this file checks suberdepartment margins of all

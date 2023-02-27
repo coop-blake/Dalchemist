@@ -1,3 +1,7 @@
+/**
+ * @module TextImporter
+ * @category Utility
+ */
 //Base TextImporter Class
 import { stat, open } from "fs/promises";
 import { Stats } from "fs";

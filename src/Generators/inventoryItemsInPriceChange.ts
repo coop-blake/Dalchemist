@@ -1,7 +1,12 @@
-//When ran by node this file returns a comma seperated list of items
-//found in both the Inventory and Pricechange files
+/**
+ * When ran by node this file returns a comma seperated list of items
+ * found in both the Inventory and Pricechange files
+ * 
+ * Import the Inventory And Pricechange Importers
+ * @module UNFIPriceChangeInventory
+ * @category UNFI Price Change
+ */
 
-//Import the Inventory And Pricechange Importers
 import InventoryImporter from "../TextImporters/Inventory";
 import PriceChangeImporter, {PriceChangeEntry}  from "../TextImporters/PriceChange";
 

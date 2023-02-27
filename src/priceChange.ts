@@ -1,8 +1,8 @@
 /**
  * UNFI Price Change
  *
- *
- * @category UNFI Price Change
+ * @module PriceChange
+ * @category Executable
  */
 
 import express from "express";

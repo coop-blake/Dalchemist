@@ -1,3 +1,7 @@
+/**
+ * @module SubcategoryMargins
+ * @category Utility
+ */
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
 

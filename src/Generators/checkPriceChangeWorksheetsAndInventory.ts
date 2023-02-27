@@ -1,13 +1,22 @@
-// Generates
-//      checkPriceChangeWorksheetsAndInventory.txt
-//      checkPriceChangeWorksheetsAndInventoryAllOutput.txt
-//
-//   Output changes based on these flags:
-//      --show-multiple-worksheet-items
-//      --show-same-priced-items
-//      --hide-higher-priced-items
-//      --hide-items-with-inconsistent-worksheets
-//import the data processor for price change worksheet comparisons
+/**
+ *
+ * 
+*
+* ### Generates  
+*      checkPriceChangeWorksheetsAndInventory.txt  
+*      checkPriceChangeWorksheetsAndInventoryAllOutput.txt  
+*
+*   Output changes based on these flags:  
+*      --show-multiple-worksheet-items  
+*      --show-same-priced-items  
+*      --hide-higher-priced-items  
+*      --hide-items-with-inconsistent-worksheets  
+* @imports data processor for price change worksheet comparisons  
+* @module CheckPriceChangeWorksheetsAndInventory 
+* @category Price Checks
+* @example
+* npm run checkPriceChangeWorksheetsAndInventory --show-multiple-worksheet-items  --show-same-priced-items
+*/
 import PriceChangeWorksheetInventoryComparisons from "../Processors/PriceChangeWorksheetInventoryComparisons";
 //create a new price change worksheet processor
 const priceChangeWorksheetInventoryComparisons =

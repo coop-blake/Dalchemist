@@ -1,4 +1,4 @@
-# Dalchemist...
+# Dalchemist
 
 A collection of Typescript modules for assiting POS Tasks  
 
