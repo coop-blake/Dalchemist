@@ -5,6 +5,8 @@
  */
 import process from "node:process";
 
+import path from 'node:path'
+
 import PriceChangeWorksheetImporter, {
   PriceChangeWorksheetEntry,
 } from "../TextImporters/PriceChangeWorksheet";
@@ -115,19 +117,15 @@ export class PriceChangeWorksheetInventoryComparison {
         item.worksheetEntries.set(worksheet.textFilePath, worksheetEntry);
         //add item to items
         this.items.set(entry.scanCode.toString(), item);
-
+        let worksheetEntriesArrayLength = item.worksheetEntries.size
         //if more then one worksheet entry, check price consitency
-        if (Object.keys(item.worksheetEntries).length > 1) {
+        if (worksheetEntriesArrayLength > 1) {
           //add to itemsOnMultipleSheets Object
           this.itemsOnMultipleSheets.push(entry.scanCode.toString());
 
           //map worksheet entries and check prices on all worksheets match
           const worksheetConsitencyCheck =
-            this.areMultipleWorksheetPricesConsitent(
-              Object.entries(item.worksheetEntries).map((worksheetEntry) => {
-                return worksheetEntry[1];
-              })
-            );
+            this.areMultipleWorksheetPricesConsitent(Array.from(item.worksheetEntries.values()));
           //if prices don't match, add to itemsWithDifferentSalePrices
           if (!worksheetConsitencyCheck) {
             this.itemsWithDifferentSalePrices.push(entry.scanCode.toString());
@@ -160,14 +158,14 @@ export class PriceChangeWorksheetInventoryComparison {
     items.forEach((itemCode) => {
       const item = this.items.get(itemCode);
       if (item !== undefined && item.inventoryEntry) {
+        returnText += `------------------------------------------------------------------------------------\n`
         returnText += `     ${item.inventoryEntry.brand} ${item.inventoryEntry.name}  ${item.inventoryEntry.size}\n`;
-        returnText += `     ${item.inventoryEntry.basePrice} Base Price \n`;
+        returnText += `     ${item.inventoryEntry.basePrice } Base Price (${item.inventoryEntry.scanCode})\n`;
 
         const worksheetEntries = item.worksheetEntries;
 
-        Object.entries(worksheetEntries).forEach((worksheetEntryObject) => {
-          const worksheetEntry = worksheetEntryObject[1];
-          returnText += `     ${worksheetEntry.modifiedPrice} ${worksheetEntry.worksheetName} \n`;
+        worksheetEntries.forEach((worksheetEntry, worksheetPath) => {
+          returnText += `     ${worksheetEntry.priceChangeWorksheetEntry.modifiedPrice} ${path.basename(worksheetPath)} \n`;
         });
       }
     });

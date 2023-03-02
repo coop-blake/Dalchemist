@@ -47,7 +47,12 @@ InventoryImport.start()
         //Create Comma seperated string of scancodes from the items in both files
         let csvString = "";
         InventoryItemsInPriceBook.forEach(function (entry) {
-          csvString = csvString + `,${entry.scanCode}`;
+          
+          const expectedMargin =
+              subMarginsImporter.getEntryFromSubDepartment(
+                entry.subdepartment
+              )?.margin;
+              csvString = csvString + `${entry.scanCode}  ${expectedMargin} ${entry.idealMargin}  ${entry.subdepartment}  ${entry.brand} ${entry.name}\r\n`;
         });
 
         console.log(csvString);
