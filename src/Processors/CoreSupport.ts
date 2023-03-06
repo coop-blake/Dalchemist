@@ -10,73 +10,29 @@ import { stat, open } from "fs/promises";
 import { Stats, existsSync } from "fs";
 
 type CoreSupportEntry = {
-  LineNumber: number;
-  Changes: string;
-  CoreSetsRound: string;
-  BuyinStart: string;
-  BuyinEnd: string;
+  CoreSetsRound: number;
+  BuyInStart: string;
+  BuyInEnd: string;
   Dept: string;
   Category: string;
-  EastUPC: string;
-  WestUPC: string;
+  Distributor: string;
+  DistributorProductID: string;
+  UPCA: string;
   FormattedUPC: string;
   ReportingUPC: string;
-  EastItem: string;
-  WestItem: string;
-  Vendor: string;
+  Brand: string;
+  Description: string;
   UnitCount: string;
   PackSize: string;
-  Description: string;
+  PromoOI: string;
+  PromoMCB: string;
+  RebatePerUnit: string;
+  SaleCaseCost: string;
+  SaleUnitCost: string;
+  EDLPPrice: string;
+  Margin: string;
   LineNotes: string;
-  EastPromoOI: string;
-  EastPromoMCB: string;
-  EastRebateperUnit: string;
-  EastSaleCaseCost: string;
-  EastSaleUnitCost: string;
-  EastEDLPPrice: string;
-  EastMargin: string;
-  CentralPromoOI: string;
-  CentralPromoMCB: string;
-  CentralRebateperUnit: string;
-  CentralSaleCaseCost: string;
-  CentralSaleUnitCost: string;
-  CentralEDLPPrice: string;
-  CentralMargin: string;
-  WestRocklinPromoOI: string;
-  WestRocklinPromoMCB: string;
-  WestRocklinRebateperUnit: string;
-  WestRocklinSaleCaseCost: string;
-  WestRocklinSaleUnitCost: string;
-  WestRocklinEDLPPrice: string;
-  WestRocklinMargin: string;
-  WestRidgefieldPromoOI: string;
-  WestRidgefieldPromoMCB: string;
-  WestRidgefieldRebateperUnit: string;
-  WestRidgefieldSaleCaseCost: string;
-  WestRidgefieldSaleUnitCost: string;
-  WestRidgefieldEDLPPrice: string;
-  WestRidgefieldMargin: string;
-  WestMorenoValleyPromoOI: string;
-  WestMorenoValleyPromoMCB: string;
-  WestMorenoValleyRebateperUnit: string;
-  WestMorenoValleySaleCaseCost: string;
-  WestMorenoValleySaleUnitCost: string;
-  WestMorenoValleyEDLPPrice: string;
-  WestMorenoValleyMargin: string;
-  WestDenverPromoOI: string;
-  WestDenverPromoMCB: string;
-  WestDenverRebateperUnit: string;
-  WestDenverSaleCaseCost: string;
-  WestDenverSaleUnitCost: string;
-  WestDenverEDLPPrice: string;
-  WestDenverMargin: string;
-  WestTexasPromoOI: string;
-  WestTexasPromoMCB: string;
-  WestTexasRebateperUnit: string;
-  WestTexasSaleCaseCost: string;
-  WestTexasSaleUnitCost: string;
-  WestTexasEDLPPrice: string;
-  WestTexasMargin: string;
+  Changes: string;
 
   ID: string;
 };
@@ -118,86 +74,58 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   }
 
   constructor(
-    filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List_2023_Feb.xlsx`
+    filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List_2023_Mar.xlsx`
   ) {
     super();
     this.filePath = filePath;
   }
+
+  //Supplier Matches to filter out our items
+  private ourDistributors = [
+    "Equal Exchange - Direct",
+    "Tony's Fine Foods - Ridgefield, WA",
+    "UNFI - Ridgefield, WA",
+    "Ancient Nutrition - Direct",
+  ];
+
+  entryIsOurDistributor = (entry: CoreSupportEntry) => {
+    if (this.ourDistributors.includes(entry.Distributor)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   entryFromValueArray = function (
     valueArray: Array<string>
   ): CoreSupportEntry | null {
     if (Array.isArray(valueArray)) {
       const entry: CoreSupportEntry = {
-        LineNumber: parseInt(valueArray[0]),
-        Changes: valueArray[1],
-        CoreSetsRound: valueArray[2],
-        BuyinStart: valueArray[3],
-        BuyinEnd: valueArray[4],
-        Dept: valueArray[5],
-        Category: valueArray[6],
-        EastUPC: valueArray[7],
-        WestUPC: valueArray[8],
-        FormattedUPC: valueArray[9],
-        ReportingUPC: valueArray[10],
-        EastItem: valueArray[11],
-        WestItem: valueArray[12],
-        Vendor: valueArray[13],
-        UnitCount: valueArray[14],
-        PackSize: valueArray[15],
-        Description: valueArray[16],
-        LineNotes: valueArray[17],
-        EastPromoOI: valueArray[18],
-        EastPromoMCB: valueArray[19],
-        EastRebateperUnit: valueArray[20],
-        EastSaleCaseCost: valueArray[21],
-        EastSaleUnitCost: valueArray[22],
-        EastEDLPPrice: valueArray[23],
-        EastMargin: valueArray[24],
-        CentralPromoOI: valueArray[25],
-        CentralPromoMCB: valueArray[26],
-        CentralRebateperUnit: valueArray[27],
-        CentralSaleCaseCost: valueArray[28],
-        CentralSaleUnitCost: valueArray[29],
-        CentralEDLPPrice: valueArray[30],
-        CentralMargin: valueArray[31],
-        WestRocklinPromoOI: valueArray[32],
-        WestRocklinPromoMCB: valueArray[33],
-        WestRocklinRebateperUnit: valueArray[34],
-        WestRocklinSaleCaseCost: valueArray[35],
-        WestRocklinSaleUnitCost: valueArray[36],
-        WestRocklinEDLPPrice: valueArray[37],
-        WestRocklinMargin: valueArray[38],
-        WestRidgefieldPromoOI: valueArray[39],
-        WestRidgefieldPromoMCB: valueArray[40],
-        WestRidgefieldRebateperUnit: valueArray[41],
-        WestRidgefieldSaleCaseCost: valueArray[42],
-        WestRidgefieldSaleUnitCost: valueArray[43],
-        WestRidgefieldEDLPPrice: valueArray[44],
-        WestRidgefieldMargin: valueArray[45],
-        WestMorenoValleyPromoOI: valueArray[46],
-        WestMorenoValleyPromoMCB: valueArray[47],
-        WestMorenoValleyRebateperUnit: valueArray[48],
-        WestMorenoValleySaleCaseCost: valueArray[49],
-        WestMorenoValleySaleUnitCost: valueArray[50],
-        WestMorenoValleyEDLPPrice: valueArray[51],
-        WestMorenoValleyMargin: valueArray[52],
-        WestDenverPromoOI: valueArray[53],
-        WestDenverPromoMCB: valueArray[54],
-        WestDenverRebateperUnit: valueArray[55],
-        WestDenverSaleCaseCost: valueArray[56],
-        WestDenverSaleUnitCost: valueArray[57],
-        WestDenverEDLPPrice: valueArray[58],
-        WestDenverMargin: valueArray[59],
-        WestTexasPromoOI: valueArray[60],
-        WestTexasPromoMCB: valueArray[61],
-        WestTexasRebateperUnit: valueArray[62],
-        WestTexasSaleCaseCost: valueArray[63],
-        WestTexasSaleUnitCost: valueArray[64],
-        WestTexasEDLPPrice: valueArray[65],
-        WestTexasMargin: valueArray[67],
+        CoreSetsRound: parseInt(valueArray[0]),
+        BuyInStart: valueArray[1],
+        BuyInEnd: valueArray[2],
+        Dept: valueArray[3],
+        Category: valueArray[4],
+        Distributor: valueArray[5],
+        DistributorProductID: valueArray[6],
+        UPCA: valueArray[7],
+        FormattedUPC: valueArray[8],
+        ReportingUPC: valueArray[9],
+        Brand: valueArray[10],
+        Description: valueArray[11],
+        UnitCount: valueArray[12],
+        PackSize: valueArray[13],
+        PromoOI: valueArray[14],
+        PromoMCB: valueArray[15],
+        RebatePerUnit: valueArray[16],
+        SaleCaseCost: valueArray[17],
+        SaleUnitCost: valueArray[18],
+        EDLPPrice: valueArray[19],
+        Margin: valueArray[20],
+        LineNotes: valueArray[21],
+        Changes: valueArray[22],
 
-        ID: valueArray[9],
+        ID: valueArray[8],
       };
       return entry;
     }
@@ -213,51 +141,43 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     switch (lineNumber) {
       case 0:
         //First line
-        if (lineArray[0] !== "undefined" && lineArray[18].trim() != "East") {
-          throw `First line of worksheet not expected: ${lineArray.join("\t")}`;
-        }
-        break;
-      case 1:
-        //second line
         if (
-          lineArray[0] === undefined ||
-          lineArray[0].trim() !== "Line Number"
+          lineArray[0] !== "Core Sets Round" &&
+          lineArray[18].trim() != "Sale Unit Cost"
         ) {
-          throw `Second line of worksheet not expected: ${lineArray.join(
-            "\t"
-          )}`;
+          throw `First line of worksheet not expected: ${lineArray.join("\t")}`;
         }
         break;
       default:
         {
           const lineNumberFromData = lineArray[0];
-          if (
-            lineNumberFromData === undefined ||
-            typeof lineNumberFromData !== "number"
-          ) {
-            throw `Second line of worksheet not expected: ${lineArray.join(
-              "\t"
-            )}`;
-          } else {
-            const entry = this.entryFromValueArray(lineArray);
-            if (entry !== null) {
-              if (this.entries.has(entry.ID)) {
-                this.invalidEntries.push(entry);
-              } else {
-                this.entries.set(entry.ID, entry);
-                if (entry.WestRidgefieldEDLPPrice !== undefined) {
-                  this.ourCoreItems.set(entry.ID, entry);
-                } else {
-                  this.notOurWarehouse.push(entry);
-                }
-              }
+          // if (
+          //   lineNumberFromData === undefined ||
+          //   typeof lineNumberFromData !== "number"
+          // ) {
+          //   throw `Second line of worksheet not expected: ${lineArray.join(
+          //     "\t"
+          //   )}`;
+          // } else {
+          const entry = this.entryFromValueArray(lineArray);
+          if (entry !== null) {
+            if (this.entries.has(entry.ID)) {
+              this.invalidEntries.push(entry);
             } else {
-              this.invalidLines.push(
-                `Line ${lineNumber}:${lineArray.join(" | ")}`
-              );
+              this.entries.set(entry.ID, entry);
+              if (this.entryIsOurDistributor(entry)) {
+                this.ourCoreItems.set(entry.ID, entry);
+              } else {
+                this.notOurWarehouse.push(entry);
+              }
             }
+          } else {
+            this.invalidLines.push(
+              `Line ${lineNumber}:${lineArray.join(" | ")}`
+            );
           }
         }
+        // }
         break;
     }
   }

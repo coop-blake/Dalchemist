@@ -266,8 +266,8 @@ const createCombinedUNFIPriceChangeEntriesForImport = function (
       inventoryEntry.basePrice, //Current Retail
       proposedPrice, //Proposed Retail
       "", //Desired price or leave blank to keep Current Retail
-      coreSupportEntry && coreSupportEntry.WestRidgefieldEDLPPrice
-        ? `Core Support ${coreSupportEntry.WestRidgefieldEDLPPrice}`
+      coreSupportEntry && coreSupportEntry.EDLPPrice
+        ? `Core Support ${coreSupportEntry.EDLPPrice}`
         : "", //Notes
       inventoryEntry.department, //Dept
       (
