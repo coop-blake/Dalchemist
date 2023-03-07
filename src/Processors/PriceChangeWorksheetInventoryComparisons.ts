@@ -5,14 +5,12 @@
  */
 import process from "node:process";
 
-import path from 'node:path'
+import path from "node:path";
 
 import PriceChangeWorksheetImporter, {
   PriceChangeWorksheetEntry,
 } from "../TextImporters/PriceChangeWorksheet";
-import InventoryImporter, {
-  InventoryEntry,
-} from "../TextImporters/Inventory";
+import InventoryImporter, { InventoryEntry } from "../TextImporters/Inventory";
 import PriceChangeWorksheetsImporter from "./PriceChangeWorksheets";
 /**
  *  PriceChangeWorksheetInventoryComparison
@@ -76,9 +74,7 @@ export class PriceChangeWorksheetInventoryComparison {
           worksheetEntries = new Map<string, WorkSheetEntry>();
           item = {
             worksheetEntries: worksheetEntries,
-            inventoryEntry: this.Inventory.getEntryFromScanCode(
-              entry.scanCode
-            ),
+            inventoryEntry: this.Inventory.getEntryFromScanCode(entry.scanCode),
           };
         }
 
@@ -117,7 +113,7 @@ export class PriceChangeWorksheetInventoryComparison {
         item.worksheetEntries.set(worksheet.textFilePath, worksheetEntry);
         //add item to items
         this.items.set(entry.scanCode.toString(), item);
-        let worksheetEntriesArrayLength = item.worksheetEntries.size
+        const worksheetEntriesArrayLength = item.worksheetEntries.size;
         //if more then one worksheet entry, check price consitency
         if (worksheetEntriesArrayLength > 1) {
           //add to itemsOnMultipleSheets Object
@@ -125,7 +121,9 @@ export class PriceChangeWorksheetInventoryComparison {
 
           //map worksheet entries and check prices on all worksheets match
           const worksheetConsitencyCheck =
-            this.areMultipleWorksheetPricesConsitent(Array.from(item.worksheetEntries.values()));
+            this.areMultipleWorksheetPricesConsitent(
+              Array.from(item.worksheetEntries.values())
+            );
           //if prices don't match, add to itemsWithDifferentSalePrices
           if (!worksheetConsitencyCheck) {
             this.itemsWithDifferentSalePrices.push(entry.scanCode.toString());
@@ -158,24 +156,26 @@ export class PriceChangeWorksheetInventoryComparison {
     items.forEach((itemCode) => {
       const item = this.items.get(itemCode);
       if (item !== undefined && item.inventoryEntry) {
-        returnText += `------------------------------------------------------------------------------------\n`
+        returnText += `------------------------------------------------------------------------------------\n`;
         returnText += `     ${item.inventoryEntry.brand} ${item.inventoryEntry.name}  ${item.inventoryEntry.size}\n`;
-        returnText += `     ${item.inventoryEntry.basePrice } Base Price (${item.inventoryEntry.scanCode})\n`;
+        returnText += `     ${item.inventoryEntry.basePrice} Base Price (${item.inventoryEntry.scanCode})\n`;
 
         const worksheetEntries = item.worksheetEntries;
 
         worksheetEntries.forEach((worksheetEntry, worksheetPath) => {
-          returnText += `     ${worksheetEntry.priceChangeWorksheetEntry.modifiedPrice} ${path.basename(worksheetPath)} \n`;
+          returnText += `     ${
+            worksheetEntry.priceChangeWorksheetEntry.modifiedPrice
+          } ${path.basename(worksheetPath)} \n`;
         });
       }
     });
     return returnText;
   }
-//   Output changes based on these flags:
-//      --show-multiple-worksheet-items
-//      --show-same-priced-items
-//      --hide-higher-priced-items
-//      --hide-items-with-inconsistent-worksheets
+  //   Output changes based on these flags:
+  //      --show-multiple-worksheet-items
+  //      --show-same-priced-items
+  //      --hide-higher-priced-items
+  //      --hide-items-with-inconsistent-worksheets
 
   /**
    * Creates a readable string
@@ -188,7 +188,7 @@ export class PriceChangeWorksheetInventoryComparison {
    *
    * @returns {string} - String for output
    */
-  getOutput() : string {
+  getOutput(): string {
     //Start with blank output
     let outputText = "";
 
@@ -234,8 +234,6 @@ export class PriceChangeWorksheetInventoryComparison {
     return outputText;
   }
 }
-
-
 
 /**
  * Represents an item entry that contains information about a worksheet and an inventory entry.
