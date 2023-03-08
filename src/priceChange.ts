@@ -49,51 +49,53 @@ async function start() {
   //index response
   dalchemist.get("/", (request, result) => {
     result.send(`<pre>
-UNFI Price Update
-    Core Support Price List: ${coreSupport.getCreationDate()?.toDateString()}
-      Number of Items: ${coreSupport.getNumberOfEntries()}
-      Number of our Items: ${coreSupport.ourCoreItems.size}
-
-      <a href="/CoreInvalidEntries">Invalid Entries:</a> ${coreSupport.getNumberOfInvalidEntries()}
-      <a href="/CoreInvalidLines">Invalid Lines:</a> ${coreSupport.getNumberOfInvalidLines()}
-    North PriceChange: ${priceChangeImporterNorth
+<H1>UNFI Price Update</H1>
+    <H2>Catapult Inventory: 📅 ${invetoryImport
       .getCreationDate()
-      ?.toDateString()}
-        Entries: ${priceChangeImporterNorth.getNumberOfEntries()}
-        Invalid Entries: ${priceChangeImporterNorth.getNumberOfInvalidEntries()}
-        Lines: ${priceChangeImporterNorth.getNumberOfInvalidLines()}
-    South PriceBook: ${priceChangeImporterSouth
+      ?.toDateString()}</H2>
+      🛒 Items: ${invetoryImport.getNumberOfEntries()}
+      🚫 Invalid Entries: ${invetoryImport.getNumberOfInvalidEntries()}
+      🚫 Invalid Lines: ${invetoryImport.getNumberOfInvalidLines()}
+    <H2>Core Support Price List: 📅 ${coreSupport
       .getCreationDate()
-      ?.toDateString()}
-        Entries: ${priceChangeImporterSouth.getNumberOfEntries()}
-        Invalid Entries: ${priceChangeImporterSouth.getNumberOfInvalidEntries()}
-        Lines: ${priceChangeImporterSouth.getNumberOfInvalidLines()}
-        
-    Duplicate Entries: 
-        <a href="/Duplicates">Entries: </a> ${duplicatedEntries.length}
-        <a href="/DuplicatedDifferent">Different Entries: </a> ${
-          duplicatedDifferentEntries.length
-        }
-
-        <a href="/CombinedUNFIPriceChangeEntries">Combined Entries:</a> ${
-          combinedPriceChangeEntries.size
-        }
-    Checked Entries: ${checkedPriceChangeEntries.size}
-    <a href="/NotFound">Not Found Entries: ${
-      notFoundPriceChangeEntries.size
-    }</a>
-    <a href="/FoundSupplier">Found Entries By Supplier: ${
-      supplierFoundPriceChangeEntries.size
-    }</a>
+      ?.toDateString()}</H2> 
+      <a href="/CoreDistributorEntries">🎪 Number of Items from our Distributors: ${coreSupport.getNumberOfEntries()}</a>
+      <a href="/CoreEntries">🎪 Number of Items from our Distributors with entries in Catapult: ${
+        coreSupport.ourCoreItems.size
+      }</a>
+      <a href="/CoreInvalidEntries">🔕 Number of Items from other Distributors:</a> ${coreSupport.getNumberOfInvalidEntries()}
+      <a href="/CoreInvalidLines">🔕 Invalid Lines:</a> ${coreSupport.getNumberOfInvalidLines()}
+    <H2>UNFI Price Changes: North 📅 ${priceChangeImporterNorth
+      .getCreationDate()
+      ?.toDateString()} : South 📅 ${priceChangeImporterSouth
+      .getCreationDate()
+      ?.toDateString()}</H2>
+      <b>North:</b>
+          Entries: ${priceChangeImporterNorth.getNumberOfEntries()}
+          Invalid Entries: ${priceChangeImporterNorth.getNumberOfInvalidEntries()}
+          Lines: ${priceChangeImporterNorth.getNumberOfInvalidLines()}
+      <b>South:</b>
+          Entries: ${priceChangeImporterSouth.getNumberOfEntries()}
+          Invalid Entries: ${priceChangeImporterSouth.getNumberOfInvalidEntries()}
+          Lines: ${priceChangeImporterSouth.getNumberOfInvalidLines()}    
+      <b>Duplicate Entries:</b>
+          <a href="/Duplicates">Entries: </a> ${duplicatedEntries.length}
+          <a href="/DuplicatedDifferent">Different Entries: </a> ${
+            duplicatedDifferentEntries.length
+          }
+          <a href="/CombinedUNFIPriceChangeEntries">Combined Entries:</a> ${
+            combinedPriceChangeEntries.size
+          }
+      <b>Final Entries:</b> ${checkedPriceChangeEntries.size}
+      <a href="/NotFound">👓 Not Found Entries: ${
+        notFoundPriceChangeEntries.size
+      }</a>
+      <a href="/FoundSupplier">👓 Found Entries By Supplier: ${
+        supplierFoundPriceChangeEntries.size
+      }</a>
     
-    Inventory: ${invetoryImport.getCreationDate()?.toDateString()}
-        Items: ${invetoryImport.getNumberOfEntries()}
-        Invalid Entries: ${invetoryImport.getNumberOfInvalidEntries()}
-        Invalid Lines: ${invetoryImport.getNumberOfInvalidLines()}
 
-
-
-        <a href="/CombinedUNFIPriceChangeEntriesForImport">Get TSV Export</a>
+        <a href="/CombinedUNFIPriceChangeEntriesForImport">Get Final TSV Export</a>
 </pre>`);
   });
 
@@ -107,8 +109,27 @@ UNFI Price Update
     result.send(`<pre>${outputText}</pre>`);
   });
 
+  dalchemist.get("/CoreDistributorEntries", async (request, result) => {
+    let outputText = "Core Support Distributor Items\n\n";
+
+    coreSupport.forEachEntry((entry) => {
+      outputText += Object.values(entry).join("\t") + "\n";
+    });
+
+    result.send(`<pre>${outputText}</pre>`);
+  });
+  dalchemist.get("/CoreEntries", async (request, result) => {
+    let outputText = "Core Support Distributor Items in\n\n";
+
+    coreSupport.ourCoreItems.forEach((entry) => {
+      outputText += Object.values(entry).join("\t") + "\n";
+    });
+
+    result.send(`<pre>${outputText}</pre>`);
+  });
+
   dalchemist.get("/CoreInvalidEntries", async (request, result) => {
-    let outputText = "Price Change Entries Not Found in Inventory\n\n";
+    let outputText = "Core Support Entries Not Found in Inventory\n\n";
 
     coreSupport.forEachInvalidEntry((entry) => {
       const existingEntry = coreSupport.getEntryFromScanCode(entry.ID);
