@@ -74,7 +74,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   }
 
   constructor(
-    filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List_2023_Mar.xlsx`
+    filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List_2023_Apr.xlsx`
   ) {
     super();
     this.filePath = filePath;
