@@ -52,7 +52,7 @@ class SubMarginsImporter extends TextImporter<SubMarginEntry> {
     // Data/Inputs/README.md
     if (valueArray.length === 2) {
       const entry: SubMarginEntry = {
-        subDepartment: valueArray[0].trim().substring(0, 30),
+        subDepartment: valueArray[0].trim().substring(0, 30).trim(),
         margin: valueArray[1].trim(),
 
         //All values as array as received
