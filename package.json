@@ -20,6 +20,7 @@
     "googleUpdate-Inventory": "npx babel-node -x .ts -- src/Google/update-Inventory.ts",
     "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
     "googleCheck-addDrop": "nodemon --exec \"babel-node -x .ts\" src/Google/check-addDrop.ts",
+    "googleCheck-Inventory": "babel-node -x .ts src/Google/Inventory/check-Inventory.ts",
     "clean": "rimraf build/",
     "debugElectron": "npx babel-node -x .ts -- src/electron/startApp.ts",
     "build": "",

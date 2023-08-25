@@ -1,17 +1,12 @@
-import * as Store from 'electron-store';
+import Store from "electron-store";
 import { dialog } from "electron";
-import Main from './electron-main'
-
-
-
+import Main from "./electron-main";
 
 class Settings {
   private static instance: Settings;
-  private store: Store;
+  private store: Store = new Store();
 
-  private constructor() {
-    this.store = new Store();
-  }
+  private constructor() {}
 
   public static getInstance(): Settings {
     if (!Settings.instance) {
@@ -23,61 +18,55 @@ class Settings {
   public saveJsonLocation(location: string) {
     console.log(`Ready, going!!${location}`);
 
-    this.store.set('jsonLocation', location);
+    this.store.set("jsonLocation", location);
   }
 
-  public async  loadJsonLocation(): Promise<string | undefined> {
-
-    let googleCertPath = this.store.get('jsonLocation') as string;
+  public async loadJsonLocation(): Promise<string | undefined> {
+    let googleCertPath = this.store.get("jsonLocation") as string;
     if (googleCertPath) {
       console.log("googleCertPath", googleCertPath);
-      return googleCertPath
+      return googleCertPath;
     } else {
       console.log("No googleCertPath in settings!");
 
-      if(Main.notReady){
+      if (Main.notReady) {
         console.log("Not ready, waiting!");
 
-      //  await Main.application?.on("ready", async () => {
-      //     googleCertPath =  await openJsonFileDialog() as string
-      //   });
-
+        //  await Main.application?.on("ready", async () => {
+        //     googleCertPath =  await openJsonFileDialog() as string
+        //   });
 
         return new Promise<string | undefined>((resolve) => {
           Main.application?.on("ready", async () => {
-            googleCertPath = await openJsonFileDialog() as string;
+            googleCertPath = (await openJsonFileDialog()) as string;
             this.saveJsonLocation(googleCertPath);
             resolve(googleCertPath);
           });
         });
 
         console.log("Not ready, waiting!");
-
-
-      }else{
+      } else {
         console.log("Ready, going!!");
 
-        googleCertPath =  await openJsonFileDialog() as string
+        googleCertPath = (await openJsonFileDialog()) as string;
       }
-      this.saveJsonLocation(googleCertPath)
-     return googleCertPath
+      this.saveJsonLocation(googleCertPath);
+      return googleCertPath;
     }
   }
 }
-
-
 
 async function openJsonFileDialog(): Promise<string | undefined> {
   console.log("openJsonFileDialog!");
 
   const result = await dialog.showOpenDialog({
-    properties: ['openFile'],
-    filters: [{ name: 'JSON Files', extensions: ['json'] }],
+    properties: ["openFile"],
+    filters: [{ name: "JSON Files", extensions: ["json"] }],
   });
-  console.log("openJsonFileDialog!",result);
+  console.log("openJsonFileDialog!", result);
 
   if (!result.canceled && result.filePaths.length > 0) {
-    console.log("openJsonFileDialogreturngin!",result.filePaths[0]);
+    console.log("openJsonFileDialogreturngin!", result.filePaths[0]);
 
     return result.filePaths[0];
   }
@@ -85,4 +74,4 @@ async function openJsonFileDialog(): Promise<string | undefined> {
   return undefined;
 }
 
-export default Settings;
+export default Settings.getInstance();

@@ -27,11 +27,10 @@ import {
 export async function start(onStarted: Function) {
   console.log("starting");
   Main.statusMessageUpdate("Starting");
-  const settings = Settings.getInstance();
 
   Main.statusMessageUpdate("Getting Google Certificate");
 
-  const googleCertPath = (await settings.loadJsonLocation()) as string;
+  const googleCertPath = (await Settings.loadJsonLocation()) as string;
   if (googleCertPath) {
     console.log("googleCertPath", googleCertPath);
   } else {
@@ -64,7 +63,7 @@ export async function start(onStarted: Function) {
 
   //config Google
   const googleCertFilename = "../Inventory/CertAndLogs/googleCert.json";
-  const googleCertFilePath = path.join(__dirname, googleCertFilename);
+  // const googleCertFilePath = path.join(__dirname, googleCertFilename);
 
   if (!fs.existsSync(googleCertPath)) {
     throw Error("Google Service Account Certificate does not exist!");
