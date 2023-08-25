@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-const { spawn } = require("child_process");
+import { spawn } = require("child_process");
 
 import fs from "fs";
 import path from "path";
@@ -100,7 +100,7 @@ async function start() {
 
     SouthDisco = SouthDisco == "1" ? "🔴" : "🟢";
     valueArray.push(SouthSoldDate ? SouthSoldDate : "");
-    valueArray.splice(9, 0, SouthDisco ? SouthDisco : 0);
+    valueArray.splice(9, 0, SouthDisco ? SouthDisco : "0");
 
     let NorthDisco = valueArray.splice(5, 1)[0];
     NorthDisco = NorthDisco == "1" ? "🔴" : "🟢";
@@ -139,9 +139,9 @@ async function start() {
     scopes: ["https://www.googleapis.com/auth/drive"],
   });
 
-  const authClient = await auth.getClient();
+  //const authClient = await auth.getClient();
 
-  const sheets = google.sheets({ version: "v4", auth: authClient });
+  const sheets = google.sheets({ version: "v4", auth: auth });
   const spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA"; //acitive id
 
   //  const spreadsheetId = "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"; //dev id

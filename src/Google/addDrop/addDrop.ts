@@ -1,13 +1,11 @@
 import { Google } from "../google";
 import * as express from "express";
 import * as path from "path";
-import * as fs from 'fs';
+import * as fs from "fs";
 
+import Main from "../../electron/electron-main";
 
-import Main from '../../electron/electron-main'
-
-import Settings from '../../electron/Settings';
-
+import Settings from "../../electron/Settings";
 
 import InventoryImporter, {
   InventoryEntry,
@@ -17,7 +15,7 @@ import {
   getNewItemsReport,
   getItemsAlreadyInInventoryReport,
   getPriceUpdatesInfo,
-  getAddDropPriceUpdatesTSV
+  getAddDropPriceUpdatesTSV,
 } from "./htmlOutputs";
 
 //Main.main(app, BrowserWindow);
@@ -25,16 +23,15 @@ import {
 /*###################################################################################
 # Start Function
 #####################################################################################*/
-export async function start( onStarted : Function) {
-
-
+// eslint-disable-next-line @typescript-eslint/ban-types
+export async function start(onStarted: Function) {
   console.log("starting");
-  Main.statusMessageUpdate("Starting")
-  const settings = Settings.getInstance()
+  Main.statusMessageUpdate("Starting");
+  const settings = Settings.getInstance();
 
-  Main.statusMessageUpdate("Getting Google Certificate")
+  Main.statusMessageUpdate("Getting Google Certificate");
 
-  let googleCertPath = await settings.loadJsonLocation() as string;
+  const googleCertPath = (await settings.loadJsonLocation()) as string;
   if (googleCertPath) {
     console.log("googleCertPath", googleCertPath);
   } else {
@@ -44,16 +41,16 @@ export async function start( onStarted : Function) {
   /*###################################################################################
 # Read Inventory
 #####################################################################################*/
-Main.statusMessageUpdate("Reading Inventory")
+  Main.statusMessageUpdate("Reading Inventory");
 
   const northInventoryFilePath = path.join(
     __dirname,
     "../Inventory/fetches/North.txt"
   );
-  
+
   if (!fs.existsSync(northInventoryFilePath)) {
-    throw(Error("Inventory File does not exist!"))
-    return
+    throw Error("Inventory File does not exist!");
+    return;
   }
   console.log("Reading North Inventory -Preparing Data");
   const NorthInventoryImport = new InventoryImporter();
@@ -63,14 +60,14 @@ Main.statusMessageUpdate("Reading Inventory")
 # Read Add/Drop
 #####################################################################################*/
   console.log("Logging into Google");
-  Main.statusMessageUpdate("Logging Into Google")
+  Main.statusMessageUpdate("Logging Into Google");
 
   //config Google
   const googleCertFilename = "../Inventory/CertAndLogs/googleCert.json";
   const googleCertFilePath = path.join(__dirname, googleCertFilename);
 
   if (!fs.existsSync(googleCertPath)) {
-    throw(Error("Google Service Account Certificate does not exist!"))
+    throw Error("Google Service Account Certificate does not exist!");
   }
 
   const sheets = Google.getSheetsFor(googleCertPath);
@@ -81,7 +78,7 @@ Main.statusMessageUpdate("Reading Inventory")
 #####################################################################################*/
   //If new item is in inventory - put the entries in an array together
   console.log("Reading New Items");
-  Main.statusMessageUpdate("Reading New Items")
+  Main.statusMessageUpdate("Reading New Items");
 
   //Read data from New Items Tab
   const newItemsResponse = await sheets.spreadsheets.values.get({
@@ -109,7 +106,7 @@ Main.statusMessageUpdate("Reading Inventory")
 # Process Attribute Updates
 #####################################################################################*/
   // Read data from "Price and attribute changes" tab
-  Main.statusMessageUpdate("Reading Price and Attribute Changes")
+  Main.statusMessageUpdate("Reading Price and Attribute Changes");
 
   const attributeChangesResponse = await sheets.spreadsheets.values.get({
     spreadsheetId: spreadsheetId,
@@ -123,7 +120,7 @@ Main.statusMessageUpdate("Reading Inventory")
     )
     .filter((attributeChangeItem) => {
       return attributeChangeItem;
-    }) as [AttributeChangeEntry]
+    }) as [AttributeChangeEntry];
   //If attributeChange contains a price update - put it in an array
   const priceUpdates = attributeChangeItems?.filter((attributeChange) => {
     return (
@@ -154,12 +151,19 @@ Main.statusMessageUpdate("Reading Inventory")
 #####################################################################################*/
 
   console.log("Preparing Server");
-  Main.statusMessageUpdate("Creating Webserver")
+  Main.statusMessageUpdate("Creating Webserver");
 
   const dalchemist = express();
 
   dalchemist.get("/", (request, response) => {
-    response.send(getIndex(newItems,itemsAlreadyInInventory, attributeChangeItems, priceUpdates ));
+    response.send(
+      getIndex(
+        newItems,
+        itemsAlreadyInInventory,
+        attributeChangeItems,
+        priceUpdates
+      )
+    );
   });
 
   dalchemist.get("/newItems", async (request, response) => {
@@ -173,15 +177,18 @@ Main.statusMessageUpdate("Reading Inventory")
     response.send(getPriceUpdatesInfo(priceUpdates, NorthInventoryImport));
   });
   dalchemist.get("/addDropPriceChanges.txt", async (request, response) => {
-    response.setHeader('Content-Disposition', 'attachment; filename="addDropPriceChanges.txt"');
-    response.setHeader('Content-Type', 'text/tab-separated-values');
-    
+    response.setHeader(
+      "Content-Disposition",
+      'attachment; filename="addDropPriceChanges.txt"'
+    );
+    response.setHeader("Content-Type", "text/tab-separated-values");
+
     response.send(getAddDropPriceUpdatesTSV(priceUpdates));
   });
 
-  getAddDropPriceUpdatesTSV
+  getAddDropPriceUpdatesTSV;
   dalchemist.listen(4848, () => {
-    onStarted()
+    onStarted();
   });
 
   /*###################################################################################
