@@ -16,7 +16,6 @@
     "externalPattern": "tests/**/*.ts",
     "exclude": "**/*+(index|.test|.spec|.e2e).ts",
     "excludeExternals": true,
-    "out": "docs",
-    "plugin": "none"
+    "out": "docs"
   }
 }
