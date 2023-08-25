@@ -23,7 +23,7 @@
     "clean": "rimraf build/",
     "debugElectron": "npx babel-node -x .ts -- src/electron/startApp.ts",
     "build": "",
-    "copy-files": "npx copyfiles -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.svg build",
+    "copy-files": "copyfiles -E -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.svg src/electron/Resources/css/index.css build",
     "electronBuild": "tsc  --outDir ./build --target es6 --module commonjs --moduleResolution node src/electron/startApp.ts && npx copyfiles -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.svg build",
     "electronRun": "electron .",
     "electron": "npm run electronBuild && npm run electronRun",
