@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Input Dialog</title>
+</head>
+<body>
+  <label for="input-field">Enter something:</label>
+  <input type="text" id="input-field" name="input" />
+  <button id="submit-button">Submit</button>
+
+  <script>
+   // const ipcRenderer = window.ipcRenderer;
+
+    const inputField = document.getElementById('input-field');
+    const submitButton = document.getElementById('submit-button');
+
+    submitButton.addEventListener('click', () => {
+      const inputValue = inputField.value;
+      ipcRenderer.send('input-data', inputValue);
+    });
+
+    ipcRenderer.on('input-data-reply', (event, data) => {
+      console.log('Received reply:', data);
+    });
+  </script>
+</body>
+</html>

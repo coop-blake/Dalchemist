@@ -1,0 +1,83 @@
+{
+  "name": "dalchemist",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./build/electron/startApp.js",
+  "scripts": {
+    "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
+    "checkDuplicateEntries": "npx babel-node -x .ts -- src/Generators/DuplicateEntriesChecker.ts",
+    "checkSubdepartmentMargins": "npx babel-node -x .ts -- src/Generators/checkSubdepartmentMargins.ts",
+    "outputToFileCheckSubdepartmentMargins": "npm run -s checkSubdepartmentMargins > ./Data/Outputs/subMarginCheckResults.txt",
+    "inventoryItemsInPricebook": "npx babel-node -x .ts -- src/Generators/inventoryItemsInPricebook.ts > Data/Outputs/inventoryItemsInPricebook.txt",
+    "inventoryItemsInPricechange": "npx babel-node -x .ts -- src/Generators/inventoryItemsInPriceChange.ts > Data/Outputs/inventoryItemsInPricechange.txt",
+    "lowerCostsInventoryPricebookComparison": "npx babel-node -x .ts --  src/Generators/lowerCostsInventoryPricebookComparison.ts > Data/Outputs/lowerCostsInventoryPricebookComparison.txt",
+    "checkPriceChangeWorksheetsAndInventory": "npx babel-node -x .ts --  src/Generators/checkPriceChangeWorksheetsAndInventory.ts > Data/Outputs/checkPriceChangeWorksheetsAndInventory.txt",
+    "checkPriceChangeWorksheetsAndInventory-AllOutput": "npx babel-node -x .ts --  src/Generators/checkPriceChangeWorksheetsAndInventory.ts --show-multiple-worksheet-items --show-same-priced-items > Data/Outputs/checkPriceChangeWorksheetsAndInventoryAllOutput.txt",
+    "start": "nodemon --exec \"babel-node -x .ts\" src/main.ts",
+    "startStatusCheck": "nodemon --exec \"babel-node -x .ts\" src/status.ts",
+    "startPriceUpdate": "nodemon --exec \"babel-node -x .ts\" src/priceChange.ts",
+    "startCoreSetCheck": "nodemon --exec \"babel-node -x .ts\" src/Webstarts/coreSupportCheck.ts",
+    "googleUpdate-Inventory": "npx babel-node -x .ts -- src/Google/update-Inventory.ts",
+    "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
+    "googleCheck-addDrop": "nodemon --exec \"babel-node -x .ts\" src/Google/check-addDrop.ts",
+    "clean": "rimraf build/",
+    "debugElectron": "npx babel-node -x .ts -- src/electron/startApp.ts",
+    "build": "",
+    "copy-files": "npx copyfiles -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.svg build",
+    "electronBuild": "tsc  --outDir ./build --target es6 --module commonjs --moduleResolution node src/electron/startApp.ts && npx copyfiles -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.svg build",
+    "electronRun": "electron .",
+    "electron": "npm run electronBuild && npm run electronRun",
+    "package-win": "npm run electronBuild && electron-packager . Dalchemist --platform=win32 --arch=x64 --out=dist --overwrite",
+    "package-macOS": "npm run electronBuild && electron-packager . Dalchemist --platform=darwin --arch=x64 --out=dist --overwrite",
+    "test": "jest",
+    "lint": "npx eslint .",
+    "docs": "typedoc",
+    "docs-external": "typedoc --out docs/external --excludeInternal --readme ./README.md",
+    "docs-md": "typdoc --plugin typedoc-plugin-markdown --out docs/markdown"
+  },
+  "author": "Blake Glanville",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@babel/cli": "^7.22.10",
+    "@babel/core": "^7.22.10",
+    "@babel/node": "^7.22.10",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-syntax-import-assertions": "^7.22.5",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.5",
+    "@types/electron": "^1.6.10",
+    "@types/express": "^4.17.17",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "copyfiles": "^2.4.1",
+    "electron": "^26.0.0",
+    "electron-packager": "^17.1.2",
+    "eslint": "^8.47.0",
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.2",
+    "rimraf": "^5.0.1",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-markdown": "^3.15.4",
+    "typescript": "^5.1.6"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^6.0.3"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "express": "^4.18.2",
+    "googleapis": "^125.0.0",
+    "node-xlsx": "^0.23.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html"
+    ]
+  }
+}

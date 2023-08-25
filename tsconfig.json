@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "./src/electron/out",
+    "rootDir": "./",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  },
+  "include": ["./src/**/*.ts", "./tests/**/*.ts", "./Globals.d.ts"],
+  "typedocOptions": {
+    "entryPoints": ["src/"],
+    "entryPointStrategy": "expand",
+    "externalPattern": "tests/**/*.ts",
+    "exclude": "**/*+(index|.test|.spec|.e2e).ts",
+    "excludeExternals": true,
+    "out": "docs",
+    "plugin": "none"
+  }
+}

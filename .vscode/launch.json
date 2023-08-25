@@ -1,0 +1,155 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🌐 Interactive: Main",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"]
+    },
+    {
+      "name": "🌐 Interactive: Status",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "startStatusCheck"]
+    },
+    {
+      "name": "🌐 Interactive: Price Update",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "startPriceUpdate"]
+    },
+    {
+      "name": "🌐 Interactive: Core Sets",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "startCoreSetCheck"]
+    },
+    {
+      "name": "🌐 Interactive: Google: Check Add/Drop",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleCheck-addDrop"]
+    },
+    {
+      "name": "🔨 #1 - Build Electron",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "electronBuild"]
+    },
+    {
+      "name": "🏃‍♀️ #2 - Run Electron",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "electronRun"]
+    },
+    {
+      "name": " 🔨🏃‍♀️ #1&2 - Build and Run Electron",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "electron"]
+    },
+    {
+      "name": "🎆 Generator: checkDuplicateEntries",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "checkDuplicateEntries"]
+    },
+    {
+      "name": "🎆 Generator: checkSubdepartmentMargins",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "checkSubdepartmentMargins"]
+    },
+    {
+      "name": "🎆 Generator: inventoryItemsInPricebook",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "inventoryItemsInPricebook"]
+    },
+    {
+      "name": "🎆 Generator: inventoryItemsInPricechange",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "inventoryItemsInPricechange"]
+    },
+    {
+      "name": "🎆 Generator: lowerCostsInventoryPricebookComparison",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "lowerCostsInventoryPricebookComparison"]
+    },
+    {
+      "name": "🎆 Generator: checkPriceChangeWorksheetsAndInventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "checkPriceChangeWorksheetsAndInventory"]
+    },
+    {
+      "name": "🎆 Generator: checkPriceChangeWorksheetsAndInventory-AllOutput",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "checkPriceChangeWorksheetsAndInventory-AllOutput"
+      ]
+    },
+    {
+      "name": "📝 Create from Generator: outputAll",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "outputAll"]
+    },
+    {
+      "name": "📝 Google: update Inventory Dev",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleUpdate-Inventory"]
+    },
+    {
+      "name": "📝 Google: update Sub Department Report",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleUpdate-subDepartmentsReport"]
+    }
+  ]
+}
