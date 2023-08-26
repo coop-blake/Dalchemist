@@ -1,17 +1,18 @@
-import {NewItemEntry, AttributeChangeEntry, AddDrop} from "./addDrop"
-import { Inventory, InventoryState, InventoryStatus, InventoryEntry } from "../Inventory/Inventory";
+import { NewItemEntry, AttributeChangeEntry, AddDrop } from "./addDrop";
+import {
+  Inventory,
+  InventoryState,
+  InventoryStatus,
+  InventoryEntry,
+} from "../Inventory/Inventory";
 
+export function getIndex() {
+  const newItems = AddDrop.state.newItems;
+  const itemsAlreadyInInventory = AddDrop.state.itemsAlreadyInInventory;
+  const attributeChangeItems = AddDrop.state.attributeChangeItems;
+  const priceUpdates = AddDrop.state.priceUpdates;
 
-export function getIndex()
-{
-
-  const newItems= AddDrop.state.newItems;
-  const itemsAlreadyInInventory=   AddDrop.state.itemsAlreadyInInventory;
-  const attributeChangeItems=   AddDrop.state.attributeChangeItems;
-  const priceUpdates=   AddDrop.state.priceUpdates;
-  
-
-  const returnString =`
+  const returnString = `
   ${getStyle()}
   <div class="mainAddDrop">
   <div class="newItems">
@@ -29,17 +30,21 @@ export function getIndex()
   </div>
   <div class="attributeChanges">
   <h1>Price & Attribute Changes</h1>
-  ${attributeChangeItems?.length ? `  Attribute Change Entries: ${attributeChangeItems?.length} 
+  ${
+    attributeChangeItems?.length
+      ? `  Attribute Change Entries: ${attributeChangeItems?.length} 
       
-  <a href="/priceUpdateInfo"> Price Changes: ${priceUpdates?.length} </a>` : `✅ Price & Attribute Changes Cleared`}
+  <a href="/priceUpdateInfo"> Price Changes: ${priceUpdates?.length} </a>`
+      : `✅ Price & Attribute Changes Cleared`
+  }
     </div>
       </div>
   
-`
-return returnString
+`;
+  return returnString;
 }
 
-export function getNewItemsReport(newItems : NewItemEntry[]) {
+export function getNewItemsReport(newItems: NewItemEntry[]) {
   return `
   ${getStyle()}
 
@@ -80,7 +85,9 @@ ${newItems
   `;
 }
 
-export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [NewItemEntry, InventoryEntry][]) {
+export function getItemsAlreadyInInventoryReport(
+  itemsAlreadyInInventory: [NewItemEntry, InventoryEntry][]
+) {
   return `
   ${getStyle()}
 
@@ -181,8 +188,8 @@ export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [NewIt
  `;
 }
 
-export function getPriceUpdatesInfo(priceUpdates : AttributeChangeEntry[]) {
-  const inventory = Inventory.getInstance()
+export function getPriceUpdatesInfo(priceUpdates: AttributeChangeEntry[]) {
+  const inventory = Inventory.getInstance();
   const returnString = `
   ${getStyle()}
      <table>
@@ -242,6 +249,13 @@ export function getPriceUpdatesInfo(priceUpdates : AttributeChangeEntry[]) {
                     : "N/A"
                 }</td>
             </tr>
+            <tr>
+                <td>Comments:</td><td>Entry Comments</td><td style="border: solid red 1px;" colspac=2>${
+                  attributeUpdateEntry.Comments
+                    ? attributeUpdateEntry.Comments
+                    : ""
+                }</td>
+            </tr>
          `;
              return returnString;
            })
@@ -289,21 +303,22 @@ export function getStyle() {
   return returnString;
 }
 
-
-export function getAddDropPriceUpdatesTSV(priceUpdates : AttributeChangeEntry[]){
-  const header = ['Scan Code', 'Base Price', 'Cost'].join('\t');
+export function getAddDropPriceUpdatesTSV(
+  priceUpdates: AttributeChangeEntry[]
+) {
+  const header = ["Scan Code", "Base Price", "Cost"].join("\t");
 
   // Convert the price updates into TSV rows
-  const rows = priceUpdates.map(entry => {
+  const rows = priceUpdates.map((entry) => {
     const scanCode = entry.ScanCode;
-    const BasePrice = entry.BasePrice;
-    const cost = entry.UnitCost;
+    const BasePrice = entry.BasePrice.replace("$", "");
+    const cost = entry.UnitCost.replace("$", "");
 
-    return [scanCode, BasePrice, cost].join('\t');
+    return [scanCode, BasePrice, cost].join("\t");
   });
 
   // Combine header and rows
-  const tsvContent = [header, ...rows].join('\n');
+  const tsvContent = [header, ...rows].join("\n");
 
   return tsvContent;
 }
