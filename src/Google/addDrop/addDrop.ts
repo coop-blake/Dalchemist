@@ -73,6 +73,7 @@ export class AddDrop {
     try {
       if (this.googleInstance !== null) {
         const sheets = this.googleInstance.getSheets();
+        const drive = this.googleInstance.getDrive();
         AddDrop.state.setStatus(AddDropStatus.Running);
 
         //Read data from New Items Tab
@@ -151,8 +152,22 @@ export class AddDrop {
 
         AddDrop.state.setPriceUpdates(priceUpdates);
         AddDrop.state.setLastRefreshCompleted(Date.now());
+
+        // const watchRequest = {
+        //   fileId: this.spreadsheetId,
+        //   resource: 'AddDropWatchRequest',
+        //   type: 'web_hook',
+        //   address
+        // };
+        // const watching = drive.changes.watch(watchRequest, (error, result) => {
+        //   console.log(error, result);
+        // });
       }
     } catch (error) {}
+
+    setTimeout(() => {
+      this.refresh();
+    }, 1000);
   }
 
   static getInstance(): AddDrop {
