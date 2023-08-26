@@ -1,10 +1,13 @@
-import { app, BrowserWindow } from "electron";
-import Main from "./electron-main";
-//import { start } from "../Google/addDrop/addDrop"
+import { AddDropState, AddDrop, AddDropStatus } from "../addDrop/addDrop";
+import { Inventory, InventoryState, InventoryStatus } from "../Inventory/Inventory";
 
-import express from 'express'
-import {NewItemEntry, AttributeChangeEntry, AddDrop, AddDropStatus} from "../Google/addDrop/addDrop"
 
+// const app = electron.app;
+// const BrowserWindow = electron.BrowserWindow
+const inventoryInstance = Inventory.getInstance();
+
+
+import express from "express";
 
 
 import {
@@ -13,11 +16,11 @@ import {
     getItemsAlreadyInInventoryReport,
     getPriceUpdatesInfo,
     getAddDropPriceUpdatesTSV,
-  } from "../Google/addDrop/htmlOutputs";
+  } from "../addDrop/htmlOutputs";
+  
   
 
-Main.main(app, BrowserWindow);
-
+  
 const addDropInstance = AddDrop.getInstance();
 
 const statusSubscription = AddDrop.state.status$.subscribe((status: AddDropStatus) => {
@@ -46,10 +49,27 @@ const lastRefreshCompletedSubscription = AddDrop.state.lastRefreshCompleted$.sub
     
   });
 
+
+  setTimeout(() => {
+    console.log("leaving")
+   
+  }, 2000);
+
+
+
   const dalchemist = express();
 
+  
   dalchemist.get("/", (request, response) => {
-    response.send(getIndex());
+
+    response.send(
+      getIndex(
+        AddDrop.state.newItems,
+        AddDrop.state.itemsAlreadyInInventory,
+        AddDrop.state.attributeChangeItems,
+        AddDrop.state.priceUpdates
+      )
+    );
   });
 
   dalchemist.get("/newItems", async (request, response) => {
@@ -75,9 +95,4 @@ const lastRefreshCompletedSubscription = AddDrop.state.lastRefreshCompleted$.sub
   getAddDropPriceUpdatesTSV;
   dalchemist.listen(4848, () => {
     console.log("ok")
-
-  console.log("Web Server Started");
-  Main.start();
-
   });
-

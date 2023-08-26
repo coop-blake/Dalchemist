@@ -10,10 +10,14 @@ coverage
 out
 docs
 src/Google/Inventory/fetches/
-src/Google/Inventory/CertAndLogs/
 .DS_Store
 
 build/
 dist/
 *.js
 !preload*.js
+
+
+src/Google/Inventory/CertAndLogs/
+
+src/Google/Inventory/CertsAndLogs

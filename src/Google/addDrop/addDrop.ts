@@ -1,5 +1,7 @@
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
+
 import { Google } from "../google";
-import * as express from "express";
+import express from "express";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -7,9 +9,9 @@ import Main from "../../electron/electron-main";
 
 import Settings from "../../electron/Settings";
 
-import InventoryImporter, {
-  InventoryEntry,
-} from "../../TextImporters/Inventory";
+
+import { Inventory, InventoryState, InventoryStatus, InventoryEntry } from "../Inventory/Inventory";
+
 import {
   getIndex,
   getNewItemsReport,
@@ -18,82 +20,77 @@ import {
   getAddDropPriceUpdatesTSV,
 } from "./htmlOutputs";
 
-//Main.main(app, BrowserWindow);
+export class AddDrop {
+  private static instance: AddDrop;
+  static state : AddDropState;
 
-/*###################################################################################
-# Start Function
-#####################################################################################*/
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function start(onStarted: Function) {
-  console.log("starting");
-  Main.statusMessageUpdate("Starting");
+  private loadedSubscription : Subscription //unwatch in deconstructor
+  private lastRefreshCompletedSubscription : Subscription
+  private spreadsheetId = "1RprheRwf1bysnNYk9jGg1zPiA4DoiGMMe74j9nVP_hU"; //document id of "Copy of add drop for API Dev"
+  private googleInstance: Google | null = null
 
-  Main.statusMessageUpdate("Getting Google Certificate");
+  private constructor() {
+    Inventory.getInstance()
+    AddDrop.state = new AddDropState();
+    AddDrop.state.setStatus(AddDropStatus.Starting)
 
-  const googleCertPath = (await Settings.loadJsonLocation()) as string;
-  if (googleCertPath) {
-    console.log("googleCertPath", googleCertPath);
-  } else {
-    console.log("No googleCertPath!");
+    this.loadedSubscription =  Google.getLoaded().subscribe((loaded : string[]) => {
+      console.log("Add Drop Got Loaded cert!", loaded);
+
+      if(this.googleInstance === null && loaded.length > 0)
+      {
+        this.googleInstance = Google.getInstanceFor(loaded[0])
+        this.refresh()
+      }
+    })
+
+
+   this.lastRefreshCompletedSubscription = Inventory.state.lastRefreshCompleted$.subscribe((lastRefreshCompleted: number) => {
+
+      if(lastRefreshCompleted !== 0)
+      {
+          const lastRefreshDate = new Date(lastRefreshCompleted);
+          const formattedDate = lastRefreshDate.toLocaleString(undefined, {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            });
+          console.log(`Inventory Updated changed: ${formattedDate}`);
+          this.refresh()
+         
+      }
+      
+    });
   }
 
-  /*###################################################################################
-# Read Inventory
-#####################################################################################*/
-  Main.statusMessageUpdate("Reading Inventory");
+  public async refresh() {
 
-  const northInventoryFilePath = path.join(
-    __dirname,
-    "../Inventory/fetches/North.txt"
-  );
-
-  if (!fs.existsSync(northInventoryFilePath)) {
-    throw Error("Inventory File does not exist!");
-    return;
-  }
-  console.log("Reading North Inventory -Preparing Data");
-  const NorthInventoryImport = new InventoryImporter();
-  NorthInventoryImport.textFilePath = northInventoryFilePath;
-  await NorthInventoryImport.start();
-  /*###################################################################################
-# Read Add/Drop
-#####################################################################################*/
-  console.log("Logging into Google");
-  Main.statusMessageUpdate("Logging Into Google");
-
-  //config Google
-  const googleCertFilename = "../Inventory/CertAndLogs/googleCert.json";
-  // const googleCertFilePath = path.join(__dirname, googleCertFilename);
-
-  if (!fs.existsSync(googleCertPath)) {
-    throw Error("Google Service Account Certificate does not exist!");
-  }
-
-  const sheets = Google.getSheetsFor(googleCertPath);
-  const spreadsheetId = "1RprheRwf1bysnNYk9jGg1zPiA4DoiGMMe74j9nVP_hU"; //document id of "Copy of add drop for API Dev"
-
-  /*###################################################################################
-# Process New Items
-#####################################################################################*/
-  //If new item is in inventory - put the entries in an array together
-  console.log("Reading New Items");
-  Main.statusMessageUpdate("Reading New Items");
-
-  //Read data from New Items Tab
-  const newItemsResponse = await sheets.spreadsheets.values.get({
-    spreadsheetId: spreadsheetId,
-    range: `New Items!A3:Y300`, // Adjust range as needed
-  });
+    try {
+      if(this.googleInstance !== null)
+      {
+        const sheets = this.googleInstance.getSheets();
+        AddDrop.state.setStatus(AddDropStatus.Running) 
+        
+        //Read data from New Items Tab
+      const newItemsResponse = await sheets.spreadsheets.values.get({
+        spreadsheetId: this.spreadsheetId,
+        range: `New Items!A3:Y300`, // Adjust range as needed
+      });
 
   const newItems = newItemsResponse.data.values
     ?.map((newItemData) => newItemEntryFromValueArray(newItemData))
     .filter((newItemData) => {
       return newItemData !== null;
     }) as [NewItemEntry];
+    AddDrop.state.setNewItems(newItems)
+
 
   const itemsAlreadyInInventory = newItems
     ?.map((newItem) => {
-      const inventoryItem = NorthInventoryImport.getEntryFromScanCode(
+      const inventoryItem = Inventory.getInstance().getEntryFromScanCode(
         newItem?.ScanCode ? newItem?.ScanCode : ""
       );
       return inventoryItem === undefined ? null : [newItem, inventoryItem];
@@ -101,6 +98,8 @@ export async function start(onStarted: Function) {
     .filter((newItemData) => {
       return newItemData;
     }) as [[NewItemEntry, InventoryEntry]];
+    AddDrop.state.setItemsAlreadyInInventory(itemsAlreadyInInventory)
+
   /*###################################################################################
 # Process Attribute Updates
 #####################################################################################*/
@@ -108,7 +107,7 @@ export async function start(onStarted: Function) {
   Main.statusMessageUpdate("Reading Price and Attribute Changes");
 
   const attributeChangesResponse = await sheets.spreadsheets.values.get({
-    spreadsheetId: spreadsheetId,
+    spreadsheetId: this.spreadsheetId,
     range: `Price & Attribute Changes!A3:AC300`, // Adjust range as needed
   });
   const attributeChangeItems = attributeChangesResponse.data.values
@@ -120,6 +119,8 @@ export async function start(onStarted: Function) {
     .filter((attributeChangeItem) => {
       return attributeChangeItem;
     }) as [AttributeChangeEntry];
+
+    AddDrop.state.setAttributeChangeItems(attributeChangeItems)
   //If attributeChange contains a price update - put it in an array
   const priceUpdates = attributeChangeItems?.filter((attributeChange) => {
     return (
@@ -145,55 +146,105 @@ export async function start(onStarted: Function) {
       ])
     );
   }) as [AttributeChangeEntry];
-  /*###################################################################################
-# Start Webserver
-#####################################################################################*/
+        
+  
+  AddDrop.state.setPriceUpdates(priceUpdates)
+        AddDrop.state.setLastRefreshCompleted(Date.now());
+      }
 
-  console.log("Preparing Server");
-  Main.statusMessageUpdate("Creating Webserver");
+      }catch(error){
 
-  const dalchemist = express();
+      }
 
-  dalchemist.get("/", (request, response) => {
-    response.send(
-      getIndex(
-        newItems,
-        itemsAlreadyInInventory,
-        attributeChangeItems,
-        priceUpdates
-      )
-    );
-  });
+  }
 
-  dalchemist.get("/newItems", async (request, response) => {
-    response.send(getNewItemsReport(newItems));
-  });
-
-  dalchemist.get("/itemsAlreadyInInventory", async (request, response) => {
-    response.send(getItemsAlreadyInInventoryReport(itemsAlreadyInInventory));
-  });
-  dalchemist.get("/priceUpdateInfo", async (request, response) => {
-    response.send(getPriceUpdatesInfo(priceUpdates, NorthInventoryImport));
-  });
-  dalchemist.get("/addDropPriceChanges.txt", async (request, response) => {
-    response.setHeader(
-      "Content-Disposition",
-      'attachment; filename="addDropPriceChanges.txt"'
-    );
-    response.setHeader("Content-Type", "text/tab-separated-values");
-
-    response.send(getAddDropPriceUpdatesTSV(priceUpdates));
-  });
-
-  getAddDropPriceUpdatesTSV;
-  dalchemist.listen(4848, () => {
-    onStarted();
-  });
-
-  /*###################################################################################
-# End Start Function
-#####################################################################################*/
+  static getInstance(): AddDrop {
+    if (!AddDrop.instance) {
+      AddDrop.instance = new AddDrop();
+    }
+    return AddDrop.instance;
+  }
+//End of AddDrop Class
 }
+
+
+
+export enum AddDropStatus {
+  NoCertificate = 'No Certificate',
+  Starting = 'Starting',
+  Running = 'Running',
+  Error = 'Error!'
+}
+
+
+export class AddDropState {
+  private statusSubject = new BehaviorSubject<AddDropStatus>(AddDropStatus.Starting);
+  private lastRefreshCompletedSubject = new BehaviorSubject<number>(0);
+
+
+  private newItemsSubject = new BehaviorSubject<NewItemEntry[]> ([])
+  private itemsAlreadyInInventorySubject = new BehaviorSubject<[NewItemEntry, InventoryEntry][]>([])
+  private attributeChangeItemsSubject  = new BehaviorSubject<  AttributeChangeEntry[]>([])
+  private priceUpdatesSubject = new BehaviorSubject< AttributeChangeEntry[]>([])
+
+
+  public get status$(): Observable<AddDropStatus> {
+    return this.statusSubject.asObservable();
+  }
+  public setStatus(status: AddDropStatus) {
+    this.statusSubject.next(status);
+  }
+
+  public get lastRefreshCompleted$(): Observable<number> {
+    return this.lastRefreshCompletedSubject.asObservable();
+  }
+  public setLastRefreshCompleted(time: number) {
+    this.lastRefreshCompletedSubject.next(time);
+  }
+
+  public get newItems(): NewItemEntry[] {
+    return this.newItemsSubject.getValue();
+  }
+  public get newItems$(): Observable<NewItemEntry[]> {
+    return this.newItemsSubject.asObservable();
+  }
+  public setNewItems(newItems: NewItemEntry[]){
+    this.newItemsSubject.next(newItems)
+  }
+
+  public get itemsAlreadyInInventory() : [NewItemEntry, InventoryEntry][]{
+    return this.itemsAlreadyInInventorySubject.getValue()
+  }
+  public get  itemsAlreadyInInventory$(): Observable<[NewItemEntry, InventoryEntry][]> {
+    return this.itemsAlreadyInInventorySubject.asObservable();
+  }
+  public setItemsAlreadyInInventory(itemsAlreadyInInventory: [NewItemEntry, InventoryEntry][]){
+    this.itemsAlreadyInInventorySubject.next(itemsAlreadyInInventory)
+  }
+
+  public get attributeChangeItems(): AttributeChangeEntry[]{
+    return this.attributeChangeItemsSubject.getValue()
+  }
+  public get  attributeChangeItems$(): Observable<AttributeChangeEntry[]> {
+    return this.attributeChangeItemsSubject.asObservable();
+  }
+  public setAttributeChangeItems(attributeChangeItems: AttributeChangeEntry[]){
+    this.attributeChangeItemsSubject.next(attributeChangeItems)
+  }
+
+  public get priceUpdates(): AttributeChangeEntry[]{
+    return this.priceUpdatesSubject.getValue()
+  }
+  public get  priceUpdates$(): Observable<AttributeChangeEntry[]> {
+    return this.priceUpdatesSubject.asObservable();
+  }
+  public setPriceUpdates(priceUpdates: AttributeChangeEntry[]){
+    this.priceUpdatesSubject.next(priceUpdates)
+  }
+}
+
+
+
 
 /*###################################################################################
 # Item Types and Return Functions

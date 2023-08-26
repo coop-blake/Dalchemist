@@ -69,6 +69,30 @@
       "runtimeArgs": ["run-script", "electron"]
     },
     {
+      "name": "✅ Google: AddDrop",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleCheck-addDrop"]
+    }, 
+    {
+      "name": "✅ Google: Inventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleCheck-Inventory"]
+    }, {
+      "name": "✅ Google",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleCheck"]
+    },
+    
+    {
       "name": "🎆 Generator: checkDuplicateEntries",
       "type": "node",
       "request": "launch",

@@ -1,12 +1,16 @@
-import {NewItemEntry, AttributeChangeEntry} from "./addDrop"
-import InventoryImporter , { InventoryEntry } from "../../TextImporters/Inventory";
+import {NewItemEntry, AttributeChangeEntry, AddDrop} from "./addDrop"
+import { Inventory, InventoryState, InventoryStatus, InventoryEntry } from "../Inventory/Inventory";
 
 
-export function getIndex(newItems : [NewItemEntry],
-  itemsAlreadyInInventory : [[NewItemEntry, InventoryEntry]], 
-  attributeChangeItems : [AttributeChangeEntry],
-  priceUpdates:  [AttributeChangeEntry])
+export function getIndex()
 {
+
+  const newItems= AddDrop.state.newItems;
+  const itemsAlreadyInInventory=   AddDrop.state.itemsAlreadyInInventory;
+  const attributeChangeItems=   AddDrop.state.attributeChangeItems;
+  const priceUpdates=   AddDrop.state.priceUpdates;
+  
+
   const returnString =`
   ${getStyle()}
   <div class="mainAddDrop">
@@ -35,7 +39,7 @@ export function getIndex(newItems : [NewItemEntry],
 return returnString
 }
 
-export function getNewItemsReport(newItems : [NewItemEntry]) {
+export function getNewItemsReport(newItems : NewItemEntry[]) {
   return `
   ${getStyle()}
 
@@ -76,7 +80,7 @@ ${newItems
   `;
 }
 
-export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [[NewItemEntry, InventoryEntry]]) {
+export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [NewItemEntry, InventoryEntry][]) {
   return `
   ${getStyle()}
 
@@ -97,52 +101,52 @@ export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [[NewI
          <td  style=" height: 10px;" colspan=2></td><td style=" height: 10px;" colspan=2></td>
          </tr>
              <tr>
-                 <td>Scan Code</td><td>${newItem.ScanCode}</td><td>Brand</td><td>${inventoryItem.brand}</td>
+                 <td>Scan Code</td><td>${newItem.ScanCode}</td><td>Brand</td><td>${inventoryItem.Brand}</td>
              </tr>
              <tr>
-                 <td>Name</td><td>${newItem.Name}</td><td>Size</td><td>${inventoryItem.size}</td>
+                 <td>Name</td><td>${newItem.Name}</td><td>Size</td><td>${inventoryItem.Size}</td>
              </tr>
              <tr>
-                 <td>Client</td><td>${newItem.Client}</td><td>Receipt Alias</td><td>${inventoryItem.receiptAlias}</td>
+                 <td>Client</td><td>${newItem.Client}</td><td>Receipt Alias</td><td>${inventoryItem.ReceiptAlias}</td>
              </tr>
              <tr>
-                 <td>Supplier</td><td>${newItem.Supplier}</td><td>Ideal Margin</td><td>${inventoryItem.idealMargin}</td>
+                 <td>Supplier</td><td>${newItem.Supplier}</td><td>Ideal Margin</td><td>${inventoryItem.IdealMargin}</td>
              </tr>
              <tr>
-                 <td>Supplier Item ID</td><td>${newItem.SupplierItemID}</td><td>Subdepartment</td><td>${inventoryItem.subdepartment}</td>
+                 <td>Supplier Item ID</td><td>${newItem.SupplierItemID}</td><td>Subdepartment</td><td>${inventoryItem.SubDepartment}</td>
              </tr>
              <tr>
-                 <td>Brand</td><td>${newItem.Brand}</td><td>Store Number</td><td>${inventoryItem.storeNumber}</td>
+                 <td>Brand</td><td>${newItem.Brand}</td><td>Store Number</td><td>${inventoryItem.N}</td>
              </tr>
              <tr>
-                 <td>Unit</td><td>${newItem.Unit}</td><td>Department</td><td>${inventoryItem.department}</td>
+                 <td>Unit</td><td>${newItem.Unit}</td><td>Department</td><td>${inventoryItem.Department}</td>
              </tr>
              <tr>
-                 <td>Subdepartment</td><td>${newItem.SubDepartment}</td><td>Supplier Unit ID</td><td>${inventoryItem.supplierUnitID}</td>
+                 <td>Subdepartment</td><td>${newItem.SubDepartment}</td><td>Supplier Unit ID</td><td>${inventoryItem.SupplierUnitID}</td>
              </tr>
              <tr>
-                 <td>Quantity</td><td>${newItem.Quantity}</td><td>Base Price</td><td>${inventoryItem.basePrice}</td>
+                 <td>Quantity</td><td>${newItem.Quantity}</td><td>Base Price</td><td>${inventoryItem.BasePrice}</td>
              </tr>
              <tr>
-                 <td>Case Cost</td><td>${newItem.CaseCost}</td><td>Quantity</td><td>${inventoryItem.quantity}</td>
+                 <td>Case Cost</td><td>${newItem.CaseCost}</td><td>Quantity</td><td>${inventoryItem.Quantity}</td>
              </tr>
              <tr>
-                 <td>Unit Cost</td><td>${newItem.UnitCost}</td><td>Last Cost</td><td>${inventoryItem.lastCost}</td>
+                 <td>Unit Cost</td><td>${newItem.UnitCost}</td><td>Last Cost</td><td>${inventoryItem.LastCost}</td>
              </tr>
              <tr>
-                 <td>Margin</td><td>${newItem.MARGIN}</td><td>Average Cost</td><td>${inventoryItem.averageCost}</td>
+                 <td>Margin</td><td>${newItem.MARGIN}</td><td>Average Cost</td><td>${inventoryItem.AverageCost}</td>
              </tr>
              <tr>
                  <td>Shipping Percent</td><td>${newItem.ShippingPercent}</td><td></td><td></td>
              </tr>
              <tr>
-                 <td>Proposed Price</td><td>${newItem.ProposedPrice}</td><td>Default Supplier</td><td>${inventoryItem.defaultSupplier}</td>
+                 <td>Proposed Price</td><td>${newItem.ProposedPrice}</td><td>Default Supplier</td><td>${inventoryItem.DefaultSupplier}</td>
              </tr>
              <tr>
-                 <td>Base Price</td><td>${newItem.BasePrice}</td><td>Unit</td><td>${inventoryItem.unit}</td>
+                 <td>Base Price</td><td>${newItem.BasePrice}</td><td>Unit</td><td>${inventoryItem.Unit}</td>
              </tr>
              <tr>
-                 <td>Department</td><td>${newItem.Department}</td><td>Last Sold Date</td><td>${inventoryItem.southLastSoldDate}</td>
+                 <td>Department</td><td>${newItem.Department}</td><td>Last Sold Date</td><td>${inventoryItem.SouthLSD}</td>
              </tr>
              <tr>
                  <td>Bottle Deposit Flag</td><td>${newItem.BottleDepositFlag}</td><td></td><td></td>
@@ -177,7 +181,8 @@ export function getItemsAlreadyInInventoryReport(itemsAlreadyInInventory: [[NewI
  `;
 }
 
-export function getPriceUpdatesInfo(priceUpdates : [AttributeChangeEntry], inventory : InventoryImporter) {
+export function getPriceUpdatesInfo(priceUpdates : AttributeChangeEntry[]) {
+  const inventory = Inventory.getInstance()
   const returnString = `
   ${getStyle()}
      <table>
@@ -198,9 +203,9 @@ export function getPriceUpdatesInfo(priceUpdates : [AttributeChangeEntry], inven
                attributeUpdateEntry.ScanCode
              }</td>
              <td colspan=2>Inventory: ${
-               inventoryItem?.brand ? inventoryItem?.brand : "N/A"
-             } ${inventoryItem?.name ? inventoryItem?.name : "N/A"} ${
-               inventoryItem?.size ? inventoryItem?.size : "N/A"
+               inventoryItem?.Brand ? inventoryItem?.Brand : "N/A"
+             } ${inventoryItem?.Name ? inventoryItem?.Name : "N/A"} ${
+               inventoryItem?.Size ? inventoryItem?.Size : "N/A"
              }</td>
          </tr>
          <tr style=" height: 10px;">
@@ -210,30 +215,30 @@ export function getPriceUpdatesInfo(priceUpdates : [AttributeChangeEntry], inven
                  <td>Requested By:</td><td>${
                    attributeUpdateEntry.Client
                  }</td><td>Brand</td><td>${
-                   inventoryItem?.brand ? inventoryItem?.brand : "N/A"
+                   inventoryItem?.Brand ? inventoryItem?.Brand : "N/A"
                  }</td>
              </tr>
              <tr>
                  <td>Base Price Entered:</td><td>${
                    attributeUpdateEntry.BasePrice
                  }</td><td>Base PRice</td><td>${
-                   inventoryItem?.basePrice ? inventoryItem?.basePrice : "N/A"
+                   inventoryItem?.BasePrice ? inventoryItem?.BasePrice : "N/A"
                  }</td>
              </tr>
              <tr>
                 <td>Unit Cost Entered:</td><td>${
                   attributeUpdateEntry.UnitCost
                 }</td><td>Last Cost</td><td>${
-                  inventoryItem?.lastCost ? inventoryItem?.lastCost : "N/A"
+                  inventoryItem?.LastCost ? inventoryItem?.LastCost : "N/A"
                 }</td>
             </tr>
             <tr>
                 <td>Case Cost Entered:</td><td>${
                   attributeUpdateEntry.CaseCost
                 }</td><td>Case Cost </td><td>${
-                  inventoryItem?.lastCost && inventoryItem?.quantity
-                    ? parseFloat(inventoryItem?.lastCost) *
-                      parseFloat(inventoryItem?.quantity)
+                  inventoryItem?.LastCost && inventoryItem?.Quantity
+                    ? parseFloat(inventoryItem?.LastCost) *
+                      parseFloat(inventoryItem?.Quantity)
                     : "N/A"
                 }</td>
             </tr>
@@ -285,16 +290,16 @@ export function getStyle() {
 }
 
 
-export function getAddDropPriceUpdatesTSV(priceUpdates : [AttributeChangeEntry]){
+export function getAddDropPriceUpdatesTSV(priceUpdates : AttributeChangeEntry[]){
   const header = ['Scan Code', 'Base Price', 'Cost'].join('\t');
 
   // Convert the price updates into TSV rows
   const rows = priceUpdates.map(entry => {
     const scanCode = entry.ScanCode;
-    const basePrice = entry.BasePrice;
+    const BasePrice = entry.BasePrice;
     const cost = entry.UnitCost;
 
-    return [scanCode, basePrice, cost].join('\t');
+    return [scanCode, BasePrice, cost].join('\t');
   });
 
   // Combine header and rows
