@@ -63,12 +63,7 @@ const lastRefreshCompletedSubscription = AddDrop.state.lastRefreshCompleted$.sub
   dalchemist.get("/", (request, response) => {
 
     response.send(
-      getIndex(
-        AddDrop.state.newItems,
-        AddDrop.state.itemsAlreadyInInventory,
-        AddDrop.state.attributeChangeItems,
-        AddDrop.state.priceUpdates
-      )
+      getIndex()
     );
   });
 

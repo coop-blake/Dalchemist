@@ -90,9 +90,16 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck"]
-    },
-    
-    {
+    }
+    , {
+      "name": "📓 Docs",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "docs"]
+    },{
+
       "name": "🎆 Generator: checkDuplicateEntries",
       "type": "node",
       "request": "launch",
