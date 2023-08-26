@@ -32,9 +32,9 @@ class Settings {
       if (Main.notReady) {
         console.log("Not ready, waiting!");
 
-        //  await Main.application?.on("ready", async () => {
-        //     googleCertPath =  await openJsonFileDialog() as string
-        //   });
+        await Main.application?.on("ready", async () => {
+          googleCertPath = (await openJsonFileDialog()) as string;
+        });
 
         return new Promise<string | undefined>((resolve) => {
           Main.application?.on("ready", async () => {
