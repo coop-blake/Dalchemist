@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { spawn } = require("child_process");
+import { spawn } from "child_process";
 
 import fs from "fs";
 import path from "path";
@@ -42,7 +42,7 @@ cscriptProcess.on("close", (code: number) => {
   }
 });
 
-async function sendVBScriptError() {}
+//async function sendVBScriptError() {}
 
 async function start() {
   console.log("starting");
@@ -95,7 +95,7 @@ async function start() {
     const SouthSoldDate = SouthInventoryImport.getEntryFromScanCode(
       entry.scanCode
     )?.southLastSoldDate;
-    let SouthDisco = SouthInventoryImport.getEntryFromScanCode(entry.scanCode)
+    let SouthDisco = SouthInventoryImport.getEntryFromScanCode(scanCode)
       ?.invDiscontinued;
 
     SouthDisco = SouthDisco == "1" ? "🔴" : "🟢";
@@ -154,6 +154,8 @@ async function start() {
 
   console.log("Uploading Inventory Google Sheet");
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "Inventory!A:T", //sheet name and range of cells
@@ -171,6 +173,8 @@ async function start() {
     minute: "numeric",
   });
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "Status!B1", //sheet name and range of cells
@@ -182,6 +186,9 @@ async function start() {
 
   const logLines = await readLastLines(logFilePath, numLinesToRead);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
+
   sheets.spreadsheets.values.update({
     spreadsheetId,
     range: "Status!B6:B100",
@@ -192,12 +199,12 @@ async function start() {
   });
 }
 
-async function readLastLines(filePath, numLines) {
-  const lines = [];
+async function readLastLines(filePath: string, numLines: number) {
+  const lines : string[] = [];
   const stream = fs.createReadStream(filePath, { encoding: "utf8" });
   let buffer = "";
 
-  await new Promise((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     stream.on("data", (chunk) => {
       buffer += chunk;
       const linesArray = buffer.split("\n");
@@ -205,7 +212,7 @@ async function readLastLines(filePath, numLines) {
         if (lines.length >= numLines) {
           lines.shift(); // Remove the first line when we have numLines
         }
-        lines.push(linesArray.shift());
+        lines.push(linesArray.shift() || "");
       }
       buffer = linesArray[0];
     });
