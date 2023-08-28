@@ -29,7 +29,7 @@ Make sure you have the latest versions of your input data in the [Data](./Data/R
 
 ## Generate File Outputs
 
-To generate all output files to the 📁**Outputs** in 📁**Data** :
+To generate all output to the [**Outputs**](./Data/Outputs) 📁 in [**Data**](./Data)  📁:
 
 `npm run outputAll`
 
@@ -47,11 +47,12 @@ See the [Services Documentation](./Documentation/Services.md) for more specific 
 
 ## Advanced usage and development
 
+[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more. Configured in the [__.vscode/launch.json__](./.vscode/launch.json) configuration file.
 
+### Run the electron app
 
+`npm run electron`
 
-[Visual Studio Code](https://code.visualstudio.com/Download) and also recomended if you plan to dig deeper.
-
-### Build the development
+### Build the development documentation
 
 `npm run docs`

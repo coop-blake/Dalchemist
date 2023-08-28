@@ -30,15 +30,26 @@ To include all items on multiple worksheets and items with same base price vs sa
 `npm run checkPriceChangeWorksheetsAndInventory-AllOuput`
 
 ## UNFI Price Book Vs Inventory Comparison
-Needs the UNFI Pricebook and Inventory Files in the [📁Data/Inputs/](../Data/Inputs/) directory for success.
+Needs the UNFI Pricebook and Inventory Files in the  [**Inputs**](../Data/Inputs/) 📁 located in the [**Data**](../Data/) 📁 for success.
 
-To generate a comma seperated list of all items in the pricebook and inventory file:  
+### All UNFI vendedable Inventory Items
+
+To generate a comma seperated list of all items in the UNFI pricebook and inventory files:
+
 `npm run inventoryItemsInPricebook`
 
+
+
+### Lower Costs Report
+
+`npm run lowerCostsInventoryPricebookComparison`
+
 For a tab seperated value file with 
+
+
 
 | Scan Code | Last Cost | UNFI Cost | Ideal Margin | Proposed Price | Base Price | Difference (Base price - UNFI Cost calculated proposed price) | Description |
 |-----------|-----------|-----------|--------------|----------------|------------|---------------------------------------------------------------|-------------|
 |           |           |           |              |                |            |                                                               |             |
 
-`npm run lowerCostsInventoryPricebookComparison`
+
