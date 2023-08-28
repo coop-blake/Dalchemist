@@ -25,16 +25,14 @@ import { CoreSupport } from "./Processors/CoreSupport";
 import PriceChangeWorksheetInventoryComparisons from "./Processors/PriceChangeWorksheetInventoryComparisons";
 //Import the Inventory And Pricechange Importers
 import InventoryImporter from "./TextImporters/Inventory";
-import PriceChangeImporter, {
-  PriceChangeEntry,
-} from "./TextImporters/PriceChange";
-import PriceBookImporter, { PriceBookEntry } from "./TextImporters/PriceBook";
+import PriceChangeImporter from "./TextImporters/PriceChange";
+import PriceBookImporter from "./TextImporters/PriceBook";
 import SubMarginsImporter from "./TextImporters/SubMargins";
 
 //import PriceChecker processor
 import PriceChecker from "./Processors/PriceChecker";
 
-import DuplicateEntry, { DupCheckEntry } from "./TextImporters/DuplicateEntry";
+import DuplicateEntry from "./TextImporters/DuplicateEntry";
 
 // Only want to import Generators here
 
@@ -127,7 +125,7 @@ Dalchemist Version ${packageInfo.version}
 
         output += `           :${originalEntry.scanCode}:${originalEntry.price} \n`;
 
-        entry.forEach((dupEntry) => {
+        entry.forEach(() => {
           output += `           :${originalEntry.scanCode}:${originalEntry.price}\n`;
         });
       }

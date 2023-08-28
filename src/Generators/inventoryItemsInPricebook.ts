@@ -44,10 +44,10 @@ InventoryImport.start()
         //Output the string to the console
         console.log(csvString.substring(1));
       })
-      .catch((error) => {
-        console.error;
+      .catch((error : Error) => {
+        console.error(error);
       });
   })
-  .catch((error) => {
-    console.error;
+  .catch((error : Error) => {
+    console.error(error);
   });

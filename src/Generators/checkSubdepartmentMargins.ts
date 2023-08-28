@@ -61,10 +61,12 @@ InventoryImport.start()
 
         console.log(csvString);
       })
-      .catch((err) => {});
+      .catch((error: Error) => {
+        console.error(error);
+      });
 
     //Output the string to the console
   })
-  .catch((error) => {
-    console.error;
+  .catch((error: Error) => {
+    console.error(error);
   });

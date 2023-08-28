@@ -32,6 +32,12 @@ export class Google {
       version: "v4",
       auth: this.auth,
     });
+
+    this.drive = google.drive({
+      version: "v3",
+      auth: this.auth,
+    });
+
   }
 
   static getInstanceFor(keyFilePath: string): Google {

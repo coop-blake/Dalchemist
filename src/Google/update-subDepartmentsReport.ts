@@ -1,7 +1,5 @@
 import { google } from "googleapis";
 
-import fs from "fs";
-import path from "path";
 
 import InventoryImporter from "../TextImporters/Inventory";
 import SubMarginsImporter from "../TextImporters/SubMargins";
@@ -86,22 +84,24 @@ async function start() {
             scopes: ["https://www.googleapis.com/auth/drive"],
           });
 
-          const authClient = await auth.getClient();
+          //const authClient = await auth.getClient();
 
-          const sheets = google.sheets({ version: "v4", auth: authClient });
+          const sheets = google.sheets({ version: "v4", auth: auth });
           const spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA"; //acitive id
 
           //          const spreadsheetId = "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk";
 
           console.log("Clearing Inventory Google Sheet");
 
-          const readData = await sheets.spreadsheets.values.clear({
+         await sheets.spreadsheets.values.clear({
             spreadsheetId, // spreadsheet id
             range: "SubMarginsReport!A:G", //range of cells to read from.
           });
 
           console.log("Uploading Inventory Google Sheet");
-
+ 
+           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore 
           await sheets.spreadsheets.values.update({
             spreadsheetId, //spreadsheet id
             range: "SubMarginsReport!A3:G", //sheet name and range of cells
@@ -111,11 +111,9 @@ async function start() {
             },
           });
         })
-        .catch((err) => {});
+        .catch((error: Error) => {console.error(error)});
 
       //Output the string to the console
     })
-    .catch((error) => {
-      console.error;
-    });
+    .catch((error: Error) => {console.error(error)});
 }

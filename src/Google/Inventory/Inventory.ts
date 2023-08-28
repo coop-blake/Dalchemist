@@ -1,13 +1,13 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { Google } from "../google";
-import Settings from "../../electron/Settings";
-import * as fs from "fs";
+
 
 export class Inventory {
   private static instance: Inventory;
 
   entries = new Map<string, InventoryEntry>();
+  private inventoryItemsArray : InventoryEntry[] = []
 
   static state: InventoryState;
 
@@ -48,14 +48,13 @@ export class Inventory {
         });
     
         
-        const inventoryItems = inventoryItemsResponse.data.values
+        
+        this.inventoryItemsArray = inventoryItemsResponse.data.values
         ?.map((newItemData) => entryFromValueArray(newItemData))
         .filter((inventoryEntry) => {
           this.entries.set(inventoryEntry.ScanCode, inventoryEntry);
           return inventoryEntry !== null;
         }) as [InventoryEntry];
-    
-    
     
         Inventory.state.setLastRefreshCompleted(Date.now());
       }

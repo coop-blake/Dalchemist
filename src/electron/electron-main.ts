@@ -9,7 +9,7 @@ import * as http from "http";
 export default class Main {
   static mainWindow: Electron.BrowserWindow | null = null;
   static application: Electron.App;
-  static BrowserWindow: any;
+  static BrowserWindow: typeof BrowserWindow;
 
   static loadError: string | null = null;
   static statusMessage: string | null = null;

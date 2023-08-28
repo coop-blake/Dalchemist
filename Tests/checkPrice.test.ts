@@ -1,9 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import PriceChangeWorksheetInventoryComparisons from "../src/Processors/PriceChangeWorksheetInventoryComparisons";
 
-import PriceChangeImporter, {
-  PriceChangeEntry,
-} from "../src/TextImporters/PriceChange";
+import PriceChangeImporter from "../src/TextImporters/PriceChange";
 const PriceChangeImport = new PriceChangeImporter();
 
 //create a new price change worksheet processor
@@ -22,7 +20,7 @@ describe("Testing Text Importer", () => {
         expect(true).toBe(true);
         done();
       })
-      .catch((error: any) => {
+      .catch((error: Error) => {
         console.log(error);
       });
   });
@@ -38,7 +36,7 @@ describe("Testing Price Change Importer", () => {
         expect(true).toBe(true);
         done();
       })
-      .catch((error: any) => {
+      .catch((error: Error) => {
         console.log(error);
       });
   });

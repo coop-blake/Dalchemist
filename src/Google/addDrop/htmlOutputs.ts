@@ -1,8 +1,6 @@
 import { NewItemEntry, AttributeChangeEntry, AddDrop } from "./addDrop";
 import {
   Inventory,
-  InventoryState,
-  InventoryStatus,
   InventoryEntry,
 } from "../Inventory/Inventory";
 

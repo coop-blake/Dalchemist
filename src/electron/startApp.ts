@@ -3,12 +3,7 @@ import Main from "./electron-main";
 //import { start } from "../Google/addDrop/addDrop"
 
 import express from "express";
-import {
-  NewItemEntry,
-  AttributeChangeEntry,
-  AddDrop,
-  AddDropStatus,
-} from "../Google/addDrop/addDrop";
+import { AddDrop } from "../Google/addDrop/addDrop";
 
 import {
   getIndex,
@@ -20,25 +15,25 @@ import {
 
 Main.main(app, BrowserWindow);
 
-const lastRefreshCompletedSubscription =
-  AddDrop.state.lastRefreshCompleted$.subscribe(
-    (lastRefreshCompleted: number) => {
-      if (lastRefreshCompleted === 0) {
-      } else {
-        const lastRefreshDate = new Date(lastRefreshCompleted);
-        const formattedDate = lastRefreshDate.toLocaleString(undefined, {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
-        console.log(`AddDrop Updated changed: ${formattedDate}`);
-        Main.start();
-      }
-    }
-  );
+// const lastRefreshCompletedSubscription =
+//   AddDrop.state.lastRefreshCompleted$.subscribe(
+//     (lastRefreshCompleted: number) => {
+//       if (lastRefreshCompleted === 0) {
+//       } else {
+//         const lastRefreshDate = new Date(lastRefreshCompleted);
+//         const formattedDate = lastRefreshDate.toLocaleString(undefined, {
+//           year: "numeric",
+//           month: "numeric",
+//           day: "numeric",
+//           hour: "2-digit",
+//           minute: "2-digit",
+//           second: "2-digit",
+//         });
+//         console.log(`AddDrop Updated changed: ${formattedDate}`);
+//         Main.start();
+//       }
+//     }
+//   );
 
 const dalchemist = express();
 

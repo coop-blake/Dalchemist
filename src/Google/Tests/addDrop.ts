@@ -1,11 +1,11 @@
-import { AddDropState, AddDrop, AddDropStatus } from "../addDrop/addDrop";
-import { Inventory, InventoryState, InventoryStatus } from "../Inventory/Inventory";
+import { AddDrop, AddDropStatus } from "../addDrop/addDrop";
+import { Inventory } from "../Inventory/Inventory";
 
 
-// const app = electron.app;
-// const BrowserWindow = electron.BrowserWindow
-const inventoryInstance = Inventory.getInstance();
 
+Inventory.getInstance(); //make sure an initial instance is created
+AddDrop.getInstance();
+//todo: above lines should be in Inventory
 
 import express from "express";
 
@@ -21,19 +21,16 @@ import {
   
 
   
-const addDropInstance = AddDrop.getInstance();
 
-const statusSubscription = AddDrop.state.status$.subscribe((status: AddDropStatus) => {
+AddDrop.state.status$.subscribe((status: AddDropStatus) => {
   console.log(`AddDrop status changed: ${status}`);
 });
 
 
-const lastRefreshCompletedSubscription = AddDrop.state.lastRefreshCompleted$.subscribe((lastRefreshCompleted: number) => {
+AddDrop.state.lastRefreshCompleted$.subscribe((lastRefreshCompleted: number) => {
 
-    if(lastRefreshCompleted === 0)
-    {
-
-    }else{
+    if(lastRefreshCompleted !== 0)
+   {
         const lastRefreshDate = new Date(lastRefreshCompleted);
         const formattedDate = lastRefreshDate.toLocaleString(undefined, {
             year: 'numeric',

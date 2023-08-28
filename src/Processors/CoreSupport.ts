@@ -13,8 +13,8 @@ const inventoryImport = new InventoryImporter();
 import TextImporter from "../TextImporters/TextImporter";
 
 import xlsx from "node-xlsx";
-import { stat, open } from "fs/promises";
-import { Stats, existsSync } from "fs";
+import { stat } from "fs/promises";
+import { existsSync } from "fs";
 
 type CoreSupportEntry = {
   CoreSetsRound: number;
@@ -159,7 +159,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
         break;
       default:
         {
-          const lineNumberFromData = lineArray[0];
+      //    const lineNumberFromData = lineArray[0];
           // if (
           //   lineNumberFromData === undefined ||
           //   typeof lineNumberFromData !== "number"

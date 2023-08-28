@@ -9,9 +9,7 @@
  */
 
 import InventoryImporter from "../TextImporters/Inventory";
-import PriceChangeImporter, {
-  PriceChangeEntry,
-} from "../TextImporters/PriceChange";
+import PriceChangeImporter from "../TextImporters/PriceChange";
 
 //Create new Import objects
 const InventoryImport = new InventoryImporter();
@@ -46,7 +44,7 @@ InventoryImport.start()
         //Output the string to the console
         console.log(csvString.substring(1));
       })
-      .catch((error: any) => {
+      .catch((error: Error) => {
         console.error(error);
       });
   })

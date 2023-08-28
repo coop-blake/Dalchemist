@@ -1,21 +1,19 @@
-import { Inventory, InventoryState, InventoryStatus } from "../Inventory/Inventory";
+import { Inventory,InventoryStatus } from "../Inventory/Inventory";
 
 
 // const app = electron.app;
 // const BrowserWindow = electron.BrowserWindow
 const inventoryInstance = Inventory.getInstance();
 
-const statusSubscription = Inventory.state.status$.subscribe((status: InventoryStatus) => {
+Inventory.state.status$.subscribe((status: InventoryStatus) => {
   console.log(`Inventory status changed: ${status}`);
 });
 
 
-const lastRefreshCompletedSubscription = Inventory.state.lastRefreshCompleted$.subscribe((lastRefreshCompleted: number) => {
+Inventory.state.lastRefreshCompleted$.subscribe((lastRefreshCompleted: number) => {
 
-    if(lastRefreshCompleted === 0)
-    {
-
-    }else{
+    if(lastRefreshCompleted !== 0)
+   {
         const lastRefreshDate = new Date(lastRefreshCompleted);
         const formattedDate = lastRefreshDate.toLocaleString(undefined, {
             year: 'numeric',
@@ -27,7 +25,7 @@ const lastRefreshCompletedSubscription = Inventory.state.lastRefreshCompleted$.s
           });
         console.log(`Inventory Updated changed: ${formattedDate}`);
     
-        let entry = inventoryInstance.getEntryFromScanCode("1551")
+        const entry = inventoryInstance.getEntryFromScanCode("1551")
         if(entry !== undefined)
         {
             console.log(`Scancoded: 1551 ${entry.Name}`);

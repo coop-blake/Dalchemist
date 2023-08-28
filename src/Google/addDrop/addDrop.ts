@@ -1,28 +1,15 @@
-import { BehaviorSubject, Observable, Subscription, combineLatest } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Google } from "../google";
-import express from "express";
-import * as path from "path";
-import * as fs from "fs";
+
 
 import Main from "../../electron/electron-main";
 
-import Settings from "../../electron/Settings";
 
 import {
   Inventory,
-  InventoryState,
-  InventoryStatus,
   InventoryEntry,
 } from "../Inventory/Inventory";
-
-import {
-  getIndex,
-  getNewItemsReport,
-  getItemsAlreadyInInventoryReport,
-  getPriceUpdatesInfo,
-  getAddDropPriceUpdatesTSV,
-} from "./htmlOutputs";
 
 export class AddDrop {
   private static instance: AddDrop;
@@ -73,7 +60,7 @@ export class AddDrop {
     try {
       if (this.googleInstance !== null) {
         const sheets = this.googleInstance.getSheets();
-        const drive = this.googleInstance.getDrive();
+       // const drive = this.googleInstance.getDrive();
         AddDrop.state.setStatus(AddDropStatus.Running);
 
         //Read data from New Items Tab
@@ -163,7 +150,7 @@ export class AddDrop {
         //   console.log(error, result);
         // });
       }
-    } catch (error) {}
+    } catch (error) {console.error(error)}
 
     setTimeout(() => {
       this.refresh();

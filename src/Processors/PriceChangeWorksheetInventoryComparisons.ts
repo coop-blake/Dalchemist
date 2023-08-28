@@ -134,7 +134,7 @@ export class PriceChangeWorksheetInventoryComparison {
     });
   }
 
-  areMultipleWorksheetPricesConsitent(worksheetEntries: any[]) {
+  areMultipleWorksheetPricesConsitent(worksheetEntries: WorkSheetEntry[]) {
     //Function checks worksheetEntries array for price consistency
     //returns true or false
     let lastPrice: string | null = null;
@@ -142,9 +142,9 @@ export class PriceChangeWorksheetInventoryComparison {
     worksheetEntries.forEach((entry) => {
       if (
         lastPrice === null ||
-        parseFloat(lastPrice) == parseFloat(entry.modifiedPrice)
+        parseFloat(lastPrice) == parseFloat(entry.priceChangeWorksheetEntry.modifiedPrice)
       ) {
-        lastPrice = entry.modifiedPrice;
+        lastPrice = entry.priceChangeWorksheetEntry.modifiedPrice;
       } else {
         isConsitent = false;
       }

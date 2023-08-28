@@ -15,7 +15,7 @@
  * @internal
  */
 
-import DuplicateEntry, { DupCheckEntry } from "../TextImporters/DuplicateEntry";
+import DuplicateEntry from "../TextImporters/DuplicateEntry";
 
 class DuplicateEntriesChecker {
   DupCheckImport = new DuplicateEntry();
@@ -43,7 +43,7 @@ class DuplicateEntriesChecker {
 
         output += `           :${originalEntry.scanCode}:${originalEntry.price} \n`;
 
-        entry.forEach((dupEntry) => {
+        entry.forEach(() => {
           output += `           :${originalEntry.scanCode}:${originalEntry.price}\n`;
         });
       }
@@ -66,7 +66,7 @@ class DuplicateEntriesChecker {
 
         output += `\t${originalEntry.price}`;
 
-        entry.forEach((dupEntry) => {
+        entry.forEach(() => {
           output += `\t${originalEntry.price}`;
         });
         output += "\r\n";

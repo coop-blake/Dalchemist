@@ -42,7 +42,7 @@ class PriceChangeWorksheetImporter extends TextImporter<PriceChangeWorksheetEntr
       case 3:
         {
           //third line
-          const values = line.split("\t");
+         // const values = line.split("\t");
           //  this.worksheetStartDate = new Date(values[1]);
           //  this.worksheetEndDate = new Date(values[2]);
         }

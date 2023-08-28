@@ -51,7 +51,7 @@ async function start() {
   NorthInventoryImport.forEachEntry(function (entry) {
     const valueArray = entry.valuesArray.map((s) => s.trim());
     const scanCode = entry.scanCode
-   const SouthSoldDate = SouthInventoryImport.getEntryFromScanCode(entry.scanCode)?.southLastSoldDate
+   const SouthSoldDate = SouthInventoryImport.getEntryFromScanCode(scanCode)?.southLastSoldDate
 
    valueArray.push(SouthSoldDate ? SouthSoldDate : "")
     values.push(valueArray);
@@ -64,20 +64,22 @@ async function start() {
     scopes: ["https://www.googleapis.com/auth/drive"],
   });
 
-  const authClient = await auth.getClient();
+  //const authClient = await auth.getClient();
 
-  const sheets = google.sheets({ version: "v4", auth: authClient });
+  const sheets = google.sheets({ version: "v4", auth: auth });
   const spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA";
 
   console.log("Clearing Inventory Google Sheet");
 
-  const readData = await sheets.spreadsheets.values.clear({
+ await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
     range: "Inventory!A:S", //range of cells to read from.
   });
 
   console.log("Uploading Inventory Google Sheet");
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "Inventory!A:S", //sheet name and range of cells
@@ -94,6 +96,8 @@ async function start() {
     minute: "numeric",
   });
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "About!B1", //sheet name and range of cells
@@ -103,7 +107,8 @@ async function start() {
     },
   });
   
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore 
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "About!B6:B100", //sheet name and range of cells
@@ -114,36 +119,35 @@ async function start() {
   });
 }
 
+async function readLastLines(filePath: string, numLines: number) {
+  const lines : string[] = [];
+  const stream = fs.createReadStream(filePath, { encoding: "utf8" });
+  let buffer = "";
 
-async function readLastLines(filePath, numLines) {
-  const lines = [];
-  const stream = fs.createReadStream(filePath, { encoding: 'utf8' });
-  let buffer = '';
+  await new Promise<void>((resolve, reject) => {
+    stream.on("data", (chunk) => {
+      buffer += chunk;
+      const linesArray = buffer.split("\n");
+      while (linesArray.length > 1) {
+        if (lines.length >= numLines) {
+          lines.shift(); // Remove the first line when we have numLines
+        }
+        lines.push(linesArray.shift() || "");
+      }
+      buffer = linesArray[0];
+    });
 
-  await new Promise((resolve, reject) => {
-      stream.on('data', chunk => {
-          buffer += chunk;
-          const linesArray = buffer.split('\n');
-          while (linesArray.length > 1) {
-              if (lines.length >= numLines) {
-                  lines.shift();  // Remove the first line when we have numLines
-              }
-              lines.push(linesArray.shift());
-          }
-          buffer = linesArray[0];
-      });
+    stream.on("end", () => {
+      // Add the remaining lines to the result
+      if (buffer.length > 0) {
+        lines.push(buffer);
+      }
+      resolve();
+    });
 
-      stream.on('end', () => {
-          // Add the remaining lines to the result
-          if (buffer.length > 0) {
-              lines.push(buffer);
-          }
-          resolve();
-      });
-
-      stream.on('error', error => {
-          reject(error);
-      });
+    stream.on("error", (error) => {
+      reject(error);
+    });
   });
 
   return lines;
