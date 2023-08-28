@@ -152,9 +152,6 @@ export class AddDrop {
       }
     } catch (error) {console.error(error)}
 
-    setTimeout(() => {
-      this.refresh();
-    }, 1000);
   }
 
   static getInstance(): AddDrop {

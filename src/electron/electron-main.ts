@@ -1,10 +1,15 @@
 //
 
-import { BrowserWindow, Tray, Menu, ipcMain, dialog } from "electron";
+import { BrowserWindow, Tray, Menu, ipcMain, dialog, IpcMainEvent } from "electron";
 
 import * as path from "path";
 import * as fs from "fs";
 import * as http from "http";
+
+import { Inventory } from "../Google/Inventory/Inventory";
+
+
+
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow | null = null;
@@ -127,7 +132,7 @@ export default class Main {
         },
       },
       {
-        label: "Input Data",
+        label: "Find Scan Code",
         click() {
           Main.showDialog();
         },
@@ -147,7 +152,7 @@ export default class Main {
   static showDialog() {
     const preloadPath = path.join(__dirname, "preloadDialog.js");
     console.log("preload path", preloadPath);
-    const win = new BrowserWindow({
+    const win = new this.BrowserWindow({
       width: 300,
       height: 150,
       webPreferences: {
@@ -159,17 +164,28 @@ export default class Main {
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
 
-    ipcMain.on("input-data", (event, data) => {
-      console.log(
-        "User input - if this was a list of UPCs, either newlined or comma seperated, make a list of items:",
-        data
-      );
-      Main.mainWindow?.loadURL(
-        `data:text/html;charset=utf-8,${encodeURIComponent(data)}`
-      );
+     const onInputData  =  (event : IpcMainEvent, data : string) => {
+      // console.log(
+      //   "User input - if this was a list of UPCs, either newlined or comma seperated, make a list of items:",
+      //   data
+      // );
 
+     
+      const output =  returnUserScancodeSearch(data)
+      Main.mainWindow?.loadURL(
+        `data:text/html;charset=utf-8,${encodeURIComponent(output)}`
+      );
+      event.sender.send("input-data-reply", "Data processed successfully");
       win.close();
+    }
+
+    win.on('closed', () => {
+      // Remove the IPC event listener when the window is closed
+      ipcMain.removeListener("input-data", onInputData);
     });
+
+
+    ipcMain.on("input-data", onInputData)
   }
 
   static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
@@ -275,4 +291,27 @@ function saveStringToFile(content: string, filePath: string) {
   } catch (error) {
     console.error("Error saving file:", error);
   }
+}
+
+
+function returnUserScancodeSearch (input: string) : string{
+  const inventory = Inventory.getInstance();
+
+  function getLineFromScanCode (ScanCode : string) : string{
+    const entry = inventory.getEntryFromScanCode(ScanCode);
+     return entry ? entry.valuesArray.join(" | ") : "No Item Found: " + ScanCode
+  }
+
+
+  if(input.includes(',')) {
+    const scanCodes = input.split(',').map(code => code.trim());
+    let returnString = ""
+    scanCodes.forEach((ScanCode) => {
+      returnString += getLineFromScanCode(ScanCode)
+    })
+    return returnString;
+  } else {
+    return getLineFromScanCode(input.trim());
+  }
+
 }
