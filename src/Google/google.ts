@@ -62,6 +62,8 @@ export class Google {
 
       if (certPathToUse && fs.existsSync(certPathToUse)) {
         Google.getInstanceFor(certPathToUse);
+      }else{
+        throw(Error("Cert Path in Settings Invalid"))
       }
     }
   }
@@ -82,4 +84,8 @@ export class Google {
   }
 }
 
-Google.loadServiceCert();
+Google.loadServiceCert().then().catch((error: Error) =>{
+
+  //todo Add a state and write errors to it
+  console.error(error)
+});

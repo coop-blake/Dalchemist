@@ -1,6 +1,6 @@
 //
 
-import { BrowserWindow, Tray, Menu, ipcMain, dialog, IpcMainEvent } from "electron";
+import {  BrowserWindow, Tray, Menu, ipcMain, dialog, IpcMainEvent } from "electron";
 
 import * as path from "path";
 import * as fs from "fs";
@@ -37,15 +37,49 @@ export default class Main {
     // Dereference the window object.
     Main.mainWindow = null;
   }
+  
+  public static getMainWindow() : BrowserWindow {
+    
+    if (Main.mainWindow === null)
+    {    
 
+      if(Main.notReady){
+        console.error("NOOOOOO!!!!")
+      }
+      const preloadPath = path.join(__dirname, "preloadDialog.js");
+      console.log("preload path" ,preloadPath)
+      Main.mainWindow =  new BrowserWindow(
+        { width: 800, 
+          height: 600,  
+          webPreferences: {
+            preload: preloadPath, // Load preload script for the input dialog
+            contextIsolation: true,
+            nodeIntegration: false,
+            },
+        });
+    }
+
+    return Main.mainWindow
+  }
   private static onReady() {
     Main.notReady = false;
-    Main.mainWindow = new Main.BrowserWindow({ width: 800, height: 600 });
 
-    Main.mainWindow?.loadFile(
-      path.join(__dirname + "/Resources/html/index.html")
+    const preloadPath = path.join(__dirname, "preloadDialog.js");
+    console.log("preload path" ,preloadPath)
+    Main.mainWindow =  new BrowserWindow(
+      { width: 800, 
+        height: 600,  
+        webPreferences: {
+          preload: preloadPath, // Load preload script for the input dialog
+          contextIsolation: true,
+          nodeIntegration: false,
+          },
+      });
+    
+      Main.mainWindow.loadFile(
+      path.join(__dirname, "/Resources/html/index.html")
     );
-    Main.mainWindow?.on("closed", Main.onClose);
+    Main.getMainWindow().on("closed", Main.onClose);
 
     //called before ready
     if (Main.statusMessage !== null && Main.loadError === null) {
@@ -76,67 +110,66 @@ export default class Main {
       {
         label: "Inventory",
         click() {
-          Main.mainWindow?.loadURL("http://localhost:4848/Inventory");
+          const mainWindow = Main.getMainWindow() 
+          mainWindow.loadURL("http://localhost:4848/Inventory");
         },
+        submenu: [ {
+          label: "Find Scan Code",
+          click() {
+            Main.showDialog();
+          },
+        },]
       },
       {
         label: "Add/Drop",
-        click() {
-          Main.mainWindow?.loadURL("http://localhost:4848/");
-        },
+        
+        submenu: [{
+          label: "Summary",
+          click() {
+             const mainWindow = Main.getMainWindow() 
+          mainWindow.loadURL("http://localhost:4848/");
+          }
+        },{
+          label: "Save Add Drop Price Change",
+          click() {
+            http
+              .get(
+                "http://localhost:4848/addDropPriceChanges.txt",
+                (response) => {
+                  let contentToSave = "";
+  
+                  response.on("data", (chunk) => {
+                    contentToSave += chunk;
+                  });
+  
+                  response.on("end", () => {
+                    // Show a dialog to choose the file path
+                    dialog
+                      .showSaveDialog({ defaultPath: "myfile.txt" })
+                      .then((result) => {
+                        if (!result.canceled && result.filePath) {
+                          const filePath = result.filePath;
+                          saveStringToFile(contentToSave, filePath);
+                        }
+                      });
+                  });
+                }
+              )
+              .on("error", (error) => {
+                console.error("Error fetching content:", error);
+              });
+          },
+        },]
       },
       {
         label: "TabImporter",
         click() {
-          Main.mainWindow?.loadURL("https://coop-blake.github.io/tabImporter/");
+           const mainWindow = Main.getMainWindow() 
+          mainWindow.loadURL("https://coop-blake.github.io/tabImporter/");
         },
       },
-      {
-        label: "Save Add Drop Price Change",
-        click() {
-          // const contentToSave = 'This is the content of the file.';
-
-          // // Show a dialog to choose the file path
-          // dialog.showSaveDialog({ defaultPath: 'myfile.txt' }).then(result => {
-          //   if (!result.canceled && result.filePath) {
-          //     const filePath = result.filePath;
-          //     saveStringToFile(contentToSave, filePath);
-          //   }
-          // });
-          http
-            .get(
-              "http://localhost:4848/addDropPriceChanges.txt",
-              (response) => {
-                let contentToSave = "";
-
-                response.on("data", (chunk) => {
-                  contentToSave += chunk;
-                });
-
-                response.on("end", () => {
-                  // Show a dialog to choose the file path
-                  dialog
-                    .showSaveDialog({ defaultPath: "myfile.txt" })
-                    .then((result) => {
-                      if (!result.canceled && result.filePath) {
-                        const filePath = result.filePath;
-                        saveStringToFile(contentToSave, filePath);
-                      }
-                    });
-                });
-              }
-            )
-            .on("error", (error) => {
-              console.error("Error fetching content:", error);
-            });
-        },
-      },
-      {
-        label: "Find Scan Code",
-        click() {
-          Main.showDialog();
-        },
-      },
+      
+     
       {
         label: process.platform === "win32" ? "Exit" : "Quit",
         click() {
@@ -172,7 +205,7 @@ export default class Main {
 
      
       const output =  returnUserScancodeSearch(data)
-      Main.mainWindow?.loadURL(
+      Main.getMainWindow().loadURL(
         `data:text/html;charset=utf-8,${encodeURIComponent(output)}`
       );
       event.sender.send("input-data-reply", "Data processed successfully");
@@ -197,37 +230,54 @@ export default class Main {
     Main.application = app;
     Main.application.on("window-all-closed", Main.onWindowAllClosed);
     Main.application.on("ready", Main.onReady);
+
+
   }
 
   static start() {
-    //Main.mainWindow?.loadURL("http://localhost:4848/");
+    //Main.getMainWindow().loadURL("http://localhost:4848/");
     Main.started = true;
 
-    const mainWindow = Main.mainWindow;
-    if (mainWindow !== null) {
-      mainWindow.webContents.executeJavaScript(`
-          const statusContent = document.getElementById('statusContent');
-          if (statusContent) {
-            statusContent.textContent = 'Success!';
-          }
-          const iconImage = document.getElementById('iconImage');
-          if(iconImage){
-            iconImage.classList.remove('pulsating');
-          }
-          const menuContent = document.getElementById('menuContent');
-          if(menuContent){
-            menuContent.classList.add('fadeIn');
-          }
-        `);
-    }
+
+      if (Main.notReady) {
+        console.log("Not ready, waiting!");
+
+        Main.application?.on("ready", async () => {
+          const mainWindow = Main.getMainWindow();
+          mainWindow.webContents.send("startEvent", "Started")
+        });
+
+      }else{
+        Main.getMainWindow().webContents.send("startEvent", "Started")
+      }
+
+
+    // const mainWindow = Main.getMainWindow();
+    // if (mainWindow !== null) {
+    //   mainWindow.webContents.executeJavaScript(`
+    //       let statusContent = document.getElementById('statusContent');
+    //       if (statusContent) {
+    //         statusContent.textContent = 'Success!';
+    //       }
+    //       let iconImage = document.getElementById('iconImage');
+    //       if(iconImage){
+    //         iconImage.classList.remove('pulsating');
+    //       }
+    //       let menuContent = document.getElementById('menuContent');
+    //       if(menuContent){
+    //         menuContent.classList.add('fadeIn');
+    //       }
+    //     `);
+    // }
   }
 
   static statusMessageUpdate(message: string) {
-    const mainWindow = Main.mainWindow;
+    const mainWindow = Main.getMainWindow();
 
     Main.statusMessage = message;
 
     if (mainWindow !== null && Main.loadError === null) {
+      mainWindow.webContents.send("startMessageUpdate", message)
       mainWindow.webContents.executeJavaScript(`
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
           update();
@@ -235,7 +285,7 @@ export default class Main {
           document.addEventListener('DOMContentLoaded', update);
         }
         function update(){
-            const statusContent = document.getElementById('statusContent');
+            let statusContent = document.getElementById('statusContent');
             
             if (statusContent) {
               statusContent.innerHTML = '${message
@@ -252,35 +302,26 @@ export default class Main {
   }
 
   static startError(error: Error) {
-    const mainWindow = Main.mainWindow;
+    const mainWindow = Main.getMainWindow();
     const errorMessage = error.message as string;
     Main.loadError = errorMessage;
-    if (mainWindow !== null) {
-      mainWindow.webContents.executeJavaScript(`
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-          update();
-        } else {
-          document.addEventListener('DOMContentLoaded', update);
-        }
-        function update(){
-            const statusContent = document.getElementById('statusContent');
-            const iconImage = document.getElementById('iconImage');
-            
-            if (statusContent) {
-              statusContent.innerHTML = 'Error Loading! </br>${errorMessage
-                .replace(/'/g, "\\'")
-                .replace(/"/g, '\\"')}';
 
-              statusContent.style.color = 'red';
+    if (Main.notReady) {
+      console.log("Not ready, waiting!");
 
-              
-            }
-            if(iconImage){
-              iconImage.classList.remove('pulsating');
-            }
-        }
-        `);
-    }
+      Main.application?.on("ready", async () => {
+        const mainWindow = Main.getMainWindow();
+        mainWindow.webContents.send(`startError`, error);
+      });
+
+    }else{
+      mainWindow.webContents.send(`startError`, error);
+  }
+
+
+    // if (mainWindow !== null) {
+    //   mainWindow.webContents.send(`startError`, error);
+    // }
   }
 }
 

@@ -1,11 +1,15 @@
 import { app, BrowserWindow } from "electron";
-import Main from "./electron-main";
+//import Main from "./electron-main";
+
 //import { start } from "../Google/addDrop/addDrop"
 
 import express from "express";
 import { AddDrop } from "../Google/addDrop/addDrop";
+import { Inventory } from "../Google/Inventory/Inventory";
 
-//import {combineLatest} from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 import {
   getIndex,
@@ -54,23 +58,44 @@ dalchemist.listen(4848, () => {
 
   console.log("Web Server Started");
 
+const addDropObservable = AddDrop.state.lastRefreshCompleted$
+const inventoryObservable = Inventory.state.lastRefreshCompleted$
 
-  AddDrop.state.lastRefreshCompleted$.subscribe(
-    (lastRefreshCompleted: number) => {
-      if (lastRefreshCompleted !== 0) {
-        const lastRefreshDate = new Date(lastRefreshCompleted);
-        const formattedDate = lastRefreshDate.toLocaleString(undefined, {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
-        console.log(`AddDrop Updated changed: ${formattedDate}`);
-        Main.start();
-      }
+console.log("Got Observables");
+
+
+combineLatest([addDropObservable,inventoryObservable]).pipe(
+  map( ([addDropLastRefresh, inventoryLastRefresh]) => {
+    console.log(`AddDrop Last refresh: ${formatDateForConsole(addDropLastRefresh)}`)
+    console.log(`Inventory Last Refresh: ${formatDateForConsole(inventoryLastRefresh)}`)
+    if(addDropLastRefresh !== 0 && inventoryLastRefresh !== 0)
+    {
+      console.log(`Starting and testing Inventory: `);
+      Main.start();
+      const entry = Inventory.getInstance().getEntryFromScanCode("1551")
+          if(entry !== undefined)
+          {
+              console.log(`Scancoded: 1551 ${entry.Name}`);
+  
+          }
     }
-  );
+  }
+)).subscribe();
+console.log("Combined");
+
 
 });
+
+
+const formatDateForConsole = function (datetime: number) : string{
+  const lastRefreshDate = new Date(datetime);
+  const formattedDate = lastRefreshDate.toLocaleString(undefined, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+return formattedDate
+}

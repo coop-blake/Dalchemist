@@ -1,6 +1,6 @@
 import Store from "electron-store";
 import { dialog } from "electron";
-import Main from "./electron-main";
+//import Main from "./electron-main";
 
 class Settings {
   private static instance: Settings;

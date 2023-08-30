@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { Google } from "../google";
 
 
-import Main from "../../electron/electron-main";
+//import Main from "../../electron/electron-main";
 
 
 import {
@@ -94,7 +94,7 @@ export class AddDrop {
 # Process Attribute Updates
 #####################################################################################*/
         // Read data from "Price and attribute changes" tab
-        Main.statusMessageUpdate("Reading Price and Attribute Changes");
+       // Main.statusMessageUpdate("Reading Price and Attribute Changes");
 
         const attributeChangesResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,

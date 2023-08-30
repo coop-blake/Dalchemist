@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Debug Main Process",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-      "program": "${workspaceRoot}/build/electron/startApp.js",
+      "program": "${workspaceRoot}/build/electron/startDalchemistApp.js",
       "runtimeArgs": [
         ".",
         // this args for attaching render process
@@ -19,7 +19,15 @@
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "protocol": "legacy"
+    }, {
+      "name": "✅ StartElectron",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "startElectron"]
     },
+    
     {
       "name": "🌐 Interactive: Main",
       "type": "node",
