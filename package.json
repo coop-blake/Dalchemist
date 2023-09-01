@@ -36,14 +36,14 @@
     "docs": "typedoc",
     "docs-external": "typedoc --out docs/external --excludeInternal --readme ./README.md",
     "docs-md": "typedoc --plugin typedoc-plugin-markdown --out docs/markdown",
-    
     "startElectron": "ts-node ./building/scripts/check-port-in-use.ts && npm run startElectron:renderer",
     "startElectron:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
     "startElectron:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "startElectron:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.preload.dev.ts",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.prod.ts",
-    "build:dlls": "ts-node building/scripts/check-native-dep.ts && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.dev.dll.ts"
+    "build:dlls": "ts-node building/scripts/check-native-dep.ts && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.dev.dll.ts",
+    "postinstall": "ts-node ./building/scripts/check-native-dep.ts && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.dev.dll.ts"
   },
   "author": "Blake Glanville",
   "license": "BSD-3-Clause",
@@ -155,7 +155,6 @@
       },
       "type": "distribution",
       "hardenedRuntime": true,
-     
       "gatekeeperAssess": false
     },
     "dmg": {
