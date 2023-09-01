@@ -1,0 +1,10 @@
+{
+    "name": "DalchemistElectron",
+    "version": "0.0.1",
+    "description": "Dalchemist Electron",
+    "author": "Blake Glanville",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "balek": "^0.0.5-pre"
+    }
+}

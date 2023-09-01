@@ -1,9 +1,10 @@
 //
+import { URL } from 'url';
 
-import { app, BrowserWindow, Tray } from "electron";
+import { app, BrowserWindow , ipcMain, IpcMainInvokeEvent} from "electron";
 import * as path from "path";
 import { BehaviorSubject, Observable } from 'rxjs';
-import { buildMenu } from "./Menu";
+import { DalchemistMainMenu } from "./Menu";
 
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -45,24 +46,45 @@ export default class DalchemistApp {
   private notReady = true
 
   private mainWindow : BrowserWindow | null = null;
+  private mainMenu: DalchemistMainMenu | null = null;
   
-
 
   public static getState(): DalchemistAppState {
     return DalchemistApp.state;
   }
+
+
   public showFindDialog() {
-    const preloadPath = path.join(__dirname, "preloadDialog.js");
+    const preloadPath = path.join(__dirname, "../../build/preloadDialog.js");
     console.log("preload path", preloadPath);
-     new BrowserWindow({
+    const win = new BrowserWindow({
       width: 300,
       height: 150,
       webPreferences: {
-        preload: preloadPath, // Load preload script for the input dialog
-
+        preload: preloadPath, 
         nodeIntegration: true,
       },
     });
+
+    win.loadFile(__dirname + "/Resources/html/inputDialog.html");
+
+    const searchInventoryAndShowResults  =  (_ipcEvent : IpcMainInvokeEvent, 
+      lookingFor : string) => {
+  
+     const output =  returnUserScancodeSearch(lookingFor)
+
+     this.getMainWindow()?.loadURL(
+       `data:text/html;charset=utf-8,${encodeURIComponent(output)}`
+     );
+     win.close();
+   }
+
+   win.on('closed', () => {
+     // Remove the IPC event listener when the window is closed
+     ipcMain.removeListener("searchInventory", searchInventoryAndShowResults);
+   });
+
+   ipcMain.handle('searchInventory', searchInventoryAndShowResults)
   }
 
 
@@ -79,7 +101,7 @@ export default class DalchemistApp {
 
     console.log("🟩DalchemistApp-Strarting!");
    
-    app.on("window-all-closed", this.onWindowsAllClosed);
+   // app.on("window-all-closed", this.onWindowsAllClosed);
    // app.on("ready", this.onReady);
 
     app.whenReady().then(() => {
@@ -89,11 +111,7 @@ export default class DalchemistApp {
 
   }
 
-  private  onWindowsAllClosed() {
-    if (process.platform !== "darwin") {
-      //  Main.application.quit();
-    }
-  }
+ 
 
   private  onReady(){
     
@@ -103,50 +121,37 @@ export default class DalchemistApp {
 
     if(mainWindow !== null)
     {
-      mainWindow.loadFile(path.join(__dirname, "/Resources/html/index.html"))
-      .then(() => { mainWindow.webContents.send('message-from-main', "started ll"); })
+      const getIndexPath = resolveHtmlPath('index.html');
+      console.log("getIndexPath", getIndexPath)
+      //mainWindow.loadFile(path.join(__dirname, "/Resources/html/index.html"))
+      mainWindow.loadURL(path.join(getIndexPath))
+      .then(() => { mainWindow.webContents.send('status', "started ll"); })
       .then(() => { mainWindow.show(); })
       .catch((error: Error) => {console.error(error)});
 
-    const menu = buildMenu(this)
-
-    const faviconPath = path.join(__dirname, this.getIcon());
-
-    console.log("Favicon", faviconPath);
-    const tray = new Tray(faviconPath);
-
-
-      tray.setToolTip("Dalchemist");
-     tray.setContextMenu(menu);
-
+    this.mainMenu = new DalchemistMainMenu(this)
 
      const addDropObservable = AddDrop.state.lastRefreshCompleted$
      const inventoryObservable = Inventory.state.lastRefreshCompleted$
-
-
      combineLatest([addDropObservable,inventoryObservable]).pipe(
       map( ([addDropLastRefresh, inventoryLastRefresh]) => {
         console.log(`AddDrop Last refresh: ${formatDateForConsole(addDropLastRefresh)}`)
         console.log(`Inventory Last Refresh: ${formatDateForConsole(inventoryLastRefresh)}`)
         if(addDropLastRefresh !== 0 && inventoryLastRefresh !== 0)
         {
-          console.log(`Add Drop and Inventory Ready: `);
+          console.log(`ONREADY: Add Drop and Inventory Ready: `);
           mainWindow.webContents.send('message-from-main', "Finished");
           
         }
       }
     )).subscribe();
-
     }
-
-
-
 
   }
 
   public getMainWindow()
     : BrowserWindow | null{
-    
+
       if (this.mainWindow === null)
       {    
   
@@ -154,7 +159,7 @@ export default class DalchemistApp {
           return null
         }
 
-        const preloadPath = path.join(__dirname, "../../build/preload.js");
+        const preloadPath =app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, "../../build/preload.js");
         console.log("preload path" ,preloadPath)
         this.mainWindow =  new BrowserWindow(
           { width: 800, 
@@ -171,7 +176,7 @@ export default class DalchemistApp {
     }
 
 
-    private getIcon() {
+    public getIcon() {
       return process.platform === "win32"
         ? "../../icon/favicon.ico"
         : "../../icon/icon.png";
@@ -194,4 +199,45 @@ export default class DalchemistApp {
       second: "2-digit",
     });
   return formattedDate
+  }
+
+
+  function returnUserScancodeSearch (input: string) : string{
+    const inventory = Inventory.getInstance();
+  
+    function getLineFromScanCode (ScanCode : string) : string{
+      const entry = inventory.getEntryFromScanCode(ScanCode);
+       return entry ? entry.valuesArray.join(" | ") : "No Item Found: " + ScanCode
+    }
+  
+  
+    if(input.includes(',')) {
+      const scanCodes = input.split(',').map(code => code.trim());
+      let returnString = ""
+      scanCodes.forEach((ScanCode) => {
+        returnString += getLineFromScanCode(ScanCode)
+      })
+      return returnString;
+    } else {
+      return getLineFromScanCode(input.trim());
+    }
+  
+  }
+
+
+
+  function resolveHtmlPath(htmlFileName: string) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log("getIndexPath:htmlFileName", htmlFileName)
+
+      const port = process.env.PORT || 1212;
+      const url = new URL(`http://localhost:${port}`);
+      url.pathname = htmlFileName;
+      console.log("getIndexPath:url.href", url.href)
+
+      return url.href;
+    }
+    console.log("getIndexPath:file", __dirname, `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`)
+
+    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
   }

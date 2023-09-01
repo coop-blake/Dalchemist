@@ -22,7 +22,7 @@
 
     function sendInput() {
       const inputValue = inputField.value;
-      electron.ipcRenderer.send('input-data', inputValue);
+      commands.searchInventory(inputValue)
     }
 
    submitButton.addEventListener('click', () => {
@@ -35,10 +35,6 @@
     });
 
 
-
-    electron.ipcRenderer.on('input-data-reply', (event, data) => {
-      console.log('Received reply:', data);
-    });
   </script>
 </body>
 </html>
