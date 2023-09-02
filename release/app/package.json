@@ -1,17 +1,16 @@
 {
-    "name": "DalchemistElectron",
-    "version": "0.0.1",
-    "description": "Dalchemist Electron",
-    "author": "Blake Glanville",
-    "license": "BSD-3-Clause",
-    "main": "./dist/main/main.js",
-    "scripts": {
-        "rebuild": "node -r ts-node/register ../../building/scripts/electron-rebuild.ts",
-        "postinstall": "npm run rebuild && npm run link-modules",
-        "link-modules": "node -r ts-node/register ../../building/scripts/link-modules.ts"
-    },
-    "dependencies": {
-        "balek": "^0.0.5-pre",
-        "DalchemistElectron": "file:"
-    }
+  "name": "DalchemistElectron",
+  "version": "0.0.1",
+  "description": "Dalchemist Electron",
+  "author": "Blake Glanville",
+  "license": "BSD-3-Clause",
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../building/scripts/electron-rebuild.ts",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../building/scripts/link-modules.ts"
+  },
+  "dependencies": {
+    "balek": "^0.0.5-pre"
+  }
 }
