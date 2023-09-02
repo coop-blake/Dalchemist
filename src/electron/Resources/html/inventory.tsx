@@ -22,7 +22,7 @@ window.electron.ipcRenderer.on(
 );
 
 function inventoryDataUpdated() {
-  new Tabulator("#example-table", {
+  const table = new Tabulator("#example-table", {
     //height:"400px",
     data: inventoryData, //load row data from array
     // layout:"fitColumns",      //fit columns to width of table
@@ -50,6 +50,7 @@ function inventoryDataUpdated() {
       Quantity: { headerFilter: true },
       Unit: { headerFilter: true },
       SupplierUnitID: { headerFilter: true },
+      valuesArray: { visible: false },
     },
   });
 }
