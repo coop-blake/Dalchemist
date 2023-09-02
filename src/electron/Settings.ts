@@ -2,6 +2,9 @@ import Store from "electron-store";
 import { dialog } from "electron";
 //import Main from "./electron-main";
 
+import { app } from "electron";
+
+
 class Settings {
   private static instance: Settings;
   private store: Store = new Store();
@@ -28,28 +31,24 @@ class Settings {
       return googleCertPath;
     } else {
       console.log("No googleCertPath in settings!");
-
-      if (Main.notReady) {
-        console.log("Not ready, waiting!");
-
-        await Main.application?.on("ready", async () => {
-          googleCertPath = (await openJsonFileDialog()) as string;
-        });
+     
+     
+       
 
         return new Promise<string | undefined>((resolve) => {
-          Main.application?.on("ready", async () => {
+
+          app.whenReady().then(async () => {
+
+
             googleCertPath = (await openJsonFileDialog()) as string;
             this.saveJsonLocation(googleCertPath);
             resolve(googleCertPath);
           });
+
+         
         });
 
-        console.log("Not ready, waiting!");
-      } else {
-        console.log("Ready, going!!");
-
-        googleCertPath = (await openJsonFileDialog()) as string;
-      }
+    
       this.saveJsonLocation(googleCertPath);
       return googleCertPath;
     }

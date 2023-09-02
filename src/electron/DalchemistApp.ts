@@ -1,8 +1,10 @@
 //
 import { URL } from "url";
 
+import { resolveHtmlPath } from "./Utility";
+
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
-import * as path from "path";
+import  path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
 import { DalchemistMainMenu } from "./Menu";
 
@@ -35,12 +37,14 @@ export enum DalchemistAppStatus {
 }
 
 export default class DalchemistApp {
-  private static instance: DalchemistApp;
+  public static instance: DalchemistApp;
   static state: DalchemistAppState = new DalchemistAppState();
 
-  private notReady = true;
+  public notReady = true;
 
   private mainWindow: BrowserWindow | null = null;
+  private addDropWindow: BrowserWindow | null = null;
+  private inventoryWindow: BrowserWindow | null = null;
   private mainMenu: DalchemistMainMenu | null = null;
 
   public static getState(): DalchemistAppState {
@@ -112,7 +116,6 @@ export default class DalchemistApp {
       this.sendingStatusToWindow = DalchemistApp.state.status$.subscribe(
         (status: string) => {
           console.log("DalchemistApp.state.status status", status);
-
           mainWindow.webContents.send("status", status);
         }
       );
@@ -203,10 +206,62 @@ export default class DalchemistApp {
     return this.mainWindow;
   }
 
+  public getInventoryWindow(): BrowserWindow | null {
+    if (this.inventoryWindow === null) {
+      if (this.notReady) {
+        return null;
+      }
+
+      const preloadPath = app.isPackaged
+        ? path.join(__dirname, "preloadInventory.js")
+        : path.join(__dirname, "../../build/preloadInventory.js");
+      console.log("Add Drop preload path", preloadPath);
+      this.inventoryWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false,
+        webPreferences: {
+          preload: preloadPath, // Load preload script for the input dialog
+          contextIsolation: true,
+          nodeIntegration: false,
+        },
+      });
+    }
+    return this.inventoryWindow;
+  }
+
+  public getAddDropWindow(): BrowserWindow | null {
+    if (this.addDropWindow === null) {
+      if (this.notReady) {
+        return null;
+      }
+
+      const preloadPath = app.isPackaged
+        ? path.join(__dirname, "preloadAddDrop.js")
+        : path.join(__dirname, "../../build/preloadAddDrop.js");
+      console.log("Add Drop preload path", preloadPath);
+      this.addDropWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false,
+        webPreferences: {
+          preload: preloadPath, // Load preload script for the input dialog
+          contextIsolation: true,
+          nodeIntegration: false,
+        },
+      });
+    }
+    return this.addDropWindow;
+  }
+
   public getIcon() {
-    return process.platform === "win32"
+    return app.isPackaged 
+    ? process.platform === "win32"
+      ? "../../../icon/favicon.ico"
+      : "../../../icon/icon32.png"
+    :process.platform === "win32"
       ? "../../icon/favicon.ico"
-      : "../../icon/icon.png";
+      : "../../icon/icon32.png"
   }
 
   public quit() {
@@ -245,24 +300,4 @@ function returnUserScancodeSearch(input: string): string {
   } else {
     return getLineFromScanCode(input.trim());
   }
-}
-
-function resolveHtmlPath(htmlFileName: string) {
-  if (process.env.NODE_ENV === "development") {
-    console.log("getIndexPath:htmlFileName", htmlFileName);
-
-    const port = process.env.PORT || 1212;
-    const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    console.log("getIndexPath:url.href", url.href);
-
-    return url.href;
-  }
-  console.log(
-    "getIndexPath:file",
-    __dirname,
-    `file://${path.resolve(__dirname, "../renderer/", htmlFileName)}`
-  );
-
-  return `file://${path.resolve(__dirname, "../renderer/", htmlFileName)}`;
 }

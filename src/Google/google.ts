@@ -2,7 +2,7 @@ import { google, Auth, sheets_v4, drive_v3 } from "googleapis";
 import { BehaviorSubject, Observable } from "rxjs";
 import Settings from "../electron/Settings";
 
-import * as path from "path";
+import  path from "path";
 import * as fs from "fs";
 
 const includedCertPath = path.join(

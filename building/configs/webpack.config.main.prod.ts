@@ -25,6 +25,9 @@ const configuration: webpack.Configuration = {
   entry: {
     main: path.join(webpackPaths.srcMainPath, 'startDalchemistApp.ts'),
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
+    preloadInventory:path.join(webpackPaths.srcMainPath, 'preloadInventory.ts'),
+    preloadAddDrop:path.join(webpackPaths.srcMainPath, 'preloadAddDrop.ts'),
+    preloadDialog:path.join(webpackPaths.srcMainPath, 'preloadDialog.ts'),
   },
 
   output: {

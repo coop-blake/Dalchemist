@@ -3,6 +3,7 @@ import { Menu, dialog, Tray} from "electron";
 import path from 'path';
 import * as http from "http";
 import DalchemistApp from "./DalchemistApp";
+import { resolveHtmlPath } from "./Utility";
 
 
 import { AddDrop } from "../Google/addDrop/addDrop";
@@ -78,11 +79,34 @@ private enableAddDropMenu(){
           }
         },
         submenu: [ {
-          label: "Find Scan Code",
+          label: "Find Scan Codes",
           click() {
             dalchemistApp.showFindDialog();
           },
-        },],
+        },
+        {
+          label: "All",
+          click() {
+             const inventoryWindow = dalchemistApp.getInventoryWindow() 
+              const getIndexPath = resolveHtmlPath("inventory.html");
+                   console.log("Inventory getIndexPath", getIndexPath);
+
+              if(inventoryWindow !== null){
+                inventoryWindow.loadURL(path.join(getIndexPath)) 
+              .then(() => {
+                const inventoryValues = Array.from(Inventory.getInstance().entries.values())
+                
+                inventoryWindow.webContents.send("inventoryData", inventoryValues);
+                
+                inventoryWindow.show();
+
+              })
+              .catch((error: Error) => {
+                console.error(error);
+              });
+             }
+          }
+        }],
         enabled: false
       },
       {
@@ -92,9 +116,27 @@ private enableAddDropMenu(){
         submenu: [{
           label: "Summary",
           click() {
-             const mainWindow = dalchemistApp.getMainWindow() 
-             if(mainWindow !== null){
-              mainWindow.loadURL("http://localhost:4848/");
+             const addDropWindow = dalchemistApp.getAddDropWindow() 
+              const getIndexPath = resolveHtmlPath("addDrop.html");
+                   console.log("Add Drop getIndexPath", getIndexPath);
+
+              if(addDropWindow !== null){
+              addDropWindow.loadURL(path.join(getIndexPath)) 
+              .then(() => {
+
+              
+
+                addDropWindow.webContents.send("newItemsArray", AddDrop.state.newItems);
+                addDropWindow.webContents.send("itemsAlreadyInInventory", AddDrop.state.itemsAlreadyInInventory);
+                addDropWindow.webContents.send("attributeChangeItems", AddDrop.state.attributeChangeItems);
+                addDropWindow.webContents.send("priceUpdates", AddDrop.state.priceUpdates);
+
+                addDropWindow.show();
+
+              })
+              .catch((error: Error) => {
+                console.error(error);
+              });
              }
           }
         },{

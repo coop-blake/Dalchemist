@@ -4,7 +4,7 @@
     "description": "Dalchemist Electron",
     "author": "Blake Glanville",
     "license": "BSD-3-Clause",
-    "main": "./dist/main/main.js",
+    "main": "./app/dist/main/main.js",
     "scripts": {
         "rebuild": "node -r ts-node/register ../building/scripts/electron-rebuild.js",
         "postinstall": "npm run rebuild && npm run link-modules",
