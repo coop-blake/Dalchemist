@@ -127,6 +127,56 @@ export default class DalchemistApp {
       this.sendingStatusToWindow = null;
     }
   }
+  public showAddDropWindow() {
+    const addDropWindow = this.getAddDropWindow();
+    const getIndexPath = resolveHtmlPath("addDrop.html");
+    console.log("addDrop getIndexPath", getIndexPath);
+
+    if (addDropWindow !== null) {
+      addDropWindow
+        .loadURL(path.join(getIndexPath))
+        .then(() => {
+          addDropWindow.webContents.send(
+            "newItemsArray",
+            AddDrop.state.newItems
+          );
+          addDropWindow.webContents.send(
+            "itemsAlreadyInInventory",
+            AddDrop.state.itemsAlreadyInInventory
+          );
+          addDropWindow.webContents.send(
+            "attributeChangeItems",
+            AddDrop.state.attributeChangeItems
+          );
+          addDropWindow.webContents.send(
+            "priceUpdates",
+            AddDrop.state.priceUpdates
+          );
+
+          addDropWindow.show();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
+    }
+
+    // if (addDropWindow !== null) {
+    //   addDropWindow
+    //     .loadURL(path.join(getIndexPath))
+    //     .then(() => {
+    //       const inventoryValues = Array.from(
+    //         Inventory.getInstance().entries.values()
+    //       );
+
+    //       inventoryWindow.webContents.send("inventoryData", inventoryValues);
+
+    //       inventoryWindow.show();
+    //     })
+    //     .catch((error: Error) => {
+    //       console.error(error);
+    //     });
+    // }
+  }
 
   public showInventoryWindow() {
     const inventoryWindow = this.getInventoryWindow();
@@ -151,6 +201,15 @@ export default class DalchemistApp {
     }
   }
   private sendingStatusToWindow: Subscription | null = null;
+
+  public closeMainWindow() {
+    const mainWindow = this.mainWindow;
+    if (mainWindow !== null) {
+      mainWindow.close();
+      this.mainWindow = null;
+    }
+  }
+
   private onReady() {
     DalchemistApp.state.setStatus(DalchemistAppStatus.Starting);
     this.notReady = false;
@@ -161,7 +220,9 @@ export default class DalchemistApp {
         if (mainWindowMessage === "inventoryMenuButtonClicked") {
           this.showInventoryWindow();
         } else if (mainWindowMessage === "addDropMenuButtonClicked") {
-          event.reply("mainWindowMessage", "handled");
+          this.showAddDropWindow();
+        } else if (mainWindowMessage === "closeMenuButtonClicked") {
+          this.closeMainWindow();
         }
       }
     );

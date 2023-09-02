@@ -30,12 +30,8 @@ if (
   !skipDLLs &&
   !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))
 ) {
-  console.log(
-    chalk.black.bgYellow.bold(
-      'Building dlls"'
-    )
-  );
-  execSync("npm --prefix release/app/ install release/app/");
+  console.log(chalk.black.bgYellow.bold('Building dlls"'));
+  // execSync("npm --cwd release/app/ install");
   execSync("npm run postinstall");
 }
 

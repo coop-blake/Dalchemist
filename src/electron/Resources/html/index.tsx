@@ -26,6 +26,18 @@ function setup() {
       inventoryMenuButtonClicked();
     });
   }
+  const addDropMenuButton = document.getElementById("addDropMenuButton");
+  if (addDropMenuButton) {
+    addDropMenuButton.addEventListener("click", function () {
+      addDropMenuButtonClicked();
+    });
+  }
+  const closeMenuButton = document.getElementById("closeMenuButton");
+  if (closeMenuButton) {
+    closeMenuButton.addEventListener("click", function () {
+      closeMenuButtonClicked();
+    });
+  }
 
   const bodyContainer = document.getElementById("bodyContainer");
   if (bodyContainer) {
@@ -40,6 +52,22 @@ function inventoryMenuButtonClicked() {
   window.electron.ipcRenderer.sendMessage(
     "mainWindowMessage",
     "inventoryMenuButtonClicked"
+  );
+}
+
+function addDropMenuButtonClicked() {
+  console.log("addDropMenuButtonClicked");
+  window.electron.ipcRenderer.sendMessage(
+    "mainWindowMessage",
+    "addDropMenuButtonClicked"
+  );
+}
+
+function closeMenuButtonClicked() {
+  console.log("closeMenuButtonClicked");
+  window.electron.ipcRenderer.sendMessage(
+    "mainWindowMessage",
+    "closeMenuButtonClicked"
   );
 }
 

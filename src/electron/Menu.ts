@@ -102,37 +102,10 @@ export class DalchemistMainMenu {
           {
             label: "Summary",
             click() {
-              const addDropWindow = dalchemistApp.getAddDropWindow();
-              const getIndexPath = resolveHtmlPath("addDrop.html");
-              console.log("Add Drop getIndexPath", getIndexPath);
-
-              if (addDropWindow !== null) {
-                addDropWindow
-                  .loadURL(path.join(getIndexPath))
-                  .then(() => {
-                    addDropWindow.webContents.send(
-                      "newItemsArray",
-                      AddDrop.state.newItems
-                    );
-                    addDropWindow.webContents.send(
-                      "itemsAlreadyInInventory",
-                      AddDrop.state.itemsAlreadyInInventory
-                    );
-                    addDropWindow.webContents.send(
-                      "attributeChangeItems",
-                      AddDrop.state.attributeChangeItems
-                    );
-                    addDropWindow.webContents.send(
-                      "priceUpdates",
-                      AddDrop.state.priceUpdates
-                    );
-
-                    addDropWindow.show();
-                  })
-                  .catch((error: Error) => {
-                    console.error(error);
-                  });
-              }
+              // const addDropWindow = dalchemistApp.getAddDropWindow();
+              // const getIndexPath = resolveHtmlPath("addDrop.html");
+              // console.log("Add Drop getIndexPath", getIndexPath);
+              dalchemistApp.showAddDropWindow();
             },
           },
           {

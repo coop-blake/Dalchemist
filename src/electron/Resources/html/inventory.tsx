@@ -50,6 +50,9 @@ function inventoryDataUpdated() {
       Quantity: { headerFilter: true },
       Unit: { headerFilter: true },
       SupplierUnitID: { headerFilter: true },
+      N: { headerFilter: true },
+      S: { headerFilter: true },
+
       valuesArray: { visible: false },
     },
   });
