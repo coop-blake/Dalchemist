@@ -7,7 +7,7 @@ const srcRendererPath = path.join(srcPath, 'electron/Resources/html/');
 const srcMainPath = path.join(srcPath, 'electron/');
 
 const buildRendererPath =  path.join(rootPath, 'build');
-const srcNodeModulesPath = path.join(rootPath, 'node-modules');
+const srcNodeModulesPath = path.join(rootPath, 'node_modules');
 
 const buildPath = path.join(rootPath, 'build');
 

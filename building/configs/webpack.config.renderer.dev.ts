@@ -35,7 +35,7 @@ if (
       'Building dlls"'
     )
   );
-  execSync("npm install");
+  execSync("npm --prefix release/app/ install release/app/");
   execSync("npm run postinstall");
 }
 
