@@ -203,6 +203,10 @@
       {
         "from": "./icon",
         "to": "icon"
+      },
+      {
+        "from": "./src/Google/Inventory/CertAndLogs/googleCert.json",
+        "to": "./CertAndLogs/googleCert.json"
       }
     ]
   }
