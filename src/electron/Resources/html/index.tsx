@@ -13,26 +13,50 @@ window.electron.ipcRenderer.on("error", (message) => {
   updateErrorMessage(message);
 });
 
-if (
-  document.readyState === "complete" ||
-  document.readyState === "interactive"
-) {
+function setup() {
   const iconImage = document.getElementById("iconImage") as HTMLImageElement;
   console.log(icon);
   if (iconImage) {
     iconImage.src = icon;
   }
-} else {
-  document.addEventListener("DOMContentLoaded", () => {});
+
+  const inventoryMenuButton = document.getElementById("inventoryMenuButton");
+  if (inventoryMenuButton) {
+    inventoryMenuButton.addEventListener("click", function () {
+      inventoryMenuButtonClicked();
+    });
+  }
+
+  const bodyContainer = document.getElementById("bodyContainer");
+  if (bodyContainer) {
+    bodyContainer.addEventListener("resize", function (resizeEvent) {
+      console.log(resizeEvent);
+    });
+  }
 }
 
-function updateErrorMessage(error) {
+function inventoryMenuButtonClicked() {
+  console.log("inventoryMenuButtonClicked");
+  window.electron.ipcRenderer.sendMessage(
+    "mainWindowMessage",
+    "inventoryMenuButtonClicked"
+  );
+}
+
+function onReady(doThis: () => void) {
+  document.readyState === "complete" || document.readyState === "interactive"
+    ? doThis()
+    : document.addEventListener("DOMContentLoaded", () => {
+        doThis();
+      });
+}
+
+onReady(setup);
+
+function updateErrorMessage(error: string) {
   console.log(error);
 
-  if (
-    document.readyState === "complete" ||
-    document.readyState === "interactive"
-  ) {
+  onReady(() => {
     const statusContent = document.getElementById("statusContent");
     const iconImage = document.getElementById("iconImage");
 
@@ -44,19 +68,12 @@ function updateErrorMessage(error) {
     if (iconImage) {
       iconImage.classList.remove("pulsating");
     }
-  } else {
-    document.addEventListener("DOMContentLoaded", () => {
-      updateErrorMessage(error);
-    });
-  }
+  });
 }
 
 function updateStatusMessage(statusMessage: string) {
   console.log(statusMessage);
-  if (
-    document.readyState === "complete" ||
-    document.readyState === "interactive"
-  ) {
+  onReady(() => {
     const statusContent = document.getElementById("statusContent");
 
     if (statusContent) {
@@ -65,21 +82,28 @@ function updateStatusMessage(statusMessage: string) {
         .replace(/"/g, '\\"')}`;
 
       if (statusMessage === "Running") {
+        const iconImage = document.getElementById("iconImage");
+        if (iconImage) {
+          iconImage.classList.remove("pulsating");
+        }
+        const iconImageContainer =
+          document.getElementById("iconImageContainer");
+        if (iconImageContainer) {
+          iconImageContainer.classList.add("shrink");
+        }
         const menuContent = document.getElementById("menuContent");
         if (menuContent) {
           menuContent.classList.add("fadeIn");
         }
+        const statusContent = document.getElementById("statusContent");
+        if (statusContent) {
+          statusContent.classList.add("fadeOut");
+        }
+        const loaderContainer = document.getElementById("loaderContainer");
+        if (loaderContainer) {
+          loaderContainer.classList.add("fadeOut");
+        }
       }
     }
-  } else {
-    document.addEventListener("DOMContentLoaded", () => {
-      updateStatusMessage(statusMessage);
-    });
-  }
+  });
 }
-
-// const receiveMessageFromMain = (message: string) => {
-//   console.log(`Received: ${message}`);
-
-//   updateStatusMessage(message);
-// };

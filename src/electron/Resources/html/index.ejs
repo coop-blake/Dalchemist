@@ -8,24 +8,33 @@
     />
     <title>Dalchemist</title>
   </head>
-  <body>
-    <div class="image-container">
+  <body id="bodyContainer">
+    <span id="loaderContainer" style="position: relative; top: 15px; left: 1px"
+      ><div class="lds-ripple">
+        <div></div>
+        <div></div></div></span
+    ><br />
+    <div class="image-container" id="iconImageContainer">
       <img
         id="iconImage"
         class="image pulsating"
         src=""
-        alt="Background Image"
+        alt="Dalchemist Image"
       />
     </div>
+    <br />
     <div class="content-container">
       <div class="content">
-        <h1>Dalchemist</h1>
+        <span id="title">Dalchemist</span>
         <div id="statusContent">Loading</div>
+
         <span style="opacity: 0" id="menuContent">
-          <a href="./addDrop.html">
-            <span class="menuButton">Add Drop</span></a
-          ></span
-        >
+          <span class="menuButton" id="inventoryMenuButton">Inventory</span>
+        </br>
+          <span class="menuButton" id="addDropMenuButton">Add Drop</span>
+        </br>
+          <span class="menuButton" id="addDropMenuButton">Close</span>
+        </span>
       </div>
     </div>
   </body>

@@ -1,10 +1,10 @@
 //
-import { URL } from "url";
+//import { URL } from "url";
 
 import { resolveHtmlPath } from "./Utility";
 
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
-import  path from "path";
+import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
 import { DalchemistMainMenu } from "./Menu";
 
@@ -128,10 +128,44 @@ export default class DalchemistApp {
     }
   }
 
+  public showInventoryWindow() {
+    const inventoryWindow = this.getInventoryWindow();
+    const getIndexPath = resolveHtmlPath("inventory.html");
+    console.log("Inventory getIndexPath", getIndexPath);
+
+    if (inventoryWindow !== null) {
+      inventoryWindow
+        .loadURL(path.join(getIndexPath))
+        .then(() => {
+          const inventoryValues = Array.from(
+            Inventory.getInstance().entries.values()
+          );
+
+          inventoryWindow.webContents.send("inventoryData", inventoryValues);
+
+          inventoryWindow.show();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
+    }
+  }
   private sendingStatusToWindow: Subscription | null = null;
   private onReady() {
     DalchemistApp.state.setStatus(DalchemistAppStatus.Starting);
     this.notReady = false;
+
+    ipcMain.on(
+      "mainWindowMessage",
+      async (event, mainWindowMessage: string) => {
+        if (mainWindowMessage === "inventoryMenuButtonClicked") {
+          this.showInventoryWindow();
+        } else if (mainWindowMessage === "addDropMenuButtonClicked") {
+          event.reply("mainWindowMessage", "handled");
+        }
+      }
+    );
+
     const mainWindow = this.getMainWindow();
 
     if (mainWindow !== null) {
@@ -193,9 +227,17 @@ export default class DalchemistApp {
         : path.join(__dirname, "../../build/preload.js");
       console.log("preload path", preloadPath);
       this.mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 270,
+        height: 350,
         show: false,
+        frame: false,
+        titleBarStyle: "customButtonsOnHover",
+        titleBarOverlay: {
+          color: "#2f3241",
+          symbolColor: "#74b1be",
+          height: "10px",
+        },
+        resizable: false,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
@@ -255,13 +297,13 @@ export default class DalchemistApp {
   }
 
   public getIcon() {
-    return app.isPackaged 
-    ? process.platform === "win32"
-      ? "../../../icon/favicon.ico"
-      : "../../../icon/icon32.png"
-    :process.platform === "win32"
+    return app.isPackaged
+      ? process.platform === "win32"
+        ? "../../../icon/favicon.ico"
+        : "../../../icon/icon32.png"
+      : process.platform === "win32"
       ? "../../icon/favicon.ico"
-      : "../../icon/icon32.png"
+      : "../../icon/icon32.png";
   }
 
   public quit() {

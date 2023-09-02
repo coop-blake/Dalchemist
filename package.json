@@ -59,6 +59,7 @@
     "@babel/plugin-transform-react-jsx": "^7.22.5",
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-typescript": "^7.22.11",
+    "@electron/notarize": "^2.1.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@svgr/webpack": "^8.1.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
@@ -153,7 +154,7 @@
       "package.json",
       "icon/*/**"
     ],
-    "afterSign": "./building/scripts/notarize.ts",
+    "afterSign": "./building/scripts/notarize.js",
     "mac": {
       "icon": "./icon/Icon.icns",
       "target": {

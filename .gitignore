@@ -23,3 +23,5 @@ src/Google/Inventory/CertAndLogs/
 src/Google/Inventory/CertsAndLogs
 
 building/dll
+
+!building/scripts/notarize.js
