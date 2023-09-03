@@ -1,5 +1,5 @@
 .mainAddDrop {
-  color: rgb(54, 52, 52);
+  padding: 5px;
 }
 
 
@@ -12,7 +12,7 @@
 }
 
 #addDropBody{
-  background-color: azure;
+  background: rgba(59, 44, 92, 0.2);
 }
 
 #DownloadButton{

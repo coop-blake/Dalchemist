@@ -5,6 +5,8 @@ import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 
+import "../css/inventory.css"
+
 console.log("From Inventory.tsx");
 
 let inventoryData: InventoryEntry[] = [];
@@ -22,7 +24,7 @@ window.electron.ipcRenderer.on(
 );
 
 function inventoryDataUpdated() {
-  const table = new Tabulator("#example-table", {
+  const table = new Tabulator("#inventoryTable", {
     //height:"400px",
     data: inventoryData, //load row data from array
     // layout:"fitColumns",      //fit columns to width of table
