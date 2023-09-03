@@ -33,23 +33,24 @@ function inventoryDataUpdated() {
     // pagination:true,       //paginate the data
     // paginationSize:10,         //allow 500 rows per page of data
     // paginationCounter:"rows", //display count of paginated rows in footer
-    // movableColumns:true,      //allow column order to be changed
+     movableColumns:true,      //allow column order to be changed
     autoColumnsDefinitions: {
-      ScanCode: { headerFilter: true },
-      DefaultSupplier: { headerFilter: true },
-      Department: { headerFilter: true },
-      Brand: { headerFilter: true },
-      Name: { headerFilter: true },
-      Size: { headerFilter: true },
+      ScanCode: { headerFilter: true, sorter:"alphanum", frozen:true },
+      Brand: { headerFilter: true ,frozen:true},
+      Name: { headerFilter: true,frozen:true },
+      Size: { headerFilter: true , sorter:"alphanum"},
+
+      DefaultSupplier: { headerFilter: true,frozen:true },
+      Department: { headerFilter: true,frozen:true },
       ReceiptAlias: { headerFilter: true },
-      BasePrice: { headerFilter: true },
-      LastCost: { headerFilter: true },
-      AverageCost: { headerFilter: true },
+      BasePrice: { headerFilter: true, sorter:"alphanum" },
+      LastCost: { headerFilter: true , sorter:"alphanum"},
+      AverageCost: { headerFilter: true, sorter:"alphanum" },
       SubDepartment: { headerFilter: true },
       IdealMargin: { headerFilter: true },
-      Quantity: { headerFilter: true },
+      Quantity: { headerFilter: true, sorter:"alphanum" },
       Unit: { headerFilter: true },
-      SupplierUnitID: { headerFilter: true },
+      SupplierUnitID: { headerFilter: true,  sorter:"alphanum" },
       N: { headerFilter: true },
       S: { headerFilter: true },
 

@@ -1,7 +1,7 @@
 import { Menu, dialog, Tray } from "electron";
 import path from "path";
 import * as http from "http";
-import DalchemistApp from "./DalchemistApp";
+import {DalchemistApp, savePriceCostTSVPrompt} from "./DalchemistApp";
 import { resolveHtmlPath } from "./Utility";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
@@ -70,30 +70,42 @@ export class DalchemistMainMenu {
 
     this.menu = Menu.buildFromTemplate([
       {
+        id: "main-menu",
+        label: "Dalchemist",
+        click() {
+          dalchemistApp.showMainWindow()
+        },
+      },
+      // {
+      //   id: "inventory-menu",
+      //   label: "Inventory",
+      //   submenu: [
+      //     {
+      //       label: "Find Scan Codes",
+      //       click() {
+      //         dalchemistApp.showFindDialog();
+      //       },
+      //     },
+      //     {
+      //       label: "All",
+      //       click() {
+      //         dalchemistApp.showInventoryWindow();
+      //       },
+      //     },
+      //   ],
+      //   enabled: false,
+      // },
+
+      {
         id: "inventory-menu",
         label: "Inventory",
         click() {
-          const mainWindow = dalchemistApp.getMainWindow();
-          if (mainWindow !== null) {
-            mainWindow.loadURL("http://localhost:4848/Inventory");
-          }
+          dalchemistApp.showInventoryWindow();
         },
-        submenu: [
-          {
-            label: "Find Scan Codes",
-            click() {
-              dalchemistApp.showFindDialog();
-            },
-          },
-          {
-            label: "All",
-            click() {
-              dalchemistApp.showInventoryWindow();
-            },
-          },
-        ],
         enabled: false,
+
       },
+
       {
         label: "Add/Drop",
         id: "add-drop-menu",
@@ -111,34 +123,7 @@ export class DalchemistMainMenu {
           {
             label: "Save Add Drop Price Change",
             click() {
-              http
-                .get(
-                  "http://localhost:4848/addDropPriceChanges.txt",
-                  (response) => {
-                    let contentToSave = "";
-
-                    response.on("data", (chunk) => {
-                      contentToSave += chunk;
-                    });
-
-                    response.on("end", () => {
-                      // Show a dialog to choose the file path
-                      dialog
-                        .showSaveDialog({
-                          defaultPath: "addDropPriceChanges.txt",
-                        })
-                        .then((result) => {
-                          if (!result.canceled && result.filePath) {
-                            const filePath = result.filePath;
-                            saveStringToFile(contentToSave, filePath);
-                          }
-                        });
-                    });
-                  }
-                )
-                .on("error", (error) => {
-                  console.error("Error fetching content:", error);
-                });
+              savePriceCostTSVPrompt()
             },
           },
         ],
@@ -146,8 +131,7 @@ export class DalchemistMainMenu {
       {
         label: "TabImporter",
         click() {
-          const mainWindow = dalchemistApp.getMainWindow();
-          mainWindow?.loadURL("https://coop-blake.github.io/tabImporter/");
+         dalchemistApp.showTabImporterWindow()
         },
       },
 
@@ -168,14 +152,7 @@ export class DalchemistMainMenu {
   }
 }
 
-function saveStringToFile(content: string, filePath: string) {
-  try {
-    fs.writeFileSync(filePath, content, "utf-8");
-    console.log("File saved successfully.");
-  } catch (error) {
-    console.error("Error saving file:", error);
-  }
-}
+
 
 const formatDateForConsole = function (datetime: number): string {
   const lastRefreshDate = new Date(datetime);

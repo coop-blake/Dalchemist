@@ -3,7 +3,7 @@
 
 import { resolveHtmlPath } from "./Utility";
 
-import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent, dialog } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
 import { DalchemistMainMenu } from "./Menu";
@@ -13,6 +13,10 @@ import { map } from "rxjs/operators";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
 import { Inventory } from "../Google/Inventory/Inventory";
+
+
+import {getAddDropPriceUpdatesTSV} from '../../src/Google/addDrop/htmlOutputs'
+import fs from 'fs'
 
 export class DalchemistAppState {
   private statusSubject = new BehaviorSubject<DalchemistAppStatus>(
@@ -25,6 +29,9 @@ export class DalchemistAppState {
 
   public setStatus(status: DalchemistAppStatus) {
     this.statusSubject.next(status);
+  }
+  public getStatus(): DalchemistAppStatus {
+    return this.statusSubject.getValue()
   }
 }
 
@@ -45,6 +52,8 @@ export default class DalchemistApp {
   private mainWindow: BrowserWindow | null = null;
   private addDropWindow: BrowserWindow | null = null;
   private inventoryWindow: BrowserWindow | null = null;
+  private tabImporterWindow: BrowserWindow | null = null;
+
   private mainMenu: DalchemistMainMenu | null = null;
 
   public static getState(): DalchemistAppState {
@@ -101,9 +110,17 @@ export default class DalchemistApp {
     // app.on("ready", this.onReady);
 
     app.whenReady().then(() => {
+      app.on("window-all-closed", this.onWindowAllClosed);
+
       console.log("DalchemistApp-onReady!");
       this.onReady();
     });
+  }
+
+  private onWindowAllClosed(){
+    if (process.platform !== "darwin") {
+      //  Main.application.quit();
+    }
   }
 
   private sendStatusToMainWindow() {
@@ -133,6 +150,16 @@ export default class DalchemistApp {
     console.log("addDrop getIndexPath", getIndexPath);
 
     if (addDropWindow !== null) {
+
+      ipcMain.on("addDropWindowMessage", this.handleAddDropWindowMessage);
+  
+      addDropWindow.on("closed", () => {
+        // Remove the IPC event listener when the window is closed
+        ipcMain.removeListener("addDropWindowMessage", this.handleAddDropWindowMessage);
+        
+      });
+
+
       addDropWindow
         .loadURL(path.join(getIndexPath))
         .then(() => {
@@ -159,23 +186,7 @@ export default class DalchemistApp {
           console.error(error);
         });
     }
-
-    // if (addDropWindow !== null) {
-    //   addDropWindow
-    //     .loadURL(path.join(getIndexPath))
-    //     .then(() => {
-    //       const inventoryValues = Array.from(
-    //         Inventory.getInstance().entries.values()
-    //       );
-
-    //       inventoryWindow.webContents.send("inventoryData", inventoryValues);
-
-    //       inventoryWindow.show();
-    //     })
-    //     .catch((error: Error) => {
-    //       console.error(error);
-    //     });
-    // }
+ 
   }
 
   public showInventoryWindow() {
@@ -187,6 +198,8 @@ export default class DalchemistApp {
       inventoryWindow
         .loadURL(path.join(getIndexPath))
         .then(() => {
+
+         
           const inventoryValues = Array.from(
             Inventory.getInstance().entries.values()
           );
@@ -200,12 +213,35 @@ export default class DalchemistApp {
         });
     }
   }
+
+  public showTabImporterWindow() {
+    const tabImporterWindow = this.getTabImporterWindow();
+   
+    if (tabImporterWindow !== null) {
+
+      
+      tabImporterWindow
+        .loadURL(path.join("https://coop-blake.github.io/tabImporter/"))
+        .then(() => { 
+          tabImporterWindow.show();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
+    }
+  }
   private sendingStatusToWindow: Subscription | null = null;
 
   public closeMainWindow() {
     const mainWindow = this.mainWindow;
     if (mainWindow !== null) {
       mainWindow.close();
+    }
+  }
+
+  private onCloseMainWindow() {
+    const mainWindow = this.mainWindow;
+    if (mainWindow !== null) {
       this.mainWindow = null;
     }
   }
@@ -213,23 +249,58 @@ export default class DalchemistApp {
   private onReady() {
     DalchemistApp.state.setStatus(DalchemistAppStatus.Starting);
     this.notReady = false;
+    this.mainMenu = new DalchemistMainMenu(this);
+    this.showMainWindow()
+  }
 
-    ipcMain.on(
-      "mainWindowMessage",
-      async (event, mainWindowMessage: string) => {
-        if (mainWindowMessage === "inventoryMenuButtonClicked") {
-          this.showInventoryWindow();
-        } else if (mainWindowMessage === "addDropMenuButtonClicked") {
-          this.showAddDropWindow();
-        } else if (mainWindowMessage === "closeMenuButtonClicked") {
-          this.closeMainWindow();
-        }
-      }
-    );
 
+  private sendMainWindowStatus(){
+    const mainWindow = this.getMainWindow();
+
+    mainWindow?.webContents.send("status", DalchemistApp.state.getStatus());
+
+  }
+  private handleMainWindowMessage = async (_event, mainWindowMessage: string) => {
+    if (mainWindowMessage === "inventoryMenuButtonClicked") {
+      this.showInventoryWindow();
+    } else if (mainWindowMessage === "addDropMenuButtonClicked") {
+      this.showAddDropWindow();
+    } else if (mainWindowMessage === "closeMenuButtonClicked") {
+      this.closeMainWindow();
+    }else if (mainWindowMessage === "loaded") {
+      this.sendMainWindowStatus()
+    }
+  }
+
+
+
+
+  private handleAddDropWindowMessage = async (_event, mainWindowMessage: string) => {
+    if (mainWindowMessage === "loaded") {
+      //should send the data
+    } else if (mainWindowMessage === "savePriceCostTSV") {
+      savePriceCostTSVPrompt()
+    } 
+  }
+
+public showMainWindow() {
+  
+  if(this.mainWindow !== null)
+  {
+    this.mainWindow.show()
+  }else{
     const mainWindow = this.getMainWindow();
 
     if (mainWindow !== null) {
+      ipcMain.on("mainWindowMessage", this.handleMainWindowMessage);
+  
+      mainWindow.on("closed", () => {
+        // Remove the IPC event listener when the window is closed
+        ipcMain.removeListener("mainWindowMessage", this.handleMainWindowMessage);
+        this.stopSendingStatusToMainWindow();
+        this.mainWindow = null
+      });
+      
       const getIndexPath = resolveHtmlPath("index.html");
       console.log("getIndexPath", getIndexPath);
       //mainWindow.loadFile(path.join(__dirname, "/Resources/html/index.html"))
@@ -245,7 +316,6 @@ export default class DalchemistApp {
           console.error(error);
         });
 
-      this.mainMenu = new DalchemistMainMenu(this);
 
       const addDropObservable = AddDrop.state.lastRefreshCompleted$;
       const inventoryObservable = Inventory.state.lastRefreshCompleted$;
@@ -275,6 +345,9 @@ export default class DalchemistApp {
           .subscribe();
       }
     }
+  }
+  
+  
   }
 
   public getMainWindow(): BrowserWindow | null {
@@ -320,8 +393,8 @@ export default class DalchemistApp {
         : path.join(__dirname, "../../build/preloadInventory.js");
       console.log("Add Drop preload path", preloadPath);
       this.inventoryWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 800,
         show: false,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
@@ -330,6 +403,10 @@ export default class DalchemistApp {
         },
       });
     }
+
+    this.inventoryWindow.on('closed' , () =>{
+            this.inventoryWindow = null
+    })
     return this.inventoryWindow;
   }
 
@@ -344,17 +421,52 @@ export default class DalchemistApp {
         : path.join(__dirname, "../../build/preloadAddDrop.js");
       console.log("Add Drop preload path", preloadPath);
       this.addDropWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 800,
         show: false,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
+          nodeIntegration: true,
         },
       });
     }
+    this.addDropWindow.on('closed' , () =>{
+      this.addDropWindow = null
+})
     return this.addDropWindow;
+  }
+
+
+  public getTabImporterWindow(): BrowserWindow | null {
+    if (this.tabImporterWindow === null) {
+      if (this.notReady) {
+        return null;
+      }
+
+      this.tabImporterWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false,
+        titleBarOverlay: {
+          color: "#2f3241",
+          symbolColor: "#74b1be",
+          height: "10px",
+        },
+        autoHideMenuBar: true,
+        webPreferences: {
+          contextIsolation: true,
+         
+      
+           // Set this to false to use the default menu
+
+        },
+      });
+    }
+    this.tabImporterWindow.on('closed' , () =>{
+      this.tabImporterWindow = null
+})
+    return this.tabImporterWindow;
   }
 
   public getIcon() {
@@ -402,5 +514,28 @@ function returnUserScancodeSearch(input: string): string {
     return returnString;
   } else {
     return getLineFromScanCode(input.trim());
+  }
+}
+
+
+export function savePriceCostTSVPrompt(){
+
+  const contentToSave = getAddDropPriceUpdatesTSV(AddDrop.state.priceUpdates)
+  dialog
+  .showSaveDialog({ defaultPath: "addDropPriceCost.txt" })
+  .then((result) => {
+    if (!result.canceled && result.filePath) {
+      const filePath = result.filePath;
+      saveStringToFile(contentToSave, filePath);
+    }
+  });
+}
+
+function saveStringToFile(content: string, filePath: string) {
+  try {
+    fs.writeFileSync(filePath, content, "utf-8");
+    console.log("File saved successfully.");
+  } catch (error) {
+    console.error("Error saving file:", error);
   }
 }

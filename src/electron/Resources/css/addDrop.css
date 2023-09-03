@@ -1,3 +1,28 @@
 .mainAddDrop {
-  color: red;
+  color: rgb(54, 52, 52);
 }
+
+
+#alreadyInInventoryContainer{
+  display: hidden;
+}
+
+#newItemsTable{
+  max-height: 300px;
+}
+
+#addDropBody{
+  background-color: azure;
+}
+
+#DownloadButton{
+  cursor: pointer;
+  font-weight: bold;
+}
+#DownloadButton:hover{
+  text-shadow: 
+    0 0 10px #00f, /* Blue glow */
+    
+}
+
+

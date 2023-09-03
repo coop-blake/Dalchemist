@@ -134,4 +134,9 @@ function updateStatusMessage(statusMessage: string) {
       }
     }
   });
+
+  window.electron.ipcRenderer.sendMessage(
+    "mainWindowMessage",
+    "loaded"
+  );
 }
