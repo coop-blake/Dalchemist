@@ -1,4 +1,4 @@
-import { Menu, dialog, Tray } from "electron";
+import { Menu, Tray } from "electron";
 import path from "path";
 import * as http from "http";
 import {DalchemistApp, savePriceCostTSVPrompt} from "./DalchemistApp";
@@ -11,6 +11,7 @@ import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 
 import fs from "fs";
+
 
 export class DalchemistMainMenu {
   private dalchemistApp: DalchemistApp;
@@ -50,6 +51,8 @@ export class DalchemistMainMenu {
         })
       )
       .subscribe();
+
+      
   }
 
   private enableInventoryMenu() {
@@ -75,6 +78,8 @@ export class DalchemistMainMenu {
         click() {
           dalchemistApp.showMainWindow()
         },
+        accelerator: 'CommandOrControl+D'
+
       },
       // {
       //   id: "inventory-menu",
@@ -103,6 +108,8 @@ export class DalchemistMainMenu {
           dalchemistApp.showInventoryWindow();
         },
         enabled: false,
+        accelerator: 'CommandOrControl+I'
+
 
       },
 
@@ -119,12 +126,14 @@ export class DalchemistMainMenu {
               // console.log("Add Drop getIndexPath", getIndexPath);
               dalchemistApp.showAddDropWindow();
             },
+            accelerator: 'CommandOrControl+A'
           },
           {
             label: "Save Add Drop Price Change",
             click() {
               savePriceCostTSVPrompt()
             },
+            accelerator: 'CommandOrControl+S'
           },
         ],
       },
@@ -140,6 +149,8 @@ export class DalchemistMainMenu {
         click() {
           dalchemistApp.quit();
         },
+        accelerator: 'CommandOrControl+Q'
+
       },
     ]);
   }

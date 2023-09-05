@@ -140,15 +140,10 @@ export class AddDrop {
         AddDrop.state.setPriceUpdates(priceUpdates);
         AddDrop.state.setLastRefreshCompleted(Date.now());
 
-        // const watchRequest = {
-        //   fileId: this.spreadsheetId,
-        //   resource: 'AddDropWatchRequest',
-        //   type: 'web_hook',
-        //   address
-        // };
-        // const watching = drive.changes.watch(watchRequest, (error, result) => {
-        //   console.log(error, result);
-        // });
+        setTimeout(() => {
+          this.refresh()
+        }, 100000)
+
       }
     } catch (error) {console.error(error)}
 

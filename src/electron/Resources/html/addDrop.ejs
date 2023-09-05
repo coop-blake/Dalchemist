@@ -9,25 +9,33 @@
     <title>Add/Drop</title>
   </head>
   <body id="addDropBody">
-    <div id="root"></div>
-
     <div class="mainAddDrop">
-      <div class="newItems">
-        <h3><span id="numberOfNewItems"></span> New Items:</h3>
+      <div id="loadingDiv">Wating For Data</div>
+
+      <div id="noItemsDiv">Add Drop All Clear!</div>
+      
+      <div id="newItemsDiv">
+        <h2><span class="titleLine" style="width: 50px;"></span><span id="numberOfNewItems"></span><span id="newItemsTitle" class="spanTitle">New Items</span><span class="titleLine"></span></h2>
         <div id="newItemsTable"></div>
-        <div id="alreadyInInventoryContainer">
+        <div id="newItemErrors">
+          <h3 style="color: red">New Item Errors</h3>
+          &nbsp Items already in Inventory
           <div id="alreadyItemsTable"></div>
         </div>
-      
-        
       </div>
-      <div class="attributeChanges">
-        <h3>Attribute Changes</h3>
+
+      <div id="changeItemsDiv">
+        <h2><span class="titleLine" style="width: 50px;">&nbsp;</span><span id="numberOfChangeItems"></span> <span id="attributeTitle" class="spanTitle">Attribute Changes</span><span class="titleLine">&nbsp;</span></h2>
+        <h4>All Changes</h4>
         <div id="changeItemsTable"></div>
+        <div id="priceChangeDiv">
+          <h4>Price Changes</h4>
+          <div id="priceChangesTable"></div>
+        </div>
         <br/>
-       <span id="DownloadButton"> Download Price and Costs 🪬</span>
+       <span id="DownloadButton"> ⬇️ Download Price and Costs TSV </span>
       </div>
-     
+
     </div>
   </body>
 </html>

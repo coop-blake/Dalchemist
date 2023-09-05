@@ -57,6 +57,10 @@ export class Inventory {
         }) as [InventoryEntry];
     
         Inventory.state.setLastRefreshCompleted(Date.now());
+
+        setTimeout(() => {
+          this.refresh()
+        }, 900000)
       }
      
 

@@ -3,7 +3,7 @@
 
 import { resolveHtmlPath } from "./Utility";
 
-import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent, dialog } from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent, dialog, globalShortcut } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
 import { DalchemistMainMenu } from "./Menu";
@@ -53,6 +53,10 @@ export default class DalchemistApp {
   private addDropWindow: BrowserWindow | null = null;
   private inventoryWindow: BrowserWindow | null = null;
   private tabImporterWindow: BrowserWindow | null = null;
+
+
+  private lastAddDropLastRefresh = 0
+  private lastInventoryLastRefresh = 0
 
   private mainMenu: DalchemistMainMenu | null = null;
 
@@ -163,23 +167,7 @@ export default class DalchemistApp {
       addDropWindow
         .loadURL(path.join(getIndexPath))
         .then(() => {
-          addDropWindow.webContents.send(
-            "newItemsArray",
-            AddDrop.state.newItems
-          );
-          addDropWindow.webContents.send(
-            "itemsAlreadyInInventory",
-            AddDrop.state.itemsAlreadyInInventory
-          );
-          addDropWindow.webContents.send(
-            "attributeChangeItems",
-            AddDrop.state.attributeChangeItems
-          );
-          addDropWindow.webContents.send(
-            "priceUpdates",
-            AddDrop.state.priceUpdates
-          );
-
+          this.sendAddDropData()
           addDropWindow.show();
         })
         .catch((error: Error) => {
@@ -187,6 +175,31 @@ export default class DalchemistApp {
         });
     }
  
+  }
+
+  private sendAddDropData(){
+    const addDropWindow = this.addDropWindow
+    if(addDropWindow!== null)
+    {
+      addDropWindow.webContents.send(
+        "newItemsArray",
+        AddDrop.state.newItems
+      );
+      addDropWindow.webContents.send(
+        "itemsAlreadyInInventory",
+        AddDrop.state.itemsAlreadyInInventory
+      );
+      addDropWindow.webContents.send(
+        "attributeChangeItems",
+        AddDrop.state.attributeChangeItems
+      );
+      addDropWindow.webContents.send(
+        "priceUpdates",
+        AddDrop.state.priceUpdates
+      );
+      addDropWindow.webContents.send("addDropDataLastReload", this.lastAddDropLastRefresh);
+
+    }
   }
 
   public showInventoryWindow() {
@@ -199,18 +212,24 @@ export default class DalchemistApp {
         .loadURL(path.join(getIndexPath))
         .then(() => {
 
-         
-          const inventoryValues = Array.from(
-            Inventory.getInstance().entries.values()
-          );
-
-          inventoryWindow.webContents.send("inventoryData", inventoryValues);
+        this.sendInventoryData();
 
           inventoryWindow.show();
         })
         .catch((error: Error) => {
           console.error(error);
         });
+    }
+  }
+  private sendInventoryData(){
+    const inventoryWindow = this.inventoryWindow
+    if (inventoryWindow !== null) {
+          const inventoryValues = Array.from(
+            Inventory.getInstance().entries.values()
+          );
+          inventoryWindow.webContents.send("inventoryData", inventoryValues);
+          inventoryWindow.webContents.send("inventoryDataLastReload", this.lastInventoryLastRefresh);
+
     }
   }
 
@@ -251,8 +270,73 @@ export default class DalchemistApp {
     this.notReady = false;
     this.mainMenu = new DalchemistMainMenu(this);
     this.showMainWindow()
+
+    globalShortcut.register(
+      'CommandOrControl+I',
+      () => { this.showInventoryWindow(); }
+    );
+    globalShortcut.register(
+      'CommandOrControl+A',
+      () => { this.showAddDropWindow(); }
+    );
+    globalShortcut.register(
+      'CommandOrControl+S',
+      () => { savePriceCostTSVPrompt(); }
+    );
+    globalShortcut.register(
+      'CommandOrControl+D',
+      () => { this.showMainWindow(); }
+    );
+
+
+
+      const addDropObservable = AddDrop.state.lastRefreshCompleted$;
+      const inventoryObservable = Inventory.state.lastRefreshCompleted$;
+      combineLatest([addDropObservable, inventoryObservable])
+                .pipe(
+                  map(([addDropLastRefresh, inventoryLastRefresh]) => {
+                    console.log(
+                      `AddDrop Last refresh: ${formatDateForConsole(
+                        addDropLastRefresh
+                      )}`
+                    );
+                    console.log(
+                      `Inventory Last Refresh: ${formatDateForConsole(
+                        inventoryLastRefresh
+                      )}`
+                    );
+                    if (addDropLastRefresh !== 0 && inventoryLastRefresh !== 0) {
+                      console.log(`ONREADY: Add Drop and Inventory Ready: `);
+                      DalchemistApp.state.setStatus(DalchemistAppStatus.Running);
+                      this.onDataUpdate(addDropLastRefresh, inventoryLastRefresh)
+                    }
+                  })
+                )
+                .subscribe();
+
   }
 
+  private onDataUpdate(addDropLastRefresh: number, inventoryLastRefresh: number){
+
+    const dalchemistStatus = DalchemistApp.state.getStatus()
+    if (dalchemistStatus !== DalchemistAppStatus.Running && addDropLastRefresh !== 0 && inventoryLastRefresh !== 0) {
+                      console.log(`ONREADY: Add Drop and Inventory Ready: `);
+                      DalchemistApp.state.setStatus(DalchemistAppStatus.Running);
+                      this.onDataUpdate(addDropLastRefresh, inventoryLastRefresh)
+                    }
+
+                    if(inventoryLastRefresh > this.lastInventoryLastRefresh){
+                      this.lastInventoryLastRefresh = inventoryLastRefresh
+                      this.sendInventoryData()
+                    }
+
+                     if(addDropLastRefresh > this.lastAddDropLastRefresh){
+                      this.lastAddDropLastRefresh = addDropLastRefresh
+
+                      this.sendAddDropData()
+                    }
+
+  }
 
   private sendMainWindowStatus(){
     const mainWindow = this.getMainWindow();
@@ -317,32 +401,12 @@ public showMainWindow() {
         });
 
 
-      const addDropObservable = AddDrop.state.lastRefreshCompleted$;
-      const inventoryObservable = Inventory.state.lastRefreshCompleted$;
+      
       if (mainWindow != null) {
         if (this.sendStatusToMainWindow !== null) {
           this.stopSendingStatusToMainWindow();
         }
-        combineLatest([addDropObservable, inventoryObservable])
-          .pipe(
-            map(([addDropLastRefresh, inventoryLastRefresh]) => {
-              console.log(
-                `AddDrop Last refresh: ${formatDateForConsole(
-                  addDropLastRefresh
-                )}`
-              );
-              console.log(
-                `Inventory Last Refresh: ${formatDateForConsole(
-                  inventoryLastRefresh
-                )}`
-              );
-              if (addDropLastRefresh !== 0 && inventoryLastRefresh !== 0) {
-                console.log(`ONREADY: Add Drop and Inventory Ready: `);
-                DalchemistApp.state.setStatus(DalchemistAppStatus.Running);
-              }
-            })
-          )
-          .subscribe();
+       
       }
     }
   }
