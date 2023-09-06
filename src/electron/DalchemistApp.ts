@@ -271,22 +271,22 @@ export default class DalchemistApp {
     this.mainMenu = new DalchemistMainMenu(this);
     this.showMainWindow()
 
-    globalShortcut.register(
-      'CommandOrControl+I',
-      () => { this.showInventoryWindow(); }
-    );
-    globalShortcut.register(
-      'CommandOrControl+A',
-      () => { this.showAddDropWindow(); }
-    );
-    globalShortcut.register(
-      'CommandOrControl+S',
-      () => { savePriceCostTSVPrompt(); }
-    );
-    globalShortcut.register(
-      'CommandOrControl+D',
-      () => { this.showMainWindow(); }
-    );
+    // globalShortcut.register(
+    //   'CommandOrControl+I',
+    //   () => { this.showInventoryWindow(); }
+    // );
+    // globalShortcut.register(
+    //   'CommandOrControl+A',
+    //   () => { this.showAddDropWindow(); }
+    // );
+    // globalShortcut.register(
+    //   'CommandOrControl+S',
+    //   () => { savePriceCostTSVPrompt(); }
+    // );
+    // globalShortcut.register(
+    //   'CommandOrControl+D',
+    //   () => { this.showMainWindow(); }
+    // );
 
 
 

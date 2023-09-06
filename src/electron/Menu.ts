@@ -76,7 +76,7 @@ export class DalchemistMainMenu {
         click() {
           dalchemistApp.showMainWindow()
         },
-        accelerator: 'CommandOrControl+D'
+      //  accelerator: 'CommandOrControl+D'
 
       },
       // {
@@ -106,7 +106,7 @@ export class DalchemistMainMenu {
           dalchemistApp.showInventoryWindow();
         },
         enabled: false,
-        accelerator: 'CommandOrControl+I'
+      //  accelerator: 'CommandOrControl+I'
 
 
       },
@@ -121,14 +121,14 @@ export class DalchemistMainMenu {
             click() {
               dalchemistApp.showAddDropWindow();
             },
-            accelerator: 'CommandOrControl+A'
+       //     accelerator: 'CommandOrControl+A'
           },
           {
             label: "Save Add Drop Price Change",
             click() {
               savePriceCostTSVPrompt()
             },
-            accelerator: 'CommandOrControl+S'
+         //   accelerator: 'CommandOrControl+S'
           },
         ],
       },
@@ -144,7 +144,7 @@ export class DalchemistMainMenu {
         click() {
           dalchemistApp.quit();
         },
-        accelerator: 'CommandOrControl+Q'
+       // accelerator: 'CommandOrControl+Q'
 
       },
     ]);
