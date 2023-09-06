@@ -1,8 +1,6 @@
 import { Menu, Tray } from "electron";
 import path from "path";
-import * as http from "http";
-import {DalchemistApp, savePriceCostTSVPrompt} from "./DalchemistApp";
-import { resolveHtmlPath } from "./Utility";
+import DalchemistApp, {savePriceCostTSVPrompt} from "./DalchemistApp";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
 import { Inventory } from "../Google/Inventory/Inventory";
@@ -10,7 +8,7 @@ import { Inventory } from "../Google/Inventory/Inventory";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 
-import fs from "fs";
+import {formatDateForConsole} from "./Utility"
 
 
 export class DalchemistMainMenu {
@@ -121,9 +119,6 @@ export class DalchemistMainMenu {
           {
             label: "Summary",
             click() {
-              // const addDropWindow = dalchemistApp.getAddDropWindow();
-              // const getIndexPath = resolveHtmlPath("addDrop.html");
-              // console.log("Add Drop getIndexPath", getIndexPath);
               dalchemistApp.showAddDropWindow();
             },
             accelerator: 'CommandOrControl+A'
@@ -162,18 +157,3 @@ export class DalchemistMainMenu {
     return this.menu;
   }
 }
-
-
-
-const formatDateForConsole = function (datetime: number): string {
-  const lastRefreshDate = new Date(datetime);
-  const formattedDate = lastRefreshDate.toLocaleString(undefined, {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-  return formattedDate;
-};

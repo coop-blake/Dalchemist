@@ -373,16 +373,11 @@ const redraw = function () {
     (newItems.length === 0  && changeItems.length === 0 
       && newItemsReceived && changeItemsReceived ) ? show("noItemsDiv") : hide("noItemsDiv");
 
-    (newItemsReceived && changeItemsReceived ) ? hide("loadingDiv") : show("loadingDiv");
+    (newItemsReceived && changeItemsReceived && 
+      newItemsInInventoryReceived  && priceChangeItemsReceived) ? hide("loadingDiv") : show("loadingDiv");
   })
  
 };
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// function displayNewItems() {
-//   table.data = newItems;
-// }
-
 
 
 
@@ -421,7 +416,7 @@ window.electron.ipcRenderer.sendMessage(
 
 
 
-
+//combined type
 type NewItemInEnventory = {
 
     ScanCode :string,

@@ -63,3 +63,18 @@ export function formatTimestampToMinute(timestamp: number) {
 
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+
+
+export function formatDateForConsole (datetime: number): string {
+  const lastRefreshDate = new Date(datetime);
+  const formattedDate = lastRefreshDate.toLocaleString(undefined, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  return formattedDate;
+}

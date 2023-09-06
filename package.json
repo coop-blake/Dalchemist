@@ -32,7 +32,7 @@
     "package-macOS": "npm run electronBuild && electron-packager . Dalchemist --platform=darwin --arch=x64 --out=dist --overwrite --icon=./icon/Icon.icns",
     "test": "jest",
     "lint": "npx eslint .",
-    "docs": "typedoc",
+    "docs": "typedoc ./src/main.ts",
     "docs-external": "typedoc --out docs/external --excludeInternal --readme ./README.md",
     "docs-md": "typedoc --plugin typedoc-plugin-markdown --out docs/markdown",
     "startElectron": "ts-node ./building/scripts/check-port-in-use.ts && npm run startElectron:renderer",
