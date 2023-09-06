@@ -138,6 +138,12 @@ export class DalchemistMainMenu {
          dalchemistApp.showTabImporterWindow()
         },
       },
+      {
+        label: "Core Sets",
+        click() {
+         dalchemistApp.showCoreSetsWindow()
+        },
+      },
 
       {
         label: process.platform === "win32" ? "Exit" : "Quit",

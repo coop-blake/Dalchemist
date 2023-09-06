@@ -53,10 +53,11 @@ export default class DalchemistApp {
   private addDropWindow: BrowserWindow | null = null;
   private inventoryWindow: BrowserWindow | null = null;
   private tabImporterWindow: BrowserWindow | null = null;
-
+  private coreSetsWindow: BrowserWindow | null = null;
 
   private lastAddDropLastRefresh = 0
   private lastInventoryLastRefresh = 0
+  private lastCoreSetsLastRefresh = 0
 
   private mainMenu: DalchemistMainMenu | null = null;
 
@@ -233,6 +234,7 @@ export default class DalchemistApp {
     }
   }
 
+
   public showTabImporterWindow() {
     const tabImporterWindow = this.getTabImporterWindow();
    
@@ -249,6 +251,38 @@ export default class DalchemistApp {
         });
     }
   }
+
+  public showCoreSetsWindow() {
+    const coreSetsWindow = this.getCoreSetsWindow();
+    const getIndexPath = resolveHtmlPath("coreSets.html");
+    console.log("CoreSets getIndexPath", getIndexPath);
+
+    if (coreSetsWindow !== null) {
+      coreSetsWindow
+        .loadURL(path.join(getIndexPath))
+        .then(() => {
+
+        this.sendCoreSetsData();
+
+          coreSetsWindow.show();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
+    }
+  }
+  private sendCoreSetsData(){
+    const coreSetsWindow = this.coreSetsWindow
+    if (coreSetsWindow !== null) {
+          const coreSetsValues = Array.from(
+           {h: 1}// CoreSets.getInstance().entries.values()
+          );
+          coreSetsWindow.webContents.send("coreSetsData", coreSetsValues);
+          coreSetsWindow.webContents.send("coreSetsDataLastReload", this.lastCoreSetsLastRefresh);
+
+    }
+  }
+
   private sendingStatusToWindow: Subscription | null = null;
 
   public closeMainWindow() {
@@ -270,6 +304,9 @@ export default class DalchemistApp {
     this.notReady = false;
     this.mainMenu = new DalchemistMainMenu(this);
     this.showMainWindow()
+    ipcMain.on("mainWindowMessage", this.handleMainWindowMessage);
+    ipcMain.on("coreSetsWindowMessage", this.handleCoreSetsWindowMessage);
+
 
     // globalShortcut.register(
     //   'CommandOrControl+I',
@@ -348,12 +385,20 @@ export default class DalchemistApp {
     if (mainWindowMessage === "inventoryMenuButtonClicked") {
       this.showInventoryWindow();
     } else if (mainWindowMessage === "addDropMenuButtonClicked") {
-      this.showAddDropWindow();
+      //this.showAddDropWindow();
+      this.showCoreSetsWindow();
     } else if (mainWindowMessage === "closeMenuButtonClicked") {
       this.closeMainWindow();
     }else if (mainWindowMessage === "loaded") {
       this.sendMainWindowStatus()
     }
+  }
+
+
+  private handleCoreSetsWindowMessage = async (_event, coreSetsWindowMessage: string) => {
+    if (coreSetsWindowMessage === "selectFileMenuButtonClicked") {
+      this.showInventoryWindow();
+    } 
   }
 
 
@@ -376,7 +421,6 @@ public showMainWindow() {
     const mainWindow = this.getMainWindow();
 
     if (mainWindow !== null) {
-      ipcMain.on("mainWindowMessage", this.handleMainWindowMessage);
   
       mainWindow.on("closed", () => {
         // Remove the IPC event listener when the window is closed
@@ -472,6 +516,34 @@ public showMainWindow() {
             this.inventoryWindow = null
     })
     return this.inventoryWindow;
+  }
+
+  public getCoreSetsWindow(): BrowserWindow | null {
+    if (this.coreSetsWindow === null) {
+      if (this.notReady) {
+        return null;
+      }
+
+      const preloadPath = app.isPackaged
+        ? path.join(__dirname, "preloadCoreSets.js")
+        : path.join(__dirname, "../../build/preloadCoreSets.js");
+      console.log("Add Drop preload path", preloadPath);
+      this.coreSetsWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        show: false,
+        webPreferences: {
+          preload: preloadPath, // Load preload script for the input dialog
+          contextIsolation: true,
+          nodeIntegration: false,
+        },
+      });
+    }
+
+    this.coreSetsWindow.on('closed' , () =>{
+            this.coreSetsWindow = null
+    })
+    return this.coreSetsWindow;
   }
 
   public getAddDropWindow(): BrowserWindow | null {
