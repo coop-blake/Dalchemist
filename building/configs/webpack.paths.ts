@@ -1,48 +1,27 @@
-import path from 'path';
+import path from "path";
 
 const rootPath = path.join(__dirname, "../..");
-const srcPath = path.join(rootPath, 'src');
+const srcPath = path.join(rootPath, "src");
 
-const srcRendererPath = path.join(srcPath, 'electron/Resources/html/');
-const srcMainPath = path.join(srcPath, 'electron/');
+const srcRendererPath = path.join(srcPath, "electron/Resources/html/");
+const srcMainPath = path.join(srcPath, "electron/");
 
-const buildRendererPath =  path.join(rootPath, 'build');
-const srcNodeModulesPath = path.join(rootPath, 'node_modules');
+const buildRendererPath = path.join(rootPath, "build");
+const srcNodeModulesPath = path.join(rootPath, "node_modules");
 
-const buildPath = path.join(rootPath, 'build');
+const buildPath = path.join(rootPath, "build");
 
-const dllPath = path.join(__dirname, '../dll');
+const dllPath = path.join(__dirname, "../dll");
 
+const releasePath = path.join(rootPath, "release");
+const appPath = path.join(releasePath, "app");
+const appPackagePath = path.join(appPath, "package.json");
+const appNodeModulesPath = path.join(appPath, "node_modules");
 
-const releasePath = path.join(rootPath, 'release');
-const appPath = path.join(releasePath, 'app');
-const appPackagePath = path.join(appPath, 'package.json');
-const appNodeModulesPath = path.join(appPath, 'node_modules');
+const distPath = path.join(appPath, "dist");
+const distMainPath = path.join(distPath, "main");
+const distRendererPath = path.join(distPath, "renderer");
 
-const distPath = path.join(appPath, 'dist');
-const distMainPath = path.join(distPath, 'main');
-const distRendererPath = path.join(distPath, 'renderer');
-/*
-const dllPath = path.join(__dirname, '../dll');
-
-
-const srcPath = path.join(rootPath, 'src');
-const srcMainPath = path.join(srcPath, 'main');
-const srcRendererPath = path.join(srcPath, 'renderer');
-
-const releasePath = path.join(rootPath, 'release');
-const appPath = path.join(releasePath, 'app');
-
-const appPackagePath = path.join(appPath, 'package.json');
-const appNodeModulesPath = path.join(appPath, 'node_modules');
-const srcNodeModulesPath = path.join(srcPath, 'node_modules');
-
-const distPath = path.join(appPath, 'dist');
-const distMainPath = path.join(distPath, 'main');
-const distRendererPath = path.join(distPath, 'renderer');
-
-const buildPath = path.join(releasePath, 'build');
-*/
 export default {
   rootPath,
   srcPath,
@@ -57,8 +36,8 @@ export default {
   appPackagePath,
   appNodeModulesPath,
   distPath,
-distMainPath,
-distRendererPath,
+  distMainPath,
+  distRendererPath,
   /*
   dllPath,
   srcPath,

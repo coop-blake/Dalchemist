@@ -32,8 +32,6 @@ async function start() {
   await inventoryImporter.start();
   //🧩 - Initialize Price Change Worksheet
   console.log("Loading Catapult Price Change Worksheets");
-  const priceChangeWorksheetsImporter = new PriceChangeWorksheetsImporter();
-  await priceChangeWorksheetsImporter.initialize();
 
   //🔥 - Create and Configure HTTP Server
   console.log("Creating http server");

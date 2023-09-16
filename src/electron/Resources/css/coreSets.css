@@ -1,3 +1,19 @@
+#coreSetInfo {
+}
 
+#coreSetsHeader {
+  font-size: larger;
+}
 
- 
+#statusInfo {
+  border: solid green 1px;
+}
+
+#selectFileMenuButton {
+  background: black;
+  color: white;
+}
+
+#coreSetsTable {
+  height: 300px;
+}
