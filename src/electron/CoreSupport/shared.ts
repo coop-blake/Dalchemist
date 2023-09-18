@@ -9,7 +9,7 @@ export enum CoreSetsStatus {
 }
 
 export type CoreSupportEntry = {
-  CoreSetsRound: number;
+  CoreSetsRound: string;
   BuyInStart: string;
   BuyInEnd: string;
   Dept: string;

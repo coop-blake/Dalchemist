@@ -1,4 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
+import { Inventory } from "../../Google/Inventory/Inventory";
 
 import { CoreSupport } from "./CoreSupport";
 
@@ -10,9 +11,7 @@ export class CoreSets {
 
   private CoreSupportReader: CoreSupport;
 
-  getCoreSupport() {
-    return this.CoreSupportReader;
-  }
+ 
 
   private constructor() {
     CoreSets.state = new CoreSetsState();
@@ -20,19 +19,29 @@ export class CoreSets {
 
     this.CoreSupportReader = new CoreSupport();
 
+
     CoreSets.state.setFilePath(this.CoreSupportReader.getFilePath());
 
-    if (this.CoreSupportReader.getFilePath() !== "") {
-      if (this.CoreSupportReader.doesKnownFileExist()) {
-        setTimeout(() => {
-          this.loadCoreSetsExcelFile();
-        });
-      } else {
-        CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
+    Inventory.getInstance();
+    
+
+    Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number)=>{
+      if(lastRefresh > 0 ){
+        if (this.CoreSupportReader.getFilePath() !== "") {
+          if (this.CoreSupportReader.doesKnownFileExist()) {
+            setTimeout(() => {
+              this.loadCoreSetsExcelFile();
+            });
+          } else {
+            CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
+          }
+        } else {
+          CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
+        }
       }
-    } else {
-      CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
-    }
+    })
+
+
   }
 
   static getInstance(): CoreSets {
@@ -40,6 +49,13 @@ export class CoreSets {
       CoreSets.instance = new CoreSets();
     }
     return CoreSets.instance;
+  }
+  static reloadCoreSupport() {
+    CoreSets.getInstance().getCoreSupport().loadCoreSetsExcelFile()
+  }
+
+  getCoreSupport() {
+    return this.CoreSupportReader;
   }
 
   async selectCoreSetsFilePath() {

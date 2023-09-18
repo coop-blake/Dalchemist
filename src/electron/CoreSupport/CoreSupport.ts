@@ -5,13 +5,9 @@
  * @internal
  */
 import { CoreSupportEntry } from "./shared";
-
 import { Inventory } from "../../Google/Inventory/Inventory";
-
 import Settings from "../Settings";
-
 import TextImporter from "../../TextImporters/TextImporter";
-
 import xlsx from "node-xlsx";
 import { stat } from "fs/promises";
 import { existsSync } from "fs";
@@ -20,6 +16,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   lineCount = 0;
   filePath = "";
 
+  //map of items n
   notOurWarehouse = new Array<CoreSupportEntry>();
 
   ourCoreItems = new Map<string, CoreSupportEntry>();
@@ -59,6 +56,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   async start() {
     try {
       // await inventoryImport.start();
+      this.entries.clear();
 
       const workSheetsFromFile = xlsx.parse(this.filePath);
 
@@ -116,7 +114,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   ): CoreSupportEntry | null {
     if (Array.isArray(valueArray)) {
       const entry: CoreSupportEntry = {
-        CoreSetsRound: parseInt(valueArray[0]),
+        CoreSetsRound: valueArray[0],
         BuyInStart: valueArray[1],
         BuyInEnd: valueArray[2],
         Dept: valueArray[3],
@@ -195,6 +193,9 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     }
   }
 
+  getNumberOfItemsAvailable() {
+    return this.ourCoreItems.size
+  }
   getNumberOfEntries() {
     return this.entries.size;
   }

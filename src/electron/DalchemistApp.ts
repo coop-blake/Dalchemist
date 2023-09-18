@@ -291,6 +291,15 @@ export default class DalchemistApp {
         "CoreSetFilePathUpdated",
         CoreSets.state.filePath
       );
+      
+      this.getCoreSetsWindow()?.webContents.send(
+        "CoreSetNumberOfCoreSupportItems",
+        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+      );
+
+      this.getCoreSetsWindow()?.webContents.send(
+        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()        );
     }
   }
 
@@ -363,10 +372,20 @@ export default class DalchemistApp {
           "Sending Core Set items to window",
           CoreSets.state.coreSetItems
         );
+       
         this.getCoreSetsWindow()?.webContents.send(
           "CoreSetEntriesUpdated",
           CoreSets.state.coreSetItems
         );
+
+        this.getCoreSetsWindow()?.webContents.send(
+          "CoreSetNumberOfCoreSupportItems",
+          CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+        );
+
+        this.getCoreSetsWindow()?.webContents.send(
+          "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+          CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()        );
       }
     });
     CoreSets.state.filePath$.subscribe((filePath) => {

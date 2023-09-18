@@ -13,6 +13,9 @@ let coreSetItems: Array<CoreSupportEntry> = [];
 let coreSetStatus = CoreSetsStatus.Starting;
 let coreSetsFilePath = "";
 
+let numberOfCoreSupportItems = 0
+let numberOfCoreSupportItemsFromOurDistributors = 0
+
 const selectFileMenuButton = document.getElementById("selectFileMenuButton");
 if (selectFileMenuButton) {
   selectFileMenuButton.addEventListener("click", function () {
@@ -44,6 +47,18 @@ function saveCoreSetReportButtonClicked() {
 }
 
 //###################### After getting data - Refresh!
+function refreshStatus(){
+  const numberOfCoreSupportItemsElement = document.getElementById("numberOfCoreSupportItems");
+
+  if (numberOfCoreSupportItemsElement) {
+    numberOfCoreSupportItemsElement.innerHTML = String(numberOfCoreSupportItems)
+  }
+  const numberOfCoreSupportItemsFromOurDistributorsElement = document.getElementById("numberOfCoreSupportItemsFromOurDistributors");
+
+  if (numberOfCoreSupportItemsFromOurDistributorsElement) {
+    numberOfCoreSupportItemsFromOurDistributorsElement.innerHTML = String(numberOfCoreSupportItemsFromOurDistributors)
+  }
+}
 
 function coreSetsRefreshed() {
   const statusElement = document.getElementById("statusInfo");
@@ -179,3 +194,23 @@ window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
 });
 
 window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
+
+
+window.electron.ipcRenderer.on(
+  "CoreSetNumberOfCoreSupportItems",
+  (numberOfCoreSupportItemsReceived: number) => {
+    console.log("Got CoreSetNumberOfCoreSupportItems")
+
+    numberOfCoreSupportItems = numberOfCoreSupportItemsReceived
+   refreshStatus()
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+  (numberOfCoreSupportItemsFromOurDistributorsReceived: number) => {
+    console.log("Got CoreSetNumberOfCoreSupportItemsFromOurDistributors")
+    numberOfCoreSupportItemsFromOurDistributors = numberOfCoreSupportItemsFromOurDistributorsReceived
+   refreshStatus()
+  }
+);

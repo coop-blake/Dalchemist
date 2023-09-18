@@ -3,9 +3,6 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { Google } from "../google";
 
 
-//import Main from "../../electron/electron-main";
-
-
 import {
   Inventory,
   InventoryEntry,
