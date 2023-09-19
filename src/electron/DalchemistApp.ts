@@ -535,7 +535,7 @@ export default class DalchemistApp {
           symbolColor: "#74b1be",
           height: "10px",
         },
-        resizable: false,
+        resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,

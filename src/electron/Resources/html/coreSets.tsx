@@ -1,20 +1,39 @@
 import "../css/coreSets.css";
 
+import {CoreSetsView} from "../../CoreSupport/Views/CoreSets"
 import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 
+
+import { onReady } from "electron/Utility";
+import { createRoot } from 'react-dom/client';
+
+
+onReady(() =>{
+  const container = document.getElementById('root') as HTMLElement;
+  console.log(container)
+  if(container){
+  const root = createRoot(container);
+  root.render(<CoreSetsView props={[]} />);
+  }
+
+  
+})
+
 console.log("From CoreSets.tsx");
 
 let coreSetsTable: Tabulator | null = null;
-let coreSetItems: Array<CoreSupportEntry> = [];
+let coreSetItems = [] as Array<CoreSupportEntry>
+  
 let coreSetStatus = CoreSetsStatus.Starting;
 let coreSetsFilePath = "";
 
 let numberOfCoreSupportItems = 0
 let numberOfCoreSupportItemsFromOurDistributors = 0
+
 
 const selectFileMenuButton = document.getElementById("selectFileMenuButton");
 if (selectFileMenuButton) {
@@ -171,7 +190,7 @@ window.electron.ipcRenderer.on(
   (coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log(coreSetItemsArray);
     if (typeof coreSetItemsArray !== "undefined") {
-      coreSetItems = coreSetItemsArray;
+      coreSetItems= coreSetItemsArray;
     }
 
     coreSetsRefreshed();
@@ -214,3 +233,5 @@ window.electron.ipcRenderer.on(
    refreshStatus()
   }
 );
+
+
