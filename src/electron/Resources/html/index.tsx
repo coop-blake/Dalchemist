@@ -1,3 +1,49 @@
+import { createRoot } from 'react-dom/client';
+import App from '../../View/App';
+
+import { setAvailableItems as setCoreSetAvailableItems,setErrorMessage } from '../../CoreSupport/View/CoreSetSlice';
+
+import { setStatus as setMainStatus, setErrorMessage as setMainErrorMessage} from "../../View/MainSlice"
+
+
+import {store} from '../../View/store'
+
+
+const container = document.getElementById('root') as HTMLElement;
+const root = createRoot(container);
+
+
+
+//Set up Listeners that update state
+window.electron.ipcRenderer.on(
+  "CoreSetEntriesUpdated",
+  (coreSetItemsArray: Array<CoreSupportEntry>) => {
+    if (typeof coreSetItemsArray !== "undefined") {
+      store.dispatch(setCoreSetAvailableItems(coreSetItemsArray))
+    }
+  }
+);
+
+window.electron.ipcRenderer.on("status", (message: string) => {
+  console.log(message)
+  store.dispatch(setMainStatus(message));
+});
+window.electron.ipcRenderer.on("error", (message: string) => {
+  console.log(message)
+
+  store.dispatch(setMainErrorMessage(message));
+});
+
+//Render app and send loaded message to backend
+root.render(<App onLoad={() => {
+  window.electron.ipcRenderer.sendMessage(
+    "mainWindowMessage",
+    "loaded"
+  );
+}}/>);
+
+
+/*
 console.log("From index.tsx");
 
 import icon from "../images/Icon.svg";
@@ -141,3 +187,6 @@ function updateStatusMessage(statusMessage: string) {
     "loaded"
   );
 }
+
+
+ */

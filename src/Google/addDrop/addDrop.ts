@@ -2,6 +2,8 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Google } from "../google";
 
+import {AttributeChangeEntry,NewItemEntry, AddDropStatus } from "./shared"
+
 
 import {
   Inventory,
@@ -155,12 +157,7 @@ export class AddDrop {
   //End of AddDrop Class
 }
 
-export enum AddDropStatus {
-  NoCertificate = "No Certificate",
-  Starting = "Starting",
-  Running = "Running",
-  Error = "Error!",
-}
+
 
 export class AddDropState {
   private statusSubject = new BehaviorSubject<AddDropStatus>(
@@ -241,8 +238,7 @@ AddDrop.getInstance();
 /*###################################################################################
 # Item Types and Return Functions
 #####################################################################################*/
-
-const newItemEntryFromValueArray = function (
+export const newItemEntryFromValueArray = function (
   valueArray: Array<string>
 ): NewItemEntry | null {
   //Based off of expected Values as outlined in
@@ -283,7 +279,7 @@ const newItemEntryFromValueArray = function (
   return null;
 };
 
-const attributeChangeEntryFromValueArray = function (
+export const attributeChangeEntryFromValueArray = function (
   valueArray: Array<string>
 ): AttributeChangeEntry | null {
   //Based off of expected Values as outlined in
@@ -326,67 +322,6 @@ const attributeChangeEntryFromValueArray = function (
   }
 
   return null;
-};
-
-export type AttributeChangeEntry = {
-  Date: string;
-  Client: string;
-  ScanCode: string;
-  Supplier: string;
-  SupplierItemID: string;
-  Brand: string;
-  Name: string;
-  Unit: string;
-  SubDepartment: string;
-  Quantity: string;
-  CaseCost: string;
-  UnitCost: string;
-  MARGIN: string;
-  ShippingPercent: string;
-  ProposedPrice: string;
-  BasePrice: string;
-  Department: string;
-  BottleDepositFlag: string;
-  LocalDirectFlag: string;
-  LocalSixFlag: string;
-  LocalORFlag: string;
-  OGFlag: string;
-  ChangeOne: string;
-  ChangeTwo: string;
-  ChangeThree: string;
-  ChangeFour: string;
-  Comments: string;
-  BestDateForPriceChange: string;
-  BestTimeForPriceChange: string;
-  valuesArray: Array<string>;
-};
-
-export type NewItemEntry = {
-  Date: string;
-  Client: string;
-  ScanCode: string;
-  Supplier: string;
-  SupplierItemID: string;
-  Brand: string;
-  Name: string;
-  Unit: string;
-  SubDepartment: string;
-  Quantity: string;
-  CaseCost: string;
-  UnitCost: string;
-  MARGIN: string;
-  ShippingPercent: string;
-  ProposedPrice: string;
-  BasePrice: string;
-  Department: string;
-  BottleDepositFlag: string;
-  LocalDirectFlag: string;
-  LocalSixFlag: string;
-  LocalORFlag: string;
-  OGFlag: string;
-  FlipChartAddFlag: string;
-  Comments: string;
-  valuesArray: Array<string>;
 };
 
 /*###################################################################################

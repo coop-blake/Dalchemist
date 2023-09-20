@@ -7,7 +7,7 @@ interface CoreSetsViewProps {
 
 export  function CoreSetsView (props: CoreSetsViewProps){
 
-    const [coreSetItems, setCoreSetItems] = useState<Array<CoreSupportEntry>>([]);
+    //const [coreSetItems, setCoreSetItems] = useState<Array<CoreSupportEntry>>([]);
 
     console.log(props)
     return (

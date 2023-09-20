@@ -1,6 +1,6 @@
 import "../css/coreSets.css";
 
-import {CoreSetsView} from "../../CoreSupport/Views/CoreSets"
+import {CoreSetsView} from "../../CoreSupport/View/CoreSets"
 import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
@@ -16,8 +16,8 @@ onReady(() =>{
   const container = document.getElementById('root') as HTMLElement;
   console.log(container)
   if(container){
-  const root = createRoot(container);
-  root.render(<CoreSetsView props={[]} />);
+ // const root = createRoot(container);
+  //root.render(<CoreSetsView props={[]} />);
   }
 
   
