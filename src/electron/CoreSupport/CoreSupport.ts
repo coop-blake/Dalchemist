@@ -138,7 +138,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
         LineNotes: valueArray[21],
         Changes: valueArray[22],
 
-        ID: valueArray[8],
+        id: valueArray[8],
       };
       return entry;
     }
@@ -167,16 +167,16 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
 
           if (entry !== null) {
             if (this.entryIsOurDistributor(entry)) {
-              if (this.entries.has(entry.ID)) {
+              if (this.entries.has(entry.id)) {
                 //TODO: change this to duplicate or otherWharehouse entries
                 this.multipleAvailableDistributorItems.push(entry);
               } else {
-                this.entries.set(entry.ID, entry);
+                this.entries.set(entry.id, entry);
                 const ouritem = Inventory.getInstance().getEntryFromScanCode(
-                  entry.ID
+                  entry.id
                 );
                 if (ouritem !== undefined) {
-                  this.ourCoreItems.set(entry.ID, entry);
+                  this.ourCoreItems.set(entry.id, entry);
                 }
               }
             } else {
@@ -194,7 +194,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   }
 
   getNumberOfItemsAvailable() {
-    return this.ourCoreItems.size
+    return this.ourCoreItems.size;
   }
   getNumberOfEntries() {
     return this.entries.size;

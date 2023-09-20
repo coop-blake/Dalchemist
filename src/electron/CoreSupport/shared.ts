@@ -33,5 +33,5 @@ export type CoreSupportEntry = {
   LineNotes: string;
   Changes: string;
 
-  ID: string;
+  id: string;
 };

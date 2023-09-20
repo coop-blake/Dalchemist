@@ -1,52 +1,77 @@
 import "../css/coreSets.css";
 
-import {CoreSetsView} from "../../CoreSupport/View/CoreSets"
+import CoreSetsView from "../../CoreSupport/View/CoreSets";
 import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
-
+import {
+  setStatus,
+  setFilePath,
+  setAvailableItems,
+  selectAvailableItems,
+} from "../../CoreSupport/View/CoreSetSlice";
 
 import { onReady } from "electron/Utility";
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
+import { store } from "../../View/store";
 
+import { Provider } from "react-redux";
 
-onReady(() =>{
-  const container = document.getElementById('root') as HTMLElement;
-  console.log(container)
-  if(container){
- // const root = createRoot(container);
-  //root.render(<CoreSetsView props={[]} />);
+//Set up Listeners that update state
+
+window.electron.ipcRenderer.on(
+  "CoreSetStatusUpdated",
+  (status: CoreSetsStatus) => {
+    store.dispatch(setStatus(status));
   }
+);
+window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
+  store.dispatch(setFilePath(filePath));
+});
 
-  
-})
+window.electron.ipcRenderer.on(
+  "CoreSetEntriesUpdated",
+  (coreSetItemsArray: Array<CoreSupportEntry>) => {
+    console.log("CoreSetEntriesUpdated");
+    if (typeof coreSetItemsArray !== "undefined") {
+      console.log(coreSetItemsArray);
+
+      store.dispatch(setAvailableItems(coreSetItemsArray));
+    }
+  }
+);
+
+onReady(() => {
+  const container = document.getElementById("CoreSetsRoot") as HTMLElement;
+  console.log(container);
+  if (container) {
+    const root = createRoot(container);
+    root.render(
+      <Provider store={store}>
+        <CoreSetsView props={[]} />
+      </Provider>
+    );
+  }
+});
 
 console.log("From CoreSets.tsx");
 
 let coreSetsTable: Tabulator | null = null;
-let coreSetItems = [] as Array<CoreSupportEntry>
-  
+let coreSetItems = [] as Array<CoreSupportEntry>;
+
 let coreSetStatus = CoreSetsStatus.Starting;
 let coreSetsFilePath = "";
 
-let numberOfCoreSupportItems = 0
-let numberOfCoreSupportItemsFromOurDistributors = 0
-
+const numberOfCoreSupportItems = 0;
+const numberOfCoreSupportItemsFromOurDistributors = 0;
 
 const selectFileMenuButton = document.getElementById("selectFileMenuButton");
 if (selectFileMenuButton) {
   selectFileMenuButton.addEventListener("click", function () {
     selectFileMenuButtonClicked();
   });
-}
-
-function selectFileMenuButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
-    "coreSetsWindowMessage",
-    "selectFileMenuButtonClicked"
-  );
 }
 
 const saveCoreSetReportButton = document.getElementById(
@@ -66,16 +91,23 @@ function saveCoreSetReportButtonClicked() {
 }
 
 //###################### After getting data - Refresh!
-function refreshStatus(){
-  const numberOfCoreSupportItemsElement = document.getElementById("numberOfCoreSupportItems");
+function refreshStatus() {
+  const numberOfCoreSupportItemsElement = document.getElementById(
+    "numberOfCoreSupportItems"
+  );
 
   if (numberOfCoreSupportItemsElement) {
-    numberOfCoreSupportItemsElement.innerHTML = String(numberOfCoreSupportItems)
+    numberOfCoreSupportItemsElement.innerHTML = String(
+      numberOfCoreSupportItems
+    );
   }
-  const numberOfCoreSupportItemsFromOurDistributorsElement = document.getElementById("numberOfCoreSupportItemsFromOurDistributors");
+  const numberOfCoreSupportItemsFromOurDistributorsElement =
+    document.getElementById("numberOfCoreSupportItemsFromOurDistributors");
 
   if (numberOfCoreSupportItemsFromOurDistributorsElement) {
-    numberOfCoreSupportItemsFromOurDistributorsElement.innerHTML = String(numberOfCoreSupportItemsFromOurDistributors)
+    numberOfCoreSupportItemsFromOurDistributorsElement.innerHTML = String(
+      numberOfCoreSupportItemsFromOurDistributors
+    );
   }
 }
 
@@ -190,7 +222,7 @@ window.electron.ipcRenderer.on(
   (coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log(coreSetItemsArray);
     if (typeof coreSetItemsArray !== "undefined") {
-      coreSetItems= coreSetItemsArray;
+      coreSetItems = coreSetItemsArray;
     }
 
     coreSetsRefreshed();
@@ -211,27 +243,3 @@ window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
   coreSetsFilePath = filePath;
   coreSetsRefreshed();
 });
-
-window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
-
-
-window.electron.ipcRenderer.on(
-  "CoreSetNumberOfCoreSupportItems",
-  (numberOfCoreSupportItemsReceived: number) => {
-    console.log("Got CoreSetNumberOfCoreSupportItems")
-
-    numberOfCoreSupportItems = numberOfCoreSupportItemsReceived
-   refreshStatus()
-  }
-);
-
-window.electron.ipcRenderer.on(
-  "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-  (numberOfCoreSupportItemsFromOurDistributorsReceived: number) => {
-    console.log("Got CoreSetNumberOfCoreSupportItemsFromOurDistributors")
-    numberOfCoreSupportItemsFromOurDistributors = numberOfCoreSupportItemsFromOurDistributorsReceived
-   refreshStatus()
-  }
-);
-
-

@@ -148,7 +148,11 @@ export default class DalchemistApp {
       this.sendingStatusToWindow = DalchemistApp.state.status$.subscribe(
         (status: string) => {
           console.log("DalchemistApp.state.status status", status);
-          mainWindow.webContents.send("status", status);
+          if (status.includes("rror")) {
+            mainWindow.webContents.send("error", status);
+          } else {
+            mainWindow.webContents.send("status", status);
+          }
         }
       );
     }
@@ -291,7 +295,7 @@ export default class DalchemistApp {
         "CoreSetFilePathUpdated",
         CoreSets.state.filePath
       );
-      
+
       this.getCoreSetsWindow()?.webContents.send(
         "CoreSetNumberOfCoreSupportItems",
         CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
@@ -299,7 +303,8 @@ export default class DalchemistApp {
 
       this.getCoreSetsWindow()?.webContents.send(
         "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()        );
+        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+      );
     }
   }
 
@@ -372,7 +377,7 @@ export default class DalchemistApp {
           "Sending Core Set items to window",
           CoreSets.state.coreSetItems
         );
-       
+
         this.getCoreSetsWindow()?.webContents.send(
           "CoreSetEntriesUpdated",
           CoreSets.state.coreSetItems
@@ -385,7 +390,8 @@ export default class DalchemistApp {
 
         this.getCoreSetsWindow()?.webContents.send(
           "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-          CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()        );
+          CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+        );
       }
     });
     CoreSets.state.filePath$.subscribe((filePath) => {
@@ -439,10 +445,12 @@ export default class DalchemistApp {
     _event,
     mainWindowMessage: string
   ) => {
+    console.log("CLICK RECEIVED");
     if (mainWindowMessage === "inventoryMenuButtonClicked") {
       this.showInventoryWindow();
     } else if (mainWindowMessage === "addDropMenuButtonClicked") {
-      //this.showAddDropWindow();
+      this.showAddDropWindow();
+    } else if (mainWindowMessage === "coreSetsMenuButtonClicked") {
       this.showCoreSetsWindow();
     } else if (mainWindowMessage === "closeMenuButtonClicked") {
       this.closeMainWindow();
@@ -526,7 +534,7 @@ export default class DalchemistApp {
       console.log("preload path", preloadPath);
       this.mainWindow = new BrowserWindow({
         width: 270,
-        height: 350,
+        height: 400,
         show: false,
         frame: false,
         titleBarStyle: "customButtonsOnHover",
