@@ -10,7 +10,6 @@ import {
   setStatus,
   setFilePath,
   setAvailableItems,
-  selectAvailableItems,
 } from "../../CoreSupport/View/CoreSetSlice";
 
 import { onReady } from "electron/Utility";

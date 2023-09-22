@@ -12,6 +12,7 @@ import {
   IpcMainInvokeEvent,
   dialog,
   globalShortcut,
+  shell,
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -268,7 +269,7 @@ export default class DalchemistApp {
 
     if (coreSetsWindow !== null) {
       coreSetsWindow
-        .loadURL(path.join(getIndexPath))
+        .loadURL(getIndexPath)
         .then(() => {
           this.sendCoreSetsData();
 
@@ -316,7 +317,10 @@ export default class DalchemistApp {
       mainWindow.close();
     }
   }
-
+  public openCoreSetsFileButtonClicked() {
+    console.log("po");
+    shell.openPath(CoreSets.state.filePath);
+  }
   private onCloseMainWindow() {
     const mainWindow = this.mainWindow;
     if (mainWindow !== null) {
@@ -451,6 +455,7 @@ export default class DalchemistApp {
     } else if (mainWindowMessage === "addDropMenuButtonClicked") {
       this.showAddDropWindow();
     } else if (mainWindowMessage === "coreSetsMenuButtonClicked") {
+      console.log("CLICK RECEIVED");
       this.showCoreSetsWindow();
     } else if (mainWindowMessage === "closeMenuButtonClicked") {
       this.closeMainWindow();
@@ -465,6 +470,8 @@ export default class DalchemistApp {
   ) => {
     if (coreSetsWindowMessage === "selectFileMenuButtonClicked") {
       CoreSets.getInstance().selectCoreSetsFilePath();
+    } else if (coreSetsWindowMessage === "openCoreSetsFile") {
+      this.openCoreSetsFileButtonClicked();
     } else if (coreSetsWindowMessage === "saveCoreSetReportButtonClicked") {
       saveCoreSetsTSVPrompt();
     }
@@ -490,10 +497,10 @@ export default class DalchemistApp {
       if (mainWindow !== null) {
         mainWindow.on("closed", () => {
           // Remove the IPC event listener when the window is closed
-          ipcMain.removeListener(
-            "mainWindowMessage",
-            this.handleMainWindowMessage
-          );
+          // ipcMain.removeListener(
+          //   "mainWindowMessage",
+          //   this.handleMainWindowMessage
+          // );
           this.stopSendingStatusToMainWindow();
           this.mainWindow = null;
         });

@@ -66,15 +66,13 @@ export const createCoreSupportWithCatapultPricingTSV = async function () {
 
   coreSupport.ourCoreItems.forEach((coreSupportEntry) => {
     const inventoryEntry = inventoryImporter.getEntryFromScanCode(
-      coreSupportEntry.ID
+      coreSupportEntry.id
     );
 
     if (inventoryEntry !== undefined) {
-      
-
       let lowestPricedWorksheetName = "Base Price";
       //Create an export Array for the entry
-      let lowestPrice = parseFloat(inventoryEntry.BasePrice.replace("$",""));
+      let lowestPrice = parseFloat(inventoryEntry.BasePrice.replace("$", ""));
       const priceChangeItem = items.get(inventoryEntry.ScanCode);
       if (priceChangeItem != null) {
         Array.from(priceChangeItem.worksheetEntries.values()).forEach(
