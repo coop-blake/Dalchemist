@@ -26,7 +26,7 @@
     "debugElectron": "npx babel-node -x .ts -- src/electron/startApp.ts",
     "copy-files": "copyfiles -E -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.js src/**/*.svg src/electron/Resources/css/index.css build",
     "electronBuild": "tsc  --outDir ./build --target es6 --module commonjs --moduleResolution node --esModuleInterop true --sourceMap true src/electron/*.ts && npm run copy-files",
-    "electronRun": "electron .",
+    "electronRun": "electron .", 
     "electron": "npm run electronBuild && npm run electronRun",
     "package-win": "npm run electronBuild && electron-packager . Dalchemist --platform=win32 --arch=x64 --out=dist --overwrite",
     "package-macOS": "npm run electronBuild && electron-packager . Dalchemist --platform=darwin --arch=x64 --out=dist --overwrite --icon=./icon/Icon.icns",

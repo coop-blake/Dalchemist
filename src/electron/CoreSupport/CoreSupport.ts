@@ -12,6 +12,20 @@ import xlsx from "node-xlsx";
 import { stat } from "fs/promises";
 import { existsSync } from "fs";
 
+
+
+
+function convertExcelDate(excelDateNumber) {
+  const baseDate = new Date(Date.UTC(1899, 11, 30)); // Excel's base date
+
+  // Calculate the milliseconds for the given Excel date number
+  const dateMilliseconds = baseDate.getTime() + (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
+
+  // Create a new Date object for the calculated date
+  return new Date(dateMilliseconds);
+}
+
+
 export class CoreSupport extends TextImporter<CoreSupportEntry> {
   lineCount = 0;
   filePath = "";
@@ -53,6 +67,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   public doesKnownFileExist(): boolean {
     return Settings.doesCoreSetsExcelFileLocationExist();
   }
+
   async start() {
     try {
       // await inventoryImport.start();
@@ -115,8 +130,8 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     if (Array.isArray(valueArray)) {
       const entry: CoreSupportEntry = {
         CoreSetsRound: valueArray[0],
-        BuyInStart: valueArray[1],
-        BuyInEnd: valueArray[2],
+        BuyInStart: valueArray[1] ? convertExcelDate(valueArray[1]).toLocaleDateString('en-us', { year:"numeric", month:"numeric", day:"numeric"}) : "",
+        BuyInEnd: valueArray[2] ? convertExcelDate(valueArray[2]).toLocaleDateString('en-us', { year:"numeric", month:"numeric", day:"numeric"}) : "",
         Dept: valueArray[3],
         Category: valueArray[4],
         Distributor: valueArray[5],

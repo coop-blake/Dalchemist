@@ -263,7 +263,7 @@ export default class DalchemistApp {
 
   public showCoreSetsWindow() {
     const coreSetsWindow = this.getCoreSetsWindow();
-    const getIndexPath = resolveHtmlPath("coreSets.html");
+    const getIndexPath = resolveHtmlPath("index.html", "/CoreSets");
     console.log("CoreSets getIndexPath", getIndexPath);
 
     if (coreSetsWindow !== null) {

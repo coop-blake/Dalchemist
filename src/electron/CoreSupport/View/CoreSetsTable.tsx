@@ -1,6 +1,6 @@
 import React from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
-import "../../Resources/css/slickgrid.scss";
+import "../../Resources/css/slickGrid.scss";
 import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
 
 import {
@@ -25,17 +25,21 @@ interface State {
   dataset: CoreSupportEntry[];
 }
 
+
+
+
+
 export default class CoreSetsTable extends React.Component<Props, State> {
   constructor(public readonly props: Props) {
     super(props);
-    console.log(props);
-    console.log(this.mockData(12));
-
+   // console.log(props);
+    //console.log(this.mockData(12));
+   
     this.state = {
       title: "Core Sets",
       gridOptions: undefined,
       columnDefinitions: [],
-      dataset: props.availableItems,
+      dataset: [...props.availableItems],
     };
   }
 
@@ -50,6 +54,8 @@ export default class CoreSetsTable extends React.Component<Props, State> {
     //   dataset: this.mockData(NB_ITEMS),
     // }));
   }
+
+
 
   /* Define grid Options and Columns */
   defineGrids() {
@@ -165,8 +171,8 @@ export default class CoreSetsTable extends React.Component<Props, State> {
       { id: "UPCA", name: "UPCA", field: "UPCA", sortable: true },
     ];
     const gridOptions: GridOption = {
-      gridHeight: 225,
-      gridWidth: 800,
+      gridHeight: 500,
+      gridWidth: 1900,
       enableAutoResize: false,
       enableSorting: true,
     };
@@ -178,28 +184,6 @@ export default class CoreSetsTable extends React.Component<Props, State> {
     }));
   }
 
-  mockData(count: number) {
-    // mock a dataset
-    const mockDataset: any[] = [];
-    for (let i = 0; i < count; i++) {
-      const randomYear = 2000 + Math.floor(Math.random() * 10);
-      const randomMonth = Math.floor(Math.random() * 11);
-      const randomDay = Math.floor(Math.random() * 29);
-      const randomPercent = Math.round(Math.random() * 100);
-
-      mockDataset[i] = {
-        id: i,
-        name: "Task " + i,
-        duration: Math.round(Math.random() * 100) + "",
-        percentComplete: randomPercent,
-        start: new Date(randomYear, randomMonth + 1, randomDay),
-        finish: new Date(randomYear + 1, randomMonth + 1, randomDay),
-        effortDriven: i % 5 === 0,
-      };
-    }
-
-    return mockDataset;
-  }
 
   render() {
     return !this.state.gridOptions ? (
