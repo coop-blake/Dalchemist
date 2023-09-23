@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
 
-import CoreSetsTable2 from "./CoreSetsTable2";
-
-
-import { selectAvailableItems } from "../../CoreSupport/View/CoreSetSlice";
+import {
+  selectAvailableItems,
+  selectOurItems,
+} from "../../CoreSupport/View/CoreSetSlice";
 import { useAppSelector } from "../../View/hooks";
+
+import fileIcon from "./resources/images/file.svg";
+import slashIcon from "./resources/images/slash.svg";
 
 import "../../Resources/css/coreSets.css";
 
@@ -19,6 +22,11 @@ export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
   const availableItems = useAppSelector(selectAvailableItems);
+  const ourItems = useAppSelector(selectOurItems);
+
+  const priceChangeWorksheetStatus = useAppSelector(
+    (state) => state.PriceChangeWorksheets.status
+  );
 
   const [subView, setSubView] = useState(SubView.settings);
 
@@ -27,15 +35,14 @@ export default function CoreSetsView() {
   }, [availableItems]);
 
   return (
-    <div>
-      <span>{status}</span>
+    <div className="CoreSetsMainDiv">
       <span
         className="navButton"
         onClick={() => {
           setSubView(SubView.settings);
         }}
       >
-        Settings
+        Setup
       </span>
       <span
         className="navButton"
@@ -55,32 +62,92 @@ export default function CoreSetsView() {
       </span>
 
       {subView === SubView.settings
-        ? settingsView()
+        ? setupView()
         : subView === SubView.review
         ? reviewView()
         : subView === SubView.report
-        ? "Report"
+        ? reportView()
         : ""}
     </div>
   );
-  function settingsView() {
+
+  function reportView() {
     return (
       <div>
-        {" "}
-        <div id="coreSetInfo">
-          <span id="coreSetsHeader" onClick={openCoreSetsFileButtonClicked}>
-            Core Sets:{" "}
-          </span>
-          <span id="statusInfo">Loaded</span>
-          <span id="selectFileMenuButton" onClick={selectFileMenuButtonClicked}>
-            Select File
-          </span>
+        Report
+        <br />
+        <span id="numberOfCoreSupportItems">{availableItems.length}</span>
+        <span id="numberOfCoreSupportItemsFromOurDistributors">
+          {ourItems.length}
+        </span>
+        <span
+          id="saveCoreSetReportButton"
+          style={{ paddingTop: "100px" }}
+          onClick={saveCoreSetReportButtonClicked}
+        >
+          Save Report
+        </span>
+      </div>
+    );
+  }
+
+  function coreSetsSetup() {
+    return (
+      <div id="coreSetsSetup">
+        <div>
+          <h2>
+            {" "}
+            <img id="fileIcon" src={fileIcon} alt="File Icon Image" /> Core Sets
+            Excel File
+          </h2>
+
           <span id="fileName">
-            {filePath ?? "No Core Sets Excel File Location Saved"}
+            {filePath !== "" ? (
+              filePath
+            ) : (
+              <span className="errorMessage">
+                <img id="slashIcon" src={slashIcon} alt="Slash Icon Image" /> No
+                Core Sets Excel File Location Saved ❗
+              </span>
+            )}
           </span>
-          <div>Price Change Worksheets</div>
-          <div>Our Suppliers</div>
+          <br />
+          <div
+            className="interfaceButton"
+            onClick={selectFileMenuButtonClicked}
+          >
+            Select File
+          </div>
+
+          {filePath !== "" && (
+            <div
+              className="interfaceButton"
+              onClick={openCoreSetsFileButtonClicked}
+            >
+              Open in Default Application
+            </div>
+          )}
         </div>
+        {availableItems.length > 0 ? (
+          <div>
+            ✅ Loaded with {availableItems.length} items from our distributors
+          </div>
+        ) : (
+          <div className="loadingStatus pulsating"> {status}</div>
+        )}
+      </div>
+    );
+  }
+
+  function setupView() {
+    return (
+      <div id="coreSetSettings">
+        {coreSetsSetup()}
+        <hr></hr>
+        <div>Our Suppliers</div>
+        <hr></hr>
+        <div>Price Change Worksheets</div>
+        <div>{priceChangeWorksheetStatus}</div>
       </div>
     );
   }
@@ -88,20 +155,10 @@ export default function CoreSetsView() {
   function reviewView() {
     return (
       <div>
-        <CoreSetsTable
-          key={availableItems}
-          availableItems={availableItems}
-          availableItemsLength={availableItems.length}
-        />
-        <CoreSetsTable2 />
+        <CoreSetsTable />
         <span id="numberOfCoreSupportItems">{availableItems.length}</span>
-        <span id="numberOfCoreSupportItemsFromOurDistributors"></span>
-        <span
-          id="saveCoreSetReportButton"
-          style={{ paddingTop: "100px" }}
-          onClick={saveCoreSetReportButtonClicked}
-        >
-          Save Report
+        <span id="numberOfCoreSupportItemsFromOurDistributors">
+          {ourItems.length}
         </span>
       </div>
     );
@@ -123,7 +180,6 @@ function saveCoreSetReportButtonClicked() {
 }
 
 function openCoreSetsFileButtonClicked() {
-  alert("ok");
   window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsFile"

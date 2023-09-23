@@ -1,21 +1,47 @@
-#coreSetInfo {
-}
-
-#coreSetsHeader {
-  font-size: larger;
+#coreSetSettings {
+  background: rgba(203, 196, 196, 0.5);
 }
 
 #statusInfo {
   border: solid green 1px;
 }
+#fileIcon {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#slashIcon {
+  padding-left: 10px;
+  padding-right: 5px;
+}
 
-#selectFileMenuButton {
-  background: black;
-  color: white;
+.interfaceButton {
+  position: relative;
+
+  cursor: pointer;
+  border: solid black 2px;
+  display: inline-block;
+  color: rgb(27, 27, 68);
+  padding: 5px;
+  background: darkgrey;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+
+  -webkit-app-region: no-drag;
+}
+.interfaceButton:hover {
+  background: rgb(27, 27, 68);
+  color: darkgrey;
 }
 
 #coreSetsTable {
   height: 300px;
+}
+
+.errorMessage {
+  color: rgb(69, 11, 11);
+  font-weight: bold;
 }
 
 .navButton {
@@ -35,4 +61,23 @@
 
 .navButton:hover {
   filter: invert(1);
+}
+
+.CoreSetsMainDiv {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  justify-content: left;
+  background: rgba(148, 126, 126, 0.5);
+  text-align: left;
+  cursor: auto;
+}
+
+.loadingStatus {
+  font-weight: bold;
+  font-style: italic;
 }

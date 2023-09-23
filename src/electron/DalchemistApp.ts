@@ -23,8 +23,9 @@ import { map } from "rxjs/operators";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
 import { Inventory } from "../Google/Inventory/Inventory";
-import { CoreSupport } from "./CoreSupport/CoreSupport";
+//import { CoreSupport } from "./CoreSupport/CoreSupport";
 import { CoreSets } from "./CoreSupport/CoreSets";
+import { PriceChangeWorksheets } from "./PriceChangeWorksheets/PriceChangeWorksheets";
 
 import { getAddDropPriceUpdatesTSV } from "../../src/Google/addDrop/htmlOutputs";
 import fs from "fs";
@@ -305,6 +306,11 @@ export default class DalchemistApp {
       this.getCoreSetsWindow()?.webContents.send(
         "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
         CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+      );
+
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsStatus",
+        PriceChangeWorksheets.state.status
       );
     }
   }
