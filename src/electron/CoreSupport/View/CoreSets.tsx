@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
+
+import CoreSetsTable2 from "./CoreSetsTable2";
+
+
 import { selectAvailableItems } from "../../CoreSupport/View/CoreSetSlice";
 import { useAppSelector } from "../../View/hooks";
 
@@ -89,6 +93,7 @@ export default function CoreSetsView() {
           availableItems={availableItems}
           availableItemsLength={availableItems.length}
         />
+        <CoreSetsTable2 />
         <span id="numberOfCoreSupportItems">{availableItems.length}</span>
         <span id="numberOfCoreSupportItemsFromOurDistributors"></span>
         <span

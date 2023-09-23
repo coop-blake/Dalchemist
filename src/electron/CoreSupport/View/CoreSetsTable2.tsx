@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
 import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
+import { useAppSelector } from "../../View/hooks";
+
 
 import {
   Column,
@@ -28,37 +30,47 @@ interface State {
 
 
 
+export default function CoreSetsTable() {
 
-export default class CoreSetsTable extends React.Component<Props, State> {
-  constructor(public readonly props: Props) {
-    super(props);
-   // console.log(props);
-    //console.log(this.mockData(12));
-   
-    this.state = {
-      title: "Core Sets",
-      gridOptions: undefined,
-      columnDefinitions: [],
-      dataset: [...props.availableItems],
-    };
-  }
+    const title = "Core Sets"
+    const availableItems = useAppSelector(selectAvailableItems);
+    const [columnDefinitions, setColumnDefinitions] = useState(defineGrids())
+    const [gridOptions, setGridOptions] = useState({
+        gridHeight: 500,
+        gridWidth: 1900,
+        enableAutoResize: false,
+        enableSorting: true,
+      } as GridOption)
+    
 
-  componentDidMount() {
-    document.title = this.state.title;
+    useEffect(() => {
+        document.title = title;
+       
 
-    // define the grid options & columns and then create the grid itself
-    this.defineGrids();
+      }, [availableItems]);
+      
 
-    // // mock some data (different in each dataset)
-    // this.setState((state: State, props: Props) => ({
-    //   dataset: this.mockData(NB_ITEMS),
-    // }));
-  }
 
+
+     
+        return !gridOptions ? (
+          ""
+        ) : (
+          <SlickgridReact
+            gridId="CoreSetSlickGrid"
+            columnDefinitions={columnDefinitions}
+            gridOptions={gridOptions!}
+            dataset={[...availableItems]}
+          />
+        );
+      }
+
+
+    
 
 
   /* Define grid Options and Columns */
-  defineGrids() {
+ const  defineGrids = function() {
     const columns: Column[] = [
       { id: "Brand", name: "Brand", field: "Brand", sortable: true },
       {
@@ -170,31 +182,10 @@ export default class CoreSetsTable extends React.Component<Props, State> {
       },
       { id: "UPCA", name: "UPCA", field: "UPCA", sortable: true },
     ];
-    const gridOptions: GridOption = {
-      gridHeight: 500,
-      gridWidth: 1900,
-      enableAutoResize: false,
-      enableSorting: true,
-    };
-
-    this.setState((state: State) => ({
-      ...state,
-      columnDefinitions: columns,
-      gridOptions,
-    }));
+    return columns
+    
   }
 
 
-  render() {
-    return !this.state.gridOptions ? (
-      ""
-    ) : (
-      <SlickgridReact
-        gridId="CoreSetSlickGrid"
-        columnDefinitions={this.state.columnDefinitions}
-        gridOptions={this.state.gridOptions!}
-        dataset={this.state.dataset}
-      />
-    );
-  }
-}
+ 
+
