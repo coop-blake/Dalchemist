@@ -148,6 +148,12 @@ export default function CoreSetsView() {
         <hr></hr>
         <div>Price Change Worksheets</div>
         <div>{priceChangeWorksheetStatus}</div>
+        <div
+            className="interfaceButton"
+            onClick={selectPriceChangeWorksheetsFolderMenuButtonClicked}
+          >
+            Select Folder
+          </div>
       </div>
     );
   }
@@ -183,5 +189,12 @@ function openCoreSetsFileButtonClicked() {
   window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsFile"
+  );
+}
+
+function selectPriceChangeWorksheetsFolderMenuButtonClicked(){
+  window.electron.ipcRenderer.sendMessage(
+    "coreSetsWindowMessage",
+    "selectPriceChangeWorksheetsFolder"
   );
 }

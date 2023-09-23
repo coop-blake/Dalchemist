@@ -71,6 +71,23 @@ class Settings {
     });
   }
 
+
+  public async selectPriceChangeFolderLocation(): Promise<string | undefined> {
+    return new Promise((Resolve, Reject) => {
+      dialog
+        .showOpenDialog({
+          title: "Choose Price Change Worksheets Folder",
+          properties: ["openDirectory"],
+        })
+        .then((result) => {
+          Resolve(result.filePaths[0]);
+        })
+        .catch((error) => {
+          Reject(error);
+        });
+    });
+  }
+
   public saveJsonLocation(location: string) {
     console.log(`Ready, going!!${location}`);
 

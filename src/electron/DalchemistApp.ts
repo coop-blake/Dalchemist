@@ -480,6 +480,8 @@ export default class DalchemistApp {
       this.openCoreSetsFileButtonClicked();
     } else if (coreSetsWindowMessage === "saveCoreSetReportButtonClicked") {
       saveCoreSetsTSVPrompt();
+    }else if (coreSetsWindowMessage === "selectPriceChangeWorksheetsFolder") {
+      PriceChangeWorksheets.selectFolderPath();
     }
   };
 

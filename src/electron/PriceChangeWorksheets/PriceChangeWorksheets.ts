@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { PriceChangeWorksheetsStatus } from "./shared";
+import Settings  from "../Settings";
 
 export class PriceChangeWorksheets {
   private static instance: PriceChangeWorksheets;
@@ -15,6 +16,18 @@ export class PriceChangeWorksheets {
       PriceChangeWorksheets.instance = new PriceChangeWorksheets();
     }
     return PriceChangeWorksheets.instance;
+  }
+
+  static  async selectFolderPath() {
+    const folderPath = await Settings.selectPriceChangeFolderLocation();
+    console.log(folderPath);
+    if (folderPath && folderPath.length > 0) {
+      this.folderPath = folderPath;
+      return folderPath;
+    } else {
+      console.log("Failed to select file", folderPath);
+      return "";
+    }
   }
 }
 
@@ -32,5 +45,17 @@ export class PriceChangeWorksheetsState {
   public setStatus(status: PriceChangeWorksheetsStatus) {
     this.statusSubject.next(status);
   }
+
+   //Folder Path
+   private folderPathSubject = new BehaviorSubject<string>("");
+   public get folderPath$(): Observable<string> {
+     return this.folderPathSubject.asObservable();
+   }
+   public get folderPath(): string {
+     return this.folderPathSubject.getValue();
+   }
+   public setFilePath(folderPath: string) {
+     this.folderPathSubject.next(folderPath);
+   }
 }
 PriceChangeWorksheets.getInstance();
