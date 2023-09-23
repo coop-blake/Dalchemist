@@ -9,6 +9,7 @@
 //TextImporter for UNFI PriceBook file
 //Import TextImporter Class
 import TextImporter from "./TextImporter";
+import path from "path";
 
 class PriceChangeWorksheetImporter extends TextImporter<PriceChangeWorksheetEntry> {
   //Set Path Of PriceBook File
@@ -21,6 +22,7 @@ class PriceChangeWorksheetImporter extends TextImporter<PriceChangeWorksheetEntr
     //call TextImporter Parent Constructor
     super();
 
+    this.fileName = path.basename(textFilePath);
     this.textFilePath = textFilePath;
   }
 
@@ -42,7 +44,7 @@ class PriceChangeWorksheetImporter extends TextImporter<PriceChangeWorksheetEntr
       case 3:
         {
           //third line
-         // const values = line.split("\t");
+          // const values = line.split("\t");
           //  this.worksheetStartDate = new Date(values[1]);
           //  this.worksheetEndDate = new Date(values[2]);
         }

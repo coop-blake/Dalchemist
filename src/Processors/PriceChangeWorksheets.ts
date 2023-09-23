@@ -10,6 +10,8 @@
 // Loads each data line of worksheet as an entry
 import PriceChangeWorksheetImporter from "../TextImporters/PriceChangeWorksheet";
 import * as fs from "node:fs/promises";
+
+import path from "path";
 /**
  * @class PriceChangeWorksheets
  * @category Processors
@@ -20,6 +22,10 @@ export default class PriceChangeWorksheets {
   worksheetsDirectory = "./Data/Inputs/Price Change Worksheets/";
   //Create empty array of worksheets
   priceChangeWorksheets = new Array<PriceChangeWorksheetImporter>();
+
+  constructor(worksheetsDirectory = "./Data/Inputs/Price Change Worksheets/") {
+    this.worksheetsDirectory = worksheetsDirectory;
+  }
 
   async initialize() {
     //Load all worksheets
@@ -42,7 +48,7 @@ export default class PriceChangeWorksheets {
   async loadWorksheet(fileName: string) {
     // Create new text import for worksheet
     const newWorksheetImporter = new PriceChangeWorksheetImporter(
-      this.worksheetsDirectory + fileName
+      path.join(this.worksheetsDirectory, fileName)
     );
     //Set Filename and textFilePath
     // newWorksheetImporter.fileName = fileName;

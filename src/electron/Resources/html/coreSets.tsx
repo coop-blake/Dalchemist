@@ -5,7 +5,11 @@ import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 import { PriceChangeWorksheetsStatus } from "../../PriceChangeWorksheets/shared";
-import { setStatus as setPriceChangeWorksheetsStatus } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
+import {
+  setStatus as setPriceChangeWorksheetsStatus,
+  setFolderPath,
+  setWorksheets,
+} from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 import {
@@ -50,6 +54,30 @@ window.electron.ipcRenderer.on(
     console.log("PriceChangeWorksheetsStatus", priceChangeWorksheetsStatus);
 
     store.dispatch(setPriceChangeWorksheetsStatus(priceChangeWorksheetsStatus));
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "PriceChangeWorksheetsFolderPath",
+  (priceChangeWorksheetsFolderPath: PriceChangeWorksheetsStatus) => {
+    console.log(
+      "PriceChangeWorksheetsFolderPath",
+      priceChangeWorksheetsFolderPath
+    );
+
+    store.dispatch(setFolderPath(priceChangeWorksheetsFolderPath));
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "PriceChangeWorksheetsWorksheets",
+  (priceChangeWorksheetsWorksheets: Array<string>) => {
+    console.log(
+      "PriceChangeWorksheetsWorksheets",
+      priceChangeWorksheetsWorksheets
+    );
+
+    store.dispatch(setWorksheets(priceChangeWorksheetsWorksheets));
   }
 );
 

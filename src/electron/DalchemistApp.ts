@@ -312,6 +312,14 @@ export default class DalchemistApp {
         "PriceChangeWorksheetsStatus",
         PriceChangeWorksheets.state.status
       );
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsFolderPath",
+        PriceChangeWorksheets.state.folderPath
+      );
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsWorksheets",
+        PriceChangeWorksheets.state.worksheets
+      );
     }
   }
 
@@ -417,6 +425,27 @@ export default class DalchemistApp {
         status
       );
     });
+
+    PriceChangeWorksheets.state.status$.subscribe((status) => {
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsStatus",
+        status
+      );
+    });
+
+    PriceChangeWorksheets.state.folderPath$.subscribe((filePath) => {
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsFolderPath",
+        filePath
+      );
+    });
+
+    PriceChangeWorksheets.state.worksheets$.subscribe((worksheets) => {
+      this.getCoreSetsWindow()?.webContents.send(
+        "PriceChangeWorksheetsWorksheets",
+        worksheets
+      );
+    });
   }
 
   private onDataUpdate(
@@ -480,7 +509,7 @@ export default class DalchemistApp {
       this.openCoreSetsFileButtonClicked();
     } else if (coreSetsWindowMessage === "saveCoreSetReportButtonClicked") {
       saveCoreSetsTSVPrompt();
-    }else if (coreSetsWindowMessage === "selectPriceChangeWorksheetsFolder") {
+    } else if (coreSetsWindowMessage === "selectPriceChangeWorksheetsFolder") {
       PriceChangeWorksheets.selectFolderPath();
     }
   };

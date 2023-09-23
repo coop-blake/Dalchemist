@@ -8,7 +8,7 @@ interface PriceChangeWorksheetsState {
   status: string;
   folderPath: string;
   errorMessage: string;
-  worksheets: Array<PriceChangeWorksheetEntry>;
+  worksheets: Array<string>;
 }
 
 // Define the initial state using that type
@@ -33,10 +33,7 @@ export const priceChangeWorksheetsSlice = createSlice({
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload;
     },
-    setWorksheets: (
-      state,
-      action: PayloadAction<Array<PriceChangeWorksheetEntry>>
-    ) => {
+    setWorksheets: (state, action: PayloadAction<Array<string>>) => {
       state.worksheets = action.payload;
     },
   },
@@ -44,7 +41,7 @@ export const priceChangeWorksheetsSlice = createSlice({
 export const selectWorksheets = (state: RootState) =>
   state.PriceChangeWorksheets.worksheets;
 
-export const { setStatus, setFolderPath, setErrorMessage } =
+export const { setStatus, setFolderPath, setErrorMessage, setWorksheets } =
   priceChangeWorksheetsSlice.actions;
 
 export default priceChangeWorksheetsSlice.reducer;

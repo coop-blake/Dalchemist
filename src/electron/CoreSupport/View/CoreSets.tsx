@@ -8,6 +8,8 @@ import {
 } from "../../CoreSupport/View/CoreSetSlice";
 import { useAppSelector } from "../../View/hooks";
 
+import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
+
 import fileIcon from "./resources/images/file.svg";
 import slashIcon from "./resources/images/slash.svg";
 
@@ -18,6 +20,14 @@ enum SubView {
   review,
   report,
 }
+
+const ourDistributors = [
+  "Equal Exchange - Direct",
+  "Tony's Fine Foods - Ridgefield, WA",
+  "UNFI - Ridgefield, WA",
+  "Ancient Nutrition - Direct",
+];
+
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
@@ -27,6 +37,12 @@ export default function CoreSetsView() {
   const priceChangeWorksheetStatus = useAppSelector(
     (state) => state.PriceChangeWorksheets.status
   );
+
+  const priceChangeWorksheetFolderPath = useAppSelector(
+    (state) => state.PriceChangeWorksheets.folderPath
+  );
+
+  const priceChangeWorksheets = useAppSelector(selectWorksheets);
 
   const [subView, setSubView] = useState(SubView.settings);
 
@@ -144,16 +160,29 @@ export default function CoreSetsView() {
       <div id="coreSetSettings">
         {coreSetsSetup()}
         <hr></hr>
-        <div>Our Suppliers</div>
+        <h2>Our Distributors</h2>
+        <div style={{ paddingLeft: "10px" }}>
+          {ourDistributors.map((distributor) => (
+            <li>{distributor}</li>
+          ))}
+        </div>
+
         <hr></hr>
-        <div>Price Change Worksheets</div>
+
+        <h2>Price Change Worksheets</h2>
         <div>{priceChangeWorksheetStatus}</div>
+        <div>{priceChangeWorksheetFolderPath}</div>
         <div
-            className="interfaceButton"
-            onClick={selectPriceChangeWorksheetsFolderMenuButtonClicked}
-          >
-            Select Folder
-          </div>
+          className="interfaceButton"
+          onClick={selectPriceChangeWorksheetsFolderMenuButtonClicked}
+        >
+          Select Folder
+        </div>
+        <div style={{ paddingLeft: "10px" }}>
+          {priceChangeWorksheets.map((worksheet) => (
+            <li>{worksheet}</li>
+          ))}
+        </div>
       </div>
     );
   }
@@ -192,7 +221,7 @@ function openCoreSetsFileButtonClicked() {
   );
 }
 
-function selectPriceChangeWorksheetsFolderMenuButtonClicked(){
+function selectPriceChangeWorksheetsFolderMenuButtonClicked() {
   window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectPriceChangeWorksheetsFolder"

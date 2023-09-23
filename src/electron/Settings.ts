@@ -70,8 +70,29 @@ class Settings {
       });
     });
   }
-
-
+  public doesPriceChangeFolderLocationExist(): boolean {
+    const priceChangeFolderLocation = this.store.get(
+      "priceChangeFolderLocation"
+    ) as string;
+    return fs.existsSync(priceChangeFolderLocation);
+  }
+  public getPriceChangeFolderLocation(): string {
+    const priceChangeFolderLocation = this.store.get(
+      "priceChangeFolderLocation"
+    ) as string;
+    if (priceChangeFolderLocation) {
+      console.log("priceChangeFolderLocation", priceChangeFolderLocation);
+      return priceChangeFolderLocation;
+    } else {
+      console.log(
+        "No priceChangeFolderLocation in settings or it doesn't exist!"
+      );
+      return "";
+    }
+  }
+  public savePriceChangeFolderLocation(location: string) {
+    this.store.set("priceChangeFolderLocation", location);
+  }
   public async selectPriceChangeFolderLocation(): Promise<string | undefined> {
     return new Promise((Resolve, Reject) => {
       dialog
@@ -80,6 +101,7 @@ class Settings {
           properties: ["openDirectory"],
         })
         .then((result) => {
+          this.savePriceChangeFolderLocation(result.filePaths[0]);
           Resolve(result.filePaths[0]);
         })
         .catch((error) => {
