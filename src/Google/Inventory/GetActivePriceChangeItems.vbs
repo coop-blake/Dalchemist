@@ -22,7 +22,17 @@ logFileObj.WriteLine Now & " - Script execution started"
 DatabaseLibraryScriptPath = objFSO.BuildPath(scriptDirectory, "DatabaseUtility.vbs")
 ExecuteGlobal CreateObject("Scripting.FileSystemObject").OpenTextFile(DatabaseLibraryScriptPath).ReadAll()
 'Create the Database Queries and Filenames
-priceChangeItemsQuery = "SELECT TRIM(PCD_INV_FK) AS InventoryPrimaryKey, TRIM(PCD_Price_pl1) AS PromoPrice, TRIM(PCD_PSWEndDate) AS EndDate, TRIM(PCD_PSWStartDate) AS StartDate, TRIM(PCD_WRKName) AS Worksheet FROM ecrs.PriceChangeData WHERE PCD_PSWEndDate > now()"
+priceChangeItemsQuery = "SELECT " & _
+    "TRIM(SI.INV_ScanCode) AS ScanCode," & _ 
+    "TRIM(PCD_Price_pl1) AS Price, " & _
+    "TRIM(DP.DIS_Description) AS Discount," & _
+	"TRIM(PCD_WRKName) AS Worksheet, " & _
+    "TRIM(PCD_PSWEndDate) AS EndDate, " & _
+    "TRIM(PCD_PSWStartDate) AS StartDate " & _
+"FROM PriceChangeData " & _
+"LEFT JOIN   DiscountProfiles DP ON PCD_DIS_FK_pl1 = DP.DIS_PK " & _ 
+"LEFT JOIN   StockInventory SI ON PCD_INV_FK = SI.INV_PK " & _ 
+"WHERE PCD_PSWEndDate > NOW();"
 
 priceChangeItemsFileName = "PriceChangeData.txt"
 

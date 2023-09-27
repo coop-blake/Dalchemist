@@ -94,6 +94,14 @@
       "runtimeArgs": ["run-script", "electron"]
     },
     {
+      "name": "✅ Google: PriceChangeData",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleUpdate-PriceChangeData"]
+    },
+    {
       "name": "✅ Google: AltIDs",
       "type": "node",
       "request": "launch",

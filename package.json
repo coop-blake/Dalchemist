@@ -19,6 +19,7 @@
     "startCoreSetCheck": "nodemon --exec \"babel-node -x .ts\" src/Webstarts/coreSupportCheck.ts",
     "googleUpdate-Inventory": "npx babel-node -x .ts -- src/Google/update-Inventory.ts",
     "googleUpdate-AltIds": "npx babel-node -x .ts -- src/Google/updateAltIds.ts",
+    "googleUpdate-PriceChangeData": "npx babel-node -x .ts -- src/Google/updatePriceChangeData.ts",
     "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
     "googleCheck-addDrop": "babel-node -x .ts src/Google/Tests/addDrop.ts",
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
