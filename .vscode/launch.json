@@ -19,7 +19,8 @@
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "protocol": "legacy"
-    }, {
+    },
+    {
       "name": "✅ StartElectron",
       "type": "node",
       "request": "launch",
@@ -27,7 +28,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "startElectron"]
     },
-    
+
     {
       "name": "🌐 Interactive: Main",
       "type": "node",
@@ -93,13 +94,21 @@
       "runtimeArgs": ["run-script", "electron"]
     },
     {
+      "name": "✅ Google: AltIDs",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleUpdate-AltIds"]
+    },
+    {
       "name": "✅ Google: AddDrop",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck-addDrop"]
-    }, 
+    },
     {
       "name": "✅ Google: Inventory",
       "type": "node",
@@ -107,23 +116,24 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck-Inventory"]
-    }, {
+    },
+    {
       "name": "✅ Google",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck"]
-    }
-    , {
+    },
+    {
       "name": "📓 Docs",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "docs"]
-    },{
-
+    },
+    {
       "name": "🎆 Generator: checkDuplicateEntries",
       "type": "node",
       "request": "launch",

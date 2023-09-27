@@ -22,10 +22,11 @@ logFileObj.WriteLine Now & " - Script execution started"
 DatabaseLibraryScriptPath = objFSO.BuildPath(scriptDirectory, "DatabaseUtility.vbs")
 ExecuteGlobal CreateObject("Scripting.FileSystemObject").OpenTextFile(DatabaseLibraryScriptPath).ReadAll()
 'Create the Database Queries and Filenames
-altIDQuery = "SELECT * FROM ecrs.AdditionalScanCodes;"
+altIDQuery = "SELECT TRIM(ASC_PK) AS privateParentKey, TRIM(ASC_ScanCode) AS ScanCode,TRIM(ASC_Quantity) AS Quantity,TRIM(ASC_INV_FK) AS privateKey FROM ecrs.AdditionalScanCodes;"
+
 altIDFileName = "AltIDs.txt"
 
-stockInventoryQuery = "SELECT * FROM ecrs.StockInventory;"
+stockInventoryQuery = "SELECT TRIM(INV_ScanCode) AS ScanCode,TRIM(INV_PK) AS privateKey FROM ecrs.StockInventory;"
 stockInventoryFileName = "StockInventorys.txt"
 ' Data Source name as set up in ODBC Data Sources
 dataSourceName = "Prototype"
