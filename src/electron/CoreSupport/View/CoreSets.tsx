@@ -12,6 +12,10 @@ import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWo
 
 import fileIcon from "./resources/images/file.svg";
 import slashIcon from "./resources/images/slash.svg";
+import toolIcon from "./resources/images/settings.svg";
+import saveIcon from "./resources/images/save.svg";
+import thumbsUpIcon from "./resources/images/thumbs-up.svg";
+
 
 import "../../Resources/css/coreSets.css";
 
@@ -48,42 +52,46 @@ export default function CoreSetsView() {
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
-  }, [availableItems]);
+  }, [availableItems, subView]);
 
   return (
     <div className="CoreSetsMainDiv">
-      <span
-        className="navButton"
-        onClick={() => {
-          setSubView(SubView.settings);
-        }}
-      >
-        Setup
-      </span>
-      <span
-        className="navButton"
-        onClick={() => {
-          setSubView(SubView.review);
-        }}
-      >
-        Review
-      </span>
-      <span
-        className="navButton"
-        onClick={() => {
-          setSubView(SubView.report);
-        }}
-      >
-        Report
-      </span>
-
-      {subView === SubView.settings
-        ? setupView()
-        : subView === SubView.review
-        ? reviewView()
-        : subView === SubView.report
-        ? reportView()
-        : ""}
+      <div className="navMenu">
+        <span
+          className={`navButton ${subView === SubView.settings && "activeButton"}`}
+          onClick={() => {
+            setSubView(SubView.settings);
+          }}
+        >
+          <img id="toolIcon" src={toolIcon} alt="Tool Icon Image" /> Setup
+        </span>
+        <span
+          className={`navButton ${subView === SubView.review && "activeButton"}`}
+          onClick={() => {
+            setSubView(SubView.review);
+          }}
+        >
+          <img id="thumbsUpIcon" src={thumbsUpIcon} alt="Thumbs Up Icon Image" />  Review
+        </span>
+        <span
+          className={`navButton ${subView === SubView.report && "activeButton"}`}
+          onClick={() => {
+            setSubView(SubView.report);
+          }}
+        >
+        <img id="saveIcon" src={saveIcon} alt="Save Icon Image" /> Report
+        </span>
+        
+      </div>
+      <div className="mainContent">
+        {subView === SubView.settings
+          ? setupView()
+          : subView === SubView.review
+          ? reviewView()
+          : subView === SubView.report
+          ? reportView()
+          : ""}
+        </div>
     </div>
   );
 
