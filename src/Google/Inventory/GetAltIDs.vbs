@@ -22,8 +22,13 @@ logFileObj.WriteLine Now & " - Script execution started"
 DatabaseLibraryScriptPath = objFSO.BuildPath(scriptDirectory, "DatabaseUtility.vbs")
 ExecuteGlobal CreateObject("Scripting.FileSystemObject").OpenTextFile(DatabaseLibraryScriptPath).ReadAll()
 'Create the Database Queries and Filenames
-altIDQuery = "SELECT TRIM(ASC_PK) AS privateParentKey, TRIM(ASC_ScanCode) AS ScanCode,TRIM(ASC_Quantity) AS Quantity,TRIM(ASC_INV_FK) AS privateKey FROM ecrs.AdditionalScanCodes;"
-
+'altIDQuery = "SELECT TRIM(ASC_PK) AS privateParentKey, TRIM(ASC_ScanCode) AS ScanCode,TRIM(ASC_Quantity) AS Quantity,TRIM(ASC_INV_FK) AS privateKey FROM ecrs.AdditionalScanCodes;"
+altIDQuery = "SELECT " & _
+   "TRIM(SI.INV_ScanCode) AS parentScanCode, " & _
+   "TRIM(ASC_ScanCode) AS ScanCode, " & _
+   "TRIM(ASC_Quantity) AS Quantity " & _
+"FROM AdditionalScanCodes " & _
+"LEFT JOIN StockInventory SI ON ASC_INV_FK = SI.INV_PK AND ASC_INV_CFK = SI.INV_CPK; "
 altIDFileName = "AltIDs.txt"
 
 stockInventoryQuery = "SELECT TRIM(INV_ScanCode) AS ScanCode,TRIM(INV_PK) AS privateKey FROM ecrs.StockInventory;"
