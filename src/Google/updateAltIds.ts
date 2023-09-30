@@ -50,9 +50,7 @@ async function start() {
   console.log("starting");
   console.log("Reading South Inventory -Preparing Data");
 
-  const combindedItems = [
-    ["Catapult Code", "Scan Code", "Quanitity", "Parent Scan Code"],
-  ];
+  const combindedItems = [["Scan Code", "Quanitity", "Parent Scan Code"]];
 
   altIDsImporter.textFilePath = "./src/Google/Inventory/fetches/AltIDs.txt";
   await altIDsImporter.start();
@@ -65,7 +63,7 @@ async function start() {
     // console.log(entry);
 
     combindedItems.push([
-      entry.privateKey,
+      //  entry.privateKey,
       entry.scanCode,
       entry.quantity,
       inventoryPrivateKeysImporter.getScanCodeFromPrivateKey(entry.parentKey),
@@ -90,7 +88,7 @@ async function start() {
   console.log("Clearing AltIDs to Google Sheet");
   await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
-    range: "AltIDs!A:C", //range of cells to read from.
+    range: "AltIDs!A:D", //range of cells to read from.
   });
 
   console.log("Uploading AltIDs to Google Sheet");
