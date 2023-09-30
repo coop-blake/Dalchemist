@@ -27,11 +27,11 @@ priceChangeItemsQuery = "SELECT " & _
     "TRIM(PCD_Price_pl1) AS Price, " & _
     "TRIM(DP.DIS_Description) AS Discount," & _
 	"TRIM(PCD_WRKName) AS Worksheet, " & _
-    "TRIM(PCD_PSWEndDate) AS EndDate, " & _
-    "TRIM(PCD_PSWStartDate) AS StartDate " & _
+    "TRIM(PCD_PSWStartDate) AS StartDate, " & _
+	"TRIM(PCD_PSWEndDate) AS EndDate " & _
 "FROM PriceChangeData " & _
-"LEFT JOIN   DiscountProfiles DP ON PCD_DIS_FK_pl1 = DP.DIS_PK " & _ 
-"LEFT JOIN   StockInventory SI ON PCD_INV_FK = SI.INV_PK " & _ 
+"LEFT JOIN   DiscountProfiles DP ON PCD_DIS_FK_pl1 = DP.DIS_PK AND PCD_DIS_CFK_pl1 = DP.DIS_CPK " & _
+"LEFT JOIN   StockInventory SI ON PCD_INV_FK = SI.INV_PK AND PCD_INV_CFK = SI.INV_CPK " & _
 "WHERE PCD_PSWEndDate > NOW();"
 
 priceChangeItemsFileName = "PriceChangeData.txt"
