@@ -50,7 +50,7 @@ async function start() {
   console.log("starting");
   console.log("Reading South Inventory -Preparing Data");
 
-  const combindedItems = [["Scan Code", "Quanitity", "Parent Scan Code"]];
+  const combindedItems = [["Parent Scan Code", "Scan Code", "Quanitity"]];
 
   altIDsImporter.textFilePath = "./src/Google/Inventory/fetches/AltIDs.txt";
   await altIDsImporter.start();
@@ -63,10 +63,10 @@ async function start() {
     // console.log(entry);
 
     combindedItems.push([
-      //  entry.privateKey,
+      entry.privateKey,
       entry.scanCode,
       entry.quantity,
-      inventoryPrivateKeysImporter.getScanCodeFromPrivateKey(entry.parentKey),
+      //inventoryPrivateKeysImporter.getScanCodeFromPrivateKey(entry.parentKey),
     ]);
   });
 
@@ -88,7 +88,7 @@ async function start() {
   console.log("Clearing AltIDs to Google Sheet");
   await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
-    range: "AltIDs!A:D", //range of cells to read from.
+    range: "AltIDs!A:C", //range of cells to read from.
   });
 
   console.log("Uploading AltIDs to Google Sheet");
@@ -97,7 +97,7 @@ async function start() {
   // @ts-ignore
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
-    range: "AltIDs!A:D", //sheet name and range of cells
+    range: "AltIDs!A:C", //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
       values: combindedItems,

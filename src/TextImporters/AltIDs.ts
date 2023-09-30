@@ -16,7 +16,7 @@ class AltIDsImporter extends TextImporter<AltIDImportEntry> {
   processLine(line: string): void {
     const values = line.split("\t");
     //Split lines into an array of values
-    if (this.lineCount == 1 && values[0] == "privateParentKey") {
+    if (this.lineCount == 1) {
       //       header line, don't process
     } else {
       const entry: AltIDImportEntry | null = this.entryFromValueArray(values);
@@ -43,12 +43,12 @@ class AltIDsImporter extends TextImporter<AltIDImportEntry> {
   ): AltIDImportEntry | null {
     //Based off of expected Values as outlined in
     // Data/Inputs/README.md
-    if (valueArray.length === 4) {
+    if (valueArray.length === 3) {
       const entry: AltIDImportEntry = {
         privateKey: valueArray[0].trim(),
         scanCode: valueArray[1].trim(),
         quantity: valueArray[2].trim(),
-        parentKey: valueArray[3].trim(),
+        parentKey: "",
 
         //All values as array as received
         valuesArray: valueArray,
