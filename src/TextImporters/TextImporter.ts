@@ -41,8 +41,9 @@ export default class TextImporter<T> {
     this.fileCreatedDate = this.fileStats.ctime;
     this.fileModifiedDate = this.fileStats.mtime;
     const File = await open(this.textFilePath);
-    for await (const line of File.readLines()) {
+    for await (const line of File.readLines({ encoding: `utf16le` })) {
       this.lineCount++;
+      const lineString = line.toString();
       this.processLine(line);
     }
     await File.close();

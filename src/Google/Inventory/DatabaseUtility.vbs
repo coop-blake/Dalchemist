@@ -48,7 +48,7 @@ End If
 outputFilePath = objFSO.BuildPath(fetchesFolderPath, textFileName)
 
 ' Create the output text file
-Set outputFile = objFSO.CreateTextFile(outputFilePath, True)
+Set outputFile = objFSO.OpenTextFile(outputFilePath, 2, True,-1)
 
 ' Write column headers to the file
 For i = 0 to recordSet.Fields.Count - 2
