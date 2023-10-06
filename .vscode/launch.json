@@ -94,6 +94,15 @@
       "runtimeArgs": ["run-script", "electron"]
     },
     {
+      "name": "✅ odbcCheck",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "odbcCheck"]
+    },
+
+    {
       "name": "✅ Google: PriceChangeData",
       "type": "node",
       "request": "launch",
