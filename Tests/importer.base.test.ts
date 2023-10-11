@@ -4,7 +4,7 @@ import {
   LineReader,
   InputStream,
   Importer
-} from "../src/Readers/LineReader";
+} from "../src/Importers/Base";
 
 /* To use the entry assimilator, you need to define an entry */
 
@@ -77,7 +77,7 @@ describe("Line Reader", () => {
 });
 
 class TestInputStream implements InputStream {
-  getLines() {
+  async getLines() {
     return [
       ["SD"],
       ["nameString", "This is a test", "10", "Extra"],

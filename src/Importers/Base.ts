@@ -18,7 +18,7 @@ export abstract class LineReader<T> {
 
 export abstract class InputStream {
   constructor() {}
-  abstract getLines(): Array<Array<string>>;
+  abstract getLines(): Promise<Array<Array<string>>>;
 }
 
 export interface ImporterInterface<T> {
@@ -41,8 +41,8 @@ export class Importer<T> implements ImporterInterface<T> {
   }
 
   async start(): Promise<Array<T>> {
-    const filtered: Array<T> = this.inputStream
-      .getLines()
+    const lines = await this.inputStream.getLines();
+    const filtered: Array<T> = lines
       .map((inStreamLine) => {
         const entry = this.lineReader.read(inStreamLine) as T;
         entry ?? !this.unrecognizedInputs.push(inStreamLine);
