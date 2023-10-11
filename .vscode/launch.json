@@ -28,7 +28,14 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "startElectron"]
     },
-
+    {
+      "name": "✅ StartTests",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testReader"]
+    },
     {
       "name": "🌐 Interactive: Main",
       "type": "node",

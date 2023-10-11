@@ -34,6 +34,7 @@
     "package-win": "npm run electronBuild && electron-packager . Dalchemist --platform=win32 --arch=x64 --out=dist --overwrite",
     "package-macOS": "npm run electronBuild && electron-packager . Dalchemist --platform=darwin --arch=x64 --out=dist --overwrite --icon=./icon/Icon.icns",
     "test": "jest",
+    "testReader": "npx jest Tests/reader.test.ts",
     "lint": "npx eslint .",
     "docs": "typedoc ./src/main.ts",
     "docs-external": "typedoc --out docs/external --excludeInternal --readme ./README.md",
