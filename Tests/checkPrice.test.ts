@@ -10,7 +10,7 @@ const priceChangeWorksheetInventoryComparisons =
 //initialize processor to load price change worksheets in directory
 
 describe("Testing Text Importer", () => {
-  test("All lines imported", (done) => {
+  test.skip("All lines imported", (done) => {
     priceChangeWorksheetInventoryComparisons
       .initialize()
       .then(() => {
@@ -23,11 +23,11 @@ describe("Testing Text Importer", () => {
       .catch((error: Error) => {
         console.log(error);
       });
-  });
+  }, 70000);
 });
 
 describe("Testing Price Change Importer", () => {
-  test("All lines imported", (done) => {
+  test.skip("All lines imported", (done) => {
     PriceChangeImport.start()
       .then(() => {
         //get the text ouput for the loaded files

@@ -7,7 +7,7 @@
 
 //Base TextImporter Class
 import { stat, open } from "fs/promises";
-import { Stats } from "fs";
+import { Stats, existsSync } from "fs";
 
 /**
  * Base class for importing text data from a file
@@ -37,16 +37,18 @@ export default class TextImporter<T> {
   multipleAvailableDistributorItems = new Array<T>();
 
   async start() {
-    this.fileStats = await stat(this.textFilePath);
-    this.fileCreatedDate = this.fileStats.ctime;
-    this.fileModifiedDate = this.fileStats.mtime;
-    const File = await open(this.textFilePath);
-    for await (const line of File.readLines({ encoding: `utf16le` })) {
-      this.lineCount++;
-      const lineString = line.toString();
-      this.processLine(line);
+    if (existsSync(this.textFilePath)) {
+      this.fileStats = await stat(this.textFilePath);
+      this.fileCreatedDate = this.fileStats.ctime;
+      this.fileModifiedDate = this.fileStats.mtime;
+      const File = await open(this.textFilePath);
+      for await (const line of File.readLines({ encoding: `utf16le` })) {
+        this.lineCount++;
+        const lineString = line.toString();
+        this.processLine(line);
+      }
+      await File.close();
     }
-    await File.close();
   }
 
   getEntryFromScanCode(scanCode: string) {

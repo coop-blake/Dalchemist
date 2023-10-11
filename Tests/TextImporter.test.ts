@@ -1,21 +1,13 @@
 import { describe, expect, test } from "@jest/globals";
+import TextImporter from "../src/TextImporters/TextImporter";
+const textImporter = new TextImporter();
 
-import PriceChecker from "../src/Processors/PriceChecker";
-//Create new PriceChecker
-const priceChecker = new PriceChecker();
-//Initialize to load input files
-//Get and print output to console
-//console.log(priceChecker.getLowerCostOutput());
-
-describe("Testing Text Importer", () => {
-  test("All lines imported", async () => {
-    await priceChecker.initialize();
-
-    expect(true).toBe(true);
+describe("Text Importer", () => {
+  test("Is it a TextImporter", async () => {
+    await textImporter.start();
+    expect(textImporter).toBeInstanceOf(TextImporter);
   });
 });
-
-// import TextImporter from "../src/TextImporters/TextImporter.js";
 
 // const DupCheckImport = new TextImporter();
 

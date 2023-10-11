@@ -16,15 +16,14 @@ class PriceChangeDataImporter extends TextImporter<PriceChangeDataImportEntry> {
   processLine(line: string): void {
     const values = line.split("\t");
     //Split lines into an array of values
-    if (this.lineCount == 1 && values[0] == "ScanCode") {
+    if (this.lineCount == 1 /*&& values[0] == "ScanCode"*/) {
       //       header line, don't process
     } else {
-      const entry: PriceChangeDataImportEntry | null = this.entryFromValueArray(values);
+      const entry: PriceChangeDataImportEntry | null =
+        this.entryFromValueArray(values);
 
       if (entry != null) {
-       
-          this.entries.set("Line:" + this.lineCount + ":", entry);
-        
+        this.entries.set("Line:" + this.lineCount + ":", entry);
       } else {
         this.invalidLines.push(line);
       }
