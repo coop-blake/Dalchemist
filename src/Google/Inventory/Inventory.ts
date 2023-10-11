@@ -1,5 +1,14 @@
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import {InventoryEntry, InventoryStatus} from "./shared"
+import {
+  InventoryEntry,
+  InventoryStatus,
+  AltIDEntry,
+  AltIDEntryFromValueArray,
+  PromoEntry,
+  PromoEntryFromValueArray
+} from "./shared";
+import Promos from "./Promos";
+import AltIDs from "./AltIds";
 import { Google } from "../google";
 
 export class Inventory {
@@ -7,6 +16,8 @@ export class Inventory {
 
   entries = new Map<string, InventoryEntry>();
   private inventoryItemsArray: InventoryEntry[] = [];
+  private altIDsItemsArray: AltIDEntry[] = [];
+  private promoItemsArray: PromoEntry[] = [];
 
   static state: InventoryState;
 
@@ -41,7 +52,7 @@ export class Inventory {
         const sheets = this.googleInstance.getSheets();
         const inventoryItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Inventory!A3:S50000`, // Adjust range as needed
+          range: `Inventory!A3:S50000` // Adjust range as needed
         });
 
         this.inventoryItemsArray = inventoryItemsResponse.data.values
@@ -50,6 +61,29 @@ export class Inventory {
             this.entries.set(inventoryEntry.ScanCode, inventoryEntry);
             return inventoryEntry !== null;
           }) as [InventoryEntry];
+
+        const altIDItemsResponse = await sheets.spreadsheets.values.get({
+          spreadsheetId: this.spreadsheetId,
+          range: `AltIDs!A2:C5000` // Adjust range as needed
+        });
+
+        this.altIDsItemsArray = altIDItemsResponse.data.values?.map(
+          (newItemData) => AltIDEntryFromValueArray(newItemData)
+        ) as [AltIDEntry];
+        const altIDs = AltIDs.getInstance();
+        altIDs.loadAltIDsFrom(this.altIDsItemsArray);
+
+        const promosResponse = await sheets.spreadsheets.values.get({
+          spreadsheetId: this.spreadsheetId,
+          range: `Promos!A2:F9000` // Adjust range as needed
+        });
+
+        this.promoItemsArray = promosResponse.data.values?.map((newItemData) =>
+          PromoEntryFromValueArray(newItemData)
+        ) as [PromoEntry];
+
+        const promos = Promos.getInstance();
+        promos.loadPromosFrom(this.promoItemsArray);
 
         Inventory.state.setLastRefreshCompleted(Date.now());
 
@@ -104,7 +138,6 @@ export class InventoryState {
   }
 }
 
-
 const entryFromValueArray = function (
   valueArray: Array<string>
 ): InventoryEntry {
@@ -135,7 +168,7 @@ const entryFromValueArray = function (
     SouthLSD: valueArray[18].trim(),
 
     //All values as array as received
-    valuesArray: valueArray,
+    valuesArray: valueArray
   };
   return entry;
 };

@@ -47,6 +47,15 @@
 .mainContent{
   
 }
+#loadedFileStatus{
+  padding-left: 10px;
+}
+
+#fileName{
+  margin-left: 10px;
+  word-wrap: break-word; 
+    max-width: 100%; 
+}
 .navMenu{
   background: grey;
 }
@@ -60,8 +69,6 @@
   background: grey;
   margin: 0;
   -webkit-app-region: no-drag;
-
-
 }
 
 .navButton:hover {
