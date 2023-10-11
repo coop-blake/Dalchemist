@@ -153,8 +153,8 @@ export default function CoreSetsView() {
           )}
         </div>
         {availableItems.length > 0 ? (
-          <div>
-            ✅ Loaded with {availableItems.length} items from our distributors
+          <div id="loadedFileStatus">
+            ✅ Loaded File
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
@@ -168,16 +168,22 @@ export default function CoreSetsView() {
       <div id="coreSetSettings">
         {coreSetsSetup()}
         <hr></hr>
-        <h2>Our Distributors</h2>
-        <div style={{ paddingLeft: "10px" }}>
+        <h2 style={{ paddingLeft: "10px" }}>Our Distributors</h2>
+        <div style={{ paddingLeft: "30px" }}>
           {ourDistributors.map((distributor) => (
             <li>{distributor}</li>
           ))}
         </div>
-
+        {availableItems.length > 0 ? (
+          <div id="loadedFileStatus">
+            ✅ Loaded with {availableItems.length} items from our distributors
+          </div>
+        ) : (
+          <div className="loadingStatus pulsating"> {status}</div>
+        )}
         <hr></hr>
 
-        <h2>Price Change Worksheets</h2>
+        <h2 style={{ paddingLeft: "10px" }}>Price Change Worksheets</h2>
         <div>{priceChangeWorksheetStatus}</div>
         <div>{priceChangeWorksheetFolderPath}</div>
         <div
@@ -186,11 +192,11 @@ export default function CoreSetsView() {
         >
           Select Folder
         </div>
-        <div style={{ paddingLeft: "10px" }}>
+        <ul style={{ paddingLeft: "10px" }}>
           {priceChangeWorksheets.map((worksheet) => (
-            <li>{worksheet}</li>
+            <li style={{ marginLeft: "40px" }}>{worksheet}</li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
