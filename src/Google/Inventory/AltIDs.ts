@@ -1,17 +1,14 @@
-import { PromoEntry } from "./shared";
-export default class Promos {
-  private static instance: Promos;
+import { AltIDEntry } from "./shared";
+export default class AltIDs {
+  private static instance: AltIDs;
 
-  private promosByScanCode = new Map<string, Array<PromoEntry>>();
+  private altIDsByScanCode = new Map<string, Array<AltIDEntry>>();
 
   private worksheets: Array<string> = [];
   private constructor() {}
-  public loadPromosFrom(promos: Array<PromoEntry>) {
-    promos.forEach((promo) => {
-      this.setPromoForItem(promo);
-      if (!this.worksheets.includes(promo.Worksheet)) {
-        this.worksheets.push(promo.Worksheet);
-      }
+  public loadAltIDsFrom(altIDs: Array<AltIDEntry>) {
+    altIDs.forEach((altID) => {
+      this.setAltIDForItem(altID);
     });
   }
 
@@ -19,24 +16,24 @@ export default class Promos {
     return this.worksheets;
   }
 
-  getPromosForItemBy(ScanCode: string) {
-    let promos = this.promosByScanCode.get(ScanCode);
-    if (promos === undefined) {
-      promos = new Array<PromoEntry>();
+  getAltIDsForItemBy(ScanCode: string) {
+    let altIDs = this.altIDsByScanCode.get(ScanCode);
+    if (altIDs === undefined) {
+      altIDs = new Array<AltIDEntry>();
     }
-    return promos;
+    return altIDs;
   }
 
-  setPromoForItem(promo: PromoEntry) {
-    const promos = this.getPromosForItemBy(promo.ScanCode);
-    promos.push(promo);
-    this.promosByScanCode.set(promo.ScanCode, promos);
+  setAltIDForItem(altID: AltIDEntry) {
+    const altIDs = this.getAltIDsForItemBy(altID.ScanCode);
+    altIDs.push(altID);
+    this.altIDsByScanCode.set(altID.ScanCode, altIDs);
   }
 
-  static getInstance(): Promos {
-    if (!Promos.instance) {
-      Promos.instance = new Promos();
+  static getInstance(): AltIDs {
+    if (!AltIDs.instance) {
+      AltIDs.instance = new AltIDs();
     }
-    return Promos.instance;
+    return AltIDs.instance;
   }
 }
