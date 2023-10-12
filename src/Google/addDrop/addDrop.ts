@@ -337,3 +337,4 @@ function fillArrayWithEmptyStrings(num: number, arr: string[]): string[] {
 function containsAny(str: string, substrArray: string[]): boolean {
   return substrArray.some((substring) => str.includes(substring));
 }
+export { AttributeChangeEntry, NewItemEntry };
