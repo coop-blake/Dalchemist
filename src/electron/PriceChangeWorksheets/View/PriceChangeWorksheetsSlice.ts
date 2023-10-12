@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../View/store";
 
-import { PriceChangeWorksheetEntry } from "TextImporters/PriceChangeWorksheet";
-
 // Define a type for the slice state
 interface PriceChangeWorksheetsState {
   status: string;
@@ -16,7 +14,7 @@ const initialState: PriceChangeWorksheetsState = {
   status: "",
   folderPath: "",
   errorMessage: "",
-  worksheets: [],
+  worksheets: []
 };
 
 export const priceChangeWorksheetsSlice = createSlice({
@@ -35,8 +33,8 @@ export const priceChangeWorksheetsSlice = createSlice({
     },
     setWorksheets: (state, action: PayloadAction<Array<string>>) => {
       state.worksheets = action.payload;
-    },
-  },
+    }
+  }
 });
 export const selectWorksheets = (state: RootState) =>
   state.PriceChangeWorksheets.worksheets;

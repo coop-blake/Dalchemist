@@ -8,7 +8,7 @@
  */
 // todo: Start a server
 // connect post requests to generators outputs
-import packageInfo from "../package.json" assert { type: "json" };
+import packageInfo from "../package.json";
 console.log(
   `Dalchemist Version 0.0.1
     Input files go in Data/Inputs

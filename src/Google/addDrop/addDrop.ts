@@ -2,13 +2,10 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Google } from "../google";
 
-import {AttributeChangeEntry,NewItemEntry, AddDropStatus } from "./shared"
+import { AttributeChangeEntry, NewItemEntry, AddDropStatus } from "./shared";
 
-
-import {
-  Inventory,
-  InventoryEntry,
-} from "../Inventory/Inventory";
+import { Inventory } from "../Inventory/Inventory";
+import { InventoryEntry } from "../Inventory/shared";
 
 export class AddDrop {
   private static instance: AddDrop;
@@ -46,7 +43,7 @@ export class AddDrop {
               day: "numeric",
               hour: "2-digit",
               minute: "2-digit",
-              second: "2-digit",
+              second: "2-digit"
             });
             console.log(`Inventory Updated changed: ${formattedDate}`);
             this.refresh();
@@ -59,13 +56,13 @@ export class AddDrop {
     try {
       if (this.googleInstance !== null) {
         const sheets = this.googleInstance.getSheets();
-       // const drive = this.googleInstance.getDrive();
+        // const drive = this.googleInstance.getDrive();
         AddDrop.state.setStatus(AddDropStatus.Running);
 
         //Read data from New Items Tab
         const newItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `New Items!A3:Y300`, // Adjust range as needed
+          range: `New Items!A3:Y300` // Adjust range as needed
         });
 
         const newItems = newItemsResponse.data.values
@@ -93,11 +90,11 @@ export class AddDrop {
 # Process Attribute Updates
 #####################################################################################*/
         // Read data from "Price and attribute changes" tab
-       // Main.statusMessageUpdate("Reading Price and Attribute Changes");
+        // Main.statusMessageUpdate("Reading Price and Attribute Changes");
 
         const attributeChangesResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Price & Attribute Changes!A3:AC300`, // Adjust range as needed
+          range: `Price & Attribute Changes!A3:AC300` // Adjust range as needed
         });
         const attributeChangeItems = attributeChangesResponse.data.values
           ?.map((attributeChangeItem) =>
@@ -116,22 +113,22 @@ export class AddDrop {
             containsAny(attributeChange?.ChangeOne ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeTwo ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeThree ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeFour ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ])
           );
         }) as [AttributeChangeEntry];
@@ -140,12 +137,12 @@ export class AddDrop {
         AddDrop.state.setLastRefreshCompleted(Date.now());
 
         setTimeout(() => {
-          this.refresh()
-        }, 100000)
-
+          this.refresh();
+        }, 100000);
       }
-    } catch (error) {console.error(error)}
-
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   static getInstance(): AddDrop {
@@ -156,8 +153,6 @@ export class AddDrop {
   }
   //End of AddDrop Class
 }
-
-
 
 export class AddDropState {
   private statusSubject = new BehaviorSubject<AddDropStatus>(
@@ -271,7 +266,7 @@ export const newItemEntryFromValueArray = function (
       Comments: valueArray[23].trim(),
 
       //All values as array as received
-      valuesArray: valueArray,
+      valuesArray: valueArray
     };
     return entry;
   }
@@ -316,7 +311,7 @@ export const attributeChangeEntryFromValueArray = function (
       BestDateForPriceChange: valueArray[27].trim(),
       BestTimeForPriceChange: valueArray[28].trim(),
 
-      valuesArray: valueArray,
+      valuesArray: valueArray
     };
     return entry;
   }
@@ -325,7 +320,7 @@ export const attributeChangeEntryFromValueArray = function (
 };
 
 /*###################################################################################
-# Utility Functions
+# Utility Functions  --  Move to Utility
 #####################################################################################*/
 
 function fillArrayWithEmptyStrings(num: number, arr: string[]): string[] {

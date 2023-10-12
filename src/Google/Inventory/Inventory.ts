@@ -8,7 +8,7 @@ import {
   PromoEntryFromValueArray
 } from "./shared";
 import Promos from "./Promos";
-import AltIDs from "./AltIds";
+import AltIDs from "./AltIDs";
 import { Google } from "../google";
 
 export class Inventory {
@@ -183,3 +183,4 @@ function fillArrayWithEmptyStrings(num: number, arr: string[]): string[] {
 
   return [...arr, ...emptyStrings];
 }
+export { InventoryEntry };

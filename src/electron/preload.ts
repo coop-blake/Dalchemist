@@ -1,7 +1,17 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent} from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-
-export type Channels = 'status';
+export type Channels =
+  | "status"
+  | "mainWindowMessage"
+  | "CoreSetEntriesUpdated"
+  | "addDropWindowMessage"
+  | "CoreSetStatusUpdated"
+  | "PriceChangeWorksheetsStatus"
+  | "PriceChangeWorksheetsFolderPath"
+  | "coreSetsWindowMessage"
+  | "CoreSetFilePathUpdated"
+  | "inventoryData"
+  | "inventoryDataLastReload";
 
 const electronHandler = {
   ipcRenderer: {
@@ -19,14 +29,12 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
-  },
-}
-
+    }
+  }
+};
 
 //type MessageCallback = (message: string) => void;
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
-
+contextBridge.exposeInMainWorld("electron", electronHandler);
 
 export type ElectronHandler = typeof electronHandler;

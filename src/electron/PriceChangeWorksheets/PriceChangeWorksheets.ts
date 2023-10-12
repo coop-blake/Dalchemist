@@ -1,8 +1,7 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { PriceChangeWorksheetsStatus } from "./shared";
-import {
-  PriceChangeWorksheetEntry,
-  PriceChangeWorksheetImporter,
+import PriceChangeWorksheetImporter, {
+  PriceChangeWorksheetEntry
 } from "TextImporters/PriceChangeWorksheet";
 import PriceChangeWorksheetsProcessor from "../../Processors/PriceChangeWorksheets";
 
@@ -35,7 +34,7 @@ export class PriceChangeWorksheets {
         await worksheetImporter.initialize();
 
         const loadedWorksheets = [
-          ...worksheetImporter.priceChangeWorksheets,
+          ...worksheetImporter.priceChangeWorksheets
         ].map((worksheetImporter: PriceChangeWorksheetImporter) => {
           return worksheetImporter.fileName;
         });
@@ -46,7 +45,7 @@ export class PriceChangeWorksheets {
           );
         });
 
-        PriceChangeWorksheets.state.setWorksheets(loadedWorksheets);
+        //PriceChangeWorksheets.state.setWorksheets(loadedWorksheets);
         PriceChangeWorksheets.state.setStatus(
           PriceChangeWorksheetsStatus.Running
         );

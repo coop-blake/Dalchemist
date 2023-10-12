@@ -1,8 +1,7 @@
 import "../css/coreSets.css";
-
+import { ipcRenderer } from "electron";
 import CoreSetsView from "../../CoreSupport/View/CoreSets";
-import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
-import { TabulatorFull as Tabulator } from "tabulator-tables";
+import { CoreSetsStatus, CoreSupportEntry } from "../../CoreSupport/shared";
 
 import { PriceChangeWorksheetsStatus } from "../../PriceChangeWorksheets/shared";
 import {
@@ -18,27 +17,27 @@ import {
   setAvailableItems,
 } from "../../CoreSupport/View/CoreSetSlice";
 
-import { onReady } from "electron/Utility";
+import { onReady } from "../../Utility";
 import { createRoot } from "react-dom/client";
 import { store } from "../../View/store";
-
+import React from "react";
 import { Provider } from "react-redux";
 
 //Set up Listeners that update state
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "CoreSetStatusUpdated",
-  (status: CoreSetsStatus) => {
+  (event, status: CoreSetsStatus) => {
     store.dispatch(setStatus(status));
   }
 );
-window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
+ipcRenderer.on("CoreSetFilePathUpdated", (event, filePath: string) => {
   store.dispatch(setFilePath(filePath));
 });
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "CoreSetEntriesUpdated",
-  (coreSetItemsArray: Array<CoreSupportEntry>) => {
+  (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log("CoreSetEntriesUpdated");
     if (typeof coreSetItemsArray !== "undefined") {
       console.log(coreSetItemsArray);
@@ -48,18 +47,18 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "PriceChangeWorksheetsStatus",
-  (priceChangeWorksheetsStatus: PriceChangeWorksheetsStatus) => {
+  (event, priceChangeWorksheetsStatus: PriceChangeWorksheetsStatus) => {
     console.log("PriceChangeWorksheetsStatus", priceChangeWorksheetsStatus);
 
     store.dispatch(setPriceChangeWorksheetsStatus(priceChangeWorksheetsStatus));
   }
 );
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "PriceChangeWorksheetsFolderPath",
-  (priceChangeWorksheetsFolderPath: PriceChangeWorksheetsStatus) => {
+  (event, priceChangeWorksheetsFolderPath: PriceChangeWorksheetsStatus) => {
     console.log(
       "PriceChangeWorksheetsFolderPath",
       priceChangeWorksheetsFolderPath
@@ -69,9 +68,9 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "PriceChangeWorksheetsWorksheets",
-  (priceChangeWorksheetsWorksheets: Array<string>) => {
+  (event, priceChangeWorksheetsWorksheets: Array<string>) => {
     console.log(
       "PriceChangeWorksheetsWorksheets",
       priceChangeWorksheetsWorksheets
@@ -96,20 +95,27 @@ onReady(() => {
 
 console.log("From CoreSets.tsx");
 
-const coreSetsTable: Tabulator | null = null;
-let coreSetItems = [] as Array<CoreSupportEntry>;
+// const coreSetsTable: Tabulator | null = null;
+// let coreSetItems = [] as Array<CoreSupportEntry>;
 
-let coreSetStatus = CoreSetsStatus.Starting;
-let coreSetsFilePath = "";
+// let coreSetStatus = CoreSetsStatus.Starting;
+// let coreSetsFilePath = "";
 
-const numberOfCoreSupportItems = 0;
-const numberOfCoreSupportItemsFromOurDistributors = 0;
+// const numberOfCoreSupportItems = 0;
+// const numberOfCoreSupportItemsFromOurDistributors = 0;
 
 const selectFileMenuButton = document.getElementById("selectFileMenuButton");
 if (selectFileMenuButton) {
   selectFileMenuButton.addEventListener("click", function () {
     selectFileMenuButtonClicked();
   });
+}
+
+function selectFileMenuButtonClicked() {
+  ipcRenderer.send(
+    "coreSetsWindowMessage",
+    "selectFileMenuButtonClicked"
+  );
 }
 
 const saveCoreSetReportButton = document.getElementById(
@@ -122,32 +128,32 @@ if (saveCoreSetReportButton) {
 }
 
 function saveCoreSetReportButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  ipcRenderer.send(
     "coreSetsWindowMessage",
     "saveCoreSetReportButtonClicked"
   );
 }
 
 //###################### After getting data - Refresh!
-function refreshStatus() {
-  const numberOfCoreSupportItemsElement = document.getElementById(
-    "numberOfCoreSupportItems"
-  );
+// function refreshStatus() {
+//   const numberOfCoreSupportItemsElement = document.getElementById(
+//     "numberOfCoreSupportItems"
+//   );
 
-  if (numberOfCoreSupportItemsElement) {
-    numberOfCoreSupportItemsElement.innerHTML = String(
-      numberOfCoreSupportItems
-    );
-  }
-  const numberOfCoreSupportItemsFromOurDistributorsElement =
-    document.getElementById("numberOfCoreSupportItemsFromOurDistributors");
+//   if (numberOfCoreSupportItemsElement) {
+//     numberOfCoreSupportItemsElement.innerHTML = String(
+//       numberOfCoreSupportItems
+//     );
+//   }
+//   const numberOfCoreSupportItemsFromOurDistributorsElement =
+//     document.getElementById("numberOfCoreSupportItemsFromOurDistributors");
 
-  if (numberOfCoreSupportItemsFromOurDistributorsElement) {
-    numberOfCoreSupportItemsFromOurDistributorsElement.innerHTML = String(
-      numberOfCoreSupportItemsFromOurDistributors
-    );
-  }
-}
+//   if (numberOfCoreSupportItemsFromOurDistributorsElement) {
+//     numberOfCoreSupportItemsFromOurDistributorsElement.innerHTML = String(
+//       numberOfCoreSupportItemsFromOurDistributors
+//     );
+//   }
+// }
 
 function coreSetsRefreshed() {
   // const statusElement = document.getElementById("statusInfo");
@@ -250,9 +256,9 @@ function coreSetsRefreshed() {
   // }
 }
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "CoreSetEntriesUpdated",
-  (coreSetItemsArray: Array<CoreSupportEntry>) => {
+  (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log(coreSetItemsArray);
     if (typeof coreSetItemsArray !== "undefined") {
       coreSetItems = coreSetItemsArray;
@@ -262,16 +268,16 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "CoreSetStatusUpdated",
-  (status: CoreSetsStatus) => {
+  (event, status: CoreSetsStatus) => {
     console.log(status);
     coreSetStatus = status;
     coreSetsRefreshed();
   }
 );
 
-window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
+ipcRenderer.on("CoreSetFilePathUpdated", (event, filePath: string) => {
   console.log(filePath);
   coreSetsFilePath = filePath;
   coreSetsRefreshed();

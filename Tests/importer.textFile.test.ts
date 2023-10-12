@@ -5,7 +5,7 @@ import {
   Importer
 } from "../src/Importers/Base";
 
-import { SeperatedTextFileInputStream } from "../src/Importers/TextFile";
+import { SeperatedTextInput } from "../src/Importers/Text";
 /* To use the entry assimilator, you need to define an entry */
 
 type TestEntry = {
@@ -32,7 +32,7 @@ class TestLineReader extends LineReader<TestEntry> {}
 
 const testLineReader = new TestLineReader(TestAssimilator);
 
-const testInputStream = new SeperatedTextFileInputStream(
+const testInputStream = new SeperatedTextInput(
   "./Tests/testForImporterStream.txt"
 );
 
@@ -43,7 +43,7 @@ describe("Text File Input Stream", () => {
   });
 });
 describe("Text File Input Stream", () => {
-  test("SHould return a String Matrix", async () => {
+  test("Should return a String Matrix", async () => {
     const importer = new Importer(testLineReader, testInputStream);
     const entries = await importer.start();
     console.log(entries);

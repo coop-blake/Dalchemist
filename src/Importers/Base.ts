@@ -16,26 +16,26 @@ export abstract class LineReader<T> {
   }
 }
 
-export abstract class InputStream {
+export abstract class InputLines {
   constructor() {}
   abstract getLines(): Promise<Array<Array<string>>>;
 }
 
 export interface ImporterInterface<T> {
   lineReader: LineReader<T>;
-  inputStream: InputStream;
+  inputStream: InputLines;
   start(): Promise<Array<T> | null>;
 }
 
 export class Importer<T> implements ImporterInterface<T> {
   lineReader: LineReader<T>;
-  inputStream: InputStream;
+  inputStream: InputLines;
 
   entries = Array<T>();
 
   unrecognizedInputs = Array<Array<string>>();
 
-  constructor(lineReader: LineReader<T>, inputStream: InputStream) {
+  constructor(lineReader: LineReader<T>, inputStream: InputLines) {
     this.inputStream = inputStream;
     this.lineReader = lineReader;
   }

@@ -29,12 +29,28 @@
       "runtimeArgs": ["run-script", "startElectron"]
     },
     {
-      "name": "✅ StartTests",
+      "name": "🤖Test-CoreSets",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "testReader"]
+      "runtimeArgs": ["run-script", "testCoreSets"]
+    },
+    {
+      "name": "🤖 Test-Importer-Text",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testImporterText"]
+    },
+    {
+      "name": "🤖Test-Importer-XLSX",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testImporterXLSX"]
     },
     {
       "name": "🌐 Interactive: Main",

@@ -1,11 +1,11 @@
-import { InputStream } from "./Base";
+import { InputLines } from "./Base";
 
 import { stat, open } from "fs/promises";
 import { Stats, existsSync } from "fs";
 
 import * as path from "path";
 
-export class SeperatedTextFileInputStream implements InputStream {
+export class SeperatedTextInput implements InputLines {
   filePath: string;
   fileCreatedDate: Date | null = null;
   fileModifiedDate: Date | null = null;
@@ -37,7 +37,6 @@ export class SeperatedTextFileInputStream implements InputStream {
       }
       await File.close();
     }
-
     return returnLines;
   }
 }

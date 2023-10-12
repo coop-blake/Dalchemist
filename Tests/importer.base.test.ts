@@ -2,7 +2,7 @@ import { describe, expect, test } from "@jest/globals";
 import {
   StringsAssimilator,
   LineReader,
-  InputStream,
+  InputLines,
   Importer
 } from "../src/Importers/Base";
 
@@ -76,7 +76,7 @@ describe("Line Reader", () => {
   });
 });
 
-class TestInputStream implements InputStream {
+class TestInputStream implements InputLines {
   async getLines() {
     return [
       ["SD"],

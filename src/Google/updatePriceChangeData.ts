@@ -1,7 +1,6 @@
 import { google } from "googleapis";
 import { spawn } from "child_process";
 
-import fs from "fs";
 import path from "path";
 
 import PriceChangeDataImporter from "../TextImporters/PriceChangeData";
@@ -49,12 +48,12 @@ async function start() {
   console.log("Reading South Inventory -Preparing Data");
 
   const combindedItems = [
-    ["Scan Code", "Price", "Discount", "Worksheet", "Start Date", "End Date"],
+    ["Scan Code", "Price", "Discount", "Worksheet", "Start Date", "End Date"]
   ];
 
-  priceChangeDataImporter.textFilePath = "./src/Google/Inventory/fetches/PriceChangeData.txt";
+  priceChangeDataImporter.textFilePath =
+    "./src/Google/Inventory/fetches/PriceChangeData.txt";
   await priceChangeDataImporter.start();
-
 
   priceChangeDataImporter.forEachEntry(function (entry) {
     // console.log(entry);
@@ -74,7 +73,7 @@ async function start() {
   const auth = new google.auth.GoogleAuth({
     keyFilename: "./src/Google/Inventory/CertAndLogs/googleCert.json",
     // Scopes can be specified either as an array or as a single, space-delimited string.
-    scopes: ["https://www.googleapis.com/auth/drive"],
+    scopes: ["https://www.googleapis.com/auth/drive"]
   });
 
   //const authClient = await auth.getClient();
@@ -87,7 +86,7 @@ async function start() {
   console.log("Clearing AltIDs to Google Sheet");
   await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
-    range: "Promos!A:F", //range of cells to read from.
+    range: "Promos!A:F" //range of cells to read from.
   });
 
   console.log("Uploading AltIDs to Google Sheet");
@@ -99,7 +98,7 @@ async function start() {
     range: "Promos!A:F", //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
-      values: combindedItems,
-    },
+      values: combindedItems
+    }
   });
 }

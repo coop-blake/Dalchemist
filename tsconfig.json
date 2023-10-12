@@ -13,7 +13,16 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "building/dll"
+    "outDir": "building/dll",
   },
-  "exclude": ["test", "release/build", "release/app/dist", "building/dll"]
+  "exclude": ["test", "release/build", "release/app/dist", "building/dll"],
+ "include": [ "src/**/*.ts","./tests/**/*.ts", "globals.d.ts"],
+ "typedocOptions": {
+   "entryPoints": ["src/"],
+   "entryPointStrategy": "expand",
+   "externalPattern": "tests/**/*.ts",
+   "exclude": "**/*+(index|.test|.spec|.e2e).ts",
+   "excludeExternals": true,
+   "out": "docs"
+ }
 }

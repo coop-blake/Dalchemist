@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
-import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
+import {  CoreSupportEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 
 import {
   Column,
-  Formatters,
   MultipleSelectOption,
   OperatorType,
   FieldType,
@@ -15,12 +14,12 @@ import {
   SlickgridReact,
 } from "slickgrid-react";
 
-interface Props {
+export interface Props {
   availableItems: Array<CoreSupportEntry>;
   availableItemsLength: number;
 }
 
-interface State {
+export interface State {
   name: string;
   subTitle: string;
   gridOptions?: GridOption;
@@ -31,7 +30,9 @@ interface State {
 export default function CoreSetsTable() {
   const title = "Core Sets";
   const availableItems = useAppSelector(selectAvailableItems);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridOptions, setGridOptions] = useState({
     gridHeight: 500,
     gridWidth: 1900,
@@ -176,7 +177,7 @@ const defineGrids = function () {
   return columns;
 };
 
-const selectFilter = function () {
+const selectFilter = function ()  {
   return {
     model: Filters.multipleSelect,
     collection: [

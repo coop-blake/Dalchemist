@@ -44,7 +44,7 @@ export default class TextImporter<T> {
       const File = await open(this.textFilePath);
       for await (const line of File.readLines({ encoding: `utf16le` })) {
         this.lineCount++;
-        const lineString = line.toString();
+        //const lineString = line.toString();
         this.processLine(line);
       }
       await File.close();

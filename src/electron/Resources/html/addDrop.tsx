@@ -1,6 +1,6 @@
-import { NewItemEntry, AttributeChangeEntry } from "Google/addDrop/addDrop";
-
-import{InventoryEntry} from "Google/Inventory/Inventory"
+import { NewItemEntry, AttributeChangeEntry } from "../../../Google/addDrop/addDrop";
+import { ipcRenderer } from "electron";
+import{InventoryEntry} from "../../../Google/Inventory/Inventory"
 import "../css/addDrop.css";
 
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
@@ -34,9 +34,9 @@ let priceChangeItemsReceived = false
 #  Events From Main Thread  ##########################################
 ####################################################################*/ 
 
-window.electron.ipcRenderer.on(
+ipcRenderer.on(
   "newItemsArray",
-  (newItemsArray: Array<NewItemEntry>) => {
+  (event, newItemsArray: Array<NewItemEntry>) => {
         newItemsReceived = true
     if(typeof newItemsArray !== 'undefined'){
       console.log(newItemsArray);
@@ -49,11 +49,11 @@ redraw()
   }
 );
 
-window.electron.ipcRenderer.on("addDropDataLastReload", (lastAddDropLastRefresh : number) => {
+ipcRenderer.on("addDropDataLastReload", (event, lastAddDropLastRefresh : number) => {
   window.document.title = `AddDrop last retreived: ${formatTimestampToMinute(lastAddDropLastRefresh)}`
 })
 
-window.electron.ipcRenderer.on("itemsAlreadyInInventory", (newItemsInInventoryArray : Array<[NewItemEntry, InventoryEntry]>) => {
+ipcRenderer.on("itemsAlreadyInInventory", (event, newItemsInInventoryArray : Array<[NewItemEntry, InventoryEntry]>) => {
   // eslint-disable-next-line no-console
   console.log("itemsAlreadyInInventory", newItemsInInventoryArray);
 
@@ -123,7 +123,7 @@ window.electron.ipcRenderer.on("itemsAlreadyInInventory", (newItemsInInventoryAr
 });
 
 //Attribute Changes
-window.electron.ipcRenderer.on("attributeChangeItems", (changeItemsArray: Array<AttributeChangeEntry>) => {
+ipcRenderer.on("attributeChangeItems", (event, changeItemsArray: Array<AttributeChangeEntry>) => {
   changeItemsReceived = true
   // eslint-disable-next-line no-console
   if(typeof changeItemsArray !== 'undefined'){
@@ -138,7 +138,7 @@ window.electron.ipcRenderer.on("attributeChangeItems", (changeItemsArray: Array<
 });
 
 //Prive Changes
-window.electron.ipcRenderer.on("priceUpdates", (priceChangeItemsArray:  Array<AttributeChangeEntry>) => {
+ipcRenderer.on("priceUpdates", (event, priceChangeItemsArray:  Array<AttributeChangeEntry>) => {
   // eslint-disable-next-line no-console
   console.log("priceUpdates", priceChangeItemsArray);
 
@@ -393,7 +393,7 @@ function setListeners() {
     const DownloadButton = document.getElementById("DownloadButton");
     if (DownloadButton) {
       DownloadButton.addEventListener("click", function () {
-        window.electron.ipcRenderer.sendMessage(
+       ipcRenderer.send(
           "addDropWindowMessage",
           "savePriceCostTSV"
         );
@@ -409,7 +409,7 @@ function setListeners() {
 //actually make the calls
 setListeners();
 
-window.electron.ipcRenderer.sendMessage(
+ipcRenderer.send(
   "addDropWindowMessage",
   "loaded"
 );

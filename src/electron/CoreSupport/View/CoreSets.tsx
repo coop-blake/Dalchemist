@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
-
+import {ipcRenderer} from "electron";
 import {
   selectAvailableItems,
   selectOurItems,
@@ -216,27 +216,27 @@ export default function CoreSetsView() {
 
 //Messages to Main Process
 function selectFileMenuButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  ipcRenderer.send(
     "coreSetsWindowMessage",
     "selectFileMenuButtonClicked"
   );
 }
 function saveCoreSetReportButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  ipcRenderer.send(
     "coreSetsWindowMessage",
     "saveCoreSetReportButtonClicked"
   );
 }
 
 function openCoreSetsFileButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  ipcRenderer.send(
     "coreSetsWindowMessage",
     "openCoreSetsFile"
   );
 }
 
 function selectPriceChangeWorksheetsFolderMenuButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  ipcRenderer.send(
     "coreSetsWindowMessage",
     "selectPriceChangeWorksheetsFolder"
   );

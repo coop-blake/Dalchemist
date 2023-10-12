@@ -1,7 +1,6 @@
 import { google } from "googleapis";
 import { spawn } from "child_process";
 
-import fs from "fs";
 import path from "path";
 
 import AltIDsImporter from "../TextImporters/AltIDs";
@@ -65,7 +64,7 @@ async function start() {
     combindedItems.push([
       entry.privateKey,
       entry.scanCode,
-      entry.quantity,
+      entry.quantity
       //inventoryPrivateKeysImporter.getScanCodeFromPrivateKey(entry.parentKey),
     ]);
   });
@@ -75,7 +74,7 @@ async function start() {
   const auth = new google.auth.GoogleAuth({
     keyFilename: "./src/Google/Inventory/CertAndLogs/googleCert.json",
     // Scopes can be specified either as an array or as a single, space-delimited string.
-    scopes: ["https://www.googleapis.com/auth/drive"],
+    scopes: ["https://www.googleapis.com/auth/drive"]
   });
 
   //const authClient = await auth.getClient();
@@ -88,7 +87,7 @@ async function start() {
   console.log("Clearing AltIDs to Google Sheet");
   await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
-    range: "AltIDs!A:C", //range of cells to read from.
+    range: "AltIDs!A:C" //range of cells to read from.
   });
 
   console.log("Uploading AltIDs to Google Sheet");
@@ -100,7 +99,7 @@ async function start() {
     range: "AltIDs!A:C", //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
-      values: combindedItems,
-    },
+      values: combindedItems
+    }
   });
 }

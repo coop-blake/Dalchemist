@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
-import { CoreSetsStatus, CoreSupportEntry } from "electron/CoreSupport/shared";
+import {  CoreSupportEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 
 import {
   Column,
-  Formatters,
   GridOption,
   SlickgridReact,
 } from "slickgrid-react";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Props {
   availableItems: Array<CoreSupportEntry>;
   availableItemsLength: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface State {
   name: string;
   subTitle: string;
@@ -27,7 +28,9 @@ interface State {
 export default function CoreSetsTable() {
   const title = "Core Sets";
   const availableItems = useAppSelector(selectAvailableItems);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridOptions, setGridOptions] = useState({
     gridHeight: 500,
     gridWidth: 1900,

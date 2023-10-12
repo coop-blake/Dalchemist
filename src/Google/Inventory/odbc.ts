@@ -1,4 +1,4 @@
-const odbc = require("odbc");
+import odbc from "odbc";
 
 const query =
   "SELECT " +
@@ -13,7 +13,7 @@ const query =
   "LEFT JOIN   StockInventory SI ON PCD_INV_FK = SI.INV_PK AND PCD_INV_CFK = SI.INV_CPK " +
   "WHERE PCD_PSWEndDate > NOW();";
 
-const connection = odbc.connect("DSN=Prototype", (error, connection) => {
+export const connection = odbc.connect("DSN=Prototype", (error, connection) => {
   connection.query(query, (error, result) => {
     if (error) {
       console.error(error);
