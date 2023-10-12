@@ -4,7 +4,7 @@ import {
   LineReader,
   InputLines,
   Importer
-} from "../src/Importers/Base";
+} from "../../src/Importers/Base";
 
 /* To use the entry assimilator, you need to define an entry */
 
@@ -88,7 +88,7 @@ class TestInputStream implements InputLines {
 }
 const testInputStream = new TestInputStream();
 describe("Importer", () => {
-  test("SHould have entries and invalid entries", async () => {
+  test("Should have entries and invalid entries", async () => {
     const importer = new Importer(testLineReader, testInputStream);
     const entries = await importer.start();
     console.log(entries);

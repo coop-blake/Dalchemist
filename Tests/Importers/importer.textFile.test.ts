@@ -1,11 +1,12 @@
 import { describe, expect, test } from "@jest/globals";
+import * as path from "path";
 import {
   StringsAssimilator,
   LineReader,
   Importer
-} from "../src/Importers/Base";
+} from "../../src/Importers/Base";
 
-import { SeperatedTextInput } from "../src/Importers/Text";
+import { SeperatedTextInput } from "../../src/Importers/Text";
 /* To use the entry assimilator, you need to define an entry */
 
 type TestEntry = {
@@ -33,7 +34,7 @@ class TestLineReader extends LineReader<TestEntry> {}
 const testLineReader = new TestLineReader(TestAssimilator);
 
 const testInputStream = new SeperatedTextInput(
-  "./Tests/testForImporterStream.txt"
+  path.join(__dirname, "testFiles/testForImporterStream.txt")
 );
 
 describe("Text File Input Stream", () => {
@@ -47,7 +48,7 @@ describe("Text File Input Stream", () => {
     const importer = new Importer(testLineReader, testInputStream);
     const entries = await importer.start();
     console.log(entries);
-    expect(importer.getNumberOfEntries()).toBe(2);
-    expect(importer.getNumberOfUnrecognizedEntries()).toBe(2);
+    expect(importer.getNumberOfEntries()).toBe(3);
+    expect(importer.getNumberOfUnrecognizedEntries()).toBe(1);
   });
 });

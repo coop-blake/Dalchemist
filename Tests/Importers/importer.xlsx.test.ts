@@ -1,11 +1,12 @@
 import { describe, expect, test } from "@jest/globals";
+import * as path from "path";
 import {
   StringsAssimilator,
   LineReader,
   Importer
-} from "../src/Importers/Base";
+} from "../../src/Importers/Base";
 
-import { XlsxInput } from "../src/Importers/Xlsx";
+import { XlsxInput } from "../../src/Importers/Xlsx";
 /* To use the entry assimilator, you need to define an entry */
 
 type TestEntry = {
@@ -33,14 +34,16 @@ class TestLineReader extends LineReader<TestEntry> {}
 const testLineReader = new TestLineReader(TestAssimilator);
 
 const testInputTextFileStream = new XlsxInput(
-  "./Tests/testForImporterStream.txt"
+  path.join(__dirname, "testFiles/testForImporterStream.txt")
 );
 
 const testInputXLSXFileStream = new XlsxInput(
-  "./Tests/testForImporterStream.xlsx"
+  path.join(__dirname, "testFiles/testForImporterStream.xlsx")
 );
 
-const testInputItemsXLSXFileStream = new XlsxInput("./Tests/testItems.xlsx");
+const testInputItemsXLSXFileStream = new XlsxInput(
+  path.join(__dirname, "testFiles/testItems.xlsx")
+);
 
 describe("Text File Input Stream", () => {
   test("Should return some lines", async () => {

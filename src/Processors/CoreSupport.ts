@@ -77,14 +77,12 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
       //Alert that the core support file is not supported
       console.log(Error);
     }
-    console.log(this.entries);
+    //console.log(this.entries);
 
     console.log(this.entries.size);
   }
 
-  constructor(
-    filePath = `./Data/Inputs/Core_Sets_Cost_Support_Price_List.xlsx`
-  ) {
+  constructor(filePath = `./Data/Inputs/CoreSets.xlsx`) {
     super();
     this.filePath = filePath;
   }
@@ -94,7 +92,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     "Equal Exchange - Direct",
     "Tony's Fine Foods - Ridgefield, WA",
     "UNFI - Ridgefield, WA",
-    "Ancient Nutrition - Direct",
+    "Ancient Nutrition - Direct"
   ];
 
   entryIsOurDistributor = (entry: CoreSupportEntry) => {
@@ -134,7 +132,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
         LineNotes: valueArray[21],
         Changes: valueArray[22],
 
-        ID: valueArray[8],
+        ID: valueArray[8]
       };
       return entry;
     }
@@ -159,7 +157,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
         break;
       default:
         {
-      //    const lineNumberFromData = lineArray[0];
+          //    const lineNumberFromData = lineArray[0];
           // if (
           //   lineNumberFromData === undefined ||
           //   typeof lineNumberFromData !== "number"
