@@ -29,6 +29,14 @@
       "runtimeArgs": ["run-script", "startElectron"]
     },
     {
+      "name": "🤖Test-Inventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testInventory"]
+    },
+    {
       "name": "🤖Test-CoreSets",
       "type": "node",
       "request": "launch",
