@@ -2,7 +2,17 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { Google } from "../../Google/google";
 
-import { fillArrayWithEmptyStrings } from "../../Utility";
+import {
+  InventoryEntry,
+  Status,
+  inventoryEntryFromSheetValueArray,
+} from "./shared";
+
+import { State } from "./State";
+
+//This Inventory Resource gets Data from The Google Sheets Source if supplied
+//It also can query the
+
 export class Inventory {
   private entries = new Map<string, InventoryEntry>();
 
@@ -16,6 +26,7 @@ export class Inventory {
   //ToDo: Put the configuration details in a Configuration
 
   public getStatus(): Status {
+    //returns current status
     const status = this.state.status;
     return status;
   }
@@ -70,89 +81,3 @@ export class Inventory {
     }
   }
 }
-
-export enum Status {
-  Initializing = "Initializing",
-  Loading = "Loading",
-  Available = "Available",
-  Unavailable = "Unavailable",
-  Error = "Unexpected Error",
-}
-
-export class State {
-  //Status
-  private statusSubject = new BehaviorSubject<Status>(Status.Initializing);
-  public get status$(): Observable<Status> {
-    return this.statusSubject.asObservable();
-  }
-  public get status(): Status {
-    return this.statusSubject.getValue() as Status;
-  }
-  public set status(status: Status) {
-    this.statusSubject.next(status);
-  }
-
-  //Last Refresh
-  private lastRefreshCompletedSubject = new BehaviorSubject<number>(0);
-  public get lastRefreshCompleted$(): Observable<number> {
-    return this.lastRefreshCompletedSubject.asObservable();
-  }
-  public get lastRefreshCompleted(): number {
-    return this.lastRefreshCompletedSubject.getValue();
-  }
-  public set lastRefreshCompleted(time: number) {
-    this.lastRefreshCompletedSubject.next(time);
-  }
-}
-
-export type InventoryEntry = {
-  ScanCode: string;
-  DefaultSupplier: string;
-  Department: string;
-  Brand: string;
-  Name: string;
-  Size: string;
-  ReceiptAlias: string;
-  BasePrice: string;
-  LastCost: string;
-  AverageCost: string;
-  SubDepartment: string;
-  IdealMargin: string;
-  Quantity: string;
-  Unit: string;
-  SupplierUnitID: string;
-  N: string;
-  S: string;
-  NorthLSD: string;
-  SouthLSD: string;
-};
-
-export const inventoryEntryFromSheetValueArray = function (
-  valueArray: Array<string>
-): InventoryEntry {
-  if (valueArray.length !== 19) {
-    valueArray = fillArrayWithEmptyStrings(19, valueArray);
-  }
-  const entry: InventoryEntry = {
-    ScanCode: valueArray[0].trim(),
-    DefaultSupplier: valueArray[1].trim(),
-    Department: valueArray[2].trim(),
-    Brand: valueArray[3].trim(),
-    Name: valueArray[4].trim(),
-    Size: valueArray[5].trim(),
-    ReceiptAlias: valueArray[6].trim(),
-    BasePrice: valueArray[7].trim(),
-    LastCost: valueArray[8].trim(),
-    AverageCost: valueArray[9].trim(),
-    SubDepartment: valueArray[10].trim(),
-    IdealMargin: valueArray[11].trim(),
-    Quantity: valueArray[12].trim(),
-    Unit: valueArray[13].trim(),
-    SupplierUnitID: valueArray[14].trim(),
-    N: valueArray[15].trim(),
-    S: valueArray[16].trim(),
-    NorthLSD: valueArray[17].trim(),
-    SouthLSD: valueArray[18].trim(),
-  };
-  return entry;
-};
