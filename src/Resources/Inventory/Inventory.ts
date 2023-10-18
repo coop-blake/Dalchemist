@@ -1,11 +1,11 @@
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 import { Google } from "../../Google/google";
 
 import {
   InventoryEntry,
   Status,
-  inventoryEntryFromSheetValueArray,
+  inventoryEntryFromSheetValueArray
 } from "./shared";
 
 import { State } from "./State";
@@ -62,7 +62,7 @@ export class Inventory {
         const sheets = this.google.getSheets();
         const inventoryItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Inventory!A3:S50000`, // Adjust range as needed
+          range: `Inventory!A3:S50000` // Adjust range as needed
         });
 
         this.googleEntries = inventoryItemsResponse.data.values
