@@ -2,7 +2,7 @@ import { describe, expect, test, beforeAll } from "@jest/globals";
 import { first } from "rxjs";
 import {
   Inventory,
-  Status as InventoryStatus
+  Status as InventoryStatus,
 } from "../../src/Resources/Inventory/Inventory";
 
 const inventory = new Inventory();
@@ -33,7 +33,6 @@ describe("Inventory exists correctly", () => {
 describe("Inventory works correctly ", () => {
   test(`Should be able to get Inventory Entries`, async () => {
     const entries = inventory.getEntries();
-    console.log(typeof status);
     expect(entries.size).toBeGreaterThanOrEqual(0);
   });
 });
