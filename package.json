@@ -38,6 +38,7 @@
     "testImporterBase": "npx jest Tests/Importers/importer.base.test.ts",
     "testImporterText": "npx jest Tests/Importers/importer.textFile.test.ts",
     "testImporterXLSX": "npx jest Tests/Importers/importer.xlsx.test.ts",
+    "testImporterSheet": "npx jest Tests/Importers/importer.sheet.test.ts",
     "testInventory": "npx jest Tests/Inventory/inventory.test.ts",
     "testCoreSets": "npx jest Tests/CoreSets/coreSets.test.ts",
     "lint": "npx eslint .",
