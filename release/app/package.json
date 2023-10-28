@@ -11,6 +11,6 @@
     "link-modules": "node -r ts-node/register ../../building/scripts/link-modules.ts"
   },
   "dependencies": {
-    "balek": "^0.0.5-pre"
+    "DalchemistElectron": "file:"
   }
 }
