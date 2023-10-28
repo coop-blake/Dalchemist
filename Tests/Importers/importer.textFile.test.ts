@@ -4,9 +4,9 @@ import {
   StringsAssimilator,
   LineReader,
   Importer
-} from "../../src/Importers/Base";
+} from "../../src/Importer/Base";
 
-import { SeperatedTextInput } from "../../src/Importers/Text";
+import { SeperatedTextInput } from "../../src/Importer/InputLines/Text";
 /* To use the entry assimilator, you need to define an entry */
 
 type TestEntry = {

@@ -4,9 +4,9 @@ import {
   StringsAssimilator,
   LineReader,
   Importer
-} from "../../src/Importers/Base";
+} from "../../src/Importer/Base";
 
-import { XlsxInput } from "../../src/Importers/Xlsx";
+import { XlsxInput } from "../../src/Importer/InputLines/Xlsx";
 /* To use the entry assimilator, you need to define an entry */
 
 type TestEntry = {

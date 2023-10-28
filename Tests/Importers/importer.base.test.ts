@@ -4,7 +4,7 @@ import {
   LineReader,
   InputLines,
   Importer
-} from "../../src/Importers/Base";
+} from "../../src/Importer/Base";
 
 /* To use the entry assimilator, you need to define an entry */
 

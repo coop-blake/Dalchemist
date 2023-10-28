@@ -16,7 +16,7 @@
     "outDir": "building/dll",
   },
   "exclude": ["test", "release/build", "release/app/dist", "building/dll"],
- "include": [ "src/**/*.ts","./tests/**/*.ts", "globals.d.ts"],
+ "include": [ "src/**/*.ts","./tests/**/*.ts", "globals.d.ts", "Tests/Inventory/inventory.sheet.test.ts"],
  "typedocOptions": {
    "entryPoints": ["src/"],
    "entryPointStrategy": "expand",

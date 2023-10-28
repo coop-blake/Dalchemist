@@ -1,7 +1,7 @@
 import { CoreSupportEntry, coreSupportLineReader } from "./CoreSupport";
 import { entryIsOurDistributor } from "./Distributors";
-import { Importer } from "../../Importers/Base";
-import { XlsxInput } from "../../Importers/Xlsx";
+import { Importer } from "../../Importer/Base";
+import { XlsxInput } from "../../Importer/InputLines/Xlsx";
 
 export class CoreSets {
   notOurCoreItems = new Map<string, Array<CoreSupportEntry>>();

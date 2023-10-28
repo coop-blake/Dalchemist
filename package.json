@@ -5,6 +5,7 @@
   "main": "./src/electron/startDalchemistApp.ts",
   "scripts": {
     "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
+    "startCLI": "npx babel-node -x .ts -- src/startCLI.ts",
     "checkDuplicateEntries": "npx babel-node -x .ts -- src/Generators/DuplicateEntriesChecker.ts",
     "checkSubdepartmentMargins": "npx babel-node -x .ts -- src/Generators/checkSubdepartmentMargins.ts",
     "outputToFileCheckSubdepartmentMargins": "npm run -s checkSubdepartmentMargins > ./Data/Outputs/subMarginCheckResults.txt",
@@ -40,6 +41,7 @@
     "testImporterXLSX": "npx jest Tests/Importers/importer.xlsx.test.ts",
     "testImporterSheet": "npx jest Tests/Importers/importer.sheet.test.ts",
     "testInventory": "npx jest Tests/Inventory/inventory.test.ts",
+    "testInventorySheet": "npx jest Tests/Inventory/inventory.sheet.test.ts",
     "testCoreSets": "npx jest Tests/CoreSets/coreSets.test.ts",
     "lint": "npx eslint .",
     "docs": "typedoc ./src/main.ts",
@@ -102,6 +104,7 @@
     "electron-updater": "^6.1.1",
     "electronmon": "^2.0.2",
     "eslint": "^8.47.0",
+    "eslint-plugin-import": "^2.29.0",
     "file-loader": "^6.2.0",
     "font-awesome": "^4.7.0",
     "html-loader": "^4.2.0",
@@ -144,15 +147,12 @@
     "utf-8-validate": "^6.0.3"
   },
   "dependencies": {
-    "@types/react-redux": "^7.1.26",
     "chalk": "^4.1.2",
     "electron-store": "^8.1.0",
-    "eslint-plugin-import": "^2.28.1",
     "express": "^4.18.2",
     "googleapis": "^126.0.0",
     "node-xlsx": "^0.23.0",
     "npm-check-updates": "^16.13.1",
-    "React": "npm:react@^18.2.0",
     "rxjs": "^7.8.1",
     "styled-components": "^6.0.8"
   },

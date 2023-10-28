@@ -1,6 +1,6 @@
-import { InputLines } from "./Base";
+import { InputLines } from "../Base";
 
-import { Google } from "../Google/google";
+import { Google } from "../../Google/google";
 
 import { from, firstValueFrom } from "rxjs";
 import { filter, take } from "rxjs/operators";
@@ -24,7 +24,6 @@ export class SheetInput implements InputLines {
           take(1)
         )
       );
-
       if (this.google === null && loaded[0]) {
         this.google = Google.getInstanceFor(loaded[0]);
       }

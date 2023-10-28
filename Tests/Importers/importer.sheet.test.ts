@@ -1,12 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
-import * as path from "path";
 import {
   StringsAssimilator,
   LineReader,
   Importer
-} from "../../src/Importers/Base";
+} from "../../src/Importer/Base";
 
-import { SheetInput } from "../../src/Importers/Sheet";
+import { SheetInput } from "../../src/Importer/InputLines/Sheet";
 const sheetID = "1iXJ2zDwDzzuQxYWh8NX7IAakquLkZDURiqVnhWPr4t4";
 const sheetRange = "Sheet1!A2:D5";
 /* To use the entry assimilator, you need to define an entry */

@@ -62,3 +62,14 @@ export class Importer<T> implements ImporterInterface<T> {
     return this.unrecognizedInputs.length;
   }
 }
+
+export abstract class LineImporter<T> {
+  abstract input: InputLines;
+  abstract lineReader: LineReader<T>;
+
+  async read(): Promise<T[]> {
+    const importer = new Importer(this.lineReader, this.input);
+    const entries = await importer.start();
+    return entries.filter((entry): entry is T => entry !== null) as T[];
+  }
+}

@@ -1,4 +1,4 @@
-import { StringsAssimilator, LineReader } from "../../Importers/Base";
+import { StringsAssimilator, LineReader } from "../../Importer/Base";
 //#########################################################################################################
 // Line Reader for Importer
 //========================================================/////////////////////////////////////////////////

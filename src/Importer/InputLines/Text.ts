@@ -1,4 +1,4 @@
-import { InputLines } from "./Base";
+import { InputLines } from "../Base";
 
 import { stat, open } from "fs/promises";
 import { Stats, existsSync } from "fs";

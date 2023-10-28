@@ -1,7 +1,7 @@
 import { describe, expect, test, beforeAll } from "@jest/globals";
 import { first } from "rxjs";
-import { Inventory } from "../../src/Resources/Inventory/Inventory";
-import { Status as InventoryStatus } from "../../src/Resources/Inventory/shared";
+import { Inventory } from "../../src/Aggregators/Inventory/Inventory";
+import { Status as InventoryStatus } from "../../src/Aggregators/Inventory/shared";
 const inventory = new Inventory();
 
 beforeAll(async () => {
@@ -20,7 +20,7 @@ beforeAll(async () => {
   });
 
   await availablePromise;
-});
+}, 10000);
 describe("Inventory exists correctly", () => {
   test(`Should be Inventory class`, async () => {
     expect(inventory).toBeInstanceOf(Inventory);
@@ -29,7 +29,7 @@ describe("Inventory exists correctly", () => {
 
 describe("Inventory works correctly ", () => {
   test(`Should be able to get Inventory Entries`, async () => {
-    const entries = inventory.getEntries();
+    const entries = inventory.getSheetEntriesMap();
     expect(entries.size).toBeGreaterThanOrEqual(0);
   }, 10000);
 });

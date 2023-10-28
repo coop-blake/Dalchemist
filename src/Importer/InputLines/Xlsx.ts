@@ -1,4 +1,4 @@
-import { InputLines } from "./Base";
+import { InputLines } from "../Base";
 
 import xlsx from "node-xlsx";
 import { stat } from "fs/promises";

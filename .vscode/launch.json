@@ -29,7 +29,7 @@
       "runtimeArgs": ["run-script", "startElectron"]
     },
     {
-      "name": "🤖Test-Sheet",
+      "name": "🤖Test-Importer-Sheet",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -43,6 +43,14 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "testInventory"]
+    },
+    {
+      "name": "🤖Test-Inventory-Sheet",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testInventorySheet"]
     },
     {
       "name": "🤖Test-CoreSets",
