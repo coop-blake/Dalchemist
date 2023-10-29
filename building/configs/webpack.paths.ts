@@ -11,7 +11,7 @@ const srcNodeModulesPath = path.join(rootPath, "node_modules");
 
 const buildPath = path.join(rootPath, "build");
 
-const dllPath = path.join(__dirname, "../dll");
+const dllPath = path.join(buildPath, "dll");
 
 const releasePath = path.join(rootPath, "release");
 const appPath = path.join(releasePath, "app");

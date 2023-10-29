@@ -30,10 +30,10 @@ if (
   !skipDLLs &&
   !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))
 ) {
-  console.log(chalk.black.bgYellow.bold('Building dlls"'));
+  console.log(chalk.black.bgYellow.bold("Building dlls"));
   //execSync("npm --cwd release/app/ install");
-  execSync("npm --prefix release/app/ install release/app/");
-  execSync("npm run postinstall");
+  // execSync("npm --prefix release/app/ install release/app/");
+  execSync("npm run build:dlls");
 }
 
 const configuration: webpack.Configuration = {
@@ -48,7 +48,7 @@ const configuration: webpack.Configuration = {
     "webpack/hot/only-dev-server",
     path.join(webpackPaths.srcRendererPath, "index.tsx"),
     path.join(webpackPaths.srcRendererPath, "addDrop.tsx"),
-    // path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
+    path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
     path.join(webpackPaths.srcRendererPath, "inventory.tsx"),
   ],
 

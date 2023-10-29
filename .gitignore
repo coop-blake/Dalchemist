@@ -12,6 +12,7 @@ docs
 src/Google/Inventory/fetches/
 .DS_Store
 
+release/package
 build/
 dist/
 *.js
@@ -22,7 +23,6 @@ src/Google/Inventory/CertAndLogs/
 
 src/Google/Inventory/CertsAndLogs
 
-building/dll
 
 !building/scripts/notarize.js
 

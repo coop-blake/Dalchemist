@@ -4,10 +4,10 @@ A collection of Typescript modules for assiting POS Tasks that rely on data from
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
-
 You will also need access to a terminal and web browser. Terminal commands are represented like `this` in the documentation.
 
 ## Getting Started
+
 You will need the Dalchemist repository on the host. With [git](https://git-scm.com/downloads) installed you can this command in the terminal to clone the repository.
 
 `git clone https://github.com/coop-blake/Dalchemist.git`
@@ -29,7 +29,7 @@ Make sure you have the latest versions of your input data in the [Data](./Data/R
 
 ## Generate File Outputs
 
-To generate all output to the [**Outputs**](./Data/Outputs) 📁 in [**Data**](./Data)  📁:
+To generate all output to [**📁Data**](./Data) / [**📁Outputs**](./Data/Outputs) :
 
 `npm run outputAll`
 
@@ -47,12 +47,20 @@ See the [Services Documentation](./Documentation/Services.md) for more specific 
 
 ## Advanced usage and development
 
-[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more. Configured in the [__.vscode/launch.json__](./.vscode/launch.json) configuration file.
+[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more. Configured in the [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
 
-### Run the electron app
+### Run the Electron App
 
-`npm run electron`
+`npm run startElectron`
 
 ### Build the development documentation
 
 `npm run docs`
+
+### Run tests
+
+`npm run test`
+
+### Cleaning Generated Files
+
+`npm run clean`
