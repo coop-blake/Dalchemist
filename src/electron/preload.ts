@@ -1,5 +1,12 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    electron: ElectronHandler;
+  }
+}
+
 export type Channels =
   | "status"
   | "mainWindowMessage"
@@ -29,8 +36,8 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    }
-  }
+    },
+  },
 };
 
 //type MessageCallback = (message: string) => void;

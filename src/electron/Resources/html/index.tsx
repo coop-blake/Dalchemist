@@ -7,6 +7,7 @@ import {
 } from "../../View/MainSlice";
 
 import { store } from "../../View/store";
+import React from "react";
 
 const container = document.getElementById("root") as HTMLElement;
 if (container) {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
-import {ipcRenderer} from "electron";
+//import { ipcRenderer } from "electron";
+
 import {
   selectAvailableItems,
   selectOurItems,
@@ -10,12 +11,11 @@ import { useAppSelector } from "../../View/hooks";
 
 import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
 
-import fileIcon from "./resources/images/file.svg";
-import slashIcon from "./resources/images/slash.svg";
-import toolIcon from "./resources/images/settings.svg";
-import saveIcon from "./resources/images/save.svg";
-import thumbsUpIcon from "./resources/images/thumbs-up.svg";
-
+const fileIcon = require("./resources/images/file.svg").default;
+const slashIcon = require("./resources/images/slash.svg").default;
+const toolIcon = require("./resources/images/settings.svg").default;
+const saveIcon = require("./resources/images/save.svg").default;
+const thumbsUpIcon = require("./resources/images/thumbs-up.svg").default;
 
 import "../../Resources/css/coreSets.css";
 
@@ -58,7 +58,9 @@ export default function CoreSetsView() {
     <div className="CoreSetsMainDiv">
       <div className="navMenu">
         <span
-          className={`navButton ${subView === SubView.settings && "activeButton"}`}
+          className={`navButton ${
+            subView === SubView.settings && "activeButton"
+          }`}
           onClick={() => {
             setSubView(SubView.settings);
           }}
@@ -66,22 +68,30 @@ export default function CoreSetsView() {
           <img id="toolIcon" src={toolIcon} alt="Tool Icon Image" /> Setup
         </span>
         <span
-          className={`navButton ${subView === SubView.review && "activeButton"}`}
+          className={`navButton ${
+            subView === SubView.review && "activeButton"
+          }`}
           onClick={() => {
             setSubView(SubView.review);
           }}
         >
-          <img id="thumbsUpIcon" src={thumbsUpIcon} alt="Thumbs Up Icon Image" />  Review
+          <img
+            id="thumbsUpIcon"
+            src={thumbsUpIcon}
+            alt="Thumbs Up Icon Image"
+          />{" "}
+          Review
         </span>
         <span
-          className={`navButton ${subView === SubView.report && "activeButton"}`}
+          className={`navButton ${
+            subView === SubView.report && "activeButton"
+          }`}
           onClick={() => {
             setSubView(SubView.report);
           }}
         >
-        <img id="saveIcon" src={saveIcon} alt="Save Icon Image" /> Report
+          <img id="saveIcon" src={saveIcon} alt="Save Icon Image" /> Report
         </span>
-        
       </div>
       <div className="mainContent">
         {subView === SubView.settings
@@ -91,7 +101,7 @@ export default function CoreSetsView() {
           : subView === SubView.report
           ? reportView()
           : ""}
-        </div>
+      </div>
     </div>
   );
 
@@ -153,9 +163,7 @@ export default function CoreSetsView() {
           )}
         </div>
         {availableItems.length > 0 ? (
-          <div id="loadedFileStatus">
-            ✅ Loaded File
-          </div>
+          <div id="loadedFileStatus">✅ Loaded File</div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
@@ -216,27 +224,27 @@ export default function CoreSetsView() {
 
 //Messages to Main Process
 function selectFileMenuButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectFileMenuButtonClicked"
   );
 }
 function saveCoreSetReportButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "saveCoreSetReportButtonClicked"
   );
 }
 
 function openCoreSetsFileButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsFile"
   );
 }
 
 function selectPriceChangeWorksheetsFolderMenuButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectPriceChangeWorksheetsFolder"
   );

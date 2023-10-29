@@ -1,5 +1,5 @@
 import "../css/coreSets.css";
-import { ipcRenderer } from "electron";
+//import { ipcRenderer } from "electron";
 import CoreSetsView from "../../CoreSupport/View/CoreSets";
 import { CoreSetsStatus, CoreSupportEntry } from "../../CoreSupport/shared";
 
@@ -25,17 +25,20 @@ import { Provider } from "react-redux";
 
 //Set up Listeners that update state
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "CoreSetStatusUpdated",
   (event, status: CoreSetsStatus) => {
     store.dispatch(setStatus(status));
   }
 );
-ipcRenderer.on("CoreSetFilePathUpdated", (event, filePath: string) => {
-  store.dispatch(setFilePath(filePath));
-});
+window.electron.ipcRenderer.on(
+  "CoreSetFilePathUpdated",
+  (event, filePath: string) => {
+    store.dispatch(setFilePath(filePath));
+  }
+);
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "CoreSetEntriesUpdated",
   (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log("CoreSetEntriesUpdated");
@@ -47,7 +50,7 @@ ipcRenderer.on(
   }
 );
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "PriceChangeWorksheetsStatus",
   (event, priceChangeWorksheetsStatus: PriceChangeWorksheetsStatus) => {
     console.log("PriceChangeWorksheetsStatus", priceChangeWorksheetsStatus);
@@ -56,7 +59,7 @@ ipcRenderer.on(
   }
 );
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "PriceChangeWorksheetsFolderPath",
   (event, priceChangeWorksheetsFolderPath: PriceChangeWorksheetsStatus) => {
     console.log(
@@ -68,7 +71,7 @@ ipcRenderer.on(
   }
 );
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "PriceChangeWorksheetsWorksheets",
   (event, priceChangeWorksheetsWorksheets: Array<string>) => {
     console.log(
@@ -112,7 +115,7 @@ if (selectFileMenuButton) {
 }
 
 function selectFileMenuButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectFileMenuButtonClicked"
   );
@@ -128,7 +131,7 @@ if (saveCoreSetReportButton) {
 }
 
 function saveCoreSetReportButtonClicked() {
-  ipcRenderer.send(
+  window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "saveCoreSetReportButtonClicked"
   );
@@ -256,7 +259,7 @@ function coreSetsRefreshed() {
   // }
 }
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "CoreSetEntriesUpdated",
   (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
     console.log(coreSetItemsArray);
@@ -268,7 +271,7 @@ ipcRenderer.on(
   }
 );
 
-ipcRenderer.on(
+window.electron.ipcRenderer.on(
   "CoreSetStatusUpdated",
   (event, status: CoreSetsStatus) => {
     console.log(status);
@@ -277,8 +280,11 @@ ipcRenderer.on(
   }
 );
 
-ipcRenderer.on("CoreSetFilePathUpdated", (event, filePath: string) => {
-  console.log(filePath);
-  coreSetsFilePath = filePath;
-  coreSetsRefreshed();
-});
+window.electron.ipcRenderer.on(
+  "CoreSetFilePathUpdated",
+  (event, filePath: string) => {
+    console.log(filePath);
+    coreSetsFilePath = filePath;
+    coreSetsRefreshed();
+  }
+);
