@@ -1,5 +1,5 @@
 {
-  "name": "DalchemistElectron",
+  "name": "dalchemist-electron",
   "version": "0.0.1",
   "description": "Dalchemist Electron",
   "author": "Blake Glanville",
@@ -11,6 +11,6 @@
     "link-modules": "node -r ts-node/register ../../building/scripts/link-modules.ts"
   },
   "dependencies": {
-    "DalchemistElectron": "file:"
+   
   }
 }

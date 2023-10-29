@@ -2,40 +2,42 @@
  * Build config for electron renderer process
  */
 
-import path from 'path';
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
-import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
-import checkNodeEnv from '../scripts/check-node-env';
-import deleteSourceMaps from '../scripts/delete-source-maps';
+import path from "path";
+import webpack from "webpack";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import { merge } from "webpack-merge";
+import TerserPlugin from "terser-webpack-plugin";
+import baseConfig from "./webpack.config.base";
+import webpackPaths from "./webpack.paths";
+import checkNodeEnv from "../scripts/check-node-env";
+import deleteSourceMaps from "../scripts/delete-source-maps";
 
-checkNodeEnv('production');
+checkNodeEnv("production");
 deleteSourceMaps();
 
 const configuration: webpack.Configuration = {
-  devtool: 'source-map',
+  devtool: "source-map",
 
-  mode: 'production',
+  mode: "production",
 
-  target: ['web', 'electron-renderer'],
+  target: ["web", "electron-renderer"],
 
-  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  path.join(webpackPaths.srcRendererPath, 'inventory.tsx'),
-  path.join(webpackPaths.srcRendererPath, 'coreSets.tsx'),
-  path.join(webpackPaths.srcRendererPath, 'addDrop.tsx')],
+  entry: [
+    path.join(webpackPaths.srcRendererPath, "index.tsx"),
+    path.join(webpackPaths.srcRendererPath, "inventory.tsx"),
+    path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
+    path.join(webpackPaths.srcRendererPath, "addDrop.tsx"),
+  ],
 
   output: {
     path: webpackPaths.distRendererPath,
-    publicPath: './',
-    filename: 'renderer.js',
+    publicPath: "./",
+    filename: "renderer.js",
     library: {
-      type: 'umd',
+      type: "umd",
     },
   },
 
@@ -46,38 +48,38 @@ const configuration: webpack.Configuration = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
             },
           },
-          'sass-loader',
+          "sass-loader",
         ],
         include: /\.module\.s?(c|a)ss$/,
       },
       {
         test: /\.s?(a|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
         exclude: /\.module\.s?(c|a)ss$/,
       },
       // Fonts
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
       // Images
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
       // SVG
       {
         test: /\.svg$/,
         use: [
           {
-            loader: '@svgr/webpack',
+            loader: "@svgr/webpack",
             options: {
               prettier: false,
               svgo: false,
@@ -88,7 +90,7 @@ const configuration: webpack.Configuration = {
               ref: true,
             },
           },
-          'file-loader',
+          "file-loader",
         ],
       },
     ],
@@ -110,22 +112,22 @@ const configuration: webpack.Configuration = {
      * development checks
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
+      NODE_ENV: "production",
       DEBUG_PROD: false,
     }),
 
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: "style.css",
     }),
 
     new BundleAnalyzerPlugin({
-      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+      analyzerMode: process.env.ANALYZE === "true" ? "server" : "disabled",
       analyzerPort: 8889,
     }),
 
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      filename: "index.html",
+      template: path.join(webpackPaths.srcRendererPath, "index.ejs"),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -135,8 +137,8 @@ const configuration: webpack.Configuration = {
       isDevelopment: false,
     }),
     new HtmlWebpackPlugin({
-      filename: 'addDrop.html',
-      template: path.join(webpackPaths.srcRendererPath, 'addDrop.ejs'),
+      filename: "addDrop.html",
+      template: path.join(webpackPaths.srcRendererPath, "addDrop.ejs"),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -146,8 +148,8 @@ const configuration: webpack.Configuration = {
       isDevelopment: false,
     }),
     new HtmlWebpackPlugin({
-      filename: 'inventory.html',
-      template: path.join(webpackPaths.srcRendererPath, 'inventory.ejs'),
+      filename: "inventory.html",
+      template: path.join(webpackPaths.srcRendererPath, "inventory.ejs"),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -157,8 +159,8 @@ const configuration: webpack.Configuration = {
       isDevelopment: false,
     }),
     new HtmlWebpackPlugin({
-      filename: 'coreSets.html',
-      template: path.join(webpackPaths.srcRendererPath, 'coreSets.ejs'),
+      filename: "coreSets.html",
+      template: path.join(webpackPaths.srcRendererPath, "index.ejs"),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -169,7 +171,7 @@ const configuration: webpack.Configuration = {
     }),
 
     new webpack.DefinePlugin({
-      'process.type': '"renderer"',
+      "process.type": '"renderer"',
     }),
   ],
 };
