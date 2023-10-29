@@ -1,6 +1,6 @@
 # Dalchemist
 
-A collection of Typescript modules for assiting POS Tasks that rely on data from Catapult, UNFI, and NCG.
+For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
