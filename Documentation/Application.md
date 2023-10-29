@@ -1,4 +1,4 @@
-# Destktop Application
+# Destktop Application ![Icon](../icon/icon32.png)  
 Some of Dalchemist services can be consumed through a Desktop Application
 
 The repository includes scripts for building, running, and packaging a cross-platform desktop application using the [Electron framework](https://www.electronjs.org/).
