@@ -238,7 +238,7 @@ export default function CoreSetsView() {
         )}
         <hr></hr>
 
-        <h2 style={{ paddingLeft: "10px" }}>Promos</h2>
+        <h2 style={{ paddingLeft: "10px" }}>Price Change Worksheets</h2>
         <div>{priceChangeWorksheetStatus}</div>
         <div>{priceChangeWorksheetFolderPath}</div>
         <div

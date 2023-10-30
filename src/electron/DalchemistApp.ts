@@ -632,7 +632,7 @@ export default class DalchemistApp {
       }
 
       const preloadPath = app.isPackaged
-        ? path.join(__dirname, "./CoreSupport/View/preloadCoreSets.js")
+        ? path.join(__dirname, "preloadCoreSets.js")
         : path.join(
             __dirname,
             "../../build/CoreSupport/View/preloadCoreSets.js"

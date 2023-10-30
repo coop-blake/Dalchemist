@@ -31,6 +31,10 @@ const configuration: webpack.Configuration = {
     ),
     preloadAddDrop: path.join(webpackPaths.srcMainPath, "preloadAddDrop.ts"),
     preloadDialog: path.join(webpackPaths.srcMainPath, "preloadDialog.ts"),
+    preloadCoreSets: path.join(
+      webpackPaths.srcMainPath,
+      "CoreSupport/View/preloadCoreSets.ts"
+    ),
   },
 
   output: {
