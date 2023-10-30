@@ -10,12 +10,20 @@ import {
 import { useAppSelector } from "../../View/hooks";
 
 import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
+import { CoreSetsStatus, CoreSupportEntry } from "../../CoreSupport/shared";
 
-const fileIcon = require("./resources/images/file.svg").default;
-const slashIcon = require("./resources/images/slash.svg").default;
-const toolIcon = require("./resources/images/settings.svg").default;
-const saveIcon = require("./resources/images/save.svg").default;
-const thumbsUpIcon = require("./resources/images/thumbs-up.svg").default;
+import fileIcon from "./resources/images/file.svg";
+import slashIcon from "./resources/images/slash.svg";
+import toolIcon from "./resources/images/settings.svg";
+import saveIcon from "./resources/images/save.svg";
+import thumbsUpIcon from "./resources/images/thumbs-up.svg";
+
+import { store } from "../../View/store";
+import {
+  setStatus,
+  setFilePath,
+  setAvailableItems,
+} from "../../CoreSupport/View/CoreSetSlice";
 
 import "../../Resources/css/coreSets.css";
 
@@ -31,6 +39,45 @@ const ourDistributors = [
   "UNFI - Ridgefield, WA",
   "Ancient Nutrition - Direct",
 ];
+
+window.electron.ipcRenderer.on(
+  "CoreSetEntriesUpdated",
+  (coreSetItemsArray: Array<CoreSupportEntry>) => {
+    console.log("CoreSetEntriesUpdated🟢🟢🟢🟢🟢", event, coreSetItemsArray);
+    if (typeof coreSetItemsArray !== "undefined") {
+      console.log(coreSetItemsArray);
+
+      store.dispatch(setAvailableItems(coreSetItemsArray));
+    }
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "CoreSetStatusUpdated",
+  (event, status: CoreSetsStatus) => {
+    console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
+    store.dispatch(setStatus(status));
+  }
+);
+window.electron.ipcRenderer.on(
+  "CoreSetFilePathUpdated",
+  (event, filePath: string) => {
+    console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
+    store.dispatch(setFilePath(filePath));
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "CoreSetEntriesUpdated",
+  (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
+    console.log("CoreSetEntriesUpdated🟢🟢🟢🟢🟢");
+    if (typeof coreSetItemsArray !== "undefined") {
+      console.log(coreSetItemsArray);
+
+      store.dispatch(setAvailableItems(coreSetItemsArray));
+    }
+  }
+);
 
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
@@ -179,7 +226,7 @@ export default function CoreSetsView() {
         <h2 style={{ paddingLeft: "10px" }}>Our Distributors</h2>
         <div style={{ paddingLeft: "30px" }}>
           {ourDistributors.map((distributor) => (
-            <li>{distributor}</li>
+            <li key={distributor}>{distributor}</li>
           ))}
         </div>
         {availableItems.length > 0 ? (
@@ -191,7 +238,7 @@ export default function CoreSetsView() {
         )}
         <hr></hr>
 
-        <h2 style={{ paddingLeft: "10px" }}>Price Change Worksheets</h2>
+        <h2 style={{ paddingLeft: "10px" }}>Promos</h2>
         <div>{priceChangeWorksheetStatus}</div>
         <div>{priceChangeWorksheetFolderPath}</div>
         <div

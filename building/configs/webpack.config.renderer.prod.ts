@@ -28,7 +28,7 @@ const configuration: webpack.Configuration = {
   entry: [
     path.join(webpackPaths.srcRendererPath, "index.tsx"),
     path.join(webpackPaths.srcRendererPath, "inventory.tsx"),
-    path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
+    // path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
     path.join(webpackPaths.srcRendererPath, "addDrop.tsx"),
   ],
 

@@ -4,13 +4,10 @@ import url from "url";
 export function resolveHtmlPath(htmlFileName: string, hash: string = "") {
   if (process.env.NODE_ENV === "development") {
     console.log("getIndexPath:htmlFileName", htmlFileName);
-
     const port = process.env.PORT || 1212;
     const url = new URL(`http://localhost:${port}`);
     url.pathname = htmlFileName;
-    // url.hash=hash
     console.log("getIndexPath:url.href", url.href);
-
     return url.href + "#" + hash;
   }
   console.log(
@@ -22,12 +19,6 @@ export function resolveHtmlPath(htmlFileName: string, hash: string = "") {
       hash
     }`
   );
-
-  // return `file://${
-  //   path.join(path.resolve(__dirname, "../renderer/", htmlFileName)) +
-  //   "#" +
-  //   hash
-  // }`;
 
   return url.format({
     protocol: "file",

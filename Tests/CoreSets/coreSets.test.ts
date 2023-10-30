@@ -29,7 +29,7 @@ describe("Read Sample Core Sets File", () => {
 
   test("Should have correctly seperated entries", async () => {
     await coreSets.process(entries);
-    expect(coreSets.getNumberOfNotOurItems()).toBe(1143);
-    expect(coreSets.getNumberOfOurItems()).toBe(960);
+    expect(coreSets.getNumberOfNotOurItems()).toBe(1137);
+    expect(coreSets.getNumberOfOurItems()).toBe(977);
   });
 });

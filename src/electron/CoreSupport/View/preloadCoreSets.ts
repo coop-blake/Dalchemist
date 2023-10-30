@@ -1,8 +1,6 @@
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-import { contextBridge, ipcRenderer, IpcRendererEvent} from 'electron';
-
-
-export type Channels = 'coreSets';
+export type Channels = "coreSets";
 
 const electronHandler = {
   ipcRenderer: {
@@ -24,12 +22,10 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
-}
-
+};
 
 //type MessageCallback = (message: string) => void;
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
-
+contextBridge.exposeInMainWorld("electron", electronHandler);
 
 export type ElectronHandler = typeof electronHandler;

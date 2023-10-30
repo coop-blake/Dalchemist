@@ -18,8 +18,8 @@
   "exclude": ["test", "release/build", "release/app/dist", "build/dll"],
   "include": [
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "./tests/**/*.ts",
-    "globals.d.ts",
     "Tests/Inventory/inventory.sheet.test.ts"
   ],
   "typedocOptions": {

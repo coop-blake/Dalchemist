@@ -48,7 +48,7 @@ const configuration: webpack.Configuration = {
     "webpack/hot/only-dev-server",
     path.join(webpackPaths.srcRendererPath, "index.tsx"),
     path.join(webpackPaths.srcRendererPath, "addDrop.tsx"),
-    path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
+    // path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
     path.join(webpackPaths.srcRendererPath, "inventory.tsx"),
   ],
 
@@ -189,19 +189,19 @@ const configuration: webpack.Configuration = {
       isDevelopment: process.env.NODE_ENV !== "production",
       nodeModules: webpackPaths.appNodeModulesPath,
     }),
-    new HtmlWebpackPlugin({
-      filename: path.join("coreSets.html"),
-      template: path.join(webpackPaths.srcRendererPath, "coreSets.ejs"),
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      isBrowser: false,
-      env: process.env.NODE_ENV,
-      isDevelopment: process.env.NODE_ENV !== "production",
-      nodeModules: webpackPaths.appNodeModulesPath,
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: path.join("coreSets.html"),
+    //   template: path.join(webpackPaths.srcRendererPath, "coreSets.ejs"),
+    //   minify: {
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true,
+    //     removeComments: true,
+    //   },
+    //   isBrowser: false,
+    //   env: process.env.NODE_ENV,
+    //   isDevelopment: process.env.NODE_ENV !== "production",
+    //   nodeModules: webpackPaths.appNodeModulesPath,
+    // }),
   ],
 
   node: {

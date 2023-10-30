@@ -11,7 +11,7 @@ import {
   ipcMain,
   IpcMainInvokeEvent,
   dialog,
-  shell
+  shell,
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -51,7 +51,7 @@ export enum DalchemistAppStatus {
   Initializing = "Initializing",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!"
+  Error = "Error!",
 }
 
 export default class DalchemistApp {
@@ -84,8 +84,8 @@ export default class DalchemistApp {
       height: 150,
       webPreferences: {
         preload: preloadPath,
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+      },
     });
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
@@ -584,14 +584,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10
+          height: 10,
         },
         resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
     }
     return this.mainWindow;
@@ -614,8 +614,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
     }
 
@@ -632,8 +632,11 @@ export default class DalchemistApp {
       }
 
       const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadCoreSets.js")
-        : path.join(__dirname, "../../build/preloadCoreSets.js");
+        ? path.join(__dirname, "./CoreSupport/View/preloadCoreSets.js")
+        : path.join(
+            __dirname,
+            "../../build/CoreSupport/View/preloadCoreSets.js"
+          );
       console.log("Add Drop preload path", preloadPath);
       this.coreSetsWindow = new BrowserWindow({
         width: 1200,
@@ -642,8 +645,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
     }
 
@@ -670,8 +673,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: true
-        }
+          nodeIntegration: true,
+        },
       });
     }
     this.addDropWindow.on("closed", () => {
@@ -693,14 +696,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10
+          height: 10,
         },
         autoHideMenuBar: true,
         webPreferences: {
-          contextIsolation: true
+          contextIsolation: true,
 
           // Set this to false to use the default menu
-        }
+        },
       });
     }
     this.tabImporterWindow.on("closed", () => {
@@ -732,7 +735,7 @@ const formatDateForConsole = function (datetime: number): string {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit"
+    second: "2-digit",
   });
   return formattedDate;
 };

@@ -2,13 +2,12 @@
   "name": "dalchemist",
   "version": "0.0.1",
   "description": "",
-  "main": "./src/electron/startDalchemistApp.ts",
   "scripts": {
     
     "startElectron": "ts-node ./building/scripts/check-port-in-use.ts && npm run startElectron:renderer",
     "startElectron:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
     "startElectron:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.preload.dev.ts",
-    "startElectron:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
+    "startElectron:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only -main ./src/electron/startDalchemistApp.ts",
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.prod.ts",
@@ -57,8 +56,6 @@
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
     "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
     "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
-  
-   
   },
   "author": "Blake Glanville",
   "license": "BSD-3-Clause",
