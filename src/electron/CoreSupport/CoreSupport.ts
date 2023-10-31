@@ -3,6 +3,8 @@
  * @category Core Support
  * @category Processor
  * @internal
+ * Core Support Excel File Processor
+ * For reading in the Core Support Excel File as CoreSupportEntry objects
  */
 
 //toDO this file needs to be converted to use Importer after updating importer XLSX inputlines
