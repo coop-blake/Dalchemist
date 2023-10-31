@@ -4,14 +4,14 @@
 import { resolveHtmlPath, formatDateForConsole } from "./Utility";
 
 import { createCoreSupportWithCatapultPricingTSV } from "./CoreSupport/TSVOutputs";
-
+import { createAndSetApplicationMenu } from "./Main/AppMenu";
 import {
   app,
   BrowserWindow,
   ipcMain,
   IpcMainInvokeEvent,
   dialog,
-  shell,
+  shell
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -51,7 +51,7 @@ export enum DalchemistAppStatus {
   Initializing = "Initializing",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!",
+  Error = "Error!"
 }
 
 export default class DalchemistApp {
@@ -96,8 +96,8 @@ export default class DalchemistApp {
       height: 150,
       webPreferences: {
         preload: preloadPath,
-        nodeIntegration: true,
-      },
+        nodeIntegration: true
+      }
     });
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
@@ -343,6 +343,8 @@ export default class DalchemistApp {
         })
       )
       .subscribe();
+    //createAndSetApplicationMenu();
+    //edit this to merge the menus to a customized one
   }
 
   private onDataUpdate(
@@ -482,14 +484,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
     }
     return this.mainWindow;
@@ -515,8 +517,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
     }
 
@@ -543,8 +545,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: true,
-        },
+          nodeIntegration: true
+        }
       });
     }
     this.addDropWindow.on("closed", () => {
@@ -566,14 +568,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         autoHideMenuBar: true,
         webPreferences: {
-          contextIsolation: true,
+          contextIsolation: true
 
           // Set this to false to use the default menu
-        },
+        }
       });
     }
     this.tabImporterWindow.on("closed", () => {
