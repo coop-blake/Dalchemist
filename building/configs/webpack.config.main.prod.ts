@@ -27,9 +27,12 @@ const configuration: webpack.Configuration = {
     preload: path.join(webpackPaths.srcMainPath, "preload.ts"),
     preloadInventory: path.join(
       webpackPaths.srcMainPath,
-      "preloadInventory.ts"
+      "Inventory/View/preloadInventory.ts"
     ),
-    preloadAddDrop: path.join(webpackPaths.srcMainPath, "preloadAddDrop.ts"),
+    preloadAddDrop: path.join(
+      webpackPaths.srcMainPath,
+      "AddDrop/View/preloadAddDrop.ts"
+    ),
     preloadDialog: path.join(webpackPaths.srcMainPath, "preloadDialog.ts"),
     preloadCoreSets: path.join(
       webpackPaths.srcMainPath,
