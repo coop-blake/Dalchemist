@@ -4,7 +4,7 @@
 import { resolveHtmlPath, formatDateForConsole } from "./Utility";
 
 import { createCoreSupportWithCatapultPricingTSV } from "./CoreSupport/TSVOutputs";
-import { createAndSetApplicationMenu } from "./Main/AppMenu";
+//import { createAndSetApplicationMenu } from "./Main/AppMenu";
 import {
   app,
   BrowserWindow,
@@ -21,9 +21,11 @@ import { combineLatest, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
-import { Inventory } from "../Google/Inventory/Inventory";
+import { Inventory as GoogleInventory } from "../Google/Inventory/Inventory";
+import { Inventory } from "./Inventory/Inventory";
 //import { CoreSupport } from "./CoreSupport/CoreSupport";
 import { CoreSets } from "./CoreSupport/CoreSets";
+
 import { PriceChangeWorksheets } from "./PriceChangeWorksheets/PriceChangeWorksheets";
 
 import { getAddDropPriceUpdatesTSV } from "../../src/Google/addDrop/htmlOutputs";
@@ -75,7 +77,6 @@ export default class DalchemistApp {
 
   private mainWindow: BrowserWindow | null = null;
   private addDropWindow: BrowserWindow | null = null;
-  private inventoryWindow: BrowserWindow | null = null;
   private tabImporterWindow: BrowserWindow | null = null;
 
   private lastAddDropLastRefresh = 0;
@@ -227,37 +228,29 @@ export default class DalchemistApp {
     }
   }
 
-  public showInventoryWindow() {
-    const inventoryWindow = this.getInventoryWindow();
-    const getIndexPath = resolveHtmlPath("inventory.html");
-    console.log("Inventory getIndexPath", getIndexPath);
+  // public showInventoryWindow() {
+  //   Inventory.getInstance().showWindow();
 
-    if (inventoryWindow !== null) {
-      inventoryWindow
-        .loadURL(path.join(getIndexPath))
-        .then(() => {
-          this.sendInventoryData();
+  //   // const inventoryWindow = this.getInventoryWindow();
+  //   // const getIndexPath = resolveHtmlPath("inventory.html");
+  //   // console.log("Inventory getIndexPath", getIndexPath);
 
-          inventoryWindow.show();
-        })
-        .catch((error: Error) => {
-          console.error(error);
-        });
-    }
-  }
-  private sendInventoryData() {
-    const inventoryWindow = this.inventoryWindow;
-    if (inventoryWindow !== null) {
-      const inventoryValues = Array.from(
-        Inventory.getInstance().entries.values()
-      );
-      inventoryWindow.webContents.send("inventoryData", inventoryValues);
-      inventoryWindow.webContents.send(
-        "inventoryDataLastReload",
-        this.lastInventoryLastRefresh
-      );
-    }
-  }
+  //   // if (inventoryWindow !== null) {
+  //   //   inventoryWindow
+  //   //     .loadURL(path.join(getIndexPath))
+  //   //     .then(() => {
+  //   //       this.sendInventoryData();
+
+  //   //       inventoryWindow.show();
+  //   //     })
+  //   //     .catch((error: Error) => {
+  //   //       console.error(error);
+  //   //     });
+  //   // }
+  // }
+  // private sendInventoryData() {
+  //   // Inventory.getInstance().showWindow();
+  // }
 
   public showTabImporterWindow() {
     const tabImporterWindow = this.getTabImporterWindow();
@@ -323,7 +316,7 @@ export default class DalchemistApp {
     // );
 
     const addDropObservable = AddDrop.state.lastRefreshCompleted$;
-    const inventoryObservable = Inventory.state.lastRefreshCompleted$;
+    const inventoryObservable = GoogleInventory.state.lastRefreshCompleted$;
     combineLatest([addDropObservable, inventoryObservable])
       .pipe(
         map(([addDropLastRefresh, inventoryLastRefresh]) => {
@@ -331,12 +324,12 @@ export default class DalchemistApp {
             `AddDrop Last refresh: ${formatDateForConsole(addDropLastRefresh)}`
           );
           console.log(
-            `Inventory Last Refresh: ${formatDateForConsole(
+            `GoogleInventory Last Refresh: ${formatDateForConsole(
               inventoryLastRefresh
             )}`
           );
           if (addDropLastRefresh !== 0 && inventoryLastRefresh !== 0) {
-            console.log(`ONREADY: Add Drop and Inventory Ready: `);
+            console.log(`ONREADY: Add Drop and GoogleInventory Ready: `);
             DalchemistApp.state.setStatus(DalchemistAppStatus.Running);
             this.onDataUpdate(addDropLastRefresh, inventoryLastRefresh);
           }
@@ -362,10 +355,10 @@ export default class DalchemistApp {
       this.onDataUpdate(addDropLastRefresh, inventoryLastRefresh);
     }
 
-    if (inventoryLastRefresh > this.lastInventoryLastRefresh) {
-      this.lastInventoryLastRefresh = inventoryLastRefresh;
-      this.sendInventoryData();
-    }
+    // if (inventoryLastRefresh > this.lastInventoryLastRefresh) {
+    //   this.lastInventoryLastRefresh = inventoryLastRefresh;
+    //   this.sendInventoryData();
+    // }
 
     if (addDropLastRefresh > this.lastAddDropLastRefresh) {
       this.lastAddDropLastRefresh = addDropLastRefresh;
@@ -385,7 +378,7 @@ export default class DalchemistApp {
   ) => {
     console.log("CLICK RECEIVED");
     if (mainWindowMessage === "inventoryMenuButtonClicked") {
-      this.showInventoryWindow();
+      Inventory.getInstance().showWindow();
     } else if (mainWindowMessage === "addDropMenuButtonClicked") {
       this.showAddDropWindow();
     } else if (mainWindowMessage === "coreSetsMenuButtonClicked") {
@@ -497,36 +490,36 @@ export default class DalchemistApp {
     return this.mainWindow;
   }
 
-  public getInventoryWindow(): BrowserWindow | null {
-    if (this.inventoryWindow === null) {
-      if (this.notReady) {
-        return null;
-      }
+  // public getInventoryWindow(): BrowserWindow | null {
+  //   if (this.inventoryWindow === null) {
+  //     if (this.notReady) {
+  //       return null;
+  //     }
 
-      const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadInventory.js")
-        : path.join(
-            __dirname,
-            "../../build/Inventory/View/preloadInventory.js"
-          );
-      console.log("Add Drop preload path", preloadPath);
-      this.inventoryWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        show: false,
-        webPreferences: {
-          preload: preloadPath, // Load preload script for the input dialog
-          contextIsolation: true,
-          nodeIntegration: false
-        }
-      });
-    }
+  //     const preloadPath = app.isPackaged
+  //       ? path.join(__dirname, "preloadInventory.js")
+  //       : path.join(
+  //           __dirname,
+  //           "../../build/Inventory/View/preloadInventory.js"
+  //         );
+  //     console.log("Add Drop preload path", preloadPath);
+  //     this.inventoryWindow = new BrowserWindow({
+  //       width: 1200,
+  //       height: 800,
+  //       show: false,
+  //       webPreferences: {
+  //         preload: preloadPath, // Load preload script for the input dialog
+  //         contextIsolation: true,
+  //         nodeIntegration: false
+  //       }
+  //     });
+  //   }
 
-    this.inventoryWindow.on("closed", () => {
-      this.inventoryWindow = null;
-    });
-    return this.inventoryWindow;
-  }
+  //   this.inventoryWindow.on("closed", () => {
+  //     this.inventoryWindow = null;
+  //   });
+  //   return this.inventoryWindow;
+  // }
 
   public getAddDropWindow(): BrowserWindow | null {
     if (this.addDropWindow === null) {
@@ -600,7 +593,7 @@ export default class DalchemistApp {
 }
 
 function returnUserScancodeSearch(input: string): string {
-  const inventory = Inventory.getInstance();
+  const inventory = GoogleInventory.getInstance();
 
   function getLineFromScanCode(ScanCode: string): string {
     const entry = inventory.getEntryFromScanCode(ScanCode);

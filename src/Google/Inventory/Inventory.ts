@@ -129,6 +129,10 @@ export class InventoryState {
     return this.lastRefreshCompletedSubject.asObservable();
   }
 
+  public get lastRefreshCompleted(): number {
+    return this.lastRefreshCompletedSubject.getValue();
+  }
+
   public setStatus(status: InventoryStatus) {
     this.statusSubject.next(status);
   }
