@@ -1,17 +1,16 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { Inventory } from "../../Google/Inventory/Inventory";
-
 import { CoreSupport } from "./CoreSupport";
 import path from "path";
-
 import { CoreSetsStatus, CoreSupportEntry } from "./shared";
 import { resolveHtmlPath } from "../Utility";
-
 import { app, BrowserWindow } from "electron";
-
 import DalchemistApp from "../DalchemistApp";
 import { PriceChangeWorksheets } from "../PriceChangeWorksheets/PriceChangeWorksheets";
-
+/**
+ * CoreSets
+ * Singlton Instance with State that handles the CoreSets BackEnd for Electron
+ */
 export class CoreSets {
   private static instance: CoreSets;
   static state: CoreSetsState;
@@ -100,7 +99,7 @@ export class CoreSets {
       coreSetsWindow
         .loadURL(getIndexPath)
         .then(() => {
-          this.sendCoreSetsData();
+          sendCoreSetsData();
 
           coreSetsWindow.show();
         })
@@ -139,48 +138,6 @@ export class CoreSets {
     }
 
     return this.coreSetsWindow;
-  }
-
-  private sendCoreSetsData() {
-    const coreSetsWindow = this.coreSetsWindow;
-    if (coreSetsWindow !== null) {
-      coreSetsWindow.webContents.send(
-        "CoreSetEntriesUpdated",
-        CoreSets.state.coreSetItems
-      );
-      coreSetsWindow.webContents.send(
-        "CoreSetStatusUpdated",
-        CoreSets.state.status
-      );
-
-      coreSetsWindow.webContents.send(
-        "CoreSetFilePathUpdated",
-        CoreSets.state.filePath
-      );
-
-      coreSetsWindow.webContents.send(
-        "CoreSetNumberOfCoreSupportItems",
-        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-      );
-
-      coreSetsWindow.webContents.send(
-        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-      );
-
-      coreSetsWindow.webContents.send(
-        "PriceChangeWorksheetsStatus",
-        PriceChangeWorksheets.state.status
-      );
-      coreSetsWindow.webContents.send(
-        "PriceChangeWorksheetsFolderPath",
-        PriceChangeWorksheets.state.folderPath
-      );
-      coreSetsWindow.webContents.send(
-        "PriceChangeWorksheetsWorksheets",
-        PriceChangeWorksheets.state.worksheets
-      );
-    }
   }
 }
 
@@ -292,4 +249,46 @@ const sendStateChangesToWindow = () => {
       worksheets
     );
   });
+};
+
+const sendCoreSetsData = async () => {
+  const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  if (coreSetsWindow !== null) {
+    coreSetsWindow.webContents.send(
+      "CoreSetEntriesUpdated",
+      CoreSets.state.coreSetItems
+    );
+    coreSetsWindow.webContents.send(
+      "CoreSetStatusUpdated",
+      CoreSets.state.status
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetFilePathUpdated",
+      CoreSets.state.filePath
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItems",
+      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+      CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+    );
+
+    coreSetsWindow.webContents.send(
+      "PriceChangeWorksheetsStatus",
+      PriceChangeWorksheets.state.status
+    );
+    coreSetsWindow.webContents.send(
+      "PriceChangeWorksheetsFolderPath",
+      PriceChangeWorksheets.state.folderPath
+    );
+    coreSetsWindow.webContents.send(
+      "PriceChangeWorksheetsWorksheets",
+      PriceChangeWorksheets.state.worksheets
+    );
+  }
 };

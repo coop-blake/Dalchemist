@@ -1,7 +1,7 @@
 //
 //import { URL } from "url";
 
-import { resolveHtmlPath } from "./Utility";
+import { resolveHtmlPath, formatDateForConsole } from "./Utility";
 
 import { createCoreSupportWithCatapultPricingTSV } from "./CoreSupport/TSVOutputs";
 
@@ -593,19 +593,6 @@ export default class DalchemistApp {
     app.quit();
   }
 }
-
-const formatDateForConsole = function (datetime: number): string {
-  const lastRefreshDate = new Date(datetime);
-  const formattedDate = lastRefreshDate.toLocaleString(undefined, {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
-  return formattedDate;
-};
 
 function returnUserScancodeSearch(input: string): string {
   const inventory = Inventory.getInstance();
