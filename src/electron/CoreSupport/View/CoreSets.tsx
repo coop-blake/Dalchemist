@@ -6,7 +6,7 @@ import CoreSetsTable from "./CoreSetsTable";
 import {
   selectAvailableItems,
   selectOurItems,
-} from "../../CoreSupport/View/CoreSetSlice";
+} from "./CoreSetSlice";
 import { useAppSelector } from "../../View/hooks";
 
 import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";

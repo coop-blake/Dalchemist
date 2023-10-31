@@ -4,6 +4,8 @@
  * @category Processor
  * @internal
  */
+
+//toDO this file needs to be converted to use Importer after updating importer XLSX inputlines
 import { CoreSupportEntry } from "./shared";
 import { Inventory } from "../../Google/Inventory/Inventory";
 import Settings from "../Settings";

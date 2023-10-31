@@ -11,7 +11,7 @@ import {
   ipcMain,
   IpcMainInvokeEvent,
   dialog,
-  shell,
+  shell
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -51,11 +51,38 @@ export enum DalchemistAppStatus {
   Initializing = "Initializing",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!",
+  Error = "Error!"
 }
 
 export default class DalchemistApp {
   public static instance: DalchemistApp;
+
+  // private static awaitingReadyCall: (() => void)[] = [];
+  // public static async awaitOnReady(): Promise<void> {
+  //   if (
+  //     DalchemistApp.instance === undefined ||
+  //     DalchemistApp.instance.notReady
+  //   ) {
+  //     return new Promise<void>((resolve) => {
+  //       DalchemistApp.awaitingReadyCall.push(resolve);
+  //     });
+  //   } else {
+  //     return;
+  //   }
+  // }
+
+  public static awaitOnReady(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (app.isReady()) {
+        resolve();
+      } else {
+        app.on("ready", () => {
+          resolve();
+        });
+      }
+    });
+  }
+
   static state: DalchemistAppState = new DalchemistAppState();
 
   public notReady = true;
@@ -64,7 +91,7 @@ export default class DalchemistApp {
   private addDropWindow: BrowserWindow | null = null;
   private inventoryWindow: BrowserWindow | null = null;
   private tabImporterWindow: BrowserWindow | null = null;
-  private coreSetsWindow: BrowserWindow | null = null;
+  //private coreSetsWindow: BrowserWindow | null = null;
 
   private lastAddDropLastRefresh = 0;
   private lastInventoryLastRefresh = 0;
@@ -84,8 +111,8 @@ export default class DalchemistApp {
       height: 150,
       webPreferences: {
         preload: preloadPath,
-        nodeIntegration: true,
-      },
+        nodeIntegration: true
+      }
     });
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
@@ -263,63 +290,60 @@ export default class DalchemistApp {
   }
 
   public showCoreSetsWindow() {
-    const coreSetsWindow = this.getCoreSetsWindow();
-    const getIndexPath = resolveHtmlPath("index.html", "/CoreSets");
-    console.log("CoreSets getIndexPath", getIndexPath);
+    CoreSets.getInstance().showCoreSetsWindow();
+    // const coreSetsWindow = this.getCoreSetsWindow();
+    // const getIndexPath = resolveHtmlPath("index.html", "/CoreSets");
+    // console.log("CoreSets getIndexPath", getIndexPath);
 
-    if (coreSetsWindow !== null) {
-      coreSetsWindow
-        .loadURL(getIndexPath)
-        .then(() => {
-          this.sendCoreSetsData();
+    // if (coreSetsWindow !== null) {
+    //   coreSetsWindow
+    //     .loadURL(getIndexPath)
+    //     .then(() => {
+    //       this.sendCoreSetsData();
 
-          coreSetsWindow.show();
-        })
-        .catch((error: Error) => {
-          console.error(error);
-        });
-    }
+    //       coreSetsWindow.show();
+    //     })
+    //     .catch((error: Error) => {
+    //       console.error(error);
+    //     });
+    // }
   }
   private sendCoreSetsData() {
-    const coreSetsWindow = this.coreSetsWindow;
-    if (coreSetsWindow !== null) {
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetEntriesUpdated",
-        CoreSets.state.coreSetItems
-      );
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetStatusUpdated",
-        CoreSets.state.status
-      );
-
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetFilePathUpdated",
-        CoreSets.state.filePath
-      );
-
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetNumberOfCoreSupportItems",
-        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-      );
-
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-      );
-
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsStatus",
-        PriceChangeWorksheets.state.status
-      );
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsFolderPath",
-        PriceChangeWorksheets.state.folderPath
-      );
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsWorksheets",
-        PriceChangeWorksheets.state.worksheets
-      );
-    }
+    // const coreSetsWindow = this.coreSetsWindow;
+    // if (coreSetsWindow !== null) {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetEntriesUpdated",
+    //     CoreSets.state.coreSetItems
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetStatusUpdated",
+    //     CoreSets.state.status
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetFilePathUpdated",
+    //     CoreSets.state.filePath
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetNumberOfCoreSupportItems",
+    //     CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+    //     CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsStatus",
+    //     PriceChangeWorksheets.state.status
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsFolderPath",
+    //     PriceChangeWorksheets.state.folderPath
+    //   );
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsWorksheets",
+    //     PriceChangeWorksheets.state.worksheets
+    //   );
+    // }
   }
 
   private sendingStatusToWindow: Subscription | null = null;
@@ -388,63 +412,66 @@ export default class DalchemistApp {
       )
       .subscribe();
 
-    CoreSets.state.lastRefreshCompleted$.subscribe((lastRefreshed) => {
-      if (lastRefreshed > 0) {
-        console.log(
-          "Sending Core Set items to window",
-          CoreSets.state.coreSetItems
-        );
+    // CoreSets.state.lastRefreshCompleted$.subscribe((lastRefreshed) => {
+    //   if (lastRefreshed > 0) {
+    //     console.log(
+    //       "Sending Core Set items to window",
+    //       CoreSets.state.coreSetItems
+    //     );
 
-        this.getCoreSetsWindow()?.webContents.send(
-          "CoreSetEntriesUpdated",
-          CoreSets.state.coreSetItems
-        );
+    //     this.getCoreSetsWindow()?.webContents.send(
+    //       "CoreSetEntriesUpdated",
+    //       CoreSets.state.coreSetItems
+    //     );
 
-        this.getCoreSetsWindow()?.webContents.send(
-          "CoreSetNumberOfCoreSupportItems",
-          CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-        );
+    //     this.getCoreSetsWindow()?.webContents.send(
+    //       "CoreSetNumberOfCoreSupportItems",
+    //       CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    //     );
 
-        this.getCoreSetsWindow()?.webContents.send(
-          "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-          CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-        );
-      }
-    });
-    CoreSets.state.filePath$.subscribe((filePath) => {
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetFilePathUpdated",
-        filePath
-      );
-    });
+    //     this.getCoreSetsWindow()?.webContents.send(
+    //       "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+    //       CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+    //     );
+    //   }
+    // });
+    // CoreSets.state.filePath$.subscribe((filePath) => {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetFilePathUpdated",
+    //     filePath
+    //   );
+    // });
 
-    CoreSets.state.status$.subscribe((status) => {
-      this.getCoreSetsWindow()?.webContents.send(
-        "CoreSetStatusUpdated",
-        status
-      );
-    });
+    // CoreSets.state.status$.subscribe((status) => {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "CoreSetStatusUpdated",
+    //     status
+    //   );
+    // });
 
-    PriceChangeWorksheets.state.status$.subscribe((status) => {
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsStatus",
-        status
-      );
-    });
+    // PriceChangeWorksheets.state.status$.subscribe((status) => {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsStatus",
+    //     status
+    //   );
+    // });
 
-    PriceChangeWorksheets.state.folderPath$.subscribe((filePath) => {
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsFolderPath",
-        filePath
-      );
-    });
+    // PriceChangeWorksheets.state.folderPath$.subscribe((filePath) => {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsFolderPath",
+    //     filePath
+    //   );
+    // });
 
-    PriceChangeWorksheets.state.worksheets$.subscribe((worksheets) => {
-      this.getCoreSetsWindow()?.webContents.send(
-        "PriceChangeWorksheetsWorksheets",
-        worksheets
-      );
-    });
+    // PriceChangeWorksheets.state.worksheets$.subscribe((worksheets) => {
+    //   this.getCoreSetsWindow()?.webContents.send(
+    //     "PriceChangeWorksheetsWorksheets",
+    //     worksheets
+    //   );
+    // });
+
+    // DalchemistApp.awaitingReadyCall.forEach((fn) => fn());
+    // DalchemistApp.awaitingReadyCall = [];
   }
 
   private onDataUpdate(
@@ -584,14 +611,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
     }
     return this.mainWindow;
@@ -614,8 +641,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
     }
 
@@ -625,36 +652,36 @@ export default class DalchemistApp {
     return this.inventoryWindow;
   }
 
-  public getCoreSetsWindow(): BrowserWindow | null {
-    if (this.coreSetsWindow === null) {
-      if (this.notReady) {
-        return null;
-      }
+  // public getCoreSetsWindow(): BrowserWindow | null {
+  //   if (this.coreSetsWindow === null) {
+  //     if (this.notReady) {
+  //       return null;
+  //     }
 
-      const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadCoreSets.js")
-        : path.join(
-            __dirname,
-            "../../build/CoreSupport/View/preloadCoreSets.js"
-          );
-      console.log("Add Drop preload path", preloadPath);
-      this.coreSetsWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        show: false,
-        webPreferences: {
-          preload: preloadPath, // Load preload script for the input dialog
-          contextIsolation: true,
-          nodeIntegration: false,
-        },
-      });
-    }
+  //     const preloadPath = app.isPackaged
+  //       ? path.join(__dirname, "preloadCoreSets.js")
+  //       : path.join(
+  //           __dirname,
+  //           "../../build/CoreSupport/View/preloadCoreSets.js"
+  //         );
+  //     console.log("Add Drop preload path", preloadPath);
+  //     this.coreSetsWindow = new BrowserWindow({
+  //       width: 1200,
+  //       height: 800,
+  //       show: false,
+  //       webPreferences: {
+  //         preload: preloadPath, // Load preload script for the input dialog
+  //         contextIsolation: true,
+  //         nodeIntegration: false
+  //       }
+  //     });
+  //   }
 
-    this.coreSetsWindow.on("closed", () => {
-      this.coreSetsWindow = null;
-    });
-    return this.coreSetsWindow;
-  }
+  //   this.coreSetsWindow.on("closed", () => {
+  //     this.coreSetsWindow = null;
+  //   });
+  //   return this.coreSetsWindow;
+  // }
 
   public getAddDropWindow(): BrowserWindow | null {
     if (this.addDropWindow === null) {
@@ -673,8 +700,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: true,
-        },
+          nodeIntegration: true
+        }
       });
     }
     this.addDropWindow.on("closed", () => {
@@ -696,14 +723,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         autoHideMenuBar: true,
         webPreferences: {
-          contextIsolation: true,
+          contextIsolation: true
 
           // Set this to false to use the default menu
-        },
+        }
       });
     }
     this.tabImporterWindow.on("closed", () => {
@@ -735,7 +762,7 @@ const formatDateForConsole = function (datetime: number): string {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
+    second: "2-digit"
   });
   return formattedDate;
 };

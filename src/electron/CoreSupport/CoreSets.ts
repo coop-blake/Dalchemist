@@ -2,8 +2,15 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Inventory } from "../../Google/Inventory/Inventory";
 
 import { CoreSupport } from "./CoreSupport";
+import path from "path";
 
 import { CoreSetsStatus, CoreSupportEntry } from "./shared";
+import { resolveHtmlPath } from "../Utility";
+
+import { app, BrowserWindow } from "electron";
+
+import DalchemistApp from "../DalchemistApp";
+import { PriceChangeWorksheets } from "../PriceChangeWorksheets/PriceChangeWorksheets";
 
 export class CoreSets {
   private static instance: CoreSets;
@@ -11,7 +18,7 @@ export class CoreSets {
 
   private CoreSupportReader: CoreSupport;
 
- 
+  private coreSetsWindow: BrowserWindow | null = null;
 
   private constructor() {
     CoreSets.state = new CoreSetsState();
@@ -19,14 +26,12 @@ export class CoreSets {
 
     this.CoreSupportReader = new CoreSupport();
 
-
     CoreSets.state.setFilePath(this.CoreSupportReader.getFilePath());
 
     Inventory.getInstance();
-    
 
-    Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number)=>{
-      if(lastRefresh > 0 ){
+    Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
+      if (lastRefresh > 0) {
         if (this.CoreSupportReader.getFilePath() !== "") {
           if (this.CoreSupportReader.doesKnownFileExist()) {
             setTimeout(() => {
@@ -39,9 +44,7 @@ export class CoreSets {
           CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
         }
       }
-    })
-
-
+    });
   }
 
   static getInstance(): CoreSets {
@@ -51,7 +54,7 @@ export class CoreSets {
     return CoreSets.instance;
   }
   static reloadCoreSupport() {
-    CoreSets.getInstance().getCoreSupport().loadCoreSetsExcelFile()
+    CoreSets.getInstance().getCoreSupport().loadCoreSetsExcelFile();
   }
 
   getCoreSupport() {
@@ -86,6 +89,98 @@ export class CoreSets {
       CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
     }
     CoreSets.state.setLastRefreshCompleted(lastUpdated);
+  }
+
+  public async showCoreSetsWindow() {
+    const coreSetsWindow = await this.getCoreSetsWindow();
+    const getIndexPath = resolveHtmlPath("index.html", "/CoreSets");
+    console.log("CoreSets getIndexPath", getIndexPath);
+
+    if (coreSetsWindow !== null) {
+      coreSetsWindow
+        .loadURL(getIndexPath)
+        .then(() => {
+          this.sendCoreSetsData();
+
+          coreSetsWindow.show();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
+    }
+  }
+
+  public async getCoreSetsWindow(): Promise<BrowserWindow> {
+    if (this.coreSetsWindow === null) {
+      await DalchemistApp.awaitOnReady();
+
+      const preloadPath = app.isPackaged
+        ? path.join(__dirname, "preloadCoreSets.js")
+        : path.join(
+            __dirname,
+            "../../../build/CoreSupport/View/preloadCoreSets.js"
+          );
+      console.log("Add Drop preload path", preloadPath);
+      this.coreSetsWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        show: false,
+        webPreferences: {
+          preload: preloadPath, // Load preload script for the input dialog
+          contextIsolation: true,
+          nodeIntegration: false
+        }
+      });
+
+      this.coreSetsWindow.on("closed", () => {
+        this.coreSetsWindow = null;
+      });
+      sendStateChangesToWindow();
+    }
+
+    return this.coreSetsWindow;
+  }
+
+  private sendCoreSetsData() {
+    const coreSetsWindow = this.coreSetsWindow;
+    if (coreSetsWindow !== null) {
+      coreSetsWindow.webContents.send(
+        "CoreSetEntriesUpdated",
+        CoreSets.state.coreSetItems
+      );
+      coreSetsWindow.webContents.send(
+        "CoreSetStatusUpdated",
+        CoreSets.state.status
+      );
+
+      coreSetsWindow.webContents.send(
+        "CoreSetFilePathUpdated",
+        CoreSets.state.filePath
+      );
+
+      coreSetsWindow.webContents.send(
+        "CoreSetNumberOfCoreSupportItems",
+        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+      );
+
+      coreSetsWindow.webContents.send(
+        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+      );
+
+      coreSetsWindow.webContents.send(
+        "PriceChangeWorksheetsStatus",
+        PriceChangeWorksheets.state.status
+      );
+      coreSetsWindow.webContents.send(
+        "PriceChangeWorksheetsFolderPath",
+        PriceChangeWorksheets.state.folderPath
+      );
+      coreSetsWindow.webContents.send(
+        "PriceChangeWorksheetsWorksheets",
+        PriceChangeWorksheets.state.worksheets
+      );
+    }
   }
 }
 
@@ -139,3 +234,62 @@ export class CoreSetsState {
 }
 
 CoreSets.getInstance();
+
+const sendStateChangesToWindow = () => {
+  CoreSets.state.lastRefreshCompleted$.subscribe(async (lastRefreshed) => {
+    if (lastRefreshed > 0) {
+      console.log(
+        "Sending Core Set items to window",
+        CoreSets.state.coreSetItems
+      );
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+      coreSetsWindow.webContents.send(
+        "CoreSetEntriesUpdated",
+        CoreSets.state.coreSetItems
+      );
+
+      coreSetsWindow.webContents.send(
+        "CoreSetNumberOfCoreSupportItems",
+        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+      );
+
+      coreSetsWindow.webContents.send(
+        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+      );
+    }
+  });
+  CoreSets.state.filePath$.subscribe(async (filePath) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+    coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
+  });
+
+  CoreSets.state.status$.subscribe(async (status) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+
+    coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
+  });
+
+  PriceChangeWorksheets.state.status$.subscribe(async (status) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+
+    coreSetsWindow.webContents.send("PriceChangeWorksheetsStatus", status);
+  });
+
+  PriceChangeWorksheets.state.folderPath$.subscribe(async (filePath) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+
+    coreSetsWindow.webContents.send(
+      "PriceChangeWorksheetsFolderPath",
+      filePath
+    );
+  });
+
+  PriceChangeWorksheets.state.worksheets$.subscribe(async (worksheets) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+    coreSetsWindow.webContents.send(
+      "PriceChangeWorksheetsWorksheets",
+      worksheets
+    );
+  });
+};
