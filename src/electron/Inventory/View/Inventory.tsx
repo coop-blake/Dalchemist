@@ -6,7 +6,7 @@ import { store } from "../../View/store";
 import InventoryTable from "./InventoryTable";
 
 import { InventoryEntry } from "../../../Google/Inventory/Inventory";
-
+import { LoadingAnimation } from "../../UI/Loading/LoadingAnimation";
 import { selectItems } from "./InventorySlice";
 
 export default function InventoryView() {
@@ -15,13 +15,7 @@ export default function InventoryView() {
     window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
   }, [items]);
 
-  return (
-    <>
-      <div>InventoryView</div>
-      <div>{items.length}</div>
-      {items.length > 0 ? <InventoryTable /> : <div>Loading...</div>}
-    </>
-  );
+  return <>{items.length > 0 ? <InventoryTable /> : <LoadingAnimation />}</>;
 }
 
 window.electron.ipcRenderer.on(

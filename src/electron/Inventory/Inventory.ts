@@ -57,14 +57,15 @@ export class Inventory {
           );
       console.log("Add Drop preload path", preloadPath);
       this.window = new BrowserWindow({
+        title: "Inventory",
         width: 1200,
         height: 800,
         show: false,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
 
       this.window.on("closed", () => {

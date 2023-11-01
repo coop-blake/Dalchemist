@@ -10,44 +10,41 @@ import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 
 let inventoryTable: Tabulator | null = null;
-
-const inventoryData: InventoryEntry[] = [];
-
+let inventoryData: InventoryEntry[] = [];
 export default function InventoryTable() {
-  const title = "Inventory";
   const items = useAppSelector(selectItems);
 
   useEffect(() => {
-    document.title = title;
-    console.log("check", [...items]);
-    inventoryDataUpdated(items);
+    document.title = "Inventory";
+    inventoryData = [];
+    items.forEach((item) => {
+      inventoryData.push({ ...item } as InventoryEntry);
+    });
+
+    console.log("inventoryDataUpdated", inventoryData);
+
+    inventoryDataUpdated(inventoryData);
   }, [items]);
 
   return !(items.length > 0) ? (
     ""
   ) : (
     <>
-      <div>Inventory Table</div>
-      <div id="inventoryTable" />
+      <div
+        id="inventoryTable"
+        style={{ height: "100vh", padding: 0, margin: 0 }}
+      />
     </>
   );
 }
 
-function setTableHeightToDocumentHeight() {
-  const tableElement = document.getElementById("example-table"); // Replace with the actual ID of your table element
-  const documentHeight = document.documentElement.clientHeight;
+function inventoryDataUpdated(data: InventoryEntry[] = []) {
+  console.log("inventoryDataUpdated", data);
 
-  // Set the table's height to match the document's height
-  if (tableElement !== null) tableElement.style.height = `${documentHeight}px`;
-}
-setTableHeightToDocumentHeight();
-window.addEventListener("resize", setTableHeightToDocumentHeight);
-
-function inventoryDataUpdated(items: Array<InventoryEntry>) {
-  if (inventoryData.length > 0) {
+  if (data.length > 0) {
     if (inventoryTable === null) {
       inventoryTable = new Tabulator("#inventoryTable", {
-        data: inventoryData, //load row data from array
+        data: data, //load row data from array
         movableColumns: true, //allow column order to be changed
         columns: [
           {
@@ -118,14 +115,12 @@ function inventoryDataUpdated(items: Array<InventoryEntry>) {
           { title: "S", field: "S", headerFilter: true },
           { title: "NorthLSD", field: "NorthLSD", headerFilter: true },
           { title: "SouthLSD", field: "SouthLSD", headerFilter: true },
-
-          //valuesArray: { visible: false },
         ],
       });
     } else {
-      console.log("check", [...items]);
+      console.log("check", [...data]);
 
-      inventoryTable.setData(items);
+      inventoryTable.setData([...data]);
     }
   }
 }
