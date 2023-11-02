@@ -3,9 +3,12 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
+  "compounds": [
+    {
+        "name": "🪛 Start Electron and Attach to Chrome",
+        "configurations": ["✅ StartElectron", "🪛 Attach to Chrome"]
+    }],
   "configurations": [
-
-  
     {
       "name": "✅ StartElectron",
       "type": "node",
@@ -19,7 +22,8 @@
       "port": 9222,
       "request": "attach",
       "type": "chrome",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "timeout": 10000
      },
     {
       "name": "🤖Test-Importer-Sheet",
@@ -250,4 +254,5 @@
       "runtimeArgs": ["run-script", "googleUpdate-subDepartmentsReport"]
     }
   ]
+
 }

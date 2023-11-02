@@ -524,32 +524,32 @@ export default class DalchemistApp {
   //   return this.inventoryWindow;
   // }
 
-  public getAddDropWindow(): BrowserWindow | null {
-    if (this.addDropWindow === null) {
-      if (this.notReady) {
-        return null;
-      }
+  // public getAddDropWindow(): BrowserWindow | null {
+  //   if (this.addDropWindow === null) {
+  //     if (this.notReady) {
+  //       return null;
+  //     }
 
-      const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadAddDrop.js")
-        : path.join(__dirname, "../../build/AddDrop/View/preloadAddDrop.js");
-      console.log("Add Drop preload path", preloadPath);
-      this.addDropWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        show: false,
-        webPreferences: {
-          preload: preloadPath, // Load preload script for the input dialog
-          contextIsolation: true,
-          nodeIntegration: true,
-        },
-      });
-    }
-    this.addDropWindow.on("closed", () => {
-      this.addDropWindow = null;
-    });
-    return this.addDropWindow;
-  }
+  //     const preloadPath = app.isPackaged
+  //       ? path.join(__dirname, "preloadAddDrop.js")
+  //       : path.join(__dirname, "../../build/AddDrop/View/preloadAddDrop.js");
+  //     console.log("Add Drop preload path", preloadPath);
+  //     this.addDropWindow = new BrowserWindow({
+  //       width: 1200,
+  //       height: 800,
+  //       show: false,
+  //       webPreferences: {
+  //         preload: preloadPath, // Load preload script for the input dialog
+  //         contextIsolation: true,
+  //         nodeIntegration: true,
+  //       },
+  //     });
+  //   }
+  //   this.addDropWindow.on("closed", () => {
+  //     this.addDropWindow = null;
+  //   });
+  //   return this.addDropWindow;
+  // }
 
   public getTabImporterWindow(): BrowserWindow | null {
     if (this.tabImporterWindow === null) {

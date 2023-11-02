@@ -7,6 +7,7 @@ import { store } from "./store";
 import MainView from "./Main";
 import CoreSetsView from "../CoreSupport/View/CoreSets";
 import InventoryView from "../Inventory/View/Inventory";
+import AddDropView from "../AddDrop/View/AddDrop";
 import React from "react";
 
 //App
@@ -17,9 +18,15 @@ export default function App(props: { onLoad: () => void }) {
   }, [props.onLoad]);
   return (
     <Provider store={store}>
-      {windowHash.startsWith("#/CoreSets") ? <CoreSetsView /> : 
-      windowHash.startsWith("#/Inventory") ? <InventoryView /> :
-      <MainView />}
+      {windowHash.startsWith("#/CoreSets") ? (
+        <CoreSetsView />
+      ) : windowHash.startsWith("#/Inventory") ? (
+        <InventoryView />
+      ) : windowHash.startsWith("#/AddDrop") ? (
+        <AddDropView />
+      ) : (
+        <MainView />
+      )}
     </Provider>
   );
 }

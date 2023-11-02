@@ -25,19 +25,19 @@ export class AddDrop {
   }
 
   public async showWindow() {
-    const inventoryWindow = await this.getWindow();
+    const window = await this.getWindow();
     const getIndexPath = resolveHtmlPath("index.html", "/AddDrop");
     //const getIndexPath = resolveHtmlPath("inventory.html");
 
     console.log("AddDrop getIndexPath", getIndexPath);
 
-    if (inventoryWindow !== null) {
-      inventoryWindow
+    if (window !== null) {
+      window
         .loadURL(getIndexPath)
         .then(() => {
           sendAddDropData();
 
-          inventoryWindow.show();
+          window.show();
         })
         .catch((error: Error) => {
           console.error(error);
@@ -50,7 +50,7 @@ export class AddDrop {
       await DalchemistApp.awaitOnReady();
 
       const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadCoreSets.js")
+        ? path.join(__dirname, "preloadAddDrop.js")
         : path.join(__dirname, "../../../build/AddDrop/View/preloadAddDrop.js");
       console.log("Add Drop preload path", preloadPath);
       this.window = new BrowserWindow({
