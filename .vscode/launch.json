@@ -4,22 +4,8 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Main Process",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-      "program": "${workspaceRoot}/build/electron/startDalchemistApp.js",
-      "runtimeArgs": [
-        ".",
-        // this args for attaching render process
-        "--remote-debugging-port=9222"
-      ],
-      "windows": {
-        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-      },
-      "protocol": "legacy"
-    },
+
+  
     {
       "name": "✅ StartElectron",
       "type": "node",
@@ -28,6 +14,13 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "startElectron"]
     },
+    {
+      "name": "🪛 Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}"
+     },
     {
       "name": "🤖Test-Importer-Sheet",
       "type": "node",
@@ -115,30 +108,6 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck-addDrop"]
-    },
-    {
-      "name": "🔨 #1 - Build Electron",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electronBuild"]
-    },
-    {
-      "name": "🏃‍♀️ #2 - Run Electron",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electronRun"]
-    },
-    {
-      "name": " 🔨🏃‍♀️ #1&2 - Build and Run Electron",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electron"]
     },
     {
       "name": "✅ odbcCheck",

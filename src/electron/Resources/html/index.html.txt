@@ -9,7 +9,7 @@
 <body>
  
   <div class="image-container">
-    <img id="iconImage" class="image pulsating" src="../images/Icon.svg" alt="Background Image">
+    <img id="iconImage" class="image pulsating" src="../images/Icons.svg" alt="Background Image">
   </div>
   <div class="content-container">
     <div class="content">

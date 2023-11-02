@@ -11,7 +11,7 @@ import {
   ipcMain,
   IpcMainInvokeEvent,
   dialog,
-  shell
+  shell,
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -20,7 +20,8 @@ import { DalchemistMainMenu } from "./Menu";
 import { combineLatest, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { AddDrop } from "../Google/addDrop/addDrop";
+import { AddDrop as GoogleAddDrop } from "../Google/addDrop/addDrop";
+import { AddDrop } from "./AddDrop/AddDrop";
 import { Inventory as GoogleInventory } from "../Google/Inventory/Inventory";
 import { Inventory } from "./Inventory/Inventory";
 //import { CoreSupport } from "./CoreSupport/CoreSupport";
@@ -53,7 +54,7 @@ export enum DalchemistAppStatus {
   Initializing = "Initializing",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!"
+  Error = "Error!",
 }
 
 export default class DalchemistApp {
@@ -97,8 +98,8 @@ export default class DalchemistApp {
       height: 150,
       webPreferences: {
         preload: preloadPath,
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+      },
     });
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
@@ -178,55 +179,57 @@ export default class DalchemistApp {
     }
   }
   public showAddDropWindow() {
-    const addDropWindow = this.getAddDropWindow();
-    const getIndexPath = resolveHtmlPath("addDrop.html");
-    console.log("addDrop getIndexPath", getIndexPath);
+    AddDrop.getInstance().showWindow();
 
-    if (addDropWindow !== null) {
-      ipcMain.on("addDropWindowMessage", this.handleAddDropWindowMessage);
+    // const addDropWindow = this.getAddDropWindow();
+    // const getIndexPath = resolveHtmlPath("addDrop.html");
+    // console.log("addDrop getIndexPath", getIndexPath);
 
-      addDropWindow.on("closed", () => {
-        // Remove the IPC event listener when the window is closed
-        ipcMain.removeListener(
-          "addDropWindowMessage",
-          this.handleAddDropWindowMessage
-        );
-      });
+    // if (addDropWindow !== null) {
+    //   ipcMain.on("addDropWindowMessage", this.handleAddDropWindowMessage);
 
-      addDropWindow
-        .loadURL(path.join(getIndexPath))
-        .then(() => {
-          this.sendAddDropData();
-          addDropWindow.show();
-        })
-        .catch((error: Error) => {
-          console.error(error);
-        });
-    }
+    //   addDropWindow.on("closed", () => {
+    //     // Remove the IPC event listener when the window is closed
+    //     ipcMain.removeListener(
+    //       "addDropWindowMessage",
+    //       this.handleAddDropWindowMessage
+    //     );
+    //   });
+
+    //   addDropWindow
+    //     .loadURL(path.join(getIndexPath))
+    //     .then(() => {
+    //       this.sendAddDropData();
+    //       addDropWindow.show();
+    //     })
+    //     .catch((error: Error) => {
+    //       console.error(error);
+    //     });
+    // }
   }
 
-  private sendAddDropData() {
-    const addDropWindow = this.addDropWindow;
-    if (addDropWindow !== null) {
-      addDropWindow.webContents.send("newItemsArray", AddDrop.state.newItems);
-      addDropWindow.webContents.send(
-        "itemsAlreadyInInventory",
-        AddDrop.state.itemsAlreadyInInventory
-      );
-      addDropWindow.webContents.send(
-        "attributeChangeItems",
-        AddDrop.state.attributeChangeItems
-      );
-      addDropWindow.webContents.send(
-        "priceUpdates",
-        AddDrop.state.priceUpdates
-      );
-      addDropWindow.webContents.send(
-        "addDropDataLastReload",
-        this.lastAddDropLastRefresh
-      );
-    }
-  }
+  // private sendAddDropData() {
+  //   const addDropWindow = this.addDropWindow;
+  //   if (addDropWindow !== null) {
+  //     addDropWindow.webContents.send("newItemsArray", AddDrop.state.newItems);
+  //     addDropWindow.webContents.send(
+  //       "itemsAlreadyInInventory",
+  //       AddDrop.state.itemsAlreadyInInventory
+  //     );
+  //     addDropWindow.webContents.send(
+  //       "attributeChangeItems",
+  //       AddDrop.state.attributeChangeItems
+  //     );
+  //     addDropWindow.webContents.send(
+  //       "priceUpdates",
+  //       AddDrop.state.priceUpdates
+  //     );
+  //     addDropWindow.webContents.send(
+  //       "addDropDataLastReload",
+  //       this.lastAddDropLastRefresh
+  //     );
+  //   }
+  // }
 
   // public showInventoryWindow() {
   //   Inventory.getInstance().showWindow();
@@ -315,7 +318,7 @@ export default class DalchemistApp {
     //   () => { this.showMainWindow(); }
     // );
 
-    const addDropObservable = AddDrop.state.lastRefreshCompleted$;
+    const addDropObservable = GoogleAddDrop.state.lastRefreshCompleted$;
     const inventoryObservable = GoogleInventory.state.lastRefreshCompleted$;
     combineLatest([addDropObservable, inventoryObservable])
       .pipe(
@@ -360,11 +363,11 @@ export default class DalchemistApp {
     //   this.sendInventoryData();
     // }
 
-    if (addDropLastRefresh > this.lastAddDropLastRefresh) {
-      this.lastAddDropLastRefresh = addDropLastRefresh;
+    // if (addDropLastRefresh > this.lastAddDropLastRefresh) {
+    //   this.lastAddDropLastRefresh = addDropLastRefresh;
 
-      this.sendAddDropData();
-    }
+    //   this.sendAddDropData();
+    // }
   }
 
   private sendMainWindowStatus() {
@@ -477,14 +480,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10
+          height: 10,
         },
         resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
     }
     return this.mainWindow;
@@ -538,8 +541,8 @@ export default class DalchemistApp {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: true
-        }
+          nodeIntegration: true,
+        },
       });
     }
     this.addDropWindow.on("closed", () => {
@@ -561,14 +564,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10
+          height: 10,
         },
         autoHideMenuBar: true,
         webPreferences: {
-          contextIsolation: true
+          contextIsolation: true,
 
           // Set this to false to use the default menu
-        }
+        },
       });
     }
     this.tabImporterWindow.on("closed", () => {
@@ -613,7 +616,9 @@ function returnUserScancodeSearch(input: string): string {
 }
 
 export function savePriceCostTSVPrompt() {
-  const contentToSave = getAddDropPriceUpdatesTSV(AddDrop.state.priceUpdates);
+  const contentToSave = getAddDropPriceUpdatesTSV(
+    GoogleAddDrop.state.priceUpdates
+  );
   dialog
     .showSaveDialog({ defaultPath: "addDropPriceCost.txt" })
     .then((result) => {

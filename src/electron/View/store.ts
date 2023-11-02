@@ -3,7 +3,7 @@ import coreSetsReducer from "../CoreSupport/View/CoreSetSlice";
 import inventoryReducer from "../Inventory/View/InventorySlice";
 import mainReducer from "./MainSlice";
 
-import addDropReducer from "../AddDrop/AddDropSlice";
+import addDropReducer from "../AddDrop/View/AddDropSlice";
 import priceChangeWorksheetsReducer from "../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
 
 export const store = configureStore({

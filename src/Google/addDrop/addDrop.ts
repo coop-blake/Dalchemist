@@ -43,7 +43,7 @@ export class AddDrop {
               day: "numeric",
               hour: "2-digit",
               minute: "2-digit",
-              second: "2-digit"
+              second: "2-digit",
             });
             console.log(`Inventory Updated changed: ${formattedDate}`);
             this.refresh();
@@ -62,7 +62,7 @@ export class AddDrop {
         //Read data from New Items Tab
         const newItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `New Items!A3:Y300` // Adjust range as needed
+          range: `New Items!A3:Y300`, // Adjust range as needed
         });
 
         const newItems = newItemsResponse.data.values
@@ -94,7 +94,7 @@ export class AddDrop {
 
         const attributeChangesResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Price & Attribute Changes!A3:AC300` // Adjust range as needed
+          range: `Price & Attribute Changes!A3:AC300`, // Adjust range as needed
         });
         const attributeChangeItems = attributeChangesResponse.data.values
           ?.map((attributeChangeItem) =>
@@ -113,22 +113,22 @@ export class AddDrop {
             containsAny(attributeChange?.ChangeOne ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeTwo ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeThree ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeFour ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ])
           );
         }) as [AttributeChangeEntry];
@@ -181,6 +181,9 @@ export class AddDropState {
   }
   public setLastRefreshCompleted(time: number) {
     this.lastRefreshCompletedSubject.next(time);
+  }
+  public get lastRefreshCompleted(): number {
+    return this.lastRefreshCompletedSubject.getValue();
   }
 
   public get newItems(): NewItemEntry[] {
@@ -266,7 +269,7 @@ export const newItemEntryFromValueArray = function (
       Comments: valueArray[23].trim(),
 
       //All values as array as received
-      valuesArray: valueArray
+      valuesArray: valueArray,
     };
     return entry;
   }
@@ -311,7 +314,7 @@ export const attributeChangeEntryFromValueArray = function (
       BestDateForPriceChange: valueArray[27].trim(),
       BestTimeForPriceChange: valueArray[28].trim(),
 
-      valuesArray: valueArray
+      valuesArray: valueArray,
     };
     return entry;
   }
