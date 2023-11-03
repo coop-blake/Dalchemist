@@ -175,6 +175,9 @@ export class AddDropState {
   public setStatus(status: AddDropStatus) {
     this.statusSubject.next(status);
   }
+  public get status(): AddDropStatus {
+    return this.statusSubject.getValue();
+  }
 
   public get lastRefreshCompleted$(): Observable<number> {
     return this.lastRefreshCompletedSubject.asObservable();

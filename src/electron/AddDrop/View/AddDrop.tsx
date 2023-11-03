@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../View/hooks";
 import {
   setStatus,
+  selectStatus,
   selectNewItems,
   setNewItems,
   setLastRefresh,
   selectLastRefresh,
-  setNewItemsInInventoryArray,
+  setNewItemsInInventory,
   selectNewItemsInInventory,
   setAttributeChanges,
   selectAttributeChanges,
@@ -18,6 +19,8 @@ import {
   NewItemEntry,
   AttributeChangeEntry,
 } from "../../../Google/addDrop/addDrop";
+
+import { AddDropStatus } from "../../../Google/addDrop/shared";
 import { InventoryEntry } from "../../../Google/Inventory/Inventory";
 
 import { LoadingAnimation } from "../../UI/Loading/LoadingAnimation";
@@ -33,41 +36,161 @@ import NewItemsTable from "./NewItemsTable";
 import NewItemsInInventoryTable from "./NewItemsInInventoryTable";
 import AttributeChangesTable from "./AttributeChangesTable";
 import PriceUpdatesTable from "./PriceUpdatesTable";
+
+import newIcon from "./resources/images/gift.svg";
+import updateIcon from "./resources/images/edit.svg";
+import priceUpdateIcon from "./resources/images/dollar-sign.svg";
+
+import alertIcon from "./resources/images/alert-triangle.svg";
+
+import { Button } from "../../UI/Button";
+
 export default function AddDropView() {
-  const items = useAppSelector(selectNewItems);
+  const status = useAppSelector(selectStatus);
+  const newItems = useAppSelector(selectNewItems);
   const lastRefresh = useAppSelector(selectLastRefresh);
   const newItemsInInventory = useAppSelector(selectNewItemsInInventory);
   const attributeChangeItems = useAppSelector(selectAttributeChanges);
   const priceUpdates = useAppSelector(selectPriceUpdates);
+
+  const [subView, setSubView] = useState(SubView.NewItems);
+
   useEffect(() => {
     console.log("🔴🔴🔴🔴🔴");
     window.electron.ipcRenderer.sendMessage("addDropWindowMessage", "loaded");
-    window.document.title = `AddDrop last retreived: ${formatTimestampToMinute(
-      lastRefresh
-    )}`;
-  }, [items, lastRefresh]);
+    window.document.title = `AddDrop: ${status} ${
+      status === AddDropStatus.Running
+        ? `last retreived: ${formatTimestampToMinute(lastRefresh)}`
+        : ""
+    }`;
+  }, [newItems, lastRefresh, newItemsInInventory]);
 
   return (
     <>
-      {items.length > 0 ? (
-        <>
-          <div>
-            Loaded <p>{items.length}</p>
-            <p>{newItemsInInventory.length}</p>
-            <p>{attributeChangeItems.length}</p>
-            <p>{priceUpdates.length}</p>
-            <NewItemsTable />
-            <NewItemsInInventoryTable />
-            <AttributeChangesTable />
-            <PriceUpdatesTable />
+      {status === AddDropStatus.Running ? (
+        <div className="CoreSetsMainDiv">
+          <div className="navMenu">
+            {/* <span
+              className={`navButton ${
+                subView === SubView.NewItems && "activeButton"
+              }`}
+              onClick={() => {
+                setSubView(SubView.NewItems);
+              }}
+            >
+              <img id="newIcon" src={newIcon} alt="New Items Icon Image" /> New
+              Items
+            </span>
+            <span
+              className={`navButton ${
+                subView === SubView.AttributeChanges && "activeButton"
+              }`}
+              onClick={() => {
+                setSubView(SubView.AttributeChanges);
+              }}
+            >
+              <img id="updateIcon" src={updateIcon} alt="Updates Icon Image" />{" "}
+              Attribute Updates
+            </span>
+            <span
+              className={`navButton ${
+                subView === SubView.PriceUpdates && "activeButton"
+              }`}
+              onClick={() => {
+                setSubView(SubView.PriceUpdates);
+              }}
+            >
+              <img
+                id="priceUpdateIcon"
+                src={priceUpdateIcon}
+                alt="Price Updates Icon Image"
+              />{" "}
+              Price Updates
+            </span>
+             <span
+                className={`navButton ${
+                  subView === SubView.InvalidNewItems && "activeButton"
+                }`}
+                onClick={() => {
+                  setSubView(SubView.InvalidNewItems);
+                }}
+              >
+                <img id="AlertImage" src={alertIcon} alt="Alert Icon Image" />{" "}
+                Invalid New Items {newItemsInInventory.length}
+              </span> */}
+
+            <Button
+              name={"New Items"}
+              icon={newIcon}
+              active={subView === SubView.NewItems}
+              onClick={() => {
+                setSubView(SubView.NewItems);
+              }}
+            />
+            <Button
+              name={"Attribute Updates"}
+              icon={updateIcon}
+              active={subView === SubView.AttributeChanges}
+              onClick={() => {
+                setSubView(SubView.AttributeChanges);
+              }}
+            />
+            <Button
+              name={"Price Updates"}
+              icon={priceUpdateIcon}
+              active={subView === SubView.PriceUpdates}
+              onClick={() => {
+                setSubView(SubView.PriceUpdates);
+              }}
+            />
+            {newItemsInInventory.length > 0 && (
+              <Button
+                name={`Invalid New Items ${newItemsInInventory.length}`}
+                icon={alertIcon}
+                active={subView === SubView.InvalidNewItems}
+                onClick={() => {
+                  setSubView(SubView.InvalidNewItems);
+                }}
+                style={{ color: "#660033" }}
+              />
+            )}
           </div>
-        </>
+          <div className="mainContent">
+            {subView === SubView.NewItems ? (
+              <NewItemsTable />
+            ) : subView === SubView.AttributeChanges ? (
+              <AttributeChangesTable />
+            ) : subView === SubView.PriceUpdates ? (
+              <PriceUpdatesTable />
+            ) : subView === SubView.InvalidNewItems ? (
+              <NewItemsInInventoryTable />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
       ) : (
         <LoadingAnimation />
       )}
     </>
   );
 }
+
+enum SubView {
+  NewItems,
+  AttributeChanges,
+  PriceUpdates,
+  InvalidNewItems,
+}
+window.electron.ipcRenderer.on(
+  "addDropStatus",
+  (newItemsArray: AddDropStatus) => {
+    if (typeof newItemsArray !== "undefined") {
+      console.log(newItemsArray);
+      store.dispatch(setStatus(newItemsArray));
+    }
+  }
+);
 
 window.electron.ipcRenderer.on(
   "newItemsArray",
@@ -151,7 +274,7 @@ window.electron.ipcRenderer.on(
 
         return returnItem;
       });
-      store.dispatch(setNewItemsInInventoryArray(newItemsInInventory));
+      store.dispatch(setNewItemsInInventory(newItemsInInventory));
     }
   }
 );
@@ -173,3 +296,7 @@ window.electron.ipcRenderer.on(
     store.dispatch(setPriceUpdates(priceChangeItemsArray));
   }
 );
+
+function AttributeChangesTableView() {
+  return <AttributeChangesTableView />;
+}

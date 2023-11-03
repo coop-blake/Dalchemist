@@ -20,7 +20,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "./tests/**/*.ts",
-    "Tests/Inventory/inventory.sheet.test.ts"
+    "src/**/*.tsx",
+    "src/**/*.svg"
   ],
   "typedocOptions": {
     "entryPoints": ["src/"],

@@ -2,6 +2,9 @@ import { AddDrop } from "./AddDrop";
 
 import { AddDrop as GoogleAddDrop } from "../../Google/addDrop/addDrop";
 
+import { ipcMain, IpcMainInvokeEvent, dialog } from "electron";
+import { getAddDropPriceUpdatesTSV } from "../../Google/addDrop/htmlOutputs";
+import { saveStringToFile } from "../FileSave";
 export const sendStateChangesToWindow = async () => {
   GoogleAddDrop.getInstance();
   const inventoryObservable =
@@ -19,6 +22,7 @@ export const sendStateChangesToWindow = async () => {
 export const sendAddDropData = async () => {
   const addDropWindow = await AddDrop.getInstance().getWindow();
   if (addDropWindow !== null) {
+    addDropWindow.webContents.send("addDropStatus", GoogleAddDrop.state.status);
     addDropWindow.webContents.send(
       "newItemsArray",
       GoogleAddDrop.state.newItems
@@ -40,4 +44,29 @@ export const sendAddDropData = async () => {
       GoogleAddDrop.state.lastRefreshCompleted
     );
   }
+};
+
+export const handleAddDropWindowMessage = async (
+  _event: IpcMainInvokeEvent,
+  mainWindowMessage: string
+) => {
+  if (mainWindowMessage === "loaded") {
+    //should send the data
+  } else if (mainWindowMessage === "savePriceCostTSV") {
+    savePriceCostTSVPrompt();
+  }
+};
+
+export const savePriceCostTSVPrompt = function () {
+  const contentToSave = getAddDropPriceUpdatesTSV(
+    GoogleAddDrop.state.priceUpdates
+  );
+  dialog
+    .showSaveDialog({ defaultPath: "addDropPriceCost.txt" })
+    .then((result) => {
+      if (!result.canceled && result.filePath) {
+        const filePath = result.filePath;
+        saveStringToFile(contentToSave, filePath);
+      }
+    });
 };

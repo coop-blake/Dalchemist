@@ -3,6 +3,7 @@ import { useAppSelector } from "../../View/hooks";
 import { setItems } from "../View/InventorySlice";
 import { store } from "../../View/store";
 
+import "./resources/css/inventory.css";
 import InventoryTable from "./InventoryTable";
 
 import { InventoryEntry } from "../../../Google/Inventory/Inventory";
@@ -12,7 +13,9 @@ import { selectItems } from "./InventorySlice";
 export default function InventoryView() {
   const items = useAppSelector(selectItems);
   useEffect(() => {
-    window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
+    items.length > 0
+      ? (document.title = `Inventory: ${items.length} Entries`)
+      : (document.title = "Inventory Loading");
   }, [items]);
 
   return <>{items.length > 0 ? <InventoryTable /> : <LoadingAnimation />}</>;

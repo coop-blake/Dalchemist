@@ -1,5 +1,5 @@
 import React from "react";
-import icon from "./Icon.svg";
+import icon from "../../Resources/images/Icon.svg";
 import "./index.css";
 
 export function LoadingAnimation() {

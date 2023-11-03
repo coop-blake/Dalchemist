@@ -409,16 +409,16 @@ export default class DalchemistApp {
     }
   };
 
-  private handleAddDropWindowMessage = async (
-    _event: IpcMainInvokeEvent,
-    mainWindowMessage: string
-  ) => {
-    if (mainWindowMessage === "loaded") {
-      //should send the data
-    } else if (mainWindowMessage === "savePriceCostTSV") {
-      savePriceCostTSVPrompt();
-    }
-  };
+  // private handleAddDropWindowMessage = async (
+  //   _event: IpcMainInvokeEvent,
+  //   mainWindowMessage: string
+  // ) => {
+  //   if (mainWindowMessage === "loaded") {
+  //     //should send the data
+  //   } else if (mainWindowMessage === "savePriceCostTSV") {
+  //     savePriceCostTSVPrompt();
+  //   }
+  // };
 
   public showMainWindow() {
     if (this.mainWindow !== null) {
@@ -615,6 +615,7 @@ function returnUserScancodeSearch(input: string): string {
   }
 }
 
+//todo:remove
 export function savePriceCostTSVPrompt() {
   const contentToSave = getAddDropPriceUpdatesTSV(
     GoogleAddDrop.state.priceUpdates

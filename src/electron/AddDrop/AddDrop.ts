@@ -3,7 +3,13 @@ import path from "path";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow } from "electron";
 import DalchemistApp from "../DalchemistApp";
-import { sendStateChangesToWindow, sendAddDropData } from "./ipc";
+import {
+  sendStateChangesToWindow,
+  sendAddDropData,
+  handleAddDropWindowMessage,
+} from "./ipc";
+
+import { ipcMain } from "electron";
 /**
  * AddDrop
  * Singlton Instance with State that handles the AddDrop Main Process for Electron
@@ -67,8 +73,13 @@ export class AddDrop {
 
       this.window.on("closed", () => {
         this.window = null;
+        ipcMain.removeListener(
+          "addDropWindowMessage",
+          handleAddDropWindowMessage
+        );
       });
       sendStateChangesToWindow();
+      ipcMain.on("addDropWindowMessage", handleAddDropWindowMessage);
     }
 
     return this.window;

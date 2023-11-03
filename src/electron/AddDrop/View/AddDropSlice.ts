@@ -51,7 +51,7 @@ export const addDropSlice = createSlice({
       state.lastRefresh = action.payload;
       console.log(state.status);
     },
-    setNewItemsInInventoryArray: (
+    setNewItemsInInventory: (
       state,
       action: PayloadAction<Array<NewItemInEnventory>>
     ) => {
@@ -71,11 +71,13 @@ export const {
   setNewItems,
   setAttributeChanges,
   setLastRefresh,
-  setNewItemsInInventoryArray,
+  setNewItemsInInventory,
   setPriceUpdates,
 } = addDropSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
+export const selectStatus = (state: RootState) => state.AddDrop.status;
+
 export const selectNewItems = (state: RootState) => state.AddDrop.NewItems;
 
 export const selectLastRefresh = (state: RootState) =>

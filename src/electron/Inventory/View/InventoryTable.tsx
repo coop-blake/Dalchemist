@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import "../../Resources/css/slickGrid.scss";
+//import "../../Resources/css/slickGrid.scss";
 import { useAppSelector } from "../../View/hooks";
 import { selectItems } from "../View/InventorySlice";
 
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import { InventoryEntry } from "../../../Google/Inventory/Inventory";
 
+import "./resources/css/inventory-table.css";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 
@@ -46,6 +47,7 @@ function inventoryDataUpdated(data: InventoryEntry[] = []) {
       inventoryTable = new Tabulator("#inventoryTable", {
         data: data, //load row data from array
         movableColumns: true, //allow column order to be changed
+        clipboard: "copy",
         columns: [
           {
             title: "ScanCode",
