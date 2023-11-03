@@ -11,7 +11,7 @@ import {
   ipcMain,
   IpcMainInvokeEvent,
   dialog,
-  shell,
+  shell
 } from "electron";
 import path from "path";
 import { BehaviorSubject, Observable } from "rxjs";
@@ -54,7 +54,7 @@ export enum DalchemistAppStatus {
   Initializing = "Initializing",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!",
+  Error = "Error!"
 }
 
 export default class DalchemistApp {
@@ -98,8 +98,8 @@ export default class DalchemistApp {
       height: 150,
       webPreferences: {
         preload: preloadPath,
-        nodeIntegration: true,
-      },
+        nodeIntegration: true
+      }
     });
 
     win.loadFile(__dirname + "/Resources/html/inputDialog.html");
@@ -180,80 +180,7 @@ export default class DalchemistApp {
   }
   public showAddDropWindow() {
     AddDrop.getInstance().showWindow();
-
-    // const addDropWindow = this.getAddDropWindow();
-    // const getIndexPath = resolveHtmlPath("addDrop.html");
-    // console.log("addDrop getIndexPath", getIndexPath);
-
-    // if (addDropWindow !== null) {
-    //   ipcMain.on("addDropWindowMessage", this.handleAddDropWindowMessage);
-
-    //   addDropWindow.on("closed", () => {
-    //     // Remove the IPC event listener when the window is closed
-    //     ipcMain.removeListener(
-    //       "addDropWindowMessage",
-    //       this.handleAddDropWindowMessage
-    //     );
-    //   });
-
-    //   addDropWindow
-    //     .loadURL(path.join(getIndexPath))
-    //     .then(() => {
-    //       this.sendAddDropData();
-    //       addDropWindow.show();
-    //     })
-    //     .catch((error: Error) => {
-    //       console.error(error);
-    //     });
-    // }
   }
-
-  // private sendAddDropData() {
-  //   const addDropWindow = this.addDropWindow;
-  //   if (addDropWindow !== null) {
-  //     addDropWindow.webContents.send("newItemsArray", AddDrop.state.newItems);
-  //     addDropWindow.webContents.send(
-  //       "itemsAlreadyInInventory",
-  //       AddDrop.state.itemsAlreadyInInventory
-  //     );
-  //     addDropWindow.webContents.send(
-  //       "attributeChangeItems",
-  //       AddDrop.state.attributeChangeItems
-  //     );
-  //     addDropWindow.webContents.send(
-  //       "priceUpdates",
-  //       AddDrop.state.priceUpdates
-  //     );
-  //     addDropWindow.webContents.send(
-  //       "addDropDataLastReload",
-  //       this.lastAddDropLastRefresh
-  //     );
-  //   }
-  // }
-
-  // public showInventoryWindow() {
-  //   Inventory.getInstance().showWindow();
-
-  //   // const inventoryWindow = this.getInventoryWindow();
-  //   // const getIndexPath = resolveHtmlPath("inventory.html");
-  //   // console.log("Inventory getIndexPath", getIndexPath);
-
-  //   // if (inventoryWindow !== null) {
-  //   //   inventoryWindow
-  //   //     .loadURL(path.join(getIndexPath))
-  //   //     .then(() => {
-  //   //       this.sendInventoryData();
-
-  //   //       inventoryWindow.show();
-  //   //     })
-  //   //     .catch((error: Error) => {
-  //   //       console.error(error);
-  //   //     });
-  //   // }
-  // }
-  // private sendInventoryData() {
-  //   // Inventory.getInstance().showWindow();
-  // }
 
   public showTabImporterWindow() {
     const tabImporterWindow = this.getTabImporterWindow();
@@ -357,17 +284,6 @@ export default class DalchemistApp {
       DalchemistApp.state.setStatus(DalchemistAppStatus.Running);
       this.onDataUpdate(addDropLastRefresh, inventoryLastRefresh);
     }
-
-    // if (inventoryLastRefresh > this.lastInventoryLastRefresh) {
-    //   this.lastInventoryLastRefresh = inventoryLastRefresh;
-    //   this.sendInventoryData();
-    // }
-
-    // if (addDropLastRefresh > this.lastAddDropLastRefresh) {
-    //   this.lastAddDropLastRefresh = addDropLastRefresh;
-
-    //   this.sendAddDropData();
-    // }
   }
 
   private sendMainWindowStatus() {
@@ -408,17 +324,6 @@ export default class DalchemistApp {
       PriceChangeWorksheets.selectFolderPath();
     }
   };
-
-  // private handleAddDropWindowMessage = async (
-  //   _event: IpcMainInvokeEvent,
-  //   mainWindowMessage: string
-  // ) => {
-  //   if (mainWindowMessage === "loaded") {
-  //     //should send the data
-  //   } else if (mainWindowMessage === "savePriceCostTSV") {
-  //     savePriceCostTSVPrompt();
-  //   }
-  // };
 
   public showMainWindow() {
     if (this.mainWindow !== null) {
@@ -480,76 +385,18 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         resizable: true,
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
     }
     return this.mainWindow;
   }
-
-  // public getInventoryWindow(): BrowserWindow | null {
-  //   if (this.inventoryWindow === null) {
-  //     if (this.notReady) {
-  //       return null;
-  //     }
-
-  //     const preloadPath = app.isPackaged
-  //       ? path.join(__dirname, "preloadInventory.js")
-  //       : path.join(
-  //           __dirname,
-  //           "../../build/Inventory/View/preloadInventory.js"
-  //         );
-  //     console.log("Add Drop preload path", preloadPath);
-  //     this.inventoryWindow = new BrowserWindow({
-  //       width: 1200,
-  //       height: 800,
-  //       show: false,
-  //       webPreferences: {
-  //         preload: preloadPath, // Load preload script for the input dialog
-  //         contextIsolation: true,
-  //         nodeIntegration: false
-  //       }
-  //     });
-  //   }
-
-  //   this.inventoryWindow.on("closed", () => {
-  //     this.inventoryWindow = null;
-  //   });
-  //   return this.inventoryWindow;
-  // }
-
-  // public getAddDropWindow(): BrowserWindow | null {
-  //   if (this.addDropWindow === null) {
-  //     if (this.notReady) {
-  //       return null;
-  //     }
-
-  //     const preloadPath = app.isPackaged
-  //       ? path.join(__dirname, "preloadAddDrop.js")
-  //       : path.join(__dirname, "../../build/AddDrop/View/preloadAddDrop.js");
-  //     console.log("Add Drop preload path", preloadPath);
-  //     this.addDropWindow = new BrowserWindow({
-  //       width: 1200,
-  //       height: 800,
-  //       show: false,
-  //       webPreferences: {
-  //         preload: preloadPath, // Load preload script for the input dialog
-  //         contextIsolation: true,
-  //         nodeIntegration: true,
-  //       },
-  //     });
-  //   }
-  //   this.addDropWindow.on("closed", () => {
-  //     this.addDropWindow = null;
-  //   });
-  //   return this.addDropWindow;
-  // }
 
   public getTabImporterWindow(): BrowserWindow | null {
     if (this.tabImporterWindow === null) {
@@ -564,14 +411,14 @@ export default class DalchemistApp {
         titleBarOverlay: {
           color: "#2f3241",
           symbolColor: "#74b1be",
-          height: 10,
+          height: 10
         },
         autoHideMenuBar: true,
         webPreferences: {
-          contextIsolation: true,
+          contextIsolation: true
 
           // Set this to false to use the default menu
-        },
+        }
       });
     }
     this.tabImporterWindow.on("closed", () => {

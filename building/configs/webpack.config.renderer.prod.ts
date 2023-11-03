@@ -25,12 +25,7 @@ const configuration: webpack.Configuration = {
 
   target: ["web", "electron-renderer"],
 
-  entry: [
-    path.join(webpackPaths.srcRendererPath, "index.tsx")
-    //path.join(webpackPaths.srcRendererPath, "inventory.tsx"),
-    // path.join(webpackPaths.srcRendererPath, "coreSets.tsx"),
-    // path.join(webpackPaths.srcRendererPath, "addDrop.tsx"),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, "index.tsx")],
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -136,40 +131,6 @@ const configuration: webpack.Configuration = {
       isBrowser: false,
       isDevelopment: false
     }),
-    // new HtmlWebpackPlugin({
-    //   filename: "addDrop.html",
-    //   template: path.join(webpackPaths.srcRendererPath, "addDrop.ejs"),
-    //   minify: {
-    //     collapseWhitespace: true,
-    //     removeAttributeQuotes: true,
-    //     removeComments: true,
-    //   },
-    //   isBrowser: false,
-    //   isDevelopment: false,
-    // }),
-    // new HtmlWebpackPlugin({
-    //   filename: "inventory.html",
-    //   template: path.join(webpackPaths.srcRendererPath, "inventory.ejs"),
-    //   minify: {
-    //     collapseWhitespace: true,
-    //     removeAttributeQuotes: true,
-    //     removeComments: true,
-    //   },
-    //   isBrowser: false,
-    //   isDevelopment: false,
-    // }),
-    // new HtmlWebpackPlugin({
-    //   filename: "coreSets.html",
-    //   template: path.join(webpackPaths.srcRendererPath, "index.ejs"),
-    //   minify: {
-    //     collapseWhitespace: true,
-    //     removeAttributeQuotes: true,
-    //     removeComments: true,
-    //   },
-    //   isBrowser: false,
-    //   isDevelopment: false,
-    // }),
-
     new webpack.DefinePlugin({
       "process.type": '"renderer"'
     })
