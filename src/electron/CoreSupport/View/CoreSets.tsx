@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
 //import { ipcRenderer } from "electron";
-
+import "./resources/css/core-support-table.css"
 import {
   selectAvailableItems,
   selectOurItems,
@@ -258,7 +258,7 @@ export default function CoreSetsView() {
 
   function reviewView() {
     return (
-      <div>
+      <div className="core-support-table">
         <CoreSetsTable />
         <span id="numberOfCoreSupportItems">{availableItems.length}</span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">

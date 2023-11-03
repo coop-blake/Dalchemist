@@ -34,11 +34,13 @@ export default function CoreSetsTable() {
   const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridOptions, setGridOptions] = useState({
-    gridHeight: 500,
-    gridWidth: 1900,
-    enableAutoResize: true,
     enableSorting: true,
     enableFiltering: true,
+    forceFitColumns: true,
+    enableCellNavigation: true,
+    enableColumnReorder: false,
+    multiColumnSort: true,
+    asyncEditorLoading: true,
   } as GridOption);
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function CoreSetsTable() {
       columnDefinitions={columnDefinitions}
       gridOptions={gridOptions!}
       dataset={[...availableItems]}
+      class="core-support-table"      
     />
   );
 }
