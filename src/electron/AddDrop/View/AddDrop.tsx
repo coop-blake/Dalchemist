@@ -70,55 +70,6 @@ export default function AddDropView() {
       {status === AddDropStatus.Running ? (
         <div className="CoreSetsMainDiv">
           <div className="navMenu">
-            {/* <span
-              className={`navButton ${
-                subView === SubView.NewItems && "activeButton"
-              }`}
-              onClick={() => {
-                setSubView(SubView.NewItems);
-              }}
-            >
-              <img id="newIcon" src={newIcon} alt="New Items Icon Image" /> New
-              Items
-            </span>
-            <span
-              className={`navButton ${
-                subView === SubView.AttributeChanges && "activeButton"
-              }`}
-              onClick={() => {
-                setSubView(SubView.AttributeChanges);
-              }}
-            >
-              <img id="updateIcon" src={updateIcon} alt="Updates Icon Image" />{" "}
-              Attribute Updates
-            </span>
-            <span
-              className={`navButton ${
-                subView === SubView.PriceUpdates && "activeButton"
-              }`}
-              onClick={() => {
-                setSubView(SubView.PriceUpdates);
-              }}
-            >
-              <img
-                id="priceUpdateIcon"
-                src={priceUpdateIcon}
-                alt="Price Updates Icon Image"
-              />{" "}
-              Price Updates
-            </span>
-             <span
-                className={`navButton ${
-                  subView === SubView.InvalidNewItems && "activeButton"
-                }`}
-                onClick={() => {
-                  setSubView(SubView.InvalidNewItems);
-                }}
-              >
-                <img id="AlertImage" src={alertIcon} alt="Alert Icon Image" />{" "}
-                Invalid New Items {newItemsInInventory.length}
-              </span> */}
-
             <Button
               name={"New Items"}
               icon={newIcon}

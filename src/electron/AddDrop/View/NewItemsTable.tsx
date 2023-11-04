@@ -7,6 +7,8 @@ import { NewItemEntry } from "../../../Google/addDrop/addDrop";
 
 import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
 
+import thumbsUpIcon from "./resources/images/thumbs-up.svg";
+
 import "./resources/css/add-drop-table.css";
 import "./resources/css/new-items-table.css";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
@@ -71,22 +73,25 @@ export default function NewItemsTable() {
   }
 
   return !(items.length > 0) ? (
-    ""
+    <div
+      style={{
+        position: "absolute",
+        top: "50px",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      <div className="centered-div large-font centered-text">
+        <img src={thumbsUpIcon} /> <br />
+        No New Items!
+      </div>
+    </div>
   ) : (
     <>
-      <div
-        id="newItemsTable"
-        className="add-drop-table"
-        style={{
-          position: "absolute",
-          top: "50px",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: 0,
-          margin: 0,
-        }}
-      />
+      <div id="newItemsTable" className="add-drop-table" />
     </>
   );
 }

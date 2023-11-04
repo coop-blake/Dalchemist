@@ -4,9 +4,10 @@ import { CoreSupport } from "./CoreSupport";
 import path from "path";
 import { CoreSetsStatus, CoreSupportEntry } from "./shared";
 import { resolveHtmlPath } from "../Utility";
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import DalchemistApp from "../DalchemistApp";
 import { PriceChangeWorksheets } from "../PriceChangeWorksheets/PriceChangeWorksheets";
+import { handleWindowMessage } from "./ipc";
 /**
  * CoreSets
  * Singlton Instance with State that handles the CoreSets BackEnd for Electron
@@ -127,14 +128,16 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
 
       this.coreSetsWindow.on("closed", () => {
         this.coreSetsWindow = null;
+        ipcMain.removeListener("coreSetsWindowMessage", handleWindowMessage);
       });
       sendStateChangesToWindow();
+      ipcMain.on("coreSetsWindowMessage", handleWindowMessage);
     }
 
     return this.coreSetsWindow;
@@ -257,6 +260,10 @@ const sendCoreSetsData = async () => {
     coreSetsWindow.webContents.send(
       "CoreSetEntriesUpdated",
       CoreSets.state.coreSetItems
+    );
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItems",
+      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
     );
     coreSetsWindow.webContents.send(
       "CoreSetStatusUpdated",
