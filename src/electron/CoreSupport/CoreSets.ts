@@ -5,7 +5,7 @@ import path from "path";
 import {
   CoreSetsStatus,
   CoreSupportEntry,
-  CoreSupportReportEntry,
+  CoreSupportReportEntry
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow, ipcMain } from "electron";
@@ -134,8 +134,8 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
 
       this.coreSetsWindow.on("closed", () => {
@@ -289,7 +289,13 @@ const sendCoreSetsData = async () => {
     );
 
     coreSetsWindow.webContents.send("CoreSetReportEntries", [
-      ...CoreSets.state.reportEntries,
+      CoreSets.state.reportEntries
+    ]);
+
+    coreSetsWindow.webContents.send("CoreSetAvailableDistributors", [
+      "one",
+      "two",
+      "three"
     ]);
   }
 };

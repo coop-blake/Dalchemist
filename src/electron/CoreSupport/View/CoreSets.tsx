@@ -5,8 +5,7 @@ import CoreSetReportTable from "./ReportTable";
 //import { ipcRenderer } from "electron";
 import "./resources/css/core-support-table.css";
 import { useAppSelector } from "../../View/hooks";
-
-import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
+import {DistributorChooser} from "./DistributorChooser"
 import {
   CoreSetsStatus,
   CoreSupportEntry,
@@ -27,6 +26,8 @@ import {
   setReportEntries,
   selectAvailableItems,
   selectReportEntries,
+  setAvailableDistributors,
+  setSelectedDistributors
 } from "./CoreSetSlice";
 
 import "../../Resources/css/coreSets.css";
@@ -82,23 +83,41 @@ window.electron.ipcRenderer.on(
     }
   }
 );
+window.electron.ipcRenderer.on(
+  "CoreSetAvailableDistributors",
+  (availableDistributorsArray: Array<string>) => {
+    console.log(
+      "availableDistributorsArray",
+      availableDistributorsArray
+    );
+    if (typeof availableDistributorsArray !== "undefined") {
+      console.log(availableDistributorsArray);
 
+      store.dispatch(setAvailableDistributors(availableDistributorsArray));
+    }
+  }
+);
+window.electron.ipcRenderer.on(
+  "CoreSetSelectedDistributors",
+  (selectedDistributorsArray: Array<string>) => {
+    console.log(
+      "selectedDistributorsArray",
+      selectedDistributorsArray
+    );
+    if (typeof selectedDistributorsArray !== "undefined") {
+      console.log(selectedDistributorsArray);
+
+      store.dispatch(setSelectedDistributors(selectedDistributorsArray));
+    }
+  }
+);
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
   const availableItems = useAppSelector(selectAvailableItems);
   const reportEntries = useAppSelector(selectReportEntries);
 
-  const priceChangeWorksheetStatus = useAppSelector(
-    (state) => state.PriceChangeWorksheets.status
-  );
-
-  const priceChangeWorksheetFolderPath = useAppSelector(
-    (state) => state.PriceChangeWorksheets.folderPath
-  );
-
-  const priceChangeWorksheets = useAppSelector(selectWorksheets);
-
+  
   const [subView, setSubView] = useState(SubView.settings);
 
   useEffect(() => {
@@ -243,6 +262,7 @@ export default function CoreSetsView() {
           <div className="loadingStatus pulsating"> {status}</div>
         )}
         <hr></hr>
+        <DistributorChooser />
       </div>
     );
   }
