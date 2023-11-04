@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../View/store";
 import {
   CoreSupportEntry,
-  CoreSupportReportEntry
+  CoreSupportReportEntry,
 } from "electron/CoreSupport/shared";
 
 // Define a type for the slice state
@@ -22,7 +22,7 @@ const initialState: CoreSetsState = {
   errorMessage: "",
   availableItems: [],
   ourItems: [],
-  reportEntries: []
+  reportEntries: [],
 };
 
 export const coreSetSlice = createSlice({
@@ -45,16 +45,13 @@ export const coreSetSlice = createSlice({
     ) => {
       state.availableItems = action.payload;
     },
-    setOurItems: (state, action: PayloadAction<Array<CoreSupportEntry>>) => {
-      state.ourItems = action.payload;
-    },
     setReportEntries: (
       state,
       action: PayloadAction<Array<CoreSupportReportEntry>>
     ) => {
       state.reportEntries = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -62,15 +59,13 @@ export const {
   setFilePath,
   setErrorMessage,
   setAvailableItems,
-  setOurItems,
-  setReportEntries
+  setReportEntries,
 } = coreSetSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAvailableItems = (state: RootState) =>
   state.CoreSets.availableItems;
-export const selectOurItems = (state: RootState) =>
-  state.CoreSets.availableItems;
+
 export const selectReportEntries = (state: RootState) =>
   state.CoreSets.reportEntries;
 

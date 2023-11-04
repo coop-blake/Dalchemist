@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import CoreSetsTable from "./CoreSetsTable";
+import CoreSetReportTable from "./ReportTable";
 //import { ipcRenderer } from "electron";
-import "./resources/css/core-support-table.css"
-import {
-  selectAvailableItems,
-  selectOurItems,
-} from "./CoreSetSlice";
+import "./resources/css/core-support-table.css";
 import { useAppSelector } from "../../View/hooks";
 
 import { selectWorksheets } from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
-import { CoreSetsStatus, CoreSupportEntry } from "../../CoreSupport/shared";
+import {
+  CoreSetsStatus,
+  CoreSupportEntry,
+  CoreSupportReportEntry,
+} from "../../CoreSupport/shared";
 
 import fileIcon from "./resources/images/file.svg";
 import slashIcon from "./resources/images/slash.svg";
@@ -23,7 +24,10 @@ import {
   setStatus,
   setFilePath,
   setAvailableItems,
-} from "../../CoreSupport/View/CoreSetSlice";
+  setReportEntries,
+  selectAvailableItems,
+  selectReportEntries,
+} from "./CoreSetSlice";
 
 import "../../Resources/css/coreSets.css";
 
@@ -54,27 +58,27 @@ window.electron.ipcRenderer.on(
 
 window.electron.ipcRenderer.on(
   "CoreSetStatusUpdated",
-  (event, status: CoreSetsStatus) => {
+  (status: CoreSetsStatus) => {
     console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
     store.dispatch(setStatus(status));
   }
 );
-window.electron.ipcRenderer.on(
-  "CoreSetFilePathUpdated",
-  (event, filePath: string) => {
-    console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
-    store.dispatch(setFilePath(filePath));
-  }
-);
+window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
+  console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
+  store.dispatch(setFilePath(filePath));
+});
 
 window.electron.ipcRenderer.on(
-  "CoreSetEntriesUpdated",
-  (event, coreSetItemsArray: Array<CoreSupportEntry>) => {
-    console.log("CoreSetEntriesUpdated🟢🟢🟢🟢🟢");
-    if (typeof coreSetItemsArray !== "undefined") {
-      console.log(coreSetItemsArray);
+  "CoreSetReportEntries",
+  (coreSetReportEntriesArray: Array<CoreSupportReportEntry>) => {
+    console.log(
+      "CoreSetReportEntriesUpdated🟢🟢🟢🟢🟢",
+      coreSetReportEntriesArray
+    );
+    if (typeof coreSetReportEntriesArray !== "undefined") {
+      console.log(coreSetReportEntriesArray);
 
-      store.dispatch(setAvailableItems(coreSetItemsArray));
+      store.dispatch(setReportEntries(coreSetReportEntriesArray));
     }
   }
 );
@@ -83,7 +87,7 @@ export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
   const availableItems = useAppSelector(selectAvailableItems);
-  const ourItems = useAppSelector(selectOurItems);
+  const reportEntries = useAppSelector(selectReportEntries);
 
   const priceChangeWorksheetStatus = useAppSelector(
     (state) => state.PriceChangeWorksheets.status
@@ -157,9 +161,9 @@ export default function CoreSetsView() {
       <div>
         Report
         <br />
-        <span id="numberOfCoreSupportItems">{availableItems.length}</span>
+        <span id="numberOfCoreSupportItems"></span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {ourItems.length}
+          {reportEntries.length}/{availableItems.length} Report Entries
         </span>
         <span
           id="saveCoreSetReportButton"
@@ -168,6 +172,7 @@ export default function CoreSetsView() {
         >
           Save Report
         </span>
+        <CoreSetReportTable />
       </div>
     );
   }
@@ -231,27 +236,13 @@ export default function CoreSetsView() {
         </div>
         {availableItems.length > 0 ? (
           <div id="loadedFileStatus">
-            ✅ Loaded with {availableItems.length} items from our distributors
+            ✅ Loaded with {availableItems.length} entries from our distributors{" "}
+            <br />✅ Loaded with {reportEntries.length} entries in our Inventory
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
         <hr></hr>
-
-        <h2 style={{ paddingLeft: "10px" }}>Price Change Worksheets</h2>
-        <div>{priceChangeWorksheetStatus}</div>
-        <div>{priceChangeWorksheetFolderPath}</div>
-        <div
-          className="interfaceButton"
-          onClick={selectPriceChangeWorksheetsFolderMenuButtonClicked}
-        >
-          Select Folder
-        </div>
-        <ul style={{ paddingLeft: "10px" }}>
-          {priceChangeWorksheets.map((worksheet) => (
-            <li style={{ marginLeft: "40px" }}>{worksheet}</li>
-          ))}
-        </ul>
       </div>
     );
   }
@@ -262,7 +253,7 @@ export default function CoreSetsView() {
         <CoreSetsTable />
         <span id="numberOfCoreSupportItems">{availableItems.length}</span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {ourItems.length}
+          {reportEntries.length}
         </span>
       </div>
     );
@@ -287,12 +278,5 @@ function openCoreSetsFileButtonClicked() {
   window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsFile"
-  );
-}
-
-function selectPriceChangeWorksheetsFolderMenuButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
-    "coreSetsWindowMessage",
-    "selectPriceChangeWorksheetsFolder"
   );
 }

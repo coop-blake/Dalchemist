@@ -5,7 +5,7 @@ export enum CoreSetsStatus {
   Starting = "Starting",
   Loading = "Loading",
   Running = "Running",
-  Error = "Error!"
+  Error = "Error!",
 }
 
 export type CoreSupportEntry = {

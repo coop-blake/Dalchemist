@@ -1,60 +1,63 @@
 import React, { useEffect, useState } from "react";
 import "../../Resources/css/slickGrid.scss";
 import { useAppSelector } from "../../View/hooks";
-import { selectPriceUpdates } from "../View/CoreSetSlice";
+import { selectReportEntries } from "../View/CoreSetSlice";
 
-import { AttributeChangeEntry } from "../../../Google/addDrop/addDrop";
-
+import { CoreSupportReportEntry } from "../shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
-import "./resources/css/price-updates-table.css";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
-import "./resources/css/add-drop-table.css";
+import "./resources/css/core-support-table.css";
 
 import saveIcon from "./resources/images/save.svg";
 import { Button } from "../../UI/Button";
 
-export default function PriceUpdatesTable() {
-  const items = useAppSelector(selectPriceUpdates);
+export default function CoreSetReportTable() {
+  const items = useAppSelector(selectReportEntries);
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<AttributeChangeEntry[]>([]);
+  const [data, setData] = useState<CoreSupportReportEntry[]>([]);
 
   useEffect(() => {
     data.splice(0);
     items.forEach((item) => {
-      data.push({ ...item } as AttributeChangeEntry);
+      data.push({ ...item } as CoreSupportReportEntry);
     });
 
-    console.log("priceUpdates DataUpdated", data);
+    console.log("coreSetsReportTable DataUpdated", data);
 
     dataUpdated(data);
   }, [items]);
 
-  function dataUpdated(data: AttributeChangeEntry[] = []) {
-    console.log("priceUpdatesTable DataUpdated", data);
+  function dataUpdated(data: CoreSupportReportEntry[] = []) {
+    console.log("coreSetsReportTable DataUpdated", data);
 
     if (data.length > 0) {
       if (table === null) {
         setTable(
-          new Tabulator("#priceUpdatesTable", {
+          new Tabulator("#coreSetsReportTable", {
             data: data, //load row data from array
             movableColumns: true, //allow column order to be changed
             columns: [
               // { title: "Date", field: "Date"},
-              { title: "Client", field: "Client", frozen: true },
-              { title: "ScanCode", field: "ScanCode", frozen: true },
-              { title: "Department", field: "Department" },
-              { title: "BasePrice", field: "BasePrice" },
-              { title: "UnitCost", field: "UnitCost" },
+              { title: "UPC", field: "UPC", frozen: true },
+              { title: "Brand", field: "Brand", frozen: true },
+              { title: "Description", field: "Description" },
+              { title: "Subdepart", field: "Subdepart" },
+              { title: "CurrentBasePrice", field: "CurrentBasePrice" },
               {
-                title: "BestDateForPriceChange",
-                field: "BestDateForPriceChange",
+                title: "LowestPrice",
+                field: "LowestPrice",
               },
               {
-                title: "BestTimeForPriceChange",
-                field: "BestTimeForPriceChange",
+                title: "CoreSetRetail",
+                field: "CoreSetRetail",
               },
+              { title: "DesiredRetail", field: "DesiredRetail" },
+              { title: "NCGNotes", field: "NCGNotes" },
+              { title: "Notes", field: "Notes" },
+              { title: "Dept", field: "Dept" },
+              { title: "Difference", field: "Difference" },
             ],
           })
         );
@@ -80,7 +83,7 @@ export default function PriceUpdatesTable() {
         className={"add-drop-table-button"}
       />
       <div
-        id="priceUpdatesTable"
+        id="coreSetsReportTable"
         className="add-drop-table"
         style={{ top: "100px" }}
       />

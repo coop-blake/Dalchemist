@@ -5,14 +5,13 @@ import path from "path";
 import {
   CoreSetsStatus,
   CoreSupportEntry,
-  CoreSupportReportEntry
+  CoreSupportReportEntry,
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow, ipcMain } from "electron";
 import DalchemistApp from "../DalchemistApp";
-import { PriceChangeWorksheets } from "../PriceChangeWorksheets/PriceChangeWorksheets";
 import { handleWindowMessage } from "./ipc";
-import { createReportEntries } from "./Report";
+import { processReportEntries } from "./Report";
 /**
  * CoreSets
  * Singlton Instance with State that handles the CoreSets BackEnd for Electron
@@ -35,13 +34,14 @@ export class CoreSets {
 
     Inventory.getInstance();
 
+    //todo combine trigger with coreset state
     Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
       if (lastRefresh > 0) {
         if (this.CoreSupportReader.getFilePath() !== "") {
           if (this.CoreSupportReader.doesKnownFileExist()) {
             setTimeout(async () => {
               await this.loadCoreSetsExcelFile();
-              createReportEntries();
+              processReportEntries();
             });
           } else {
             CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
@@ -134,8 +134,8 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
 
       this.coreSetsWindow.on("closed", () => {
@@ -208,7 +208,7 @@ export class CoreSetsState {
   public get reportEntries$(): Observable<CoreSupportReportEntry[]> {
     return this.reportEntriesSubject.asObservable();
   }
-  public setCoreSetReportEntries(reportEntries: CoreSupportReportEntry[]) {
+  public setReportEntries(reportEntries: CoreSupportReportEntry[]) {
     this.reportEntriesSubject.next(reportEntries);
   }
 }
@@ -250,27 +250,10 @@ const sendStateChangesToWindow = () => {
     coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
   });
 
-  PriceChangeWorksheets.state.status$.subscribe(async (status) => {
+  CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-    coreSetsWindow.webContents.send("PriceChangeWorksheetsStatus", status);
-  });
-
-  PriceChangeWorksheets.state.folderPath$.subscribe(async (filePath) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-
-    coreSetsWindow.webContents.send(
-      "PriceChangeWorksheetsFolderPath",
-      filePath
-    );
-  });
-
-  PriceChangeWorksheets.state.worksheets$.subscribe(async (worksheets) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-    coreSetsWindow.webContents.send(
-      "PriceChangeWorksheetsWorksheets",
-      worksheets
-    );
+    coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
   });
 };
 
@@ -305,21 +288,8 @@ const sendCoreSetsData = async () => {
       CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
     );
 
-    coreSetsWindow.webContents.send(
-      "CoreSetReportEntries",
-      CoreSets.state.reportEntries
-    );
-    coreSetsWindow.webContents.send(
-      "PriceChangeWorksheetsStatus",
-      PriceChangeWorksheets.state.status
-    );
-    coreSetsWindow.webContents.send(
-      "PriceChangeWorksheetsFolderPath",
-      PriceChangeWorksheets.state.folderPath
-    );
-    coreSetsWindow.webContents.send(
-      "PriceChangeWorksheetsWorksheets",
-      PriceChangeWorksheets.state.worksheets
-    );
+    coreSetsWindow.webContents.send("CoreSetReportEntries", [
+      ...CoreSets.state.reportEntries,
+    ]);
   }
 };

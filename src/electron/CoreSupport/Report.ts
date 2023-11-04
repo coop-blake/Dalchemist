@@ -1,4 +1,3 @@
-import { createCoreSupportWithCatapultPricingTSV } from "./TSVOutputs";
 import fs from "fs";
 import { dialog } from "electron";
 import { CoreSupportReportEntry } from "./shared";
@@ -7,7 +6,7 @@ import { Promos } from "../../Google/Inventory/Promos";
 import { Inventory } from "../../Google/Inventory/Inventory";
 
 export async function saveCoreSetsTSVPrompt() {
-  const contentToSave = await createCoreSupportWithCatapultPricingTSV();
+  const contentToSave = reportEntriesAsTSVString();
   dialog.showSaveDialog({ defaultPath: "coreSetReport.txt" }).then((result) => {
     if (!result.canceled && result.filePath) {
       const filePath = result.filePath;
@@ -25,14 +24,13 @@ function saveStringToFile(content: string, filePath: string) {
   }
 }
 
-export const createReportEntries = function (): Array<CoreSupportReportEntry> {
+export const processReportEntries = function () {
   const returnEntries: Array<CoreSupportReportEntry> = [];
   const promoEntries = Promos.getInstance().promosByScancode;
-  const coreSupport = CoreSets.getInstance().getCoreSupport();
   const inventoryImporter = Inventory.getInstance();
 
-  const ourItems = CoreSets.state.coreSetItems;
-  ourItems.forEach((coreSupportEntry) => {
+  const availableItems = CoreSets.state.coreSetItems;
+  availableItems.forEach((coreSupportEntry) => {
     const inventoryEntry = inventoryImporter.getEntryFromScanCode(
       coreSupportEntry.id
     );
@@ -44,8 +42,8 @@ export const createReportEntries = function (): Array<CoreSupportReportEntry> {
       const priceChanges = promoEntries.get(inventoryEntry.ScanCode);
       if (priceChanges != null) {
         Array.from(priceChanges.values()).forEach((priceChange) => {
-          if (lowestPrice > parseFloat(priceChange.Price)) {
-            lowestPrice = parseFloat(priceChange.Price);
+          if (lowestPrice > parseFloat(priceChange.Price.replace("$", ""))) {
+            lowestPrice = parseFloat(priceChange.Price.replace("$", ""));
             lowestPricedWorksheetName = priceChange.Worksheet;
           }
         });
@@ -65,11 +63,53 @@ export const createReportEntries = function (): Array<CoreSupportReportEntry> {
         Dept: inventoryEntry.Department,
         Difference: (
           lowestPrice - parseFloat(coreSupportEntry.EDLPPrice)
-        ).toFixed(2)
+        ).toFixed(2),
       };
       returnEntries.push(reportItem);
     }
   });
 
-  return returnEntries;
+  CoreSets.state.setReportEntries(returnEntries);
+};
+
+export const reportEntriesAsTSVString = function () {
+  const reportEntries = CoreSets.state.reportEntries;
+
+  const exportArrayHeader = [
+    "UPC",
+    "Brand",
+    "Description",
+    "Subdepart",
+    "Current Base Price",
+    "Lowest Price",
+    "Core Set Retail",
+    "NCG Notes",
+    "Desired price or leave blank to keep Current Retail",
+    "Notes",
+    "Dept",
+    "Difference",
+  ];
+
+  let outputText = exportArrayHeader.join("\t") + "\n";
+
+  reportEntries.forEach((entry) => {
+    const exportArray = [
+      entry.UPC,
+      entry.Brand,
+      entry.Description,
+      entry.Subdepart,
+      entry.CurrentBasePrice,
+      entry.LowestPrice,
+      entry.CoreSetRetail,
+      entry.NCGNotes,
+      entry.DesiredRetail,
+      entry.Notes,
+      entry.Dept,
+      entry.Difference,
+    ];
+    //Add the exportArray to the output Text as a tab seperated value line
+    outputText += exportArray.join("\t") + "\n";
+  });
+
+  return outputText;
 };
