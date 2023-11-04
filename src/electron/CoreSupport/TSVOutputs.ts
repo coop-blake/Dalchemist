@@ -3,7 +3,7 @@ import path from "path";
 import { CoreSets } from "./CoreSets";
 import PriceChangeWorksheetsImporter from "../../Processors/PriceChangeWorksheets";
 import PriceChangeWorksheetImporter, {
-  PriceChangeWorksheetEntry,
+  PriceChangeWorksheetEntry
 } from "../../TextImporters/PriceChangeWorksheet";
 
 export const createCoreSupportWithCatapultPricingTSV =
@@ -25,7 +25,7 @@ export const createCoreSupportWithCatapultPricingTSV =
       "Desired price or leave blank to keep Current Retail",
       "Notes",
       "Dept",
-      "Difference",
+      "Difference"
     ];
 
     let outputText = exportArrayHeader.join("\t") + "\n";
@@ -51,11 +51,11 @@ export const createCoreSupportWithCatapultPricingTSV =
             worksheetEntries: worksheetEntries,
             inventoryEntry: inventoryImporter.getEntryFromScanCode(
               entry.scanCode
-            ),
+            )
           };
           const worksheetEntry = {
             priceChangeWorksheetEntry: entry,
-            worksheet: worksheet,
+            worksheet: worksheet
           };
           //add worksheet entry to item worksheetEntries
           item.worksheetEntries.set(worksheet.textFilePath, worksheetEntry);
@@ -110,7 +110,7 @@ export const createCoreSupportWithCatapultPricingTSV =
           "", //Desired price or leave blank to keep Current Retail
           lowestPricedWorksheetName, //Notes
           inventoryEntry.Department, //Dept
-          (lowestPrice - parseFloat(coreSupportEntry.EDLPPrice)).toFixed(2), //Difference
+          (lowestPrice - parseFloat(coreSupportEntry.EDLPPrice)).toFixed(2) //Difference
         ];
         //Add the exportArray to the output Text as a tab seperated value line
         outputText += exportArray.join("\t") + "\n";

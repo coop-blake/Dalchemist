@@ -2,12 +2,17 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Inventory } from "../../Google/Inventory/Inventory";
 import { CoreSupport } from "./CoreSupport";
 import path from "path";
-import { CoreSetsStatus, CoreSupportEntry } from "./shared";
+import {
+  CoreSetsStatus,
+  CoreSupportEntry,
+  CoreSupportReportEntry
+} from "./shared";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow, ipcMain } from "electron";
 import DalchemistApp from "../DalchemistApp";
 import { PriceChangeWorksheets } from "../PriceChangeWorksheets/PriceChangeWorksheets";
 import { handleWindowMessage } from "./ipc";
+import { createReportEntries } from "./Report";
 /**
  * CoreSets
  * Singlton Instance with State that handles the CoreSets BackEnd for Electron
@@ -34,8 +39,9 @@ export class CoreSets {
       if (lastRefresh > 0) {
         if (this.CoreSupportReader.getFilePath() !== "") {
           if (this.CoreSupportReader.doesKnownFileExist()) {
-            setTimeout(() => {
-              this.loadCoreSetsExcelFile();
+            setTimeout(async () => {
+              await this.loadCoreSetsExcelFile();
+              createReportEntries();
             });
           } else {
             CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
@@ -128,8 +134,8 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
 
       this.coreSetsWindow.on("closed", () => {
@@ -190,6 +196,20 @@ export class CoreSetsState {
   }
   public setCoreSetItems(coreSetItems: CoreSupportEntry[]) {
     this.coreSetItemsSubject.next(coreSetItems);
+  }
+
+  //Report Entries
+  private reportEntriesSubject = new BehaviorSubject<CoreSupportReportEntry[]>(
+    []
+  );
+  public get reportEntries(): CoreSupportReportEntry[] {
+    return this.reportEntriesSubject.getValue();
+  }
+  public get reportEntries$(): Observable<CoreSupportReportEntry[]> {
+    return this.reportEntriesSubject.asObservable();
+  }
+  public setCoreSetReportEntries(reportEntries: CoreSupportReportEntry[]) {
+    this.reportEntriesSubject.next(reportEntries);
   }
 }
 
@@ -285,6 +305,10 @@ const sendCoreSetsData = async () => {
       CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
     );
 
+    coreSetsWindow.webContents.send(
+      "CoreSetReportEntries",
+      CoreSets.state.reportEntries
+    );
     coreSetsWindow.webContents.send(
       "PriceChangeWorksheetsStatus",
       PriceChangeWorksheets.state.status

@@ -7,7 +7,7 @@ import {
   PromoEntry,
   PromoEntryFromValueArray
 } from "./shared";
-import Promos from "./Promos";
+import { Promos } from "./Promos";
 import AltIDs from "./AltIDs";
 import { Google } from "../google";
 

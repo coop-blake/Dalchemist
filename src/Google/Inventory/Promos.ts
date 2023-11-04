@@ -1,5 +1,5 @@
 import { PromoEntry } from "./shared";
-export default class Promos {
+export class Promos {
   private static instance: Promos;
 
   private promosByScanCode = new Map<string, Array<PromoEntry>>();
@@ -17,6 +17,10 @@ export default class Promos {
 
   public getWorksheets(): Array<string> {
     return this.worksheets;
+  }
+
+  get promosByScancode(): Map<string, Array<PromoEntry>> {
+    return this.promosByScanCode;
   }
 
   getPromosForItemBy(ScanCode: string) {

@@ -5,7 +5,7 @@ export enum CoreSetsStatus {
   Starting = "Starting",
   Loading = "Loading",
   Running = "Running",
-  Error = "Error!",
+  Error = "Error!"
 }
 
 export type CoreSupportEntry = {
@@ -34,4 +34,19 @@ export type CoreSupportEntry = {
   Changes: string;
 
   id: string;
+};
+
+export type CoreSupportReportEntry = {
+  UPC: string;
+  Brand: string;
+  Description: string;
+  Subdepart: string;
+  CurrentBasePrice: string;
+  LowestPrice: string;
+  CoreSetRetail: string;
+  DesiredRetail: string;
+  NCGNotes: string;
+  Notes: string;
+  Dept: string;
+  Difference: string;
 };
