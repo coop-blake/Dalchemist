@@ -21,7 +21,54 @@ const openCoreSetsFile = () => {
   shell.openPath(CoreSets.state.filePath);
 };
 
-export const setCoreSetDistributors = (
+export const sendCoreSetsData = async () => {
+  const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  if (coreSetsWindow !== null) {
+    coreSetsWindow.webContents.send(
+      "CoreSetEntriesUpdated",
+      CoreSets.state.coreSetItems
+    );
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItems",
+      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    );
+    coreSetsWindow.webContents.send(
+      "CoreSetStatusUpdated",
+      CoreSets.state.status
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetFilePathUpdated",
+      CoreSets.state.filePath
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItems",
+      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+      CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+    );
+
+    coreSetsWindow.webContents.send("CoreSetReportEntries", [
+      ...CoreSets.state.reportEntries,
+    ]);
+
+    coreSetsWindow.webContents.send(
+      "CoreSetUserSelectedDistributors",
+      CoreSets.state.userSelectedCoreSetDistributors
+    );
+
+    coreSetsWindow.webContents.send(
+      "CoreSetAllDistributors",
+      CoreSets.state.allCoreSetDistributors
+    );
+  }
+};
+
+export const handleUserSelectedCoreSetDistributors = (
   _event: IpcMainInvokeEvent,
   distributors: Array<string>
 ) => {

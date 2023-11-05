@@ -21,16 +21,18 @@ export function CheckboxList({ items, toggledItems, onCheckboxChange }: Props) {
   };
 
   return (
-    <div>
+    <div className="distributor-checkbox-list">
       {items.map((item: string) => (
-        <label key={item}>
-          <input
-            type="checkbox"
-            checked={toggledItems.includes(item)}
-            onChange={() => handleCheckboxChange(item)}
-          />
-          {item}
-        </label>
+        <>
+          <label key={item} className="distributor-checkbox-item">
+            <input
+              type="checkbox"
+              checked={toggledItems.includes(item)}
+              onChange={() => handleCheckboxChange(item)}
+            />
+            {item}
+          </label>
+        </>
       ))}
     </div>
   );

@@ -8,10 +8,14 @@ import {
   CoreSupportReportEntry,
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import Settings from "../Settings";
 import DalchemistApp from "../DalchemistApp";
-import { handleWindowMessage, setCoreSetDistributors } from "./ipc";
+import {
+  handleWindowMessage,
+  sendCoreSetsData,
+  handleUserSelectedCoreSetDistributors,
+} from "./ipc";
 import { processReportEntries } from "./Report";
 /**
  * CoreSets
@@ -53,13 +57,13 @@ export class CoreSets {
       }
     });
 
-    // CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
-    //   async (distributors) => {
-    //     console.log("CoreSets Distributors", distributors);
-    //     await this.loadCoreSetsExcelFile();
-    //     processReportEntries();
-    //   }
-    // );
+    CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
+      async (distributors) => {
+        console.log("CoreSets Distributors", distributors);
+        await this.loadCoreSetsExcelFile();
+        processReportEntries();
+      }
+    );
   }
 
   static getInstance(): CoreSets {
@@ -153,7 +157,10 @@ export class CoreSets {
       });
       sendStateChangesToWindow();
       ipcMain.on("coreSetsWindowMessage", handleWindowMessage);
-      ipcMain.on("setCoreSetsDistributors", setCoreSetDistributors);
+      ipcMain.on(
+        "setCoreSetsDistributors",
+        handleUserSelectedCoreSetDistributors
+      );
     }
 
     return this.coreSetsWindow;
@@ -315,51 +322,4 @@ const sendStateChangesToWindow = () => {
       );
     }
   );
-};
-
-const sendCoreSetsData = async () => {
-  const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-  if (coreSetsWindow !== null) {
-    coreSetsWindow.webContents.send(
-      "CoreSetEntriesUpdated",
-      CoreSets.state.coreSetItems
-    );
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItems",
-      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    );
-    coreSetsWindow.webContents.send(
-      "CoreSetStatusUpdated",
-      CoreSets.state.status
-    );
-
-    coreSetsWindow.webContents.send(
-      "CoreSetFilePathUpdated",
-      CoreSets.state.filePath
-    );
-
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItems",
-      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    );
-
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-      CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-    );
-
-    coreSetsWindow.webContents.send("CoreSetReportEntries", [
-      ...CoreSets.state.reportEntries,
-    ]);
-
-    coreSetsWindow.webContents.send(
-      "CoreSetUserSelectedDistributors",
-      CoreSets.state.userSelectedCoreSetDistributors
-    );
-
-    coreSetsWindow.webContents.send(
-      "CoreSetAllDistributors",
-      CoreSets.state.allCoreSetDistributors
-    );
-  }
 };

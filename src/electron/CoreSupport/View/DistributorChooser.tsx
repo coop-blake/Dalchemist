@@ -5,24 +5,12 @@ import {
   selectSelectedDistributors,
 } from "./CoreSetSlice";
 import { CheckboxList } from "electron/UI/CheckboxList";
-
+import "./resources/css/distributor-checkbox.css";
 export function DistributorChooser() {
   const availableDistributors = useAppSelector(selectAvailableDistributors);
   const selectedDistributors = useAppSelector(selectSelectedDistributors);
   return (
     <>
-      {availableDistributors.join(", ")}
-      <br />
-      {selectedDistributors.join(",")}
-      <div
-        onClick={() => {
-          setCoreSetDistributors(["foo", "bar"]);
-        }}
-        style={{ border: "1px solid black", width: "100px", height: "100px" }}
-      >
-        Click me
-      </div>
-
       <CheckboxList
         items={availableDistributors}
         toggledItems={selectedDistributors}
