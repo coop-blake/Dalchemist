@@ -5,7 +5,7 @@ import CoreSetReportTable from "./ReportTable";
 //import { ipcRenderer } from "electron";
 import "./resources/css/core-support-table.css";
 import { useAppSelector } from "../../View/hooks";
-import {DistributorChooser} from "./DistributorChooser"
+import { DistributorChooser } from "./DistributorChooser";
 import {
   CoreSetsStatus,
   CoreSupportEntry,
@@ -27,7 +27,7 @@ import {
   selectAvailableItems,
   selectReportEntries,
   setAvailableDistributors,
-  setSelectedDistributors
+  setSelectedDistributors,
 } from "./CoreSetSlice";
 
 import "../../Resources/css/coreSets.css";
@@ -84,12 +84,9 @@ window.electron.ipcRenderer.on(
   }
 );
 window.electron.ipcRenderer.on(
-  "CoreSetAvailableDistributors",
+  "CoreSetAllDistributors",
   (availableDistributorsArray: Array<string>) => {
-    console.log(
-      "availableDistributorsArray",
-      availableDistributorsArray
-    );
+    console.log("availableDistributorsArray", availableDistributorsArray);
     if (typeof availableDistributorsArray !== "undefined") {
       console.log(availableDistributorsArray);
 
@@ -98,12 +95,9 @@ window.electron.ipcRenderer.on(
   }
 );
 window.electron.ipcRenderer.on(
-  "CoreSetSelectedDistributors",
+  "CoreSetUserSelectedDistributors",
   (selectedDistributorsArray: Array<string>) => {
-    console.log(
-      "selectedDistributorsArray",
-      selectedDistributorsArray
-    );
+    console.log("CoreSetUserSelectedDistributors", selectedDistributorsArray);
     if (typeof selectedDistributorsArray !== "undefined") {
       console.log(selectedDistributorsArray);
 
@@ -117,7 +111,6 @@ export default function CoreSetsView() {
   const availableItems = useAppSelector(selectAvailableItems);
   const reportEntries = useAppSelector(selectReportEntries);
 
-  
   const [subView, setSubView] = useState(SubView.settings);
 
   useEffect(() => {

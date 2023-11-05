@@ -1,6 +1,7 @@
 import { shell, IpcMainInvokeEvent } from "electron";
 import { saveCoreSetsTSVPrompt } from "./Report";
 import { CoreSets } from "./CoreSets";
+
 export const handleWindowMessage = async (
   _event: IpcMainInvokeEvent,
   mainWindowMessage: string
@@ -18,4 +19,11 @@ export const handleWindowMessage = async (
 
 const openCoreSetsFile = () => {
   shell.openPath(CoreSets.state.filePath);
+};
+
+export const setCoreSetDistributors = (
+  _event: IpcMainInvokeEvent,
+  distributors: Array<string>
+) => {
+  CoreSets.state.setUserSelectedCoreSetDistributors(distributors);
 };

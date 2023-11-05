@@ -16,6 +16,7 @@ export type Channels =
   | "PriceChangeWorksheetsStatus"
   | "PriceChangeWorksheetsFolderPath"
   | "coreSetsWindowMessage"
+  | "setCoreSetsDistributors"
   | "CoreSetFilePathUpdated"
   | "inventoryData"
   | "inventoryDataLastReload";

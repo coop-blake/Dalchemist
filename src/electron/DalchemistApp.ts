@@ -1,16 +1,7 @@
 import { resolveHtmlPath, formatDateForConsole } from "./Utility";
-import { createCoreSupportWithCatapultPricingTSV } from "./CoreSupport/TSVOutputs";
 //import { createAndSetApplicationMenu } from "./Main/AppMenu";
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  IpcMainInvokeEvent,
-  dialog,
-  shell,
-} from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "path";
-import fs from "fs";
 
 import { BehaviorSubject, Observable, combineLatest, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
@@ -21,8 +12,6 @@ import { AddDrop } from "./AddDrop/AddDrop";
 import { Inventory as GoogleInventory } from "../Google/Inventory/Inventory";
 import { Inventory } from "./Inventory/Inventory";
 import { CoreSets } from "./CoreSupport/CoreSets";
-import { PriceChangeWorksheets } from "./PriceChangeWorksheets/PriceChangeWorksheets";
-import { getAddDropPriceUpdatesTSV } from "../../src/Google/addDrop/htmlOutputs";
 
 import { sendMainWindowStatus } from "./ipc";
 export class DalchemistAppState {
@@ -282,37 +271,3 @@ export default class DalchemistApp {
     app.quit();
   }
 }
-
-//todo:remove
-// export function savePriceCostTSVPrompt() {
-//   const contentToSave = getAddDropPriceUpdatesTSV(
-//     GoogleAddDrop.state.priceUpdates
-//   );
-//   dialog
-//     .showSaveDialog({ defaultPath: "addDropPriceCost.txt" })
-//     .then((result) => {
-//       if (!result.canceled && result.filePath) {
-//         const filePath = result.filePath;
-//         saveStringToFile(contentToSave, filePath);
-//       }
-//     });
-// }
-
-// export async function saveCoreSetsTSVPrompt() {
-//   const contentToSave = await createCoreSupportWithCatapultPricingTSV();
-//   dialog.showSaveDialog({ defaultPath: "coreSetReport.txt" }).then((result) => {
-//     if (!result.canceled && result.filePath) {
-//       const filePath = result.filePath;
-//       saveStringToFile(contentToSave, filePath);
-//     }
-//   });
-// }
-
-// function saveStringToFile(content: string, filePath: string) {
-//   try {
-//     fs.writeFileSync(filePath, content, "utf-8");
-//     console.log("File saved successfully.");
-//   } catch (error) {
-//     console.error("Error saving file:", error);
-//   }
-// }

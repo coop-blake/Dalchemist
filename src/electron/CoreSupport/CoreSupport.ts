@@ -15,6 +15,7 @@ import TextImporter from "../../TextImporters/TextImporter";
 import xlsx from "node-xlsx";
 import { stat } from "fs/promises";
 import { existsSync } from "fs";
+import { CoreSets } from "./CoreSets";
 
 function convertExcelDate(excelDateNumber: number) {
   const baseDate = new Date(Date.UTC(1899, 11, 30)); // Excel's base date
@@ -69,7 +70,9 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
     return Settings.doesCoreSetsExcelFileLocationExist();
   }
 
+  private distributors: Set<string> = new Set<string>();
   async start() {
+    this.distributors.clear();
     try {
       // await inventoryImport.start();
       this.entries.clear();
@@ -98,7 +101,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
       this.entries.clear();
     }
     // console.log(this.entries);
-
+    CoreSets.state.setAllCoreSetDistributors(Array.from(this.distributors));
     console.log(this.entries.size);
   }
 
@@ -110,15 +113,10 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
   }
 
   //Supplier Matches to filter out our items
-  ourDistributors = [
-    "Equal Exchange - Direct",
-    "Tony's Fine Foods - Ridgefield, WA",
-    "UNFI - Ridgefield, WA",
-    "Ancient Nutrition - Direct"
-  ];
 
   entryIsOurDistributor = (entry: CoreSupportEntry) => {
-    if (this.ourDistributors.includes(entry.Distributor)) {
+    const ourDistributors = CoreSets.state.userSelectedCoreSetDistributors;
+    if (ourDistributors.includes(entry.Distributor)) {
       return true;
     } else {
       return false;
@@ -137,7 +135,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
               {
                 year: "numeric",
                 month: "numeric",
-                day: "numeric"
+                day: "numeric",
               }
             )
           : "",
@@ -147,7 +145,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
               {
                 year: "numeric",
                 month: "numeric",
-                day: "numeric"
+                day: "numeric",
               }
             )
           : "",
@@ -172,7 +170,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
         LineNotes: valueArray[21],
         Changes: valueArray[22],
 
-        id: valueArray[8]
+        id: valueArray[8],
       };
       return entry;
     }
@@ -200,6 +198,7 @@ export class CoreSupport extends TextImporter<CoreSupportEntry> {
           const entry = this.entryFromValueArray(lineArray);
 
           if (entry !== null) {
+            this.distributors.add(entry.Distributor);
             if (this.entryIsOurDistributor(entry)) {
               if (this.entries.has(entry.id)) {
                 //TODO: change this to duplicate or otherWharehouse entries

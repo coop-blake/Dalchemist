@@ -11,6 +11,19 @@ class Settings {
 
   private constructor() {}
 
+  public getCoreSetDistributors(): string[] {
+    const coreSetDistributors = this.store.get(
+      "coreSetDistributors"
+    ) as string[];
+    if (coreSetDistributors) {
+      return coreSetDistributors;
+    } else {
+      return [];
+    }
+  }
+  public setCoreSetDistributors(distributors: string[]) {
+    this.store.set("coreSetDistributors", distributors);
+  }
   public static getInstance(): Settings {
     if (!Settings.instance) {
       Settings.instance = new Settings();
