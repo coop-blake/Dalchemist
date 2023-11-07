@@ -1,13 +1,3 @@
-export enum CoreSetsStatus {
-  NoFilePath = "No File Path",
-  NoFileAtPath = "No File At Path",
-  UnexpectedFile = "Core Sets File not as expected",
-  Starting = "Starting",
-  Loading = "Loading",
-  Running = "Running",
-  Error = "Error!",
-}
-
 export type CoreSupportPriceListEntry = {
   CoreSetsRound: string;
   BuyInStart: string;

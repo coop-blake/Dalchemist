@@ -18,7 +18,7 @@ export const handleWindowMessage = async (
 };
 
 const openCoreSetsFile = () => {
-  shell.openPath(CoreSets.state.filePath);
+  shell.openPath(CoreSets.state.coreSupportPriceListFilePath);
 };
 
 export const sendCoreSetsData = async () => {
@@ -26,12 +26,12 @@ export const sendCoreSetsData = async () => {
   if (coreSetsWindow !== null) {
     coreSetsWindow.webContents.send(
       "CoreSetEntriesUpdated",
-      CoreSets.state.coreSetItems
+      CoreSets.CoreSupportPriceListState.allEntries
     );
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItems",
-      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    );
+    // coreSetsWindow.webContents.send(
+    //   "CoreSetNumberOfCoreSupportItems",
+    //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    // );
     coreSetsWindow.webContents.send(
       "CoreSetStatusUpdated",
       CoreSets.state.status
@@ -39,18 +39,18 @@ export const sendCoreSetsData = async () => {
 
     coreSetsWindow.webContents.send(
       "CoreSetFilePathUpdated",
-      CoreSets.state.filePath
+      CoreSets.state.coreSupportPriceListFilePath
     );
 
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItems",
-      CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    );
+    // coreSetsWindow.webContents.send(
+    //   "CoreSetNumberOfCoreSupportItems",
+    //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+    // );
 
-    coreSetsWindow.webContents.send(
-      "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-      CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-    );
+    // coreSetsWindow.webContents.send(
+    //   "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+    //   CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+    // );
 
     coreSetsWindow.webContents.send("CoreSetReportEntries", [
       ...CoreSets.state.reportEntries,
@@ -58,12 +58,12 @@ export const sendCoreSetsData = async () => {
 
     coreSetsWindow.webContents.send(
       "CoreSetUserSelectedDistributors",
-      CoreSets.state.userSelectedCoreSetDistributors
+      Array.from(CoreSets.CoreSupportPriceListState.selectedDistributors)
     );
 
     coreSetsWindow.webContents.send(
       "CoreSetAllDistributors",
-      CoreSets.state.allCoreSetDistributors
+      Array.from(CoreSets.CoreSupportPriceListState.allDistributors)
     );
   }
 };

@@ -1,10 +1,10 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { Inventory } from "../../Google/Inventory/Inventory";
-import { CoreSupport } from "./CoreSupport";
+import { CoreSupport } from "./CoreSupport/CoreSupport";
 import path from "path";
 import {
   CoreSetsStatus,
-  CoreSupportEntry,
+  CoreSupportPriceListEntry,
   CoreSupportReportEntry,
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
@@ -35,14 +35,16 @@ export class CoreSets {
 
     this.CoreSupportReader = new CoreSupport();
 
-    CoreSets.state.setFilePath(this.CoreSupportReader.getFilePath());
+    CoreSets.state.setCoreSupportPriceListFilePath(
+      Settings.getCoreSetsExcelFilePath()
+    );
 
     Inventory.getInstance();
 
     //todo combine trigger with CoreSet state
     Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
       if (lastRefresh > 0) {
-        if (this.CoreSupportReader.getFilePath() !== "") {
+        if (CoreSets.state.coreSupportPriceListFilePath !== "") {
           if (this.CoreSupportReader.doesKnownFileExist()) {
             setTimeout(async () => {
               await this.loadCoreSetsExcelFile();
@@ -66,6 +68,11 @@ export class CoreSets {
     );
   }
 
+  private reloadAnfRefresh() {}
+
+  static get CoreSupportPriceListState() {
+    return CoreSets.getInstance().CoreSupportReader.getState();
+  }
   static getInstance(): CoreSets {
     if (!CoreSets.instance) {
       CoreSets.instance = new CoreSets();
@@ -84,7 +91,7 @@ export class CoreSets {
     const selectedFile = await this.CoreSupportReader.selectFilePath();
 
     if (selectedFile !== "") {
-      CoreSets.state.setFilePath(selectedFile);
+      CoreSets.state.setCoreSupportPriceListFilePath(selectedFile);
       this.loadCoreSetsExcelFile();
     }
   }
@@ -94,9 +101,7 @@ export class CoreSets {
 
     const lastUpdated = await this.CoreSupportReader.loadCoreSetsExcelFile();
     if (lastUpdated > 0) {
-      const coreSetEntriesArray = Array.from(
-        this.CoreSupportReader.entries.values()
-      );
+      const coreSetEntriesArray = this.CoreSupportReader.getEntries();
       if (coreSetEntriesArray.length > 0) {
         CoreSets.state.setCoreSetItems(coreSetEntriesArray);
         CoreSets.state.setStatus(CoreSetsStatus.Running);
@@ -183,15 +188,15 @@ export class CoreSetsState {
   }
 
   //File Path
-  private filePathSubject = new BehaviorSubject<string>("");
-  public get filePath$(): Observable<string> {
-    return this.filePathSubject.asObservable();
+  private coreSupportPriceListFilePathSubject = new BehaviorSubject<string>("");
+  public get coreSupportPriceListFilePath$(): Observable<string> {
+    return this.coreSupportPriceListFilePathSubject.asObservable();
   }
-  public get filePath(): string {
-    return this.filePathSubject.getValue();
+  public get coreSupportPriceListFilePath(): string {
+    return this.coreSupportPriceListFilePathSubject.getValue();
   }
-  public setFilePath(filePath: string) {
-    this.filePathSubject.next(filePath);
+  public setCoreSupportPriceListFilePath(filePath: string) {
+    this.coreSupportPriceListFilePathSubject.next(filePath);
   }
 
   //Last refresh
@@ -204,14 +209,16 @@ export class CoreSetsState {
   }
 
   //Core Set Items
-  private coreSetItemsSubject = new BehaviorSubject<CoreSupportEntry[]>([]);
-  public get coreSetItems(): CoreSupportEntry[] {
+  private coreSetItemsSubject = new BehaviorSubject<
+    CoreSupportPriceListEntry[]
+  >([]);
+  public get coreSetItems(): CoreSupportPriceListEntry[] {
     return this.coreSetItemsSubject.getValue();
   }
-  public get coreSetItems$(): Observable<CoreSupportEntry[]> {
+  public get coreSetItems$(): Observable<CoreSupportPriceListEntry[]> {
     return this.coreSetItemsSubject.asObservable();
   }
-  public setCoreSetItems(coreSetItems: CoreSupportEntry[]) {
+  public setCoreSetItems(coreSetItems: CoreSupportPriceListEntry[]) {
     this.coreSetItemsSubject.next(coreSetItems);
   }
 
@@ -279,18 +286,18 @@ const sendStateChangesToWindow = () => {
         CoreSets.state.coreSetItems
       );
 
-      coreSetsWindow.webContents.send(
-        "CoreSetNumberOfCoreSupportItems",
-        CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-      );
+      // coreSetsWindow.webContents.send(
+      //   "CoreSetNumberOfCoreSupportItems",
+      //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
+      // );
 
-      coreSetsWindow.webContents.send(
-        "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-        CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-      );
+      // coreSetsWindow.webContents.send(
+      //   "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
+      //   CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
+      // );
     }
   });
-  CoreSets.state.filePath$.subscribe(async (filePath) => {
+  CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
     coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
   });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
-import {  CoreSupportEntry } from "../shared";
+import { CoreSupportPriceListEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 
 import {
@@ -15,7 +15,7 @@ import {
 } from "slickgrid-react";
 
 export interface Props {
-  availableItems: Array<CoreSupportEntry>;
+  availableItems: Array<CoreSupportPriceListEntry>;
   availableItemsLength: number;
 }
 
@@ -24,7 +24,7 @@ export interface State {
   subTitle: string;
   gridOptions?: GridOption;
   columnDefinitions: Column[];
-  dataset: CoreSupportEntry[];
+  dataset: CoreSupportPriceListEntry[];
 }
 
 export default function CoreSetsTable() {
@@ -55,8 +55,8 @@ export default function CoreSetsTable() {
       gridId="CoreSetSlickGrid"
       columnDefinitions={columnDefinitions}
       gridOptions={gridOptions!}
-      dataset={[...availableItems]}
-      class="core-support-table"      
+      dataset={[...availableItems.slice(0, 100)]}
+      class="core-support-table"
     />
   );
 }
@@ -180,7 +180,7 @@ const defineGrids = function () {
   return columns;
 };
 
-const selectFilter = function ()  {
+const selectFilter = function () {
   return {
     model: Filters.multipleSelect,
     collection: [
