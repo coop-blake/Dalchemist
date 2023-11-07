@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../View/store";
 import {
   CoreSupportPriceListEntry,
-  CoreSupportReportEntry,
+  CoreSupportReportEntry
 } from "electron/CoreSupport/shared";
 
 // Define a type for the slice state
@@ -10,8 +10,9 @@ interface CoreSetsState {
   status: string;
   filePath: string;
   errorMessage: string;
-  availableItems: Array<CoreSupportPriceListEntry>;
-  ourItems: Array<CoreSupportPriceListEntry>;
+  allEntries: Array<CoreSupportPriceListEntry>;
+  selectedDistributorEntries: Array<CoreSupportPriceListEntry>;
+  selectedItemsInInventoryEntries: Array<CoreSupportPriceListEntry>;
   reportEntries: Array<CoreSupportReportEntry>;
   availableDistributors: Array<string>;
   selectedDistributors: Array<string>;
@@ -22,11 +23,12 @@ const initialState: CoreSetsState = {
   status: "",
   filePath: "",
   errorMessage: "",
-  availableItems: [],
-  ourItems: [],
+  allEntries: [],
+  selectedDistributorEntries: [],
+  selectedItemsInInventoryEntries: [],
   reportEntries: [],
   availableDistributors: [],
-  selectedDistributors: [],
+  selectedDistributors: []
 };
 
 export const coreSetSlice = createSlice({
@@ -43,11 +45,18 @@ export const coreSetSlice = createSlice({
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload;
     },
-    setAvailableItems: (
+    setAllEntries: (
       state,
       action: PayloadAction<Array<CoreSupportPriceListEntry>>
     ) => {
-      state.availableItems = action.payload;
+      state.allEntries = action.payload;
+    },
+
+    setSelectedDistributorEntries: (
+      state,
+      action: PayloadAction<Array<CoreSupportPriceListEntry>>
+    ) => {
+      state.selectedDistributorEntries = action.payload;
     },
     setReportEntries: (
       state,
@@ -60,23 +69,29 @@ export const coreSetSlice = createSlice({
     },
     setSelectedDistributors: (state, action: PayloadAction<Array<string>>) => {
       state.selectedDistributors = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const {
   setStatus,
   setFilePath,
   setErrorMessage,
-  setAvailableItems,
+  setAllEntries,
+  setSelectedDistributorEntries,
   setReportEntries,
   setAvailableDistributors,
-  setSelectedDistributors,
+  setSelectedDistributors
 } = coreSetSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectAvailableItems = (state: RootState) =>
-  state.CoreSets.availableItems;
+export const selectAllEntries = (state: RootState) => state.CoreSets.allEntries;
+
+export const selectSelectedDistributorEntries = (state: RootState) =>
+  state.CoreSets.selectedDistributorEntries;
+
+export const selectSelectedItemsInInventoryEntries = (state: RootState) =>
+  state.CoreSets.selectedItemsInInventoryEntries;
 
 export const selectReportEntries = (state: RootState) =>
   state.CoreSets.reportEntries;

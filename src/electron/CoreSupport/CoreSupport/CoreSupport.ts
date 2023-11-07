@@ -74,7 +74,7 @@ export class CoreSupport {
   }
 
   clearData() {
-    this.state.setOurItems([]);
+    this.state.setOurDistributorEntries([]);
     this.state.setAllEntries([]);
     this.state.setAllDistributors(new Set<string>());
   }
@@ -82,7 +82,7 @@ export class CoreSupport {
   async start() {
     const distributors: Set<string> = new Set<string>();
     const selectedDistributors = Settings.getCoreSetDistributors();
-    const ourItems = Array<CoreSupportPriceListEntry>();
+    const ourDistributorsEntries = Array<CoreSupportPriceListEntry>();
     const notOurItems = Array<CoreSupportPriceListEntry>();
     try {
       // await inventoryImport.start();
@@ -91,13 +91,13 @@ export class CoreSupport {
       );
       entries.forEach((entry: CoreSupportPriceListEntry) => {
         if (selectedDistributors.includes(entry.Distributor)) {
-          ourItems.push(entry);
+          ourDistributorsEntries.push(entry);
         } else {
           notOurItems.push(entry);
         }
         distributors.add(entry.Distributor);
       });
-      this.state.setOurItems(ourItems);
+      this.state.setOurDistributorEntries(ourDistributorsEntries);
       this.state.setAllEntries(entries);
       this.state.setAllDistributors(distributors);
     } catch (Error) {

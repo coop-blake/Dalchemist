@@ -8,7 +8,7 @@ import { useAppSelector } from "../../View/hooks";
 import { DistributorChooser } from "./DistributorChooser";
 import {
   CoreSetsStatus,
-  CoreSupportEntry,
+  CoreSupportPriceListEntry,
   CoreSupportReportEntry,
 } from "../../CoreSupport/shared";
 
@@ -22,9 +22,10 @@ import { store } from "../../View/store";
 import {
   setStatus,
   setFilePath,
-  setAvailableItems,
+  setAllEntries,
+  setSelectedDistributorEntries,
   setReportEntries,
-  selectAvailableItems,
+  selectSelectedDistributorEntries,
   selectReportEntries,
   setAvailableDistributors,
   setSelectedDistributors,
@@ -46,13 +47,25 @@ const ourDistributors = [
 ];
 
 window.electron.ipcRenderer.on(
-  "CoreSetEntriesUpdated",
-  (coreSetItemsArray: Array<CoreSupportEntry>) => {
-    console.log("CoreSetEntriesUpdated🟢🟢🟢🟢🟢", event, coreSetItemsArray);
+  "CoreSetAllEntriesUpdated",
+  (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
+    console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
     if (typeof coreSetItemsArray !== "undefined") {
       console.log(coreSetItemsArray);
 
-      store.dispatch(setAvailableItems(coreSetItemsArray));
+      store.dispatch(setAllEntries(coreSetItemsArray));
+    }
+  }
+);
+
+window.electron.ipcRenderer.on(
+  "CoreSetOurDistributorsEntriesUpdated",
+  (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
+    console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
+    if (typeof coreSetItemsArray !== "undefined") {
+      console.log(coreSetItemsArray);
+
+      store.dispatch(setSelectedDistributorEntries(coreSetItemsArray));
     }
   }
 );
@@ -108,14 +121,14 @@ window.electron.ipcRenderer.on(
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
-  const availableItems = useAppSelector(selectAvailableItems);
+  const selectedDistributorEntries = useAppSelector(selectSelectedDistributorEntries);
   const reportEntries = useAppSelector(selectReportEntries);
 
   const [subView, setSubView] = useState(SubView.settings);
 
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
-  }, [availableItems, subView]);
+  }, [selectedDistributorEntries, subView]);
 
   return (
     <div className="CoreSetsMainDiv">
@@ -175,7 +188,7 @@ export default function CoreSetsView() {
         <br />
         <span id="numberOfCoreSupportItems"></span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {reportEntries.length}/{availableItems.length} Report Entries
+          {reportEntries.length}/{selectedDistributorEntries.length} Report Entries
         </span>
         <span
           id="saveCoreSetReportButton"
@@ -226,7 +239,7 @@ export default function CoreSetsView() {
             </div>
           )}
         </div>
-        {availableItems.length > 0 ? (
+        {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">✅ Loaded File</div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
@@ -246,9 +259,9 @@ export default function CoreSetsView() {
             <li key={distributor}>{distributor}</li>
           ))}
         </div>
-        {availableItems.length > 0 ? (
+        {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">
-            ✅ Loaded with {availableItems.length} entries from our distributors{" "}
+            ✅ Loaded with {selectedDistributorEntries.length} entries from our distributors{" "}
             <br />✅ Loaded with {reportEntries.length} entries in our Inventory
           </div>
         ) : (
@@ -264,7 +277,7 @@ export default function CoreSetsView() {
     return (
       <div className="core-support-table">
         <CoreSetsTable />
-        <span id="numberOfCoreSupportItems">{availableItems.length}</span>
+        <span id="numberOfCoreSupportItems">{selectedDistributorEntries.length}</span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
           {reportEntries.length}
         </span>

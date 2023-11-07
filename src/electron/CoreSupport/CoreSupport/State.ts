@@ -2,6 +2,20 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { CoreSupportPriceListEntry } from "./shared";
 
 export class CoreSupportState {
+  private lastRefreshedSubject = new BehaviorSubject<number>(0);
+
+  public get lastRefreshed$(): Observable<number> {
+    return this.lastRefreshedSubject.asObservable();
+  }
+
+  public get lastRefreshed(): number {
+    return this.lastRefreshedSubject.getValue();
+  }
+
+  public setLastRefreshed(lastRefreshed: number) {
+    this.lastRefreshedSubject.next(lastRefreshed);
+  }
+
   /*
    * File Path ##########################################################
    */
@@ -60,20 +74,24 @@ export class CoreSupportState {
   /**
    * Our Items ##########################################################
    */
-  private ourItemsSubject = new BehaviorSubject<
+  private ourDistributorsEntriesSubject = new BehaviorSubject<
     Array<CoreSupportPriceListEntry>
   >([]);
 
-  public get ourItems$(): Observable<Array<CoreSupportPriceListEntry>> {
-    return this.ourItemsSubject.asObservable();
+  public get ourDistributorsEntries$(): Observable<
+    Array<CoreSupportPriceListEntry>
+  > {
+    return this.ourDistributorsEntriesSubject.asObservable();
   }
 
-  public get ourItems(): Array<CoreSupportPriceListEntry> {
-    return this.ourItemsSubject.getValue();
+  public get ourDistributorsEntries(): Array<CoreSupportPriceListEntry> {
+    return this.ourDistributorsEntriesSubject.getValue();
   }
 
-  public setOurItems(ourItems: Array<CoreSupportPriceListEntry>) {
-    this.ourItemsSubject.next(ourItems);
+  public setOurDistributorEntries(
+    ourDistributorsEntries: Array<CoreSupportPriceListEntry>
+  ) {
+    this.ourDistributorsEntriesSubject.next(ourDistributorsEntries);
   }
 
   /**

@@ -5,7 +5,7 @@ import path from "path";
 import {
   CoreSetsStatus,
   CoreSupportPriceListEntry,
-  CoreSupportReportEntry,
+  CoreSupportReportEntry
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
@@ -14,7 +14,7 @@ import DalchemistApp from "../DalchemistApp";
 import {
   handleWindowMessage,
   sendCoreSetsData,
-  handleUserSelectedCoreSetDistributors,
+  handleUserSelectedCoreSetDistributors
 } from "./ipc";
 import { processReportEntries } from "./Report";
 /**
@@ -103,12 +103,12 @@ export class CoreSets {
     if (lastUpdated > 0) {
       const coreSetEntriesArray = this.CoreSupportReader.getEntries();
       if (coreSetEntriesArray.length > 0) {
-        CoreSets.state.setCoreSetItems(coreSetEntriesArray);
+        //CoreSets.state.setCoreSetItems(coreSetEntriesArray);
         CoreSets.state.setStatus(CoreSetsStatus.Running);
       } else {
         CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
       }
-      CoreSets.state.setCoreSetItems(coreSetEntriesArray);
+      //CoreSets.state.setCoreSetItems(coreSetEntriesArray);
     } else {
       CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
     }
@@ -152,15 +152,15 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false,
-        },
+          nodeIntegration: false
+        }
       });
 
       this.coreSetsWindow.on("closed", () => {
         this.coreSetsWindow = null;
         ipcMain.removeListener("coreSetsWindowMessage", handleWindowMessage);
       });
-      sendStateChangesToWindow();
+      sendCoreSetsData();
       ipcMain.on("coreSetsWindowMessage", handleWindowMessage);
       ipcMain.on(
         "setCoreSetsDistributors",
@@ -209,30 +209,30 @@ export class CoreSetsState {
   }
 
   //Core Set Items
-  private coreSetItemsSubject = new BehaviorSubject<
-    CoreSupportPriceListEntry[]
-  >([]);
-  public get coreSetItems(): CoreSupportPriceListEntry[] {
-    return this.coreSetItemsSubject.getValue();
-  }
-  public get coreSetItems$(): Observable<CoreSupportPriceListEntry[]> {
-    return this.coreSetItemsSubject.asObservable();
-  }
-  public setCoreSetItems(coreSetItems: CoreSupportPriceListEntry[]) {
-    this.coreSetItemsSubject.next(coreSetItems);
-  }
+  // private coreSetItemsSubject = new BehaviorSubject<
+  //   CoreSupportPriceListEntry[]
+  // >([]);
+  // public get coreSetItems(): CoreSupportPriceListEntry[] {
+  //   return this.coreSetItemsSubject.getValue();
+  // }
+  // public get coreSetItems$(): Observable<CoreSupportPriceListEntry[]> {
+  //   return this.coreSetItemsSubject.asObservable();
+  // }
+  // public setCoreSetItems(coreSetItems: CoreSupportPriceListEntry[]) {
+  //   this.coreSetItemsSubject.next(coreSetItems);
+  // }
 
   //All Core Set Distributors
-  private allCoreSetDistributorsSubject = new BehaviorSubject<string[]>([]);
-  public get allCoreSetDistributors$(): Observable<string[]> {
-    return this.allCoreSetDistributorsSubject.asObservable();
-  }
-  public get allCoreSetDistributors(): string[] {
-    return this.allCoreSetDistributorsSubject.getValue();
-  }
-  public setAllCoreSetDistributors(distributors: string[]) {
-    this.allCoreSetDistributorsSubject.next(distributors);
-  }
+  // private allCoreSetDistributorsSubject = new BehaviorSubject<string[]>([]);
+  // public get allCoreSetDistributors$(): Observable<string[]> {
+  //   return this.allCoreSetDistributorsSubject.asObservable();
+  // }
+  // public get allCoreSetDistributors(): string[] {
+  //   return this.allCoreSetDistributorsSubject.getValue();
+  // }
+  // public setAllCoreSetDistributors(distributors: string[]) {
+  //   this.allCoreSetDistributorsSubject.next(distributors);
+  // }
 
   //Core Set Distributors
   private userSelectedCoreSetDistributorsSubject = new BehaviorSubject<
@@ -273,60 +273,55 @@ export class CoreSetsState {
 
 CoreSets.getInstance();
 
-const sendStateChangesToWindow = () => {
-  CoreSets.state.lastRefreshCompleted$.subscribe(async (lastRefreshed) => {
-    if (lastRefreshed > 0) {
-      console.log(
-        "Sending Core Set items to window",
-        CoreSets.state.coreSetItems
-      );
-      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-      coreSetsWindow.webContents.send(
-        "CoreSetEntriesUpdated",
-        CoreSets.state.coreSetItems
-      );
+// const sendStateChangesToWindow = () => {
+//   //Core Support Price List
+//   CoreSets.CoreSupportPriceListState.lastRefreshed$.subscribe(
+//     async (lastRefreshed) => {
+//       //
+//       if (lastRefreshed > 0) {
+//         console.log("Sending Core Set items to window: 🥳");
+//         const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+//         coreSetsWindow.webContents.send(
+//           "CoreSetAllEntriesUpdated",
+//           CoreSets.CoreSupportPriceListState.allEntries
+//         );
+//         coreSetsWindow.webContents.send(
+//           "CoreSetOurDistributorsEntriesUpdated",
+//           CoreSets.CoreSupportPriceListState.ourDistributorsEntries
+//         );
+//       }
+//     }
+//   );
+//   CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
+//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+//     coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
+//   });
 
-      // coreSetsWindow.webContents.send(
-      //   "CoreSetNumberOfCoreSupportItems",
-      //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-      // );
+//   CoreSets.state.status$.subscribe(async (status) => {
+//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-      // coreSetsWindow.webContents.send(
-      //   "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-      //   CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-      // );
-    }
-  });
-  CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-    coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
-  });
+//     coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
+//   });
 
-  CoreSets.state.status$.subscribe(async (status) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+//   CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
+//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-    coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
-  });
+//     coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
+//   });
 
-  CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+//   // CoreSets.state.allCoreSetDistributors$.subscribe(async (distributors) => {
+//   //   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+//   //   coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
+//   // });
 
-    coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
-  });
+//   CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
+//     async (distributors) => {
+//       const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-  CoreSets.state.allCoreSetDistributors$.subscribe(async (distributors) => {
-    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-    coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
-  });
-
-  CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
-    async (distributors) => {
-      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-
-      coreSetsWindow.webContents.send(
-        "CoreSetUserSelectedDistributors",
-        distributors
-      );
-    }
-  );
-};
+//       coreSetsWindow.webContents.send(
+//         "CoreSetUserSelectedDistributors",
+//         distributors
+//       );
+//     }
+//   );
+// };

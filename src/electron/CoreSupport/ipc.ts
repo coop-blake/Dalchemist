@@ -24,10 +24,6 @@ const openCoreSetsFile = () => {
 export const sendCoreSetsData = async () => {
   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
   if (coreSetsWindow !== null) {
-    coreSetsWindow.webContents.send(
-      "CoreSetEntriesUpdated",
-      CoreSets.CoreSupportPriceListState.allEntries
-    );
     // coreSetsWindow.webContents.send(
     //   "CoreSetNumberOfCoreSupportItems",
     //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
@@ -42,6 +38,15 @@ export const sendCoreSetsData = async () => {
       CoreSets.state.coreSupportPriceListFilePath
     );
 
+    coreSetsWindow.webContents.send(
+      "CoreSetAllEntriesUpdated",
+      CoreSets.CoreSupportPriceListState.allEntries
+    );
+    coreSetsWindow.webContents.send(
+      "CoreSetOurDistributorsEntriesUpdated",
+      CoreSets.CoreSupportPriceListState.ourDistributorsEntries
+    );
+
     // coreSetsWindow.webContents.send(
     //   "CoreSetNumberOfCoreSupportItems",
     //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
@@ -53,7 +58,7 @@ export const sendCoreSetsData = async () => {
     // );
 
     coreSetsWindow.webContents.send("CoreSetReportEntries", [
-      ...CoreSets.state.reportEntries,
+      ...CoreSets.state.reportEntries
     ]);
 
     coreSetsWindow.webContents.send(

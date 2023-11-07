@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { selectAvailableItems } from "./CoreSetSlice";
+import { selectSelectedDistributorEntries } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
 import { CoreSupportPriceListEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
@@ -15,8 +15,8 @@ import {
 } from "slickgrid-react";
 
 export interface Props {
-  availableItems: Array<CoreSupportPriceListEntry>;
-  availableItemsLength: number;
+  selectedDistributorEntries: Array<CoreSupportPriceListEntry>;
+  selectedDistributorEntriesLength: number;
 }
 
 export interface State {
@@ -29,7 +29,7 @@ export interface State {
 
 export default function CoreSetsTable() {
   const title = "Core Sets";
-  const availableItems = useAppSelector(selectAvailableItems);
+  const selectedDistributorEntries = useAppSelector(selectSelectedDistributorEntries);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,17 +45,17 @@ export default function CoreSetsTable() {
 
   useEffect(() => {
     document.title = title;
-    console.log("check", [...availableItems]);
-  }, [availableItems]);
+    console.log("check", [...selectedDistributorEntries]);
+  }, [selectedDistributorEntries]);
 
-  return !(availableItems.length > 0) ? (
+  return !(selectedDistributorEntries.length > 0) ? (
     ""
   ) : (
     <SlickgridReact
       gridId="CoreSetSlickGrid"
       columnDefinitions={columnDefinitions}
       gridOptions={gridOptions!}
-      dataset={[...availableItems.slice(0, 100)]}
+      dataset={[...selectedDistributorEntries.slice(0, 100)]}
       class="core-support-table"
     />
   );
