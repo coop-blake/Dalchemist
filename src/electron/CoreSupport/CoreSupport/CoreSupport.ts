@@ -9,46 +9,32 @@
 
 //toDO this file needs to be converted to use Importer after updating importer XLSX inputlines
 import { CoreSupportPriceListEntry } from "./shared";
-import { Inventory } from "../../../Google/Inventory/Inventory";
-import * as fs from "fs";
 import Settings from "../../Settings";
-import { CoreSets } from "../CoreSets";
 import { CoreSupportState } from "./State";
 import { CoreSupportPriceList } from "./CoreSupportPriceList";
 
-function convertExcelDate(excelDateNumber: number) {
-  const baseDate = new Date(Date.UTC(1899, 11, 30)); // Excel's base date
-
-  // Calculate the milliseconds for the given Excel date number
-  const dateMilliseconds =
-    baseDate.getTime() + (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
-
-  // Create a new Date object for the calculated date
-  return new Date(dateMilliseconds);
-}
-
 export class CoreSupport {
-  notOurWarehouse = new Array<CoreSupportPriceListEntry>();
+  // notOurWarehouse = new Array<CoreSupportPriceListEntry>();
 
-  ourCoreItems = new Map<string, CoreSupportPriceListEntry>();
-  private entries = new Array<CoreSupportPriceListEntry>();
+  // ourCoreItems = new Map<string, CoreSupportPriceListEntry>();
+  // private entries = new Array<CoreSupportPriceListEntry>();
 
   private state = new CoreSupportState();
 
   private CoreSupportPriceList = new CoreSupportPriceList();
-  private filePath = "";
+  //private filePath = "";
   getState(): CoreSupportState {
     return this.state;
   }
-  getEntries() {
-    return this.entries;
-  }
+  // getEntries() {
+  //   return this.entries;
+  // }
 
   async loadCoreSetsExcelFile() {
-    const filePath = await Settings.getCoreSetsExcelFilePath();
-    console.log(filePath);
+    const filePath = Settings.getCoreSetsExcelFilePath();
+    //console.log(filePath);
     if (filePath && filePath.length > 0) {
-      this.filePath = filePath;
+      //this.filePath = filePath;
       await this.start();
       return Date.now();
     } else {
@@ -61,7 +47,7 @@ export class CoreSupport {
     const filePath = await Settings.selectCoreSetsLocation();
     console.log(filePath);
     if (filePath && filePath.length > 0) {
-      this.filePath = filePath;
+      // this.filePath = filePath;
       return filePath;
     } else {
       console.log("Failed to select file", filePath);
@@ -86,7 +72,7 @@ export class CoreSupport {
     const notOurItems = Array<CoreSupportPriceListEntry>();
     try {
       const entries = await this.CoreSupportPriceList.getEntriesFor(
-        await Settings.getCoreSetsExcelFilePath()
+        Settings.getCoreSetsExcelFilePath()
       );
       entries.forEach((entry: CoreSupportPriceListEntry) => {
         if (selectedDistributors.includes(entry.Distributor)) {

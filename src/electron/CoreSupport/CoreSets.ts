@@ -42,22 +42,22 @@ export class CoreSets {
     Inventory.getInstance();
 
     //todo combine trigger with CoreSet state
-    Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
-      if (lastRefresh > 0) {
-        if (CoreSets.state.coreSupportPriceListFilePath !== "") {
-          if (this.CoreSupportReader.doesKnownFileExist()) {
-            setTimeout(async () => {
-              await this.loadCoreSetsExcelFile();
-              processReportEntries();
-            });
-          } else {
-            CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
-          }
-        } else {
-          CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
-        }
-      }
-    });
+    // Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
+    //   if (lastRefresh > 0) {
+    //     if (CoreSets.state.coreSupportPriceListFilePath !== "") {
+    //       if (this.CoreSupportReader.doesKnownFileExist()) {
+    //         setTimeout(async () => {
+    //           await this.loadCoreSetsExcelFile();
+    //           processReportEntries();
+    //         });
+    //       } else {
+    //         CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
+    //       }
+    //     } else {
+    //       CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
+    //     }
+    //   }
+    // });
 
     // CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
     //   async (distributors) => {
@@ -107,14 +107,12 @@ export class CoreSets {
 
     const lastUpdated = await this.CoreSupportReader.loadCoreSetsExcelFile();
     if (lastUpdated > 0) {
-      const coreSetEntriesArray = this.CoreSupportReader.getEntries();
+      const coreSetEntriesArray = CoreSets.CoreSupportPriceListState.allEntries;
       if (coreSetEntriesArray.length > 0) {
-        //CoreSets.state.setCoreSetItems(coreSetEntriesArray);
         CoreSets.state.setStatus(CoreSetsStatus.Running);
       } else {
         CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
       }
-      //CoreSets.state.setCoreSetItems(coreSetEntriesArray);
     } else {
       CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
     }
@@ -132,7 +130,6 @@ export class CoreSets {
         .then(() => {
           sendStateUpdatesToWindow();
           sendCoreSetsData();
-
           coreSetsWindow.show();
         })
         .catch((error: Error) => {
@@ -144,7 +141,6 @@ export class CoreSets {
   public async getCoreSetsWindow(): Promise<BrowserWindow> {
     if (this.coreSetsWindow === null) {
       await DalchemistApp.awaitOnReady();
-
       const preloadPath = app.isPackaged
         ? path.join(__dirname, "preloadCoreSets.js")
         : path.join(
@@ -162,7 +158,6 @@ export class CoreSets {
           nodeIntegration: false,
         },
       });
-
       this.coreSetsWindow.on("closed", () => {
         this.coreSetsWindow = null;
         ipcMain.removeListener("coreSetsWindowMessage", handleWindowMessage);
@@ -174,7 +169,6 @@ export class CoreSets {
         handleUserSelectedCoreSetDistributors
       );
     }
-
     return this.coreSetsWindow;
   }
 }
@@ -215,54 +209,6 @@ export class CoreSetsState {
     this.lastRefreshCompletedSubject.next(time);
   }
 
-  //Core Set Items
-  // private coreSetItemsSubject = new BehaviorSubject<
-  //   CoreSupportPriceListEntry[]
-  // >([]);
-  // public get coreSetItems(): CoreSupportPriceListEntry[] {
-  //   return this.coreSetItemsSubject.getValue();
-  // }
-  // public get coreSetItems$(): Observable<CoreSupportPriceListEntry[]> {
-  //   return this.coreSetItemsSubject.asObservable();
-  // }
-  // public setCoreSetItems(coreSetItems: CoreSupportPriceListEntry[]) {
-  //   this.coreSetItemsSubject.next(coreSetItems);
-  // }
-
-  //All Core Set Distributors
-  // private allCoreSetDistributorsSubject = new BehaviorSubject<string[]>([]);
-  // public get allCoreSetDistributors$(): Observable<string[]> {
-  //   return this.allCoreSetDistributorsSubject.asObservable();
-  // }
-  // public get allCoreSetDistributors(): string[] {
-  //   return this.allCoreSetDistributorsSubject.getValue();
-  // }
-  // public setAllCoreSetDistributors(distributors: string[]) {
-  //   this.allCoreSetDistributorsSubject.next(distributors);
-  // }
-
-  //Core Set Distributors
-  // private userSelectedCoreSetDistributorsSubject = new BehaviorSubject<
-  //   string[]
-  // >([]);
-  // public get userSelectedCoreSetDistributors$(): Observable<string[]> {
-  //   return this.userSelectedCoreSetDistributorsSubject.asObservable();
-  // }
-  // public get userSelectedCoreSetDistributors(): string[] {
-  //   if (this.userSelectedCoreSetDistributorsSubject.getValue().length == 0) {
-  //     this.userSelectedCoreSetDistributorsSubject.next(
-  //       Settings.getCoreSetDistributors()
-  //     );
-  //     return Settings.getCoreSetDistributors();
-  //   } else {
-  //     return this.userSelectedCoreSetDistributorsSubject.getValue();
-  //   }
-  // }
-  // public setUserSelectedCoreSetDistributors(distributors: string[]) {
-  //   Settings.setCoreSetDistributors(distributors);
-  //   this.userSelectedCoreSetDistributorsSubject.next(distributors);
-  // }
-
   //Report Entries
   private reportEntriesSubject = new BehaviorSubject<CoreSupportReportEntry[]>(
     []
@@ -281,63 +227,33 @@ export class CoreSetsState {
 CoreSets.getInstance();
 
 const sendStateUpdatesToWindow = () => {
-  //Core Support Price List
-  // CoreSets.CoreSupportPriceListState.lastRefreshed$.subscribe(
-  //   async (lastRefreshed) => {
-  //     //
-  //     if (lastRefreshed > 0) {
-  //       console.log("Sending Core Set items to window: 🥳");
-  //       const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-  //       coreSetsWindow.webContents.send(
-  //         "CoreSetAllEntriesUpdated",
-  //         CoreSets.CoreSupportPriceListState.allEntries
-  //       );
-  //       coreSetsWindow.webContents.send(
-  //         "CoreSetOurDistributorsEntriesUpdated",
-  //         CoreSets.CoreSupportPriceListState.selectedDistributorsEntries
-  //       );
-  //     }
-  //   }
-  // );
-
-  CoreSets.CoreSupportPriceListState.allEntries$.subscribe(
-    async (allEntries) => {
-      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-      coreSetsWindow.webContents.send("CoreSetAllEntriesUpdated", allEntries);
-    }
-  );
-  CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
-    async (selectedDistributorEntries) => {
-      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-      coreSetsWindow.webContents.send(
-        "CoreSetSelectedDistributorsEntriesUpdated",
-        selectedDistributorEntries
-      );
-    }
-  );
-
+  //Watch and send the following State:
+  //Core Support Price List File Path
   CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
     coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
   });
-
+  //Core Sets Status
   CoreSets.state.status$.subscribe(async (status) => {
     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
     coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
   });
-
+  //Report Entries
   CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
     coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
   });
+  //All Distributors
+  CoreSets.CoreSupportPriceListState.allDistributors$.subscribe(
+    async (distributors) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-  // CoreSets.state.allCoreSetDistributors$.subscribe(async (distributors) => {
-  //   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-  //   coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
-  // });
-
+      coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
+    }
+  );
+  //Selected Distributors
   CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
     async (distributors) => {
       const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
@@ -348,6 +264,23 @@ const sendStateUpdatesToWindow = () => {
       );
 
       CoreSets.refresh();
+    }
+  );
+  //All Entries from Core SUpport Price List
+  CoreSets.CoreSupportPriceListState.allEntries$.subscribe(
+    async (allEntries) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+      coreSetsWindow.webContents.send("CoreSetAllEntriesUpdated", allEntries);
+    }
+  );
+  //Selected Distributor Entries from Core SUpport Price List
+  CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
+    async (selectedDistributorEntries) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+      coreSetsWindow.webContents.send(
+        "CoreSetSelectedDistributorsEntriesUpdated",
+        selectedDistributorEntries
+      );
     }
   );
 };

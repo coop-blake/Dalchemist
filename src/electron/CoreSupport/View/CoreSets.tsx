@@ -108,7 +108,9 @@ window.electron.ipcRenderer.on(
     if (typeof availableDistributorsArray !== "undefined") {
       console.log(availableDistributorsArray);
 
-      store.dispatch(setAvailableDistributors(availableDistributorsArray));
+      store.dispatch(
+        setAvailableDistributors(Array.from(availableDistributorsArray))
+      );
     }
   }
 );
