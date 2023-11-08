@@ -29,10 +29,11 @@ export const processReportEntries = function () {
   const promoEntries = Promos.getInstance().promosByScancode;
   const inventoryImporter = Inventory.getInstance();
 
-  const availableItems = CoreSets.state.coreSetItems;
-  availableItems.forEach((coreSupportEntry) => {
+  const selectedDistributorsEntries =
+    CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
+  selectedDistributorsEntries.forEach((coreSupportPriceListEntry) => {
     const inventoryEntry = inventoryImporter.getEntryFromScanCode(
-      coreSupportEntry.id
+      coreSupportPriceListEntry.id
     );
 
     if (inventoryEntry !== undefined) {
@@ -56,13 +57,13 @@ export const processReportEntries = function () {
         Subdepart: inventoryEntry.SubDepartment,
         CurrentBasePrice: inventoryEntry.BasePrice,
         LowestPrice: lowestPrice.toString(),
-        CoreSetRetail: coreSupportEntry.EDLPPrice,
-        NCGNotes: coreSupportEntry.LineNotes,
+        CoreSetRetail: coreSupportPriceListEntry.EDLPPrice,
+        NCGNotes: coreSupportPriceListEntry.LineNotes,
         DesiredRetail: "",
         Notes: lowestPricedWorksheetName,
         Dept: inventoryEntry.Department,
         Difference: (
-          lowestPrice - parseFloat(coreSupportEntry.EDLPPrice)
+          lowestPrice - parseFloat(coreSupportPriceListEntry.EDLPPrice)
         ).toFixed(2),
       };
       returnEntries.push(reportItem);

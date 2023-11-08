@@ -29,7 +29,9 @@ export interface State {
 
 export default function CoreSetsTable() {
   const title = "Core Sets";
-  const selectedDistributorEntries = useAppSelector(selectSelectedDistributorEntries);
+  const selectedDistributorEntries = useAppSelector(
+    selectSelectedDistributorEntries
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,7 +57,7 @@ export default function CoreSetsTable() {
       gridId="CoreSetSlickGrid"
       columnDefinitions={columnDefinitions}
       gridOptions={gridOptions!}
-      dataset={[...selectedDistributorEntries.slice(0, 100)]}
+      dataset={[...selectedDistributorEntries]}
       class="core-support-table"
     />
   );
@@ -189,17 +191,7 @@ const selectFilter = function () {
       "UNFI - Ridgefield, WA",
       "Ancient Nutrition - Direct",
     ],
-    // We can load the "collection" asynchronously (on first load only, after that we will simply use "collection")
-    // 3 ways are supported (react-http-client, react-fetch-client OR even Promise)
 
-    // 1- USE HttpClient from "react-http-client" to load collection asynchronously
-    // collectionAsync: this.http.createRequest(URL_SAMPLE_COLLECTION_DATA).asGet().send(),
-
-    // OR 2- use "react-fetch-client", they are both supported
-    // collectionAsync: fetch(URL_SAMPLE_COLLECTION_DATA),
-
-    // collectionFilterBy & collectionSortBy accept a single or multiple options
-    // we can exclude certains values 365 & 360 from the dropdown filter
     collectionFilterBy: [
       {
         property: "value",

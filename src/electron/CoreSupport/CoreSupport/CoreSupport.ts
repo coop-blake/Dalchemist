@@ -74,7 +74,7 @@ export class CoreSupport {
   }
 
   clearData() {
-    this.state.setOurDistributorEntries([]);
+    this.state.setSelectedDistributorEntries([]);
     this.state.setAllEntries([]);
     this.state.setAllDistributors(new Set<string>());
   }
@@ -85,7 +85,6 @@ export class CoreSupport {
     const ourDistributorsEntries = Array<CoreSupportPriceListEntry>();
     const notOurItems = Array<CoreSupportPriceListEntry>();
     try {
-      // await inventoryImport.start();
       const entries = await this.CoreSupportPriceList.getEntriesFor(
         await Settings.getCoreSetsExcelFilePath()
       );
@@ -97,22 +96,22 @@ export class CoreSupport {
         }
         distributors.add(entry.Distributor);
       });
-      this.state.setOurDistributorEntries(ourDistributorsEntries);
+      this.state.setSelectedDistributorEntries(ourDistributorsEntries);
       this.state.setAllEntries(entries);
       this.state.setAllDistributors(distributors);
     } catch (Error) {
       //Alert that the core support file is not supported
       console.log(Error);
     }
-    // console.log(this.entries);
-    // CoreSets.state.setAllCoreSetDistributors(Array.from(distributors));
-    //console.log(this.entries.length);
   }
 
-  constructor() {}
+  constructor() {
+    this.state.setSelectedDistributors(
+      new Set(Settings.getCoreSetDistributors())
+    );
+  }
 
   //Supplier Matches to filter out our items
-
   entryIsOurDistributor = (entry: CoreSupportPriceListEntry) => {
     const ourDistributors = Array.from(this.state.selectedDistributors);
     if (ourDistributors.includes(entry.Distributor)) {
@@ -121,82 +120,4 @@ export class CoreSupport {
       return false;
     }
   };
-
-  // getEntryById(id: string): CoreSupportPriceListEntry | undefined {
-  //   const entry = this.entries.get(id);
-
-  //   return entry;
-  // }
-
-  processLineArray(lineArray: string[], lineNumber: number) {
-    // switch (lineNumber) {
-    //   case 0:
-    //     //First line
-    //     if (
-    //       lineArray[0] !== "Core Sets Round" &&
-    //       lineArray[18].trim() != "Sale Unit Cost"
-    //     ) {
-    //       throw `First line of worksheet not expected: ${lineArray.join("\t")}`;
-    //     }
-    //     break;
-    //   default:
-    //     {
-    //       const entry = this.entryFromValueArray(lineArray);
-    //       if (entry !== null) {
-    //         this.distributors.add(entry.Distributor);
-    //         if (this.entryIsOurDistributor(entry)) {
-    //           if (this.entries.has(entry.id)) {
-    //             //TODO: change this to duplicate or otherWharehouse entries
-    //             this.multipleAvailableDistributorItems.push(entry);
-    //           } else {
-    //             this.entries.set(entry.id, entry);
-    //             const ouritem = Inventory.getInstance().getEntryFromScanCode(
-    //               entry.id
-    //             );
-    //             if (ouritem === undefined) {
-    //               console.log(
-    //                 "CoreSupport: Item not found in inventory",
-    //                 entry.id,
-    //                 entry.Description
-    //               );
-    //               //Items Not found in inventory
-    //               //todo: implement this
-    //               // const ourItemBySupplier =
-    //               //   Inventory.getInstance().getEntryFromSupplierCode(
-    //               //     entry.DistributorProductID
-    //               //   );
-    //             }
-    //             if (ouritem !== undefined) {
-    //               this.ourCoreItems.set(entry.id, entry);
-    //             }
-    //           }
-    //         } else {
-    //           this.notOurWarehouse.push(entry);
-    //         }
-    //       } else {
-    //         this.invalidLines.push(
-    //           `Line ${lineNumber}:${lineArray.join(" | ")}`
-    //         );
-    //       }
-    //     }
-    //     break;
-    // }
-  }
-
-  // getNumberOfItemsAvailable() {
-  //   return this.ourCoreItems.size;
-  // }
-  // getNumberOfEntries() {
-  //   return this.entries.size;
-  // }
-  // getNumberOfMultipleAvailableDistributorItems() {
-  //   return this.multipleAvailableDistributorItems.length;
-  // }
-  // getNumberOfInvalidLines() {
-  //   return this.invalidLines.length;
-  // }
-
-  // getCreationDate(): Date | null {
-  //   return this.fileCreatedDate;
-  // }
 }

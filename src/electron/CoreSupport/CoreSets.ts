@@ -5,7 +5,7 @@ import path from "path";
 import {
   CoreSetsStatus,
   CoreSupportPriceListEntry,
-  CoreSupportReportEntry
+  CoreSupportReportEntry,
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
@@ -14,7 +14,7 @@ import DalchemistApp from "../DalchemistApp";
 import {
   handleWindowMessage,
   sendCoreSetsData,
-  handleUserSelectedCoreSetDistributors
+  handleUserSelectedCoreSetDistributors,
 } from "./ipc";
 import { processReportEntries } from "./Report";
 /**
@@ -59,16 +59,22 @@ export class CoreSets {
       }
     });
 
-    CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
-      async (distributors) => {
-        console.log("CoreSets Distributors", distributors);
-        await this.loadCoreSetsExcelFile();
-        processReportEntries();
-      }
-    );
+    // CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
+    //   async (distributors) => {
+    //     console.log("CoreSets Distributors", distributors);
+    //     await this.loadCoreSetsExcelFile();
+    //     processReportEntries();
+    //   }
+    // );
   }
 
-  private reloadAnfRefresh() {}
+  static async refresh() {
+    const inventoryLastRefresh = Inventory.state.lastRefreshCompleted;
+    if (inventoryLastRefresh > 0) {
+      await CoreSets.getInstance().loadCoreSetsExcelFile();
+      processReportEntries();
+    }
+  }
 
   static get CoreSupportPriceListState() {
     return CoreSets.getInstance().CoreSupportReader.getState();
@@ -124,6 +130,7 @@ export class CoreSets {
       coreSetsWindow
         .loadURL(getIndexPath)
         .then(() => {
+          sendStateUpdatesToWindow();
           sendCoreSetsData();
 
           coreSetsWindow.show();
@@ -152,8 +159,8 @@ export class CoreSets {
         webPreferences: {
           preload: preloadPath, // Load preload script for the input dialog
           contextIsolation: true,
-          nodeIntegration: false
-        }
+          nodeIntegration: false,
+        },
       });
 
       this.coreSetsWindow.on("closed", () => {
@@ -235,26 +242,26 @@ export class CoreSetsState {
   // }
 
   //Core Set Distributors
-  private userSelectedCoreSetDistributorsSubject = new BehaviorSubject<
-    string[]
-  >([]);
-  public get userSelectedCoreSetDistributors$(): Observable<string[]> {
-    return this.userSelectedCoreSetDistributorsSubject.asObservable();
-  }
-  public get userSelectedCoreSetDistributors(): string[] {
-    if (this.userSelectedCoreSetDistributorsSubject.getValue().length == 0) {
-      this.userSelectedCoreSetDistributorsSubject.next(
-        Settings.getCoreSetDistributors()
-      );
-      return Settings.getCoreSetDistributors();
-    } else {
-      return this.userSelectedCoreSetDistributorsSubject.getValue();
-    }
-  }
-  public setUserSelectedCoreSetDistributors(distributors: string[]) {
-    Settings.setCoreSetDistributors(distributors);
-    this.userSelectedCoreSetDistributorsSubject.next(distributors);
-  }
+  // private userSelectedCoreSetDistributorsSubject = new BehaviorSubject<
+  //   string[]
+  // >([]);
+  // public get userSelectedCoreSetDistributors$(): Observable<string[]> {
+  //   return this.userSelectedCoreSetDistributorsSubject.asObservable();
+  // }
+  // public get userSelectedCoreSetDistributors(): string[] {
+  //   if (this.userSelectedCoreSetDistributorsSubject.getValue().length == 0) {
+  //     this.userSelectedCoreSetDistributorsSubject.next(
+  //       Settings.getCoreSetDistributors()
+  //     );
+  //     return Settings.getCoreSetDistributors();
+  //   } else {
+  //     return this.userSelectedCoreSetDistributorsSubject.getValue();
+  //   }
+  // }
+  // public setUserSelectedCoreSetDistributors(distributors: string[]) {
+  //   Settings.setCoreSetDistributors(distributors);
+  //   this.userSelectedCoreSetDistributorsSubject.next(distributors);
+  // }
 
   //Report Entries
   private reportEntriesSubject = new BehaviorSubject<CoreSupportReportEntry[]>(
@@ -273,55 +280,74 @@ export class CoreSetsState {
 
 CoreSets.getInstance();
 
-// const sendStateChangesToWindow = () => {
-//   //Core Support Price List
-//   CoreSets.CoreSupportPriceListState.lastRefreshed$.subscribe(
-//     async (lastRefreshed) => {
-//       //
-//       if (lastRefreshed > 0) {
-//         console.log("Sending Core Set items to window: 🥳");
-//         const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-//         coreSetsWindow.webContents.send(
-//           "CoreSetAllEntriesUpdated",
-//           CoreSets.CoreSupportPriceListState.allEntries
-//         );
-//         coreSetsWindow.webContents.send(
-//           "CoreSetOurDistributorsEntriesUpdated",
-//           CoreSets.CoreSupportPriceListState.ourDistributorsEntries
-//         );
-//       }
-//     }
-//   );
-//   CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
-//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-//     coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
-//   });
+const sendStateUpdatesToWindow = () => {
+  //Core Support Price List
+  // CoreSets.CoreSupportPriceListState.lastRefreshed$.subscribe(
+  //   async (lastRefreshed) => {
+  //     //
+  //     if (lastRefreshed > 0) {
+  //       console.log("Sending Core Set items to window: 🥳");
+  //       const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  //       coreSetsWindow.webContents.send(
+  //         "CoreSetAllEntriesUpdated",
+  //         CoreSets.CoreSupportPriceListState.allEntries
+  //       );
+  //       coreSetsWindow.webContents.send(
+  //         "CoreSetOurDistributorsEntriesUpdated",
+  //         CoreSets.CoreSupportPriceListState.selectedDistributorsEntries
+  //       );
+  //     }
+  //   }
+  // );
 
-//   CoreSets.state.status$.subscribe(async (status) => {
-//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  CoreSets.CoreSupportPriceListState.allEntries$.subscribe(
+    async (allEntries) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+      coreSetsWindow.webContents.send("CoreSetAllEntriesUpdated", allEntries);
+    }
+  );
+  CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
+    async (selectedDistributorEntries) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+      coreSetsWindow.webContents.send(
+        "CoreSetSelectedDistributorsEntriesUpdated",
+        selectedDistributorEntries
+      );
+    }
+  );
 
-//     coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
-//   });
+  CoreSets.state.coreSupportPriceListFilePath$.subscribe(async (filePath) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+    coreSetsWindow.webContents.send("CoreSetFilePathUpdated", filePath);
+  });
 
-//   CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
-//     const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  CoreSets.state.status$.subscribe(async (status) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-//     coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
-//   });
+    coreSetsWindow.webContents.send("CoreSetStatusUpdated", status);
+  });
 
-//   // CoreSets.state.allCoreSetDistributors$.subscribe(async (distributors) => {
-//   //   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
-//   //   coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
-//   // });
+  CoreSets.state.reportEntries$.subscribe(async (reportEntries) => {
+    const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
 
-//   CoreSets.state.userSelectedCoreSetDistributors$.subscribe(
-//     async (distributors) => {
-//       const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+    coreSetsWindow.webContents.send("CoreSetReportEntries", reportEntries);
+  });
 
-//       coreSetsWindow.webContents.send(
-//         "CoreSetUserSelectedDistributors",
-//         distributors
-//       );
-//     }
-//   );
-// };
+  // CoreSets.state.allCoreSetDistributors$.subscribe(async (distributors) => {
+  //   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+  //   coreSetsWindow.webContents.send("CoreSetAllDistributors", distributors);
+  // });
+
+  CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
+    async (distributors) => {
+      const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
+
+      coreSetsWindow.webContents.send(
+        "CoreSetUserSelectedDistributors",
+        distributors
+      );
+
+      CoreSets.refresh();
+    }
+  );
+};

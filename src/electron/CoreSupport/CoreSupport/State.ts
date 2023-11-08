@@ -74,24 +74,24 @@ export class CoreSupportState {
   /**
    * Our Items ##########################################################
    */
-  private ourDistributorsEntriesSubject = new BehaviorSubject<
+  private selectedDistributorsEntriesSubject = new BehaviorSubject<
     Array<CoreSupportPriceListEntry>
   >([]);
 
-  public get ourDistributorsEntries$(): Observable<
+  public get selectedDistributorsEntries$(): Observable<
     Array<CoreSupportPriceListEntry>
   > {
-    return this.ourDistributorsEntriesSubject.asObservable();
+    return this.selectedDistributorsEntriesSubject.asObservable();
   }
 
-  public get ourDistributorsEntries(): Array<CoreSupportPriceListEntry> {
-    return this.ourDistributorsEntriesSubject.getValue();
+  public get selectedDistributorsEntries(): Array<CoreSupportPriceListEntry> {
+    return this.selectedDistributorsEntriesSubject.getValue();
   }
 
-  public setOurDistributorEntries(
-    ourDistributorsEntries: Array<CoreSupportPriceListEntry>
+  public setSelectedDistributorEntries(
+    selectedDistributorsEntries: Array<CoreSupportPriceListEntry>
   ) {
-    this.ourDistributorsEntriesSubject.next(ourDistributorsEntries);
+    this.selectedDistributorsEntriesSubject.next(selectedDistributorsEntries);
   }
 
   /**

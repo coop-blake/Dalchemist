@@ -1,4 +1,5 @@
 import { shell, IpcMainInvokeEvent } from "electron";
+import Settings from "../Settings";
 import { saveCoreSetsTSVPrompt } from "./Report";
 import { CoreSets } from "./CoreSets";
 
@@ -24,41 +25,29 @@ const openCoreSetsFile = () => {
 export const sendCoreSetsData = async () => {
   const coreSetsWindow = await CoreSets.getInstance().getCoreSetsWindow();
   if (coreSetsWindow !== null) {
-    // coreSetsWindow.webContents.send(
-    //   "CoreSetNumberOfCoreSupportItems",
-    //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    // );
+    //Send Current Status
     coreSetsWindow.webContents.send(
       "CoreSetStatusUpdated",
       CoreSets.state.status
     );
-
+    // Core Support Price List File Path
     coreSetsWindow.webContents.send(
       "CoreSetFilePathUpdated",
       CoreSets.state.coreSupportPriceListFilePath
     );
-
+    // All Entries
     coreSetsWindow.webContents.send(
       "CoreSetAllEntriesUpdated",
       CoreSets.CoreSupportPriceListState.allEntries
     );
+    // Selected Distributor Entries
     coreSetsWindow.webContents.send(
-      "CoreSetOurDistributorsEntriesUpdated",
-      CoreSets.CoreSupportPriceListState.ourDistributorsEntries
+      "CoreSetSelectedDistributorsEntriesUpdated",
+      CoreSets.CoreSupportPriceListState.selectedDistributorsEntries
     );
-
-    // coreSetsWindow.webContents.send(
-    //   "CoreSetNumberOfCoreSupportItems",
-    //   CoreSets.getInstance().getCoreSupport().getNumberOfEntries()
-    // );
-
-    // coreSetsWindow.webContents.send(
-    //   "CoreSetNumberOfCoreSupportItemsFromOurDistributors",
-    //   CoreSets.getInstance().getCoreSupport().getNumberOfItemsAvailable()
-    // );
-
+    // Report Entries (Combined With Inventory)
     coreSetsWindow.webContents.send("CoreSetReportEntries", [
-      ...CoreSets.state.reportEntries
+      ...CoreSets.state.reportEntries,
     ]);
 
     coreSetsWindow.webContents.send(
@@ -73,9 +62,14 @@ export const sendCoreSetsData = async () => {
   }
 };
 
+//When Renderer sends Selected Distributor list
+//Save to Settings and set State
 export const handleUserSelectedCoreSetDistributors = (
   _event: IpcMainInvokeEvent,
   distributors: Array<string>
 ) => {
-  CoreSets.state.setUserSelectedCoreSetDistributors(distributors);
+  Settings.setCoreSetDistributors(distributors);
+  CoreSets.CoreSupportPriceListState.setSelectedDistributors(
+    new Set(distributors)
+  );
 };

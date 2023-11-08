@@ -29,6 +29,7 @@ import {
   selectReportEntries,
   setAvailableDistributors,
   setSelectedDistributors,
+  selectSelectedDistributors,
 } from "./CoreSetSlice";
 
 import "../../Resources/css/coreSets.css";
@@ -59,9 +60,13 @@ window.electron.ipcRenderer.on(
 );
 
 window.electron.ipcRenderer.on(
-  "CoreSetOurDistributorsEntriesUpdated",
+  "CoreSetSelectedDistributorsEntriesUpdated",
   (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
-    console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
+    console.log(
+      "CoreSetSelectedDistributorsEntriesUpdated",
+      event,
+      coreSetItemsArray
+    );
     if (typeof coreSetItemsArray !== "undefined") {
       console.log(coreSetItemsArray);
 
@@ -114,15 +119,20 @@ window.electron.ipcRenderer.on(
     if (typeof selectedDistributorsArray !== "undefined") {
       console.log(selectedDistributorsArray);
 
-      store.dispatch(setSelectedDistributors(selectedDistributorsArray));
+      store.dispatch(
+        setSelectedDistributors(Array.from(selectedDistributorsArray))
+      );
     }
   }
 );
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
-  const selectedDistributorEntries = useAppSelector(selectSelectedDistributorEntries);
+  const selectedDistributorEntries = useAppSelector(
+    selectSelectedDistributorEntries
+  );
   const reportEntries = useAppSelector(selectReportEntries);
+  const selectedDistributors = useAppSelector(selectSelectedDistributors);
 
   const [subView, setSubView] = useState(SubView.settings);
 
@@ -188,7 +198,8 @@ export default function CoreSetsView() {
         <br />
         <span id="numberOfCoreSupportItems"></span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {reportEntries.length}/{selectedDistributorEntries.length} Report Entries
+          {reportEntries.length}/{selectedDistributorEntries.length} Report
+          Entries
         </span>
         <span
           id="saveCoreSetReportButton"
@@ -255,14 +266,15 @@ export default function CoreSetsView() {
         <hr></hr>
         <h2 style={{ paddingLeft: "10px" }}>Our Distributors</h2>
         <div style={{ paddingLeft: "30px" }}>
-          {ourDistributors.map((distributor) => (
+          {selectedDistributors.map((distributor) => (
             <li key={distributor}>{distributor}</li>
           ))}
         </div>
         {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">
-            ✅ Loaded with {selectedDistributorEntries.length} entries from our distributors{" "}
-            <br />✅ Loaded with {reportEntries.length} entries in our Inventory
+            ✅ Loaded with {selectedDistributorEntries.length} entries from our
+            distributors <br />✅ Loaded with {reportEntries.length} entries in
+            our Inventory
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
@@ -277,7 +289,9 @@ export default function CoreSetsView() {
     return (
       <div className="core-support-table">
         <CoreSetsTable />
-        <span id="numberOfCoreSupportItems">{selectedDistributorEntries.length}</span>
+        <span id="numberOfCoreSupportItems">
+          {selectedDistributorEntries.length}
+        </span>
         <span id="numberOfCoreSupportItemsFromOurDistributors">
           {reportEntries.length}
         </span>
