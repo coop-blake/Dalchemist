@@ -30,7 +30,9 @@ import {
   setAvailableDistributors,
   setSelectedDistributors,
   selectSelectedDistributors,
+  selectAllEntries,
 } from "./CoreSetSlice";
+import { listenToIPCAndSetState } from "./ipc";
 
 import "../../Resources/css/coreSets.css";
 
@@ -40,96 +42,10 @@ enum SubView {
   report,
 }
 
-const ourDistributors = [
-  "Equal Exchange - Direct",
-  "Tony's Fine Foods - Ridgefield, WA",
-  "UNFI - Ridgefield, WA",
-  "Ancient Nutrition - Direct",
-];
-
-window.electron.ipcRenderer.on(
-  "CoreSetAllEntriesUpdated",
-  (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
-    console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
-    if (typeof coreSetItemsArray !== "undefined") {
-      console.log(coreSetItemsArray);
-
-      store.dispatch(setAllEntries(coreSetItemsArray));
-    }
-  }
-);
-
-window.electron.ipcRenderer.on(
-  "CoreSetSelectedDistributorsEntriesUpdated",
-  (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
-    console.log(
-      "CoreSetSelectedDistributorsEntriesUpdated",
-      event,
-      coreSetItemsArray
-    );
-    if (typeof coreSetItemsArray !== "undefined") {
-      console.log(coreSetItemsArray);
-
-      store.dispatch(setSelectedDistributorEntries(coreSetItemsArray));
-    }
-  }
-);
-
-window.electron.ipcRenderer.on(
-  "CoreSetStatusUpdated",
-  (status: CoreSetsStatus) => {
-    console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
-    store.dispatch(setStatus(status));
-  }
-);
-window.electron.ipcRenderer.on("CoreSetFilePathUpdated", (filePath: string) => {
-  console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
-  store.dispatch(setFilePath(filePath));
-});
-
-window.electron.ipcRenderer.on(
-  "CoreSetReportEntries",
-  (coreSetReportEntriesArray: Array<CoreSupportReportEntry>) => {
-    console.log(
-      "CoreSetReportEntriesUpdated🟢🟢🟢🟢🟢",
-      coreSetReportEntriesArray
-    );
-    if (typeof coreSetReportEntriesArray !== "undefined") {
-      console.log(coreSetReportEntriesArray);
-
-      store.dispatch(setReportEntries(coreSetReportEntriesArray));
-    }
-  }
-);
-window.electron.ipcRenderer.on(
-  "CoreSetAllDistributors",
-  (availableDistributorsArray: Array<string>) => {
-    console.log("availableDistributorsArray", availableDistributorsArray);
-    if (typeof availableDistributorsArray !== "undefined") {
-      console.log(availableDistributorsArray);
-
-      store.dispatch(
-        setAvailableDistributors(Array.from(availableDistributorsArray))
-      );
-    }
-  }
-);
-window.electron.ipcRenderer.on(
-  "CoreSetUserSelectedDistributors",
-  (selectedDistributorsArray: Array<string>) => {
-    console.log("CoreSetUserSelectedDistributors", selectedDistributorsArray);
-    if (typeof selectedDistributorsArray !== "undefined") {
-      console.log(selectedDistributorsArray);
-
-      store.dispatch(
-        setSelectedDistributors(Array.from(selectedDistributorsArray))
-      );
-    }
-  }
-);
 export default function CoreSetsView() {
   const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
+  const allEntries = useAppSelector(selectAllEntries);
   const selectedDistributorEntries = useAppSelector(
     selectSelectedDistributorEntries
   );
@@ -141,6 +57,10 @@ export default function CoreSetsView() {
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
   }, [selectedDistributorEntries, subView]);
+
+  useEffect(() => {
+    listenToIPCAndSetState();
+  }, []);
 
   return (
     <div className="CoreSetsMainDiv">
@@ -253,7 +173,11 @@ export default function CoreSetsView() {
           )}
         </div>
         {selectedDistributorEntries.length > 0 ? (
-          <div id="loadedFileStatus">✅ Loaded File</div>
+          <div id="loadedFileStatus">
+            ✅ Loaded {allEntries.length} entries from Core Support Price List
+            File
+            <br />
+          </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
@@ -262,27 +186,40 @@ export default function CoreSetsView() {
   }
 
   function setupView() {
+    const entryUPC = reportEntries.map((entry) => {
+      return entry.UPC;
+    });
+
     return (
       <div id="coreSetSettings">
-        {coreSetsSetup()}
-        <hr></hr>
-        <h2 style={{ paddingLeft: "10px" }}>Our Distributors</h2>
-        <div style={{ paddingLeft: "30px" }}>
-          {selectedDistributors.map((distributor) => (
-            <li key={distributor}>{distributor}</li>
-          ))}
-        </div>
+        {coreSetsSetup()} <hr />
+        <h2 style={{ paddingLeft: "10px" }}>Distributors</h2>
         {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">
-            ✅ Loaded with {selectedDistributorEntries.length} entries from our
-            distributors <br />✅ Loaded with {reportEntries.length} entries in
-            our Inventory
+            ✅ {selectedDistributorEntries.length} entries from our distributors{" "}
+            <br />
+          </div>
+        ) : (
+          <div className="loadingStatus pulsating"> {status}</div>
+        )}
+        <DistributorChooser />
+        {selectedDistributorEntries.length > 0 ? (
+          <div id="loadedFileStatus">
+            ✅ Containing {reportEntries.length} entries in our Inventory
+            <br />✅ Resulting in{" "}
+            {
+              new Set(
+                reportEntries.map((entry) => {
+                  return entry.UPC;
+                })
+              ).size
+            }{" "}
+            entries in our Inventory
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
         <hr></hr>
-        <DistributorChooser />
       </div>
     );
   }

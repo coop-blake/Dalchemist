@@ -33,45 +33,42 @@ export class CoreSets {
     CoreSets.state = new CoreSetsState();
     CoreSets.state.setStatus(CoreSetsStatus.Starting);
 
-    this.CoreSupportReader = new CoreSupport();
+    const coreSupportReader = new CoreSupport();
 
-    CoreSets.state.setCoreSupportPriceListFilePath(
-      Settings.getCoreSetsExcelFilePath()
-    );
+    this.CoreSupportReader = coreSupportReader;
+    setTimeout(() => {
+      CoreSets.state.setCoreSupportPriceListFilePath(
+        Settings.getCoreSetsExcelFilePath()
+      );
 
-    Inventory.getInstance();
+      Inventory.getInstance();
 
-    //todo combine trigger with CoreSet state
-    // Inventory.state.lastRefreshCompleted$.subscribe((lastRefresh: number) => {
-    //   if (lastRefresh > 0) {
-    //     if (CoreSets.state.coreSupportPriceListFilePath !== "") {
-    //       if (this.CoreSupportReader.doesKnownFileExist()) {
-    //         setTimeout(async () => {
-    //           await this.loadCoreSetsExcelFile();
-    //           processReportEntries();
-    //         });
-    //       } else {
-    //         CoreSets.state.setStatus(CoreSetsStatus.NoFileAtPath);
-    //       }
-    //     } else {
-    //       CoreSets.state.setStatus(CoreSetsStatus.NoFilePath);
-    //     }
-    //   }
-    // });
+      CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
+        async (selectedDistributorsEntries) => {
+          processReportEntries();
+        }
+      );
 
-    // CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
-    //   async (distributors) => {
-    //     console.log("CoreSets Distributors", distributors);
-    //     await this.loadCoreSetsExcelFile();
-    //     processReportEntries();
-    //   }
-    // );
+      CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
+        async (distributors) => {
+          coreSupportReader.start();
+        }
+      );
+
+      CoreSets.state.coreSupportPriceListFilePath$.subscribe(
+        async (filePath) => {
+          if (filePath !== "") {
+            coreSupportReader.start();
+          }
+        }
+      );
+    }, 0);
   }
 
   static async refresh() {
     const inventoryLastRefresh = Inventory.state.lastRefreshCompleted;
     if (inventoryLastRefresh > 0) {
-      await CoreSets.getInstance().loadCoreSetsExcelFile();
+      // await CoreSets.getInstance().loadCoreSetsExcelFile();
       processReportEntries();
     }
   }
@@ -98,26 +95,26 @@ export class CoreSets {
 
     if (selectedFile !== "") {
       CoreSets.state.setCoreSupportPriceListFilePath(selectedFile);
-      this.loadCoreSetsExcelFile();
+      // this.loadCoreSetsExcelFile();
     }
   }
 
-  async loadCoreSetsExcelFile() {
-    CoreSets.state.setStatus(CoreSetsStatus.Loading);
+  // async loadCoreSetsExcelFile() {
+  //   CoreSets.state.setStatus(CoreSetsStatus.Loading);
 
-    const lastUpdated = await this.CoreSupportReader.loadCoreSetsExcelFile();
-    if (lastUpdated > 0) {
-      const coreSetEntriesArray = CoreSets.CoreSupportPriceListState.allEntries;
-      if (coreSetEntriesArray.length > 0) {
-        CoreSets.state.setStatus(CoreSetsStatus.Running);
-      } else {
-        CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
-      }
-    } else {
-      CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
-    }
-    CoreSets.state.setLastRefreshCompleted(lastUpdated);
-  }
+  //   const lastUpdated = await this.CoreSupportReader.loadCoreSetsExcelFile();
+  //   if (lastUpdated > 0) {
+  //     const coreSetEntriesArray = CoreSets.CoreSupportPriceListState.allEntries;
+  //     if (coreSetEntriesArray.length > 0) {
+  //       CoreSets.state.setStatus(CoreSetsStatus.Running);
+  //     } else {
+  //       CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
+  //     }
+  //   } else {
+  //     CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
+  //   }
+  //   CoreSets.state.setLastRefreshCompleted(lastUpdated);
+  // }
 
   public async showCoreSetsWindow() {
     const coreSetsWindow = await this.getCoreSetsWindow();
@@ -263,7 +260,7 @@ const sendStateUpdatesToWindow = () => {
         distributors
       );
 
-      CoreSets.refresh();
+      //CoreSets.refresh();
     }
   );
   //All Entries from Core SUpport Price List

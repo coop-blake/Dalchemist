@@ -1,6 +1,6 @@
 import { shell, IpcMainInvokeEvent } from "electron";
 import Settings from "../Settings";
-import { saveCoreSetsTSVPrompt } from "./Report";
+import { saveCoreSetsTSVPrompt, reportEntriesAsXLSX } from "./Report";
 import { CoreSets } from "./CoreSets";
 
 export const handleWindowMessage = async (
@@ -12,7 +12,8 @@ export const handleWindowMessage = async (
   } else if (mainWindowMessage === "openCoreSetsFile") {
     openCoreSetsFile();
   } else if (mainWindowMessage === "saveCoreSetReportButtonClicked") {
-    saveCoreSetsTSVPrompt();
+    //saveCoreSetsTSVPrompt();
+    reportEntriesAsXLSX();
   } else if (mainWindowMessage === "selectFileMenuButtonClicked") {
     CoreSets.getInstance().selectCoreSetsFilePath();
   }

@@ -117,6 +117,14 @@ const entryFromValueArray = function (
 
       id: valueArray[8] + valueArray[5] + valueArray[6],
     };
+    //if it is the first line, return null
+    if (
+      entry.Brand === "Brand" &&
+      entry.Description === "Description" &&
+      entry.EDLPPrice === "EDLP Price"
+    ) {
+      return null;
+    }
     return entry;
   }
   return null;
