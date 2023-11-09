@@ -193,20 +193,17 @@ export default function CoreSetsView() {
     return (
       <div id="coreSetSettings">
         {coreSetsSetup()} <hr />
-        <h2 style={{ paddingLeft: "10px" }}>Distributors</h2>
+        <h2 style={{ paddingLeft: "10px" }}> 🚛 {selectedDistributorEntries.length} Distributor Entries</h2>
         {selectedDistributorEntries.length > 0 ? (
-          <div id="loadedFileStatus">
-            ✅ {selectedDistributorEntries.length} entries from our distributors{" "}
-            <br />
-          </div>
+         ""
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
         <DistributorChooser />
         {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">
-            ✅ Containing {reportEntries.length} entries in our Inventory
-            <br />✅ Resulting in{" "}
+            
+            <br />🏷️{" "}
             {
               new Set(
                 reportEntries.map((entry) => {
@@ -214,7 +211,7 @@ export default function CoreSetsView() {
                 })
               ).size
             }{" "}
-            entries in our Inventory
+            unique items from  {reportEntries.length} entries matching Inventory
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
