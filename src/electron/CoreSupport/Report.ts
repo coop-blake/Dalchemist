@@ -25,11 +25,11 @@ function saveStringToFile(content: string, filePath: string) {
   }
 }
 
-export const processReportEntries = function () {
+export const processReportEntries = async function () {
   const returnEntries: Array<CoreSupportReportEntry> = [];
   const promoEntries = Promos.getInstance().promosByScancode;
   const inventoryImporter = Inventory.getInstance();
-
+  await Inventory.state.onLoaded();
   const selectedDistributorsEntries =
     CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
   selectedDistributorsEntries.forEach((coreSupportPriceListEntry) => {

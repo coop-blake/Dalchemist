@@ -33,9 +33,7 @@ export class CoreSets {
     CoreSets.state = new CoreSetsState();
     CoreSets.state.setStatus(CoreSetsStatus.Starting);
 
-    const coreSupportReader = new CoreSupport();
-
-    this.CoreSupportReader = coreSupportReader;
+    this.CoreSupportReader = new CoreSupport();
     setTimeout(() => {
       CoreSets.state.setCoreSupportPriceListFilePath(
         Settings.getCoreSetsExcelFilePath()
@@ -45,33 +43,47 @@ export class CoreSets {
 
       CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
         async (selectedDistributorsEntries) => {
-          processReportEntries();
+          this.checkAndProcessReportEntries();
         }
       );
 
       CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
         async (distributors) => {
-          coreSupportReader.start();
+          this.checkAndStartCoreSupport();
         }
       );
 
       CoreSets.state.coreSupportPriceListFilePath$.subscribe(
         async (filePath) => {
-          if (filePath !== "") {
-            coreSupportReader.start();
-          }
+          this.checkAndStartCoreSupport();
         }
       );
+      this.checkAndStartCoreSupport();
     }, 0);
   }
+  private checkAndStartCoreSupport() {
+    if (
+      CoreSets.state.coreSupportPriceListFilePath !== "" &&
+      CoreSets.CoreSupportPriceListState.selectedDistributors.size > 0
+    ) {
+      this.CoreSupportReader.start();
+    }
+  }
 
-  static async refresh() {
-    const inventoryLastRefresh = Inventory.state.lastRefreshCompleted;
-    if (inventoryLastRefresh > 0) {
-      // await CoreSets.getInstance().loadCoreSetsExcelFile();
+  private checkAndProcessReportEntries() {
+    if (
+      CoreSets.CoreSupportPriceListState.selectedDistributorsEntries.length > 0
+    ) {
       processReportEntries();
     }
   }
+  // static async refresh() {
+  //   const inventoryLastRefresh = Inventory.state.lastRefreshCompleted;
+  //   if (inventoryLastRefresh > 0) {
+  //     // await CoreSets.getInstance().loadCoreSetsExcelFile();
+  //     processReportEntries();
+  //   }
+  // }
 
   static get CoreSupportPriceListState() {
     return CoreSets.getInstance().CoreSupportReader.getState();

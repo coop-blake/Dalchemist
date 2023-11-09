@@ -1,15 +1,22 @@
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  firstValueFrom,
+} from "rxjs";
 import {
   InventoryEntry,
   InventoryStatus,
   AltIDEntry,
   AltIDEntryFromValueArray,
   PromoEntry,
-  PromoEntryFromValueArray
+  PromoEntryFromValueArray,
 } from "./shared";
 import { Promos } from "./Promos";
 import AltIDs from "./AltIDs";
 import { Google } from "../google";
+
+import { first } from "rxjs/operators";
 
 export class Inventory {
   private static instance: Inventory;
@@ -52,7 +59,7 @@ export class Inventory {
         const sheets = this.googleInstance.getSheets();
         const inventoryItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Inventory!A3:S50000` // Adjust range as needed
+          range: `Inventory!A3:S50000`, // Adjust range as needed
         });
 
         this.inventoryItemsArray = inventoryItemsResponse.data.values
@@ -64,7 +71,7 @@ export class Inventory {
 
         const altIDItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `AltIDs!A2:C5000` // Adjust range as needed
+          range: `AltIDs!A2:C5000`, // Adjust range as needed
         });
 
         this.altIDsItemsArray = altIDItemsResponse.data.values?.map(
@@ -75,7 +82,7 @@ export class Inventory {
 
         const promosResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Promos!A2:F9000` // Adjust range as needed
+          range: `Promos!A2:F9000`, // Adjust range as needed
         });
 
         this.promoItemsArray = promosResponse.data.values?.map((newItemData) =>
@@ -140,6 +147,12 @@ export class InventoryState {
   public setLastRefreshCompleted(time: number) {
     this.lastRefreshCompletedSubject.next(time);
   }
+
+  public async onLoaded(): Promise<number> {
+    return firstValueFrom(
+      this.lastRefreshCompleted$.pipe(first((value) => value > 0))
+    );
+  }
 }
 
 const entryFromValueArray = function (
@@ -172,7 +185,7 @@ const entryFromValueArray = function (
     SouthLSD: valueArray[18].trim(),
 
     //All values as array as received
-    valuesArray: valueArray
+    valuesArray: valueArray,
   };
   return entry;
 };
