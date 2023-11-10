@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { selectSelectedDistributorEntries } from "./CoreSetSlice";
-import "./resources/css/slickGrid.scss";
+//import "./resources/css/slickGrid.scss";
 import { CoreSupportPriceListEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 

@@ -120,11 +120,9 @@ export default function CoreSetsView() {
   function reportView() {
     return (
       <div>
-        Report
         <br />
-        <span id="numberOfCoreSupportItems"></span>
-        <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {reportEntries.length}/{selectedDistributorEntries.length} Report
+        <span id="reviewTitle" style={{paddingTop: "50px"}}>
+        {reportEntries.length}/{selectedDistributorEntries.length} Report
           Entries
         </span>
         <span

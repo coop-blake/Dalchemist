@@ -71,17 +71,6 @@ export default function CoreSetReportTable() {
     ""
   ) : (
     <>
-      {" "}
-      <Button
-        name={"Save as TSV"}
-        icon={saveIcon}
-        active={false}
-        onClick={() => {
-          savePriceUpdateCSV();
-        }}
-        style={{ height: "20px" }}
-        className={"add-drop-table-button"}
-      />
       <div
         id="coreSetsReportTable"
         className="add-drop-table"
