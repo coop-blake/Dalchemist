@@ -141,7 +141,7 @@ export default function NewItemsInInventoryTable() {
 
               {
                 title: "New Price",
-                field: "newItemProposedPrice",
+                field: "newItemBasePrice",
                 formatter: styleFormatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
