@@ -75,31 +75,35 @@ export default function CoreSetsView() {
         >
           <img id="toolIcon" src={toolIcon} alt="Tool Icon Image" /> Setup
         </span>
-        <span
-          className={`navButton ${
-            subView === SubView.review && "activeButton"
-          }`}
-          onClick={() => {
-            setSubView(SubView.review);
-          }}
-        >
-          <img
-            id="thumbsUpIcon"
-            src={thumbsUpIcon}
-            alt="Thumbs Up Icon Image"
-          />{" "}
-          Review
-        </span>
-        <span
-          className={`navButton ${
-            subView === SubView.report && "activeButton"
-          }`}
-          onClick={() => {
-            setSubView(SubView.report);
-          }}
-        >
-          <img id="saveIcon" src={saveIcon} alt="Save Icon Image" /> Report
-        </span>
+        {selectedDistributorEntries.length > 0 && (
+          <span
+            className={`navButton ${
+              subView === SubView.review && "activeButton"
+            }`}
+            onClick={() => {
+              setSubView(SubView.review);
+            }}
+          >
+            <img
+              id="thumbsUpIcon"
+              src={thumbsUpIcon}
+              alt="Thumbs Up Icon Image"
+            />{" "}
+            Review
+          </span>
+        )}
+        {reportEntries.length > 1 && (
+          <span
+            className={`navButton ${
+              subView === SubView.report && "activeButton"
+            }`}
+            onClick={() => {
+              setSubView(SubView.report);
+            }}
+          >
+            <img id="saveIcon" src={saveIcon} alt="Save Icon Image" /> Report
+          </span>
+        )}
       </div>
       <div className="mainContent">
         {subView === SubView.settings
@@ -125,7 +129,7 @@ export default function CoreSetsView() {
         </span>
         <span
           id="saveCoreSetReportButton"
-          style={{ paddingTop: "100px" }}
+          className="interfaceButton"
           onClick={saveCoreSetReportButtonClicked}
         >
           Save Report
@@ -141,8 +145,8 @@ export default function CoreSetsView() {
         <div>
           <h2>
             {" "}
-            <img id="fileIcon" src={fileIcon} alt="File Icon Image" /> Core Sets
-            Excel File
+            <img id="fileIcon" src={fileIcon} alt="File Icon Image" /> Core
+            Support XLSX File
           </h2>
 
           <span id="fileName">
@@ -151,7 +155,7 @@ export default function CoreSetsView() {
             ) : (
               <span className="errorMessage">
                 <img id="slashIcon" src={slashIcon} alt="Slash Icon Image" /> No
-                Core Sets Excel File Location Saved ❗
+                Core Support Price List Excel File Location Saved ❗
               </span>
             )}
           </span>
@@ -193,17 +197,20 @@ export default function CoreSetsView() {
     return (
       <div id="coreSetSettings">
         {coreSetsSetup()} <hr />
-        <h2 style={{ paddingLeft: "10px" }}> 🚛 {selectedDistributorEntries.length} Distributor Entries</h2>
+        <h2 style={{ paddingLeft: "10px" }}>
+          {" "}
+          🚛 {selectedDistributorEntries.length} Distributor Entries
+        </h2>
         {selectedDistributorEntries.length > 0 ? (
-         ""
+          ""
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
         )}
         <DistributorChooser />
         {selectedDistributorEntries.length > 0 ? (
           <div id="loadedFileStatus">
-            
-            <br />🏷️{" "}
+            <br />
+            🏷️{" "}
             {
               new Set(
                 reportEntries.map((entry) => {
@@ -211,7 +218,7 @@ export default function CoreSetsView() {
                 })
               ).size
             }{" "}
-            unique items from  {reportEntries.length} entries matching Inventory
+            unique items from {reportEntries.length} entries matching Inventory
           </div>
         ) : (
           <div className="loadingStatus pulsating"> {status}</div>
@@ -225,11 +232,9 @@ export default function CoreSetsView() {
     return (
       <div className="core-support-table">
         <CoreSetsTable />
-        <span id="numberOfCoreSupportItems">
-          {selectedDistributorEntries.length}
-        </span>
-        <span id="numberOfCoreSupportItemsFromOurDistributors">
-          {reportEntries.length}
+
+        <span id="reviewTitle">
+          {selectedDistributorEntries.length} Distributor Entries
         </span>
       </div>
     );

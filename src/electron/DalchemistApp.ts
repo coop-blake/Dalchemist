@@ -195,6 +195,9 @@ export default class DalchemistApp {
     }
   };
 
+  public showInventoryWindow() {
+    Inventory.getInstance().showWindow();
+  }
   public showMainWindow() {
     if (this.mainWindow !== null) {
       this.mainWindow.show();

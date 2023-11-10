@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { selectSelectedDistributorEntries } from "./CoreSetSlice";
-import "../../Resources/css/slickGrid.scss";
+import "./resources/css/slickGrid.scss";
 import { CoreSupportPriceListEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 
@@ -58,7 +58,6 @@ export default function CoreSetsTable() {
       columnDefinitions={columnDefinitions}
       gridOptions={gridOptions!}
       dataset={[...selectedDistributorEntries]}
-      class="core-support-table"
     />
   );
 }
