@@ -1,231 +1,90 @@
-import React, { useEffect, useState } from "react";
 import { selectSelectedDistributorEntries } from "./CoreSetSlice";
 //import "./resources/css/slickGrid.scss";
 import { CoreSupportPriceListEntry } from "../shared";
 import { useAppSelector } from "../../View/hooks";
 
-import {
-  Column,
-  MultipleSelectOption,
-  OperatorType,
-  FieldType,
-  Filters,
-  GridOption,
-  SlickgridReact,
-  Formatters,
-} from "slickgrid-react";
+import React, { useEffect, useState } from "react";
 
-export interface Props {
-  selectedDistributorEntries: Array<CoreSupportPriceListEntry>;
-  selectedDistributorEntriesLength: number;
-}
+import { TabulatorFull as Tabulator } from "tabulator-tables";
+import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
+import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
+import "./resources/css/core-support-table.css";
 
-export interface State {
-  name: string;
-  subTitle: string;
-  gridOptions?: GridOption;
-  columnDefinitions: Column[];
-  dataset: CoreSupportPriceListEntry[];
-}
-
-export default function CoreSetsTable() {
-  const title = "Core Sets";
+export default function PriceUpdatesTable() {
   const selectedDistributorEntries = useAppSelector(
     selectSelectedDistributorEntries
   );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [columnDefinitions, setColumnDefinitions] = useState(defineGrids());
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [gridOptions, setGridOptions] = useState({
-    enableSorting: true,
-    enableFiltering: true,
-    //forceFitColumns: true,
-    enableAutoResize: true,
-  } as GridOption);
+  const [table, setTable] = useState<Tabulator | null>(null);
+  const [data, setData] = useState<CoreSupportPriceListEntry[]>([]);
 
   useEffect(() => {
-    document.title = title;
-    console.log("check", [...selectedDistributorEntries]);
-  }, [selectedDistributorEntries, columnDefinitions, gridOptions]);
+    data.splice(0);
+    selectedDistributorEntries.forEach((entry) => {
+      data.push({ ...entry } as CoreSupportPriceListEntry);
+    });
+
+    console.log("Core Support Distributor entries", data);
+
+    dataUpdated(data);
+  }, [selectedDistributorEntries]);
+
+  function dataUpdated(data: CoreSupportPriceListEntry[] = []) {
+    console.log("Core Support Distributor DataUpdated", data);
+
+    if (data.length > 0) {
+      if (table === null) {
+        setTable(
+          new Tabulator("#coreSupportDistributorEntriesTable", {
+            data: data, //load row data from array
+            movableColumns: true, //allow column order to be changed
+            columns: [
+              
+                { title: "Brand", field: "Brand" },
+                { title: "BuyInEnd", field: "BuyInEnd" },
+                { title: "BuyInStart", field: "BuyInStart" },
+                { title: "Category", field: "Category" },
+                { title: "Changes", field: "Changes" },
+                { title: "CoreSetsRound", field: "CoreSetsRound" },
+                { title: "Dept", field: "Dept" },
+                { title: "Description", field: "Description" },
+                { title: "Distributor", field: "Distributor" },
+                { title: "DistributorProductID", field: "DistributorProductID" },
+                { title: "EDLPPrice", field: "EDLPPrice" },
+                { title: "FormattedUPC", field: "FormattedUPC" },
+                { title: "LineNotes", field: "LineNotes" },
+                { title: "Margin", field: "Margin" },
+                { title: "PackSize", field: "PackSize" },
+                { title: "PromoMCB", field: "PromoMCB" },
+                { title: "PromoOI", field: "PromoOI" },
+                { title: "RebatePerUnit", field: "RebatePerUnit" },
+                { title: "ReportingUPC", field: "ReportingUPC" },
+                { title: "SaleCaseCost", field: "SaleCaseCost" },
+                { title: "SaleUnitCost", field: "SaleUnitCost" },
+                { title: "UnitCount", field: "UnitCount" },
+                { title: "UPCA", field: "UPCA" },
+              
+              
+            ],
+          })
+        );
+      } else {
+        table.setData([...data]);
+      }
+    }
+  }
 
   return !(selectedDistributorEntries.length > 0) ? (
     ""
   ) : (
-    <SlickgridReact
-      gridId="CoreSetSlickGrid"
-      columnDefinitions={columnDefinitions}
-      gridOptions={gridOptions!}
-      dataset={[...selectedDistributorEntries]}
-    />
+    <>
+      {" "}
+      
+      <div
+        id="coreSupportDistributorEntriesTable"
+        className="core-support-table"
+        style={{ top: "50px" }}
+      />
+    </>
   );
 }
 
-/* Define grid Options and Columns */
-const defineGrids = function () {
-  const columns: Column[] = [
-    { id: "Brand", name: "Brand", field: "Brand", sortable: true },
-    {
-      id: "BuyInEnd",
-      name: "BuyInEnd",
-      field: "BuyInEnd",
-      sortable: true,
-    },
-    {
-      id: "BuyInStart",
-      name: "BuyInStart",
-      field: "BuyInStart",
-      sortable: true,
-      filterable: true,
-    },
-    {
-      id: "Category",
-      name: "Category",
-      field: "Category",
-      sortable: true,
-    },
-    { id: "Changes", name: "Changes", field: "Changes", sortable: true },
-    {
-      id: "CoreSetsRound",
-      name: "CoreSetsRound",
-      field: "CoreSetsRound",
-      sortable: true,
-    },
-    { id: "Dept", name: "Dept", field: "Dept", sortable: true },
-    {
-      id: "Description",
-      name: "Description",
-      field: "Description",
-      sortable: true,
-    },
-    {
-      id: "Distributor",
-      name: "Distributor",
-      field: "Distributor",
-      sortable: true,
-      filterable: true,
-      filter: selectFilter(),
-    },
-    {
-      id: "DistributorProductID",
-      name: "DistributorProductID",
-      field: "DistributorProductID",
-      sortable: true,
-    },
-    {
-      id: "EDLPPrice",
-      name: "EDLPPrice",
-      field: "EDLPPrice",
-      sortable: true,
-    },
-    {
-      id: "FormattedUPC",
-      name: "FormattedUPC",
-      field: "FormattedUPC",
-      sortable: true,
-    },
-    { id: "id", name: "id", field: "id", sortable: true },
-    {
-      id: "LineNotes",
-      name: "LineNotes",
-      field: "LineNotes",
-      sortable: true,
-    },
-    { id: "Margin", name: "Margin", field: "Margin", sortable: true },
-    {
-      id: "PackSize",
-      name: "PackSize",
-      field: "PackSize",
-      sortable: true,
-    },
-    {
-      id: "PromoMCB",
-      name: "PromoMCB",
-      field: "PromoMCB",
-      sortable: true,
-    },
-    { id: "PromoOI", name: "PromoOI", field: "PromoOI", sortable: true },
-    {
-      id: "RebatePerUnit",
-      name: "RebatePerUnit",
-      field: "RebatePerUnit",
-      sortable: true,
-    },
-    {
-      id: "ReportingUPC",
-      name: "ReportingUPC",
-      field: "ReportingUPC",
-      sortable: true,
-    },
-    {
-      id: "SaleCaseCost",
-      name: "SaleCaseCost",
-      field: "SaleCaseCost",
-      sortable: true,
-    },
-    {
-      id: "SaleUnitCost",
-      name: "SaleUnitCost",
-      field: "SaleUnitCost",
-      sortable: true,
-    },
-    {
-      id: "UnitCount",
-      name: "UnitCount",
-      field: "UnitCount",
-      sortable: true,
-    },
-    { id: "UPCA", name: "UPCA", field: "UPCA", sortable: true },
-  ];
-  return columns;
-};
-
-const selectFilter = function () {
-  return {
-    model: Filters.multipleSelect,
-    collection: [
-      "Equal Exchange - Direct",
-      "Tony's Fine Foods - Ridgefield, WA",
-      "UNFI - Ridgefield, WA",
-      "Ancient Nutrition - Direct",
-    ],
-
-    collectionFilterBy: [
-      {
-        property: "value",
-        operator: OperatorType.notEqual,
-        value: 360,
-      },
-      {
-        property: "value",
-        operator: OperatorType.notEqual,
-        value: 365,
-      },
-    ],
-
-    // sort the select dropdown in a descending order
-    collectionSortBy: {
-      property: "value",
-      sortDesc: true,
-      fieldType: FieldType.number,
-    },
-    customStructure: {
-      value: "value",
-      label: "label",
-      optionLabel: "value", // if selected text is too long, we can use option labels instead
-      labelSuffix: "text",
-    },
-    collectionOptions: {
-      separatorBetweenTextLabels: " ",
-      filterResultAfterEachPass: "chain", // options are "merge" or "chain" (defaults to "chain")
-    },
-    // we could add certain option(s) to the "multiple-select" plugin
-    filterOptions: {
-      maxHeight: 250,
-      width: 175,
-
-      // if we want to display shorter text as the selected text (on the select filter itself, parent element)
-      // we can use "useSelectOptionLabel" or "useSelectOptionLabelToHtml" the latter will parse html
-      useSelectOptionLabelToHtml: true,
-    } as MultipleSelectOption,
-  };
-};

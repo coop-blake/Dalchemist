@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../Resources/css/slickGrid.scss";
 import { useAppSelector } from "../../View/hooks";
-import { selectReportEntries } from "../View/CoreSetSlice";
+import { selectReportEntries } from "./CoreSetSlice";
 
 import { CoreSupportReportEntry } from "../shared";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
