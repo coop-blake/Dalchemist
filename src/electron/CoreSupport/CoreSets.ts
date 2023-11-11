@@ -8,7 +8,13 @@ import {
   CoreSupportReportEntry,
 } from "./shared";
 import { resolveHtmlPath } from "../Utility";
-import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  IpcMainInvokeEvent,
+  shell,
+} from "electron";
 import Settings from "../Settings";
 import DalchemistApp from "../DalchemistApp";
 import {
@@ -171,6 +177,7 @@ export class CoreSets {
         this.coreSetsWindow = null;
         ipcMain.removeListener("coreSetsWindowMessage", handleWindowMessage);
       });
+
       sendCoreSetsData();
       ipcMain.on("coreSetsWindowMessage", handleWindowMessage);
       ipcMain.on(

@@ -9,6 +9,8 @@ export const handleWindowMessage = async (
 ) => {
   if (mainWindowMessage === "loaded") {
     //should send the data
+  } else if (mainWindowMessage === "openCoreSetsNCGLink") {
+    openCoreSetsNCGLink();
   } else if (mainWindowMessage === "openCoreSetsFile") {
     openCoreSetsFile();
   } else if (mainWindowMessage === "saveCoreSetReportButtonClicked") {
@@ -21,6 +23,12 @@ export const handleWindowMessage = async (
 
 const openCoreSetsFile = () => {
   shell.openPath(CoreSets.state.coreSupportPriceListFilePath);
+};
+
+const openCoreSetsNCGLink = () => {
+  shell.openPath(
+    "https://ncg.coop/resource-library/core-sets-cost-support-price-lists"
+  );
 };
 
 export const sendCoreSetsData = async () => {

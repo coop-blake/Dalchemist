@@ -52,7 +52,7 @@ export default function CoreSetReportTable() {
               // { title: "Date", field: "Date"},
               { title: "UPC", field: "UPC", frozen: true },
               { title: "Brand", field: "Brand", frozen: true },
-              { title: "Description", field: "Description" },
+              { title: "Description", field: "Description", frozen: true },
               { title: "Subdepart", field: "Subdepart" },
               { title: "CurrentBasePrice", field: "CurrentBasePrice" },
               {

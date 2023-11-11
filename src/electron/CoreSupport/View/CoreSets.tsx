@@ -152,9 +152,16 @@ export default function CoreSetsView() {
           <h2>
             {" "}
             <img id="fileIcon" src={fileIcon} alt="File Icon Image" /> Core
-            Support XLSX File
+            Support XLSX File{" "}
           </h2>
-
+          <span
+            id="openCoreSetsNCGLinkButton"
+            className="interfaceButton"
+            onClick={openCoreSetsNCGLink}
+          >
+            🔗 NCG Resource
+          </span>
+          <br />
           <span id="fileName">
             {filePath !== "" ? (
               filePath
@@ -252,6 +259,12 @@ function selectFileMenuButtonClicked() {
   window.electron.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectFileMenuButtonClicked"
+  );
+}
+function openCoreSetsNCGLink() {
+  window.electron.ipcRenderer.sendMessage(
+    "coreSetsWindowMessage",
+    "openCoreSetsNCGLink"
   );
 }
 function saveCoreSetReportButtonClicked() {
