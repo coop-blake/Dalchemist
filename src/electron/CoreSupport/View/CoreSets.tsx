@@ -28,6 +28,7 @@ import {
   selectSelectedDistributorEntries,
   selectReportEntries,
   setAvailableDistributors,
+  selectAvailableDistributors,
   setSelectedDistributors,
   selectSelectedDistributors,
   selectAllEntries,
@@ -51,6 +52,8 @@ export default function CoreSetsView() {
   );
   const reportEntries = useAppSelector(selectReportEntries);
   const selectedDistributors = useAppSelector(selectSelectedDistributors);
+
+  const availableDistributors = useAppSelector(selectAvailableDistributors);
 
   const [subView, setSubView] = useState(SubView.settings);
 
@@ -196,47 +199,44 @@ export default function CoreSetsView() {
             <br />
           </div>
         ) : (
-          <div className="loadingStatus pulsating"> {status}</div>
+          ""
         )}
       </div>
     );
   }
 
   function setupView() {
-    const entryUPC = reportEntries.map((entry) => {
-      return entry.UPC;
-    });
-
     return (
       <div id="coreSetSettings">
         {coreSetsSetup()} <hr />
-        <h2 style={{ paddingLeft: "10px" }}>
-          {" "}
-          🚛 {selectedDistributorEntries.length} Distributor Entries
-        </h2>
-        {selectedDistributorEntries.length > 0 ? (
-          ""
+        {availableDistributors.length > 0 ? (
+          <h2 style={{ paddingLeft: "10px" }}>
+            🚛 {selectedDistributorEntries.length} Distributor Entries
+          </h2>
         ) : (
-          <div className="loadingStatus pulsating"> {status}</div>
+          ""
         )}
         <DistributorChooser />
         {selectedDistributorEntries.length > 0 ? (
-          <div id="loadedFileStatus">
-            <br />
-            🏷️{" "}
-            {
-              new Set(
-                reportEntries.map((entry) => {
-                  return entry.UPC;
-                })
-              ).size
-            }{" "}
-            unique items from {reportEntries.length} entries matching Inventory
-          </div>
+          <>
+            <div id="loadedFileStatus">
+              <br />
+              🏷️{" "}
+              {
+                new Set(
+                  reportEntries.map((entry) => {
+                    return entry.UPC;
+                  })
+                ).size
+              }{" "}
+              unique items from {reportEntries.length} entries matching
+              Inventory
+            </div>
+            <hr />
+          </>
         ) : (
-          <div className="loadingStatus pulsating"> {status}</div>
+          ""
         )}
-        <hr></hr>
       </div>
     );
   }

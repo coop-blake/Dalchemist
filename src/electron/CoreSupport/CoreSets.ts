@@ -68,10 +68,7 @@ export class CoreSets {
     }, 0);
   }
   private checkAndStartCoreSupport() {
-    if (
-      CoreSets.state.coreSupportPriceListFilePath !== "" &&
-      CoreSets.CoreSupportPriceListState.selectedDistributors.size > 0
-    ) {
+    if (CoreSets.state.coreSupportPriceListFilePath !== "") {
       this.CoreSupportReader.start();
     }
   }
@@ -83,13 +80,6 @@ export class CoreSets {
       processReportEntries();
     }
   }
-  // static async refresh() {
-  //   const inventoryLastRefresh = Inventory.state.lastRefreshCompleted;
-  //   if (inventoryLastRefresh > 0) {
-  //     // await CoreSets.getInstance().loadCoreSetsExcelFile();
-  //     processReportEntries();
-  //   }
-  // }
 
   static get CoreSupportPriceListState() {
     return CoreSets.getInstance().CoreSupportReader.getState();
@@ -113,26 +103,8 @@ export class CoreSets {
 
     if (selectedFile !== "") {
       CoreSets.state.setCoreSupportPriceListFilePath(selectedFile);
-      // this.loadCoreSetsExcelFile();
     }
   }
-
-  // async loadCoreSetsExcelFile() {
-  //   CoreSets.state.setStatus(CoreSetsStatus.Loading);
-
-  //   const lastUpdated = await this.CoreSupportReader.loadCoreSetsExcelFile();
-  //   if (lastUpdated > 0) {
-  //     const coreSetEntriesArray = CoreSets.CoreSupportPriceListState.allEntries;
-  //     if (coreSetEntriesArray.length > 0) {
-  //       CoreSets.state.setStatus(CoreSetsStatus.Running);
-  //     } else {
-  //       CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
-  //     }
-  //   } else {
-  //     CoreSets.state.setStatus(CoreSetsStatus.UnexpectedFile);
-  //   }
-  //   CoreSets.state.setLastRefreshCompleted(lastUpdated);
-  // }
 
   public async showCoreSetsWindow() {
     const coreSetsWindow = await this.getCoreSetsWindow();

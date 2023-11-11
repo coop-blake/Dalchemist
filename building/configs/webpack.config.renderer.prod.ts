@@ -85,7 +85,7 @@ const configuration: webpack.Configuration = {
               ref: true,
             },
           },
-          // "file-loader",
+          "url-loader",
         ],
       },
     ],
