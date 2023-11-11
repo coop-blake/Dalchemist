@@ -70,7 +70,7 @@ export class AddDrop {
           .filter((newItemData) => {
             return newItemData !== null;
           }) as [NewItemEntry];
-        AddDrop.state.setNewItems(newItems);
+        AddDrop.state.setNewItems(newItems ?? []);
 
         const itemsAlreadyInInventory = newItems
           ?.map((newItem) => {
@@ -84,7 +84,7 @@ export class AddDrop {
           .filter((newItemData) => {
             return newItemData;
           }) as [[NewItemEntry, InventoryEntry]];
-        AddDrop.state.setItemsAlreadyInInventory(itemsAlreadyInInventory);
+        AddDrop.state.setItemsAlreadyInInventory(itemsAlreadyInInventory ?? []);
 
         /*###################################################################################
 # Process Attribute Updates
@@ -106,7 +106,7 @@ export class AddDrop {
             return attributeChangeItem;
           }) as [AttributeChangeEntry];
 
-        AddDrop.state.setAttributeChangeItems(attributeChangeItems);
+        AddDrop.state.setAttributeChangeItems(attributeChangeItems ?? []);
         //If attributeChange contains a price update - put it in an array
         const priceUpdates = attributeChangeItems?.filter((attributeChange) => {
           return (
@@ -133,7 +133,7 @@ export class AddDrop {
           );
         }) as [AttributeChangeEntry];
 
-        AddDrop.state.setPriceUpdates(priceUpdates);
+        AddDrop.state.setPriceUpdates(priceUpdates ?? []);
         AddDrop.state.setLastRefreshCompleted(Date.now());
 
         setTimeout(() => {

@@ -4,6 +4,7 @@ import { useAppSelector } from "../../View/hooks";
 import { selectAttributeChanges } from "../View/AddDropSlice";
 
 import { AttributeChangeEntry } from "../../../Google/addDrop/addDrop";
+import thumbsUpIcon from "./resources/images/thumbs-up.svg";
 
 import "./resources/css/attribute-changes-table.css";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
@@ -83,9 +84,27 @@ export default function AttributeChangesTable() {
   }
 
   return !(items.length > 0) ? (
-    ""
+    <div
+      style={{
+        position: "absolute",
+        top: "50px",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      <div className="centered-div large-font centered-text">
+        <img src={thumbsUpIcon} /> <br />
+        No Attribute Changes!
+      </div>
+    </div>
   ) : (
     <>
+      <span className="add-drop-title">
+        {items.length} Attribute Change{items.length > 1 ? "s" : ""}
+      </span>
       <div id="attributeChangesTable" className="add-drop-table" />
     </>
   );

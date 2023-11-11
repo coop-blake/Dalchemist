@@ -10,6 +10,7 @@ import "./resources/css/price-updates-table.css";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 import "./resources/css/add-drop-table.css";
+import thumbsUpIcon from "./resources/images/thumbs-up.svg";
 
 import saveIcon from "./resources/images/save.svg";
 import { Button } from "../../UI/Button";
@@ -65,7 +66,22 @@ export default function PriceUpdatesTable() {
   }
 
   return !(items.length > 0) ? (
-    ""
+    <div
+      style={{
+        position: "absolute",
+        top: "50px",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      <div className="centered-div large-font centered-text">
+        <img src={thumbsUpIcon} /> <br />
+        No Price Changes!
+      </div>
+    </div>
   ) : (
     <>
       {" "}
@@ -75,6 +91,9 @@ export default function PriceUpdatesTable() {
         onClick={savePriceUpdateCSV}
       >
         Save TSV
+      </span>
+      <span className="add-drop-title">
+        {items.length} Price/Cost Entr{items.length > 1 ? "ies" : "y"}
       </span>
       <div
         id="priceUpdatesTable"

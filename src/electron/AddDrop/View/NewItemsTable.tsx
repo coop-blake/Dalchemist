@@ -91,10 +91,9 @@ export default function NewItemsTable() {
     </div>
   ) : (
     <>
-
-        <span className="add-drop-title">
-          {items.length} New Item Entries
-        </span>
+      <span className="add-drop-title">
+        {items.length} New Item Entr{items.length > 1 ? "ies" : "y"}
+      </span>
       <div id="newItemsTable" className="add-drop-table" />
     </>
   );
