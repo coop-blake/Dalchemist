@@ -69,16 +69,13 @@ export default function PriceUpdatesTable() {
   ) : (
     <>
       {" "}
-      <Button
-        name={"Save as TSV"}
-        icon={saveIcon}
-        active={false}
-        onClick={() => {
-          savePriceUpdateCSV();
-        }}
-        style={{ height: "20px" }}
-        className={"add-drop-table-button"}
-      />
+      <span
+        id="savePriceUpdateCSVButton"
+        className="interfaceButton"
+        onClick={savePriceUpdateCSV}
+      >
+        Save TSV
+      </span>
       <div
         id="priceUpdatesTable"
         className="add-drop-table"
