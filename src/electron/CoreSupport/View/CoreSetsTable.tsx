@@ -12,6 +12,7 @@ import {
   Filters,
   GridOption,
   SlickgridReact,
+  Formatters,
 } from "slickgrid-react";
 
 export interface Props {
@@ -38,17 +39,14 @@ export default function CoreSetsTable() {
   const [gridOptions, setGridOptions] = useState({
     enableSorting: true,
     enableFiltering: true,
-    forceFitColumns: true,
-    enableCellNavigation: true,
-    enableColumnReorder: false,
-    multiColumnSort: true,
-    asyncEditorLoading: true,
+    //forceFitColumns: true,
+    enableAutoResize: true,
   } as GridOption);
 
   useEffect(() => {
     document.title = title;
     console.log("check", [...selectedDistributorEntries]);
-  }, [selectedDistributorEntries]);
+  }, [selectedDistributorEntries, columnDefinitions, gridOptions]);
 
   return !(selectedDistributorEntries.length > 0) ? (
     ""

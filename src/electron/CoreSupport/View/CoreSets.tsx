@@ -118,12 +118,20 @@ export default function CoreSetsView() {
   );
 
   function reportView() {
+    const UPCMap: Map<string, CoreSupportReportEntry> = reportEntries.reduce(
+      (map, obj) => {
+        map.set(obj.UPC, obj);
+        return map;
+      },
+      new Map<string, CoreSupportReportEntry>()
+    );
+
+    const items = Array.from(UPCMap.values());
+
     return (
-      <div>
-        <br />
-        <span id="reviewTitle" style={{paddingTop: "50px"}}>
-        {reportEntries.length}/{selectedDistributorEntries.length} Report
-          Entries
+      <div style={{ marginTop: "50px" }}>
+        <span id="reviewTitle" style={{ marginTop: "50px" }}>
+          {reportEntries.length} Entries / {items.length} Inventory Report Items
         </span>
         <span
           id="saveCoreSetReportButton"

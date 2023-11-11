@@ -32,11 +32,21 @@ export default function CoreSetReportTable() {
   function dataUpdated(data: CoreSupportReportEntry[] = []) {
     console.log("coreSetsReportTable DataUpdated", data);
 
-    if (data.length > 0) {
+    const UPCMap: Map<string, CoreSupportReportEntry> = data.reduce(
+      (map, obj) => {
+        map.set(obj.UPC, obj);
+        return map;
+      },
+      new Map<string, CoreSupportReportEntry>()
+    );
+
+    const reducedData = Array.from(UPCMap.values());
+
+    if (reducedData.length > 0) {
       if (table === null) {
         setTable(
           new Tabulator("#coreSetsReportTable", {
-            data: data, //load row data from array
+            data: reducedData, //load row data from array
             movableColumns: true, //allow column order to be changed
             columns: [
               // { title: "Date", field: "Date"},
@@ -62,7 +72,7 @@ export default function CoreSetReportTable() {
           })
         );
       } else {
-        table.setData([...data]);
+        table.setData([...reducedData]);
       }
     }
   }

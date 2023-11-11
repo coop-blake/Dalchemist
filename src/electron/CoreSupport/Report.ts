@@ -1,6 +1,6 @@
 import fs from "fs";
 import { dialog } from "electron";
-import { CoreSupportReportEntry } from "./shared";
+import { CoreSupportReportEntry, CoreSupportPriceListEntry } from "./shared";
 import { CoreSets } from "./CoreSets";
 import { Promos } from "../../Google/Inventory/Promos";
 import { Inventory } from "../../Google/Inventory/Inventory";
@@ -149,7 +149,17 @@ export const reportEntriesAsXLSX = function () {
   let DeptWidth = 4;
   let DifferenceWidth = 10;
 
-  reportEntries.forEach((entry) => {
+  const UPCMap: Map<string, CoreSupportReportEntry> = reportEntries.reduce(
+    (map, obj) => {
+      map.set(obj.UPC, obj);
+      return map;
+    },
+    new Map<string, CoreSupportReportEntry>()
+  );
+
+  const items = Array.from(UPCMap.values());
+
+  items.forEach((entry) => {
     const exportArray = [
       entry.UPC,
       entry.Brand,
@@ -214,6 +224,16 @@ export const reportEntriesAsXLSX = function () {
   XLSX.utils.book_append_sheet(workbook, reportSheet, "Report Data");
   reportSheet["A2"].s = { patternType: "solid", fgColor: { rgb: "FFFF00" } };
 
+  const itemsNotInInventory = getDistributorItemsNotInInventory();
+
+  const itemsNotInInventorySheet = XLSX.utils.aoa_to_sheet(itemsNotInInventory);
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    itemsNotInInventorySheet,
+    "Items not in Inventory"
+  );
+
   dialog
     .showSaveDialog({ defaultPath: "coreSetReport.xlsx" })
     .then((result) => {
@@ -222,4 +242,80 @@ export const reportEntriesAsXLSX = function () {
         XLSX.writeFile(workbook, filePath);
       }
     });
+};
+
+const getDistributorItemsNotInInventory = function () {
+  const selectedDistributorsEntries =
+    CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
+  const reportEntries = CoreSets.state.reportEntries;
+
+  const UPCMap: Map<string, CoreSupportReportEntry> = reportEntries.reduce(
+    (map, obj) => {
+      map.set(obj.UPC, obj);
+      return map;
+    },
+    new Map<string, CoreSupportReportEntry>()
+  );
+
+  const itemsNotInInventory = selectedDistributorsEntries.filter((item) => {
+    return UPCMap.get(item.FormattedUPC) === undefined;
+  });
+
+  const exportArrayHeader = [
+    "CoreSetsRound",
+    "BuyInStart",
+    "BuyInEnd",
+    "Dept",
+    "Category",
+    "Distributor",
+    "DistributorProductID",
+    "UPCA",
+    "FormattedUPC",
+    "ReportingUPC",
+    "Brand",
+    "Description",
+    "UnitCount",
+    "PackSize",
+    "PromoOI",
+    "PromoMCB",
+    "RebatePerUnit",
+    "SaleCaseCost",
+    "SaleUnitCost",
+    "EDLPPrice",
+    "Margin",
+    "LineNotes",
+    "Changes",
+  ];
+
+  const data = [exportArrayHeader];
+
+  itemsNotInInventory.forEach((entry) => {
+    data.push([
+      `${entry.CoreSetsRound}`,
+      `${entry.BuyInStart}`,
+      `${entry.BuyInEnd}`,
+      `${entry.Dept}`,
+      `${entry.Category}`,
+      `${entry.Distributor}`,
+      `${entry.DistributorProductID}`,
+      `${entry.UPCA}`,
+      `${entry.FormattedUPC}`,
+      `${entry.ReportingUPC}`,
+      `${entry.Brand}`,
+      `${entry.Description}`,
+      `${entry.UnitCount}`,
+      `${entry.PackSize}`,
+      `${entry.PromoOI}`,
+      `${entry.PromoMCB}`,
+      `${entry.RebatePerUnit}`,
+      `${entry.SaleCaseCost}`,
+      `${entry.SaleUnitCost}`,
+      `${entry.EDLPPrice}`,
+      `${entry.Margin}`,
+      `${entry.LineNotes}`,
+      `${entry.Changes}`,
+    ]);
+  });
+
+  return data;
 };
