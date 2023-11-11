@@ -83,7 +83,7 @@ export default function CoreSetReportTable() {
     <>
       <div
         id="coreSetsReportTable"
-        className="add-drop-table"
+        className="core-support-table"
         style={{ top: "100px" }}
       />
     </>

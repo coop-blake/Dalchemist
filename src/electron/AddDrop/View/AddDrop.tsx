@@ -56,7 +56,6 @@ export default function AddDropView() {
   const [subView, setSubView] = useState(SubView.NewItems);
 
   useEffect(() => {
-    console.log("🔴🔴🔴🔴🔴");
     window.electron.ipcRenderer.sendMessage("addDropWindowMessage", "loaded");
     window.document.title = `AddDrop: ${status} ${
       status === AddDropStatus.Running

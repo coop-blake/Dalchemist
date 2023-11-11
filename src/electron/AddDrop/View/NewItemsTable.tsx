@@ -91,6 +91,10 @@ export default function NewItemsTable() {
     </div>
   ) : (
     <>
+
+        <span className="add-drop-title">
+          {items.length} New Item Entries
+        </span>
       <div id="newItemsTable" className="add-drop-table" />
     </>
   );
