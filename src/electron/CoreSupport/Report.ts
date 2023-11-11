@@ -224,10 +224,13 @@ export const reportEntriesAsXLSX = function () {
   XLSX.utils.book_append_sheet(workbook, reportSheet, "Report Data");
   reportSheet["A2"].s = { patternType: "solid", fgColor: { rgb: "FFFF00" } };
 
-  const itemsNotInInventory = getDistributorItemsNotInInventory();
+  const itemsNotInInventoryDataColumns = getDistributorItemsNotInInventory();
+
+  const itemsNotInInventory = itemsNotInInventoryDataColumns.data;
+  const itemsNotInInventoryColWidths = itemsNotInInventoryDataColumns.colWidths;
 
   const itemsNotInInventorySheet = XLSX.utils.aoa_to_sheet(itemsNotInInventory);
-
+  itemsNotInInventorySheet["!cols"] = itemsNotInInventoryColWidths;
   XLSX.utils.book_append_sheet(
     workbook,
     itemsNotInInventorySheet,
@@ -239,12 +242,47 @@ export const reportEntriesAsXLSX = function () {
     .then((result) => {
       if (!result.canceled && result.filePath) {
         const filePath = result.filePath;
-        XLSX.writeFile(workbook, filePath);
+
+        try {
+          XLSX.writeFile(workbook, filePath);
+        } catch (error) {
+          dialog.showErrorBox(
+            "Error",
+            `Failed to write file to ${filePath}. ${error.message}`
+          );
+        }
       }
+    })
+    .catch((error) => {
+      dialog.showErrorBox("Error", error.message);
     });
 };
 
 const getDistributorItemsNotInInventory = function () {
+  let CoreSetsRoundWidth = 10;
+  let BuyInStartWidth = 10;
+  let BuyInEndWidth = 10;
+  let DeptWidth = 10;
+  let CategoryWidth = 10;
+  let DistributorWidth = 10;
+  let DistributorProductIDWidth = 20;
+  let UPCAWidth = 10;
+  let FormattedUPCWidth = 10;
+  let ReportingUPCWidth = 10;
+  let BrandWidth = 10;
+  let DescriptionWidth = 10;
+  let UnitCountWidth = 10;
+  let PackSizeWidth = 10;
+  let PromoOIWidth = 10;
+  let PromoMCBWidth = 10;
+  let RebatePerUnitWidth = 10;
+  let SaleCaseCostWidth = 10;
+  let SaleUnitCostWidth = 10;
+  let EDLPPriceWidth = 10;
+  let MarginWidth = 10;
+  let LineNotesWidth = 10;
+  let ChangesWidth = 10;
+
   const selectedDistributorsEntries =
     CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
   const reportEntries = CoreSets.state.reportEntries;
@@ -290,32 +328,109 @@ const getDistributorItemsNotInInventory = function () {
   const data = [exportArrayHeader];
 
   itemsNotInInventory.forEach((entry) => {
+    CoreSetsRoundWidth = Math.max(
+      CoreSetsRoundWidth,
+      entry.CoreSetsRound?.length ?? 0
+    );
+    BuyInStartWidth = Math.max(BuyInStartWidth, entry.BuyInStart?.length ?? 0);
+    BuyInEndWidth = Math.max(BuyInEndWidth, entry.BuyInEnd?.length ?? 0);
+    DeptWidth = Math.max(DeptWidth, entry.Dept?.length ?? 0);
+    CategoryWidth = Math.max(CategoryWidth, entry.Category?.length ?? 0);
+    DistributorWidth = Math.max(
+      DistributorWidth,
+      entry.Distributor?.length ?? 0
+    );
+    DistributorProductIDWidth = Math.max(
+      DistributorProductIDWidth,
+      entry.DistributorProductID?.length ?? 0
+    );
+    UPCAWidth = Math.max(UPCAWidth, entry.UPCA?.length ?? 0);
+    FormattedUPCWidth = Math.max(
+      FormattedUPCWidth,
+      entry.FormattedUPC?.length ?? 0
+    );
+    ReportingUPCWidth = Math.max(
+      ReportingUPCWidth,
+      entry.ReportingUPC?.length ?? 0
+    );
+    BrandWidth = Math.max(BrandWidth, entry.Brand?.length ?? 0);
+    DescriptionWidth = Math.max(
+      DescriptionWidth,
+      entry.Description?.length ?? 0
+    );
+    UnitCountWidth = Math.max(UnitCountWidth, entry.UnitCount?.length ?? 0);
+    PackSizeWidth = Math.max(PackSizeWidth, entry.PackSize?.length ?? 0);
+    PromoOIWidth = Math.max(PromoOIWidth, entry.PromoOI?.length ?? 0);
+    PromoMCBWidth = Math.max(PromoMCBWidth, entry.PromoMCB?.length ?? 0);
+    RebatePerUnitWidth = Math.max(
+      RebatePerUnitWidth,
+      entry.RebatePerUnit?.length ?? 0
+    );
+    SaleCaseCostWidth = Math.max(
+      SaleCaseCostWidth,
+      entry.SaleCaseCost?.length ?? 0
+    );
+    SaleUnitCostWidth = Math.max(
+      SaleUnitCostWidth,
+      entry.SaleUnitCost?.length ?? 0
+    );
+    EDLPPriceWidth = Math.max(EDLPPriceWidth, entry.EDLPPrice?.length ?? 0);
+    MarginWidth = Math.max(MarginWidth, entry.Margin?.length ?? 0);
+    LineNotesWidth = Math.max(LineNotesWidth, entry.LineNotes?.length ?? 0);
+    ChangesWidth = Math.max(ChangesWidth, entry.Changes?.length ?? 0);
+
     data.push([
-      `${entry.CoreSetsRound}`,
-      `${entry.BuyInStart}`,
-      `${entry.BuyInEnd}`,
-      `${entry.Dept}`,
-      `${entry.Category}`,
-      `${entry.Distributor}`,
-      `${entry.DistributorProductID}`,
-      `${entry.UPCA}`,
-      `${entry.FormattedUPC}`,
-      `${entry.ReportingUPC}`,
-      `${entry.Brand}`,
-      `${entry.Description}`,
-      `${entry.UnitCount}`,
-      `${entry.PackSize}`,
-      `${entry.PromoOI}`,
-      `${entry.PromoMCB}`,
-      `${entry.RebatePerUnit}`,
-      `${entry.SaleCaseCost}`,
-      `${entry.SaleUnitCost}`,
-      `${entry.EDLPPrice}`,
-      `${entry.Margin}`,
-      `${entry.LineNotes}`,
-      `${entry.Changes}`,
+      `${entry.CoreSetsRound ?? ""}`,
+      `${entry.BuyInStart ?? ""}`,
+      `${entry.BuyInEnd ?? ""}`,
+      `${entry.Dept ?? ""}`,
+      `${entry.Category ?? ""}`,
+      `${entry.Distributor ?? ""}`,
+      `${entry.DistributorProductID ?? ""}`,
+      `${entry.UPCA ?? ""}`,
+      `${entry.FormattedUPC ?? ""}`,
+      `${entry.ReportingUPC ?? ""}`,
+      `${entry.Brand ?? ""}`,
+      `${entry.Description ?? ""}`,
+      `${entry.UnitCount ?? ""}`,
+      `${entry.PackSize ?? ""}`,
+      `${entry.PromoOI ?? ""}`,
+      `${entry.PromoMCB ?? ""}`,
+      `${entry.RebatePerUnit ?? ""}`,
+      `${entry.SaleCaseCost ?? ""}`,
+      `${entry.SaleUnitCost ?? ""}`,
+      `${entry.EDLPPrice ?? ""}`,
+      `${entry.Margin ?? ""}`,
+      `${entry.LineNotes ?? ""}`,
+      `${entry.Changes ?? ""}`,
     ]);
   });
 
-  return data;
+  const colWidths = [
+    { wch: CoreSetsRoundWidth },
+    { wch: BuyInStartWidth },
+    { wch: BuyInEndWidth },
+    { wch: DeptWidth },
+    { wch: CategoryWidth },
+    { wch: DistributorWidth },
+    { wch: DistributorProductIDWidth },
+    { wch: UPCAWidth },
+    { wch: FormattedUPCWidth },
+    { wch: ReportingUPCWidth },
+    { wch: BrandWidth },
+    { wch: DescriptionWidth },
+    { wch: UnitCountWidth },
+    { wch: PackSizeWidth },
+    { wch: PromoOIWidth },
+    { wch: PromoMCBWidth },
+    { wch: RebatePerUnitWidth },
+    { wch: SaleCaseCostWidth },
+    { wch: SaleUnitCostWidth },
+    { wch: EDLPPriceWidth },
+    { wch: MarginWidth },
+    { wch: LineNotesWidth },
+    { wch: ChangesWidth },
+  ];
+
+  return { data: data, colWidths: colWidths };
 };
