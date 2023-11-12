@@ -1,6 +1,7 @@
 import { Menu, Tray } from "electron";
 import path from "path";
-import DalchemistApp, {savePriceCostTSVPrompt} from "./DalchemistApp";
+import DalchemistApp from "./DalchemistApp";
+import { savePriceCostTSVPrompt } from "./AddDrop/ipc";
 
 import { AddDrop } from "../Google/addDrop/addDrop";
 import { Inventory } from "../Google/Inventory/Inventory";
@@ -8,8 +9,7 @@ import { Inventory } from "../Google/Inventory/Inventory";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 
-import {formatDateForConsole} from "./Utility"
-
+import { formatDateForConsole } from "./Utility";
 
 export class DalchemistMainMenu {
   private dalchemistApp: DalchemistApp;
@@ -49,8 +49,6 @@ export class DalchemistMainMenu {
         })
       )
       .subscribe();
-
-      
   }
 
   private enableInventoryMenu() {
@@ -74,10 +72,9 @@ export class DalchemistMainMenu {
         id: "main-menu",
         label: "Dalchemist",
         click() {
-          dalchemistApp.showMainWindow()
+          dalchemistApp.showMainWindow();
         },
-      //  accelerator: 'CommandOrControl+D'
-
+        //  accelerator: 'CommandOrControl+D'
       },
       // {
       //   id: "inventory-menu",
@@ -106,9 +103,7 @@ export class DalchemistMainMenu {
           dalchemistApp.showInventoryWindow();
         },
         enabled: false,
-      //  accelerator: 'CommandOrControl+I'
-
-
+        //  accelerator: 'CommandOrControl+I'
       },
 
       {
@@ -121,27 +116,24 @@ export class DalchemistMainMenu {
             click() {
               dalchemistApp.showAddDropWindow();
             },
-       //     accelerator: 'CommandOrControl+A'
+            //     accelerator: 'CommandOrControl+A'
           },
           {
             label: "Save Add Drop Price Change",
             click() {
-              savePriceCostTSVPrompt()
+              savePriceCostTSVPrompt();
             },
-         //   accelerator: 'CommandOrControl+S'
+            //   accelerator: 'CommandOrControl+S'
           },
         ],
-      },
-      {
-        label: "TabImporter",
         click() {
-         dalchemistApp.showTabImporterWindow()
+          dalchemistApp.showAddDropWindow();
         },
       },
       {
         label: "Core Sets",
         click() {
-         dalchemistApp.showCoreSetsWindow()
+          dalchemistApp.showCoreSetsWindow();
         },
       },
 
@@ -150,8 +142,7 @@ export class DalchemistMainMenu {
         click() {
           dalchemistApp.quit();
         },
-       // accelerator: 'CommandOrControl+Q'
-
+        // accelerator: 'CommandOrControl+Q'
       },
     ]);
   }
