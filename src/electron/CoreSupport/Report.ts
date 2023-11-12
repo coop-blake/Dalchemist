@@ -1,10 +1,12 @@
 import fs from "fs";
+import path from "path";
 import { dialog } from "electron";
 import { CoreSupportReportEntry, CoreSupportPriceListEntry } from "./shared";
 import { CoreSets } from "./CoreSets";
 import { Promos } from "../../Google/Inventory/Promos";
 import { Inventory } from "../../Google/Inventory/Inventory";
-import * as XLSX from "xlsx";
+
+import xlsx from "node-xlsx";
 
 export async function saveCoreSetsTSVPrompt() {
   const contentToSave = reportEntriesAsTSVString();
@@ -203,9 +205,7 @@ export const reportEntriesAsXLSX = function () {
     data.push(exportArray);
   });
 
-  const reportSheet = XLSX.utils.aoa_to_sheet(data);
-
-  reportSheet["!cols"] = [
+  const reportSheetColWidths = [
     { wch: UPCWidth },
     { wch: BrandWidth },
     { wch: DescriptionWidth },
@@ -220,41 +220,51 @@ export const reportEntriesAsXLSX = function () {
     { wch: DifferenceWidth },
   ];
 
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, reportSheet, "Report Data");
-  reportSheet["A2"].s = { patternType: "solid", fgColor: { rgb: "FFFF00" } };
-
   const itemsNotInInventoryDataColumns = getDistributorItemsNotInInventory();
 
   const itemsNotInInventory = itemsNotInInventoryDataColumns.data;
   const itemsNotInInventoryColWidths = itemsNotInInventoryDataColumns.colWidths;
 
-  const itemsNotInInventorySheet = XLSX.utils.aoa_to_sheet(itemsNotInInventory);
-  itemsNotInInventorySheet["!cols"] = itemsNotInInventoryColWidths;
-  XLSX.utils.book_append_sheet(
-    workbook,
-    itemsNotInInventorySheet,
-    "Items not in Inventory"
+  const buffer = xlsx.build(
+    [
+      {
+        name: "Report Data",
+        data: data,
+        options: {
+          "!cols": reportSheetColWidths,
+        },
+      },
+      {
+        name: "Items not in Inventory",
+        data: itemsNotInInventory,
+        options: { "!cols": itemsNotInInventoryColWidths },
+      },
+    ],
+    {}
   );
 
   dialog
-    .showSaveDialog({ defaultPath: "coreSetReport.xlsx" })
-    .then((result) => {
+    .showSaveDialog({
+      defaultPath: "coreSetReport.xlsx",
+      title: "Save file as",
+      filters: [
+        {
+          name: "Spreadsheets",
+          extensions: ["xlsx"],
+        },
+      ],
+    })
+    .then(async (result) => {
       if (!result.canceled && result.filePath) {
-        const filePath = result.filePath;
-
-        try {
-          XLSX.writeFile(workbook, filePath);
-        } catch (error) {
-          dialog.showErrorBox(
-            "Error",
-            `Failed to write file to ${filePath}. ${error.message}`
-          );
-        }
+        const filePath = path.resolve(result.filePath);
+        fs.writeFileSync(filePath, buffer);
       }
     })
     .catch((error) => {
-      dialog.showErrorBox("Error", error.message);
+      dialog.showErrorBox(
+        "Error",
+        `Something happened during write ${error.message}`
+      );
     });
 };
 
