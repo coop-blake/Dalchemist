@@ -7,7 +7,9 @@ To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/downl
 You will also need access to a terminal. Terminal commands are represented like `this` in the documentation.
 
 ## ✨ Getting Started
+
 ### Download repository
+
 You will need the Dalchemist repository on the host.  
 With [git](https://git-scm.com/downloads) installed you can this command in the terminal to clone the repository.
 
@@ -17,22 +19,17 @@ You could also download a [Zip file from github](https://github.com/coop-blake/D
 
 ### Install npm modules
 
-Open a terminal in the 📁**Dalchemist** directory then use **Node Package Manager** to install the required package dependencies  
+Open a terminal in the 📁**Dalchemist** directory then use **Node Package Manager** to install the required package dependencies
 
 `npm install`
 
+## ![Icon](./icon/icon32.png) Run the Desktop App
 
-## ![Icon](./icon/icon32.png) Run the Desktop App  
-
-
-`npm run startElectron`
+`npm run start:App`
 
 More details can be found in [📁Documentation/](./Documentation)[📝Application.md](./Documentation/Application.md)
 
-
-
-
-## 🗒️ Generate File Outputs 
+## 🗒️ Generate File Outputs
 
 ### Place your Data files
 
@@ -58,13 +55,10 @@ This will start all Data Proccessors and Generators which can take a moment or t
 
 See the [Services Documentation](./Documentation/Services.md) for more specific options
 
-
-
 ## 🧑‍💻 Advanced usage and development
 
 [Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more.  
 Configured in the [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
-
 
 ### Build the development documentation
 

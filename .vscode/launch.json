@@ -6,16 +6,16 @@
   "compounds": [
     {
         "name": "🪛 Start Electron and Attach to Chrome",
-        "configurations": ["✅ StartElectron", "🪛 Attach to Chrome"]
+        "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
     }],
   "configurations": [
     {
-      "name": "✅ StartElectron",
+      "name": "✅ start:App",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "startElectron"]
+      "runtimeArgs": ["run-script", "start:App"]
     },
     {
       "name": "🪛 Attach to Chrome",
