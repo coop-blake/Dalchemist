@@ -18,10 +18,7 @@ export const sendStateChangesToWindow = async () => {
 export const sendInventoryData = async () => {
   const inventoryWindow = await Inventory.getInstance().getWindow();
   if (inventoryWindow !== null) {
-    console.log(
-      "Sending GoogleInventory items to window",
-      GoogleInventory.getInstance().entries.values()
-    );
+    console.log("Sending GoogleInventory items to window");
     const inventoryWindow = await Inventory.getInstance().getWindow();
     const inventoryValues = Array.from(
       GoogleInventory.getInstance().entries.values()

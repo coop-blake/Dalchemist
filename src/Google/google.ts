@@ -1,6 +1,6 @@
 import { google, Auth, sheets_v4, drive_v3 } from "googleapis";
 import { BehaviorSubject, Observable } from "rxjs";
-import Settings from "../electron/Settings";
+import Settings from "../App/Settings";
 
 import path from "path";
 import * as fs from "fs";
@@ -30,17 +30,17 @@ export class Google {
     this.auth = new google.auth.GoogleAuth({
       keyFilename: keyFilePath,
       // Scopes can be specified either as an array or as a single, space-delimited string.
-      scopes: ["https://www.googleapis.com/auth/drive"]
+      scopes: ["https://www.googleapis.com/auth/drive"],
     });
 
     this.sheets = google.sheets({
       version: "v4",
-      auth: this.auth
+      auth: this.auth,
     });
 
     this.drive = google.drive({
       version: "v3",
-      auth: this.auth
+      auth: this.auth,
     });
   }
 

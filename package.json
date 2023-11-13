@@ -6,7 +6,7 @@
     "startElectron": "ts-node ./building/scripts/check-port-in-use.ts && npm run startElectron:renderer",
     "startElectron:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
     "startElectron:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.preload.dev.ts",
-    "startElectron:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only -main ./src/electron/startDalchemistApp.ts --remote-debugging-port=9222",
+    "startElectron:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only -main ./src/App/startDalchemistApp.ts --remote-debugging-port=9222",
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.prod.ts",
@@ -164,7 +164,7 @@
   "electronmon": {
     "patterns": [
       "!**/**",
-      "src/electron/**"
+      "src/App/**"
     ],
     "logLevel": "quiet"
   },

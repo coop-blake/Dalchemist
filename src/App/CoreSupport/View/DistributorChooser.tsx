@@ -4,7 +4,7 @@ import {
   selectAvailableDistributors,
   selectSelectedDistributors,
 } from "./CoreSetSlice";
-import { CheckboxList } from "electron/UI/CheckboxList";
+import { CheckboxList } from "App/UI/CheckboxList";
 import "./resources/css/distributor-checkbox.css";
 export function DistributorChooser() {
   const availableDistributors = useAppSelector(selectAvailableDistributors);

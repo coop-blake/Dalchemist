@@ -3,8 +3,8 @@ import path from "path";
 const rootPath = path.join(__dirname, "../..");
 const srcPath = path.join(rootPath, "src");
 
-const srcRendererPath = path.join(srcPath, "electron/Resources/html/");
-const srcMainPath = path.join(srcPath, "electron/");
+const srcRendererPath = path.join(srcPath, "App/Resources/html/");
+const srcMainPath = path.join(srcPath, "App/");
 
 const buildRendererPath = path.join(rootPath, "build");
 const srcNodeModulesPath = path.join(rootPath, "node_modules");
