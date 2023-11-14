@@ -8,6 +8,7 @@ import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 import "./resources/css/add-drop-table.css";
+import "./resources/css/new-items-already-table.css";
 
 export default function NewItemsInInventoryTable() {
   const items = useAppSelector(selectNewItemsInInventory);
