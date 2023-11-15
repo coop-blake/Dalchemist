@@ -24,23 +24,27 @@ Open a terminal in the 📁**Dalchemist** directory then use **Node Package Mana
 `npm install`
 
 ## ![Icon](./icon/icon32.png) Run the Desktop App
-The desktop app can be transpiled and ran in development mode using the following command. 
+
+The Desktop App is intended to provide a packaged, usable interface that can be downloaded, installed and used without any additional configuration besides what is presented in the graphical interface. To achieve this, a google API service certificate is will need to be provided to the packaging process.
+
+The desktop app can be transpiled and ran in development mode using the following command.
 
 `npm run start:App`
 
-You can also build a packaged Desktop App installer for Linux, Mac, or Windows.  
+You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
 
-The Desktop App is intended to provide a packaged, usable interface that can be downloaded, installed and used without any additional configuration besides what is presented in the graphical interface.
+`npm run package:App`
 
 More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
 
-## ![Icon](./Documentation/resources/terminal.svg)  Terminal Interface 
+## ![Icon](./Documentation/resources/terminal.svg) Terminal Interface
 
-Some features are available from the Command line and can be executed without the graphical user interface provided in the Desktop App.
+Some features are available from the Command line and can be executed without the graphical user interface.
 
-### 🗒️ Generate File Outputs 
+### 🗒️ Generate File Outputs
 
-Many of the terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
+Most of the terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
+
 #### Place your Data files
 
 Make sure you have the latest versions of your input data in the [📁 Data](./Data/Readme.md) folder
@@ -48,16 +52,18 @@ Make sure you have the latest versions of your input data in the [📁 Data](./D
 - Catapult Inventory and Price Worksheets
 - Core Cost Support
 - UNFI Pricebook and Pricechange
+
 #### Generate Output
+
 To generate all output to [**📁Data**](./Data) / [**📁Outputs**](./Data/Outputs) :
 
 `npm run outputAll`
 
 For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
-
 ## 🧑‍💻 Advanced usage and development
-You are free to clone and develop this repoistory to fit your own needs. 
+
+You are free to clone and develop this repoistory to fit your own needs.
 
 [Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more.  
 Configured in the [**.vscode/launch.json**](./.vscode/launch.json) configuration file.

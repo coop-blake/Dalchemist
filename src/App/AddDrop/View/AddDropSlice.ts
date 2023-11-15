@@ -5,7 +5,6 @@ import {
   NewItemEntry,
   AttributeChangeEntry,
 } from "../../../Google/addDrop/shared";
-import { InventoryEntry } from "../../../Google/Inventory/Inventory";
 
 import { NewItemInEnventory } from "./shared";
 

@@ -41,7 +41,6 @@ export class CoreSupportPriceList {
     } catch {
       return [];
     }
-    const fileStat = statSync(filePath);
 
     return [];
   }

@@ -22,38 +22,38 @@ export const createAndSetApplicationMenu = async () => {
           label: "About My App",
           click: () => {
             // Open a custom about window here
-          }
+          },
         },
         {
-          type: "separator"
+          type: "separator",
         },
         {
-          role: "quit"
-        }
-      ]
+          role: "quit",
+        },
+      ],
     },
     {
       label: "Edit",
       submenu: [
         // Add custom Edit menu items here
-      ]
-    }
+      ],
+    },
     // Add other menu items and submenus as needed
   ];
 
-  const defaultItemsToRetain = ["appmenu", "filemenu", "cut", "copy", "paste"];
+  // const defaultItemsToRetain = ["appmenu", "filemenu", "cut", "copy", "paste"];
 
-  const filteredDefaultMenu =
-    defaultMenu?.items.filter((item) => {
-      if (item.role && defaultItemsToRetain.includes(item.role as string)) {
-        return true;
-      }
-      return false;
-    }) || [];
+  // const filteredDefaultMenu =
+  //   defaultMenu?.items.filter((item) => {
+  //     if (item.role && defaultItemsToRetain.includes(item.role as string)) {
+  //       return true;
+  //     }
+  //     return false;
+  //   }) || [];
 
   const template: MenuItemConstructorOptions[] = [
     ...applicationMenuTemplate,
-    ...(appMenu ? [appMenu] : [])
+    ...(appMenu ? [appMenu] : []),
   ];
 
   const menu = Menu.buildFromTemplate(template);

@@ -2,7 +2,7 @@ import { AddDrop } from "./AddDrop";
 
 import { AddDrop as GoogleAddDrop } from "../../Google/addDrop/addDrop";
 
-import { ipcMain, IpcMainInvokeEvent, dialog } from "electron";
+import { IpcMainInvokeEvent, dialog } from "electron";
 import { getAddDropPriceUpdatesTSV } from "../../Google/addDrop/htmlOutputs";
 import { saveStringToFile } from "../FileSave";
 export const sendStateChangesToWindow = async () => {

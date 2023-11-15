@@ -12,7 +12,6 @@ import {
   Filters,
   GridOption,
   SlickgridReact,
-  Formatters,
 } from "slickgrid-react";
 
 export interface Props {

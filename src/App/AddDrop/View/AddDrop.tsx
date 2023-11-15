@@ -10,9 +10,7 @@ import {
   setNewItemsInInventory,
   selectNewItemsInInventory,
   setAttributeChanges,
-  selectAttributeChanges,
   setPriceUpdates,
-  selectPriceUpdates,
 } from "../View/AddDropSlice";
 import { store } from "../../View/store";
 import {
@@ -25,12 +23,10 @@ import { InventoryEntry } from "../../../Google/Inventory/Inventory";
 
 import { LoadingAnimation } from "../../UI/Loading/LoadingAnimation";
 
-import { onReady, show, hide, formatTimestampToMinute } from "../../Utility";
+import { formatTimestampToMinute } from "../../Utility";
 
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
-
-import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
 
 import NewItemsTable from "./NewItemsTable";
 import NewItemsInInventoryTable from "./NewItemsInInventoryTable";
@@ -50,8 +46,6 @@ export default function AddDropView() {
   const newItems = useAppSelector(selectNewItems);
   const lastRefresh = useAppSelector(selectLastRefresh);
   const newItemsInInventory = useAppSelector(selectNewItemsInInventory);
-  const attributeChangeItems = useAppSelector(selectAttributeChanges);
-  const priceUpdates = useAppSelector(selectPriceUpdates);
 
   const [subView, setSubView] = useState(SubView.NewItems);
 
@@ -246,7 +240,3 @@ window.electron.ipcRenderer.on(
     store.dispatch(setPriceUpdates(priceChangeItemsArray));
   }
 );
-
-function AttributeChangesTableView() {
-  return <AttributeChangesTableView />;
-}

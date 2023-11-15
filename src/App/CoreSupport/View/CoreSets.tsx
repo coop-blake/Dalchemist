@@ -6,11 +6,7 @@ import CoreSetReportTable from "./ReportTable";
 import "./resources/css/core-support-table.css";
 import { useAppSelector } from "../../View/hooks";
 import { DistributorChooser } from "./DistributorChooser";
-import {
-  CoreSetsStatus,
-  CoreSupportPriceListEntry,
-  CoreSupportReportEntry,
-} from "../../CoreSupport/shared";
+import { CoreSupportReportEntry } from "../../CoreSupport/shared";
 
 import fileIcon from "./resources/images/file.svg";
 import slashIcon from "./resources/images/slash.svg";
@@ -18,19 +14,10 @@ import toolIcon from "./resources/images/settings.svg";
 import saveIcon from "./resources/images/save.svg";
 import thumbsUpIcon from "./resources/images/thumbs-up.svg";
 
-import { store } from "../../View/store";
 import {
-  setStatus,
-  setFilePath,
-  setAllEntries,
-  setSelectedDistributorEntries,
-  setReportEntries,
   selectSelectedDistributorEntries,
   selectReportEntries,
-  setAvailableDistributors,
   selectAvailableDistributors,
-  setSelectedDistributors,
-  selectSelectedDistributors,
   selectAllEntries,
 } from "./CoreSetSlice";
 import { listenToIPCAndSetState } from "./ipc";
@@ -44,14 +31,12 @@ enum SubView {
 }
 
 export default function CoreSetsView() {
-  const status = useAppSelector((state) => state.CoreSets.status);
   const filePath = useAppSelector((state) => state.CoreSets.filePath);
   const allEntries = useAppSelector(selectAllEntries);
   const selectedDistributorEntries = useAppSelector(
     selectSelectedDistributorEntries
   );
   const reportEntries = useAppSelector(selectReportEntries);
-  const selectedDistributors = useAppSelector(selectSelectedDistributors);
 
   const availableDistributors = useAppSelector(selectAvailableDistributors);
 

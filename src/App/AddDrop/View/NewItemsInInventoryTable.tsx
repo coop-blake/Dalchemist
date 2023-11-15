@@ -14,7 +14,7 @@ export default function NewItemsInInventoryTable() {
   const items = useAppSelector(selectNewItemsInInventory);
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<NewItemInEnventory[]>([]);
+  const [data] = useState<NewItemInEnventory[]>([]);
 
   useEffect(() => {
     data.splice(0);

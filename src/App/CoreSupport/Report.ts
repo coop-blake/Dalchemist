@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { dialog } from "electron";
-import { CoreSupportReportEntry, CoreSupportPriceListEntry } from "./shared";
+import { CoreSupportReportEntry } from "./shared";
 import { CoreSets } from "./CoreSets";
 import { Promos } from "../../Google/Inventory/Promos";
 import { Inventory } from "../../Google/Inventory/Inventory";

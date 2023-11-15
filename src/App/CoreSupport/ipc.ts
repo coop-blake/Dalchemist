@@ -1,6 +1,6 @@
 import { shell, IpcMainInvokeEvent } from "electron";
 import Settings from "../Settings";
-import { saveCoreSetsTSVPrompt, reportEntriesAsXLSX } from "./Report";
+import { reportEntriesAsXLSX } from "./Report";
 import { CoreSets } from "./CoreSets";
 
 export const handleWindowMessage = async (

@@ -2,19 +2,9 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Inventory } from "../../Google/Inventory/Inventory";
 import { CoreSupport } from "./CoreSupport/CoreSupport";
 import path from "path";
-import {
-  CoreSetsStatus,
-  CoreSupportPriceListEntry,
-  CoreSupportReportEntry,
-} from "./shared";
+import { CoreSetsStatus, CoreSupportReportEntry } from "./shared";
 import { resolveHtmlPath } from "../Utility";
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  IpcMainInvokeEvent,
-  shell,
-} from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import Settings from "../Settings";
 import DalchemistApp from "../DalchemistApp";
 import {
@@ -48,22 +38,20 @@ export class CoreSets {
       Inventory.getInstance();
 
       CoreSets.CoreSupportPriceListState.selectedDistributorsEntries$.subscribe(
-        async (selectedDistributorsEntries) => {
+        async () => {
           this.checkAndProcessReportEntries();
         }
       );
 
       CoreSets.CoreSupportPriceListState.selectedDistributors$.subscribe(
-        async (distributors) => {
+        async () => {
           this.checkAndStartCoreSupport();
         }
       );
 
-      CoreSets.state.coreSupportPriceListFilePath$.subscribe(
-        async (filePath) => {
-          this.checkAndStartCoreSupport();
-        }
-      );
+      CoreSets.state.coreSupportPriceListFilePath$.subscribe(async () => {
+        this.checkAndStartCoreSupport();
+      });
       this.checkAndStartCoreSupport();
     }, 0);
   }

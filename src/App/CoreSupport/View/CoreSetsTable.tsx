@@ -15,7 +15,7 @@ export default function PriceUpdatesTable() {
     selectSelectedDistributorEntries
   );
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<CoreSupportPriceListEntry[]>([]);
+  const [data] = useState<CoreSupportPriceListEntry[]>([]);
 
   useEffect(() => {
     data.splice(0);
@@ -38,32 +38,29 @@ export default function PriceUpdatesTable() {
             data: data, //load row data from array
             movableColumns: true, //allow column order to be changed
             columns: [
-              
-                { title: "Brand", field: "Brand" },
-                { title: "BuyInEnd", field: "BuyInEnd" },
-                { title: "BuyInStart", field: "BuyInStart" },
-                { title: "Category", field: "Category" },
-                { title: "Changes", field: "Changes" },
-                { title: "CoreSetsRound", field: "CoreSetsRound" },
-                { title: "Dept", field: "Dept" },
-                { title: "Description", field: "Description" },
-                { title: "Distributor", field: "Distributor" },
-                { title: "DistributorProductID", field: "DistributorProductID" },
-                { title: "EDLPPrice", field: "EDLPPrice" },
-                { title: "FormattedUPC", field: "FormattedUPC" },
-                { title: "LineNotes", field: "LineNotes" },
-                { title: "Margin", field: "Margin" },
-                { title: "PackSize", field: "PackSize" },
-                { title: "PromoMCB", field: "PromoMCB" },
-                { title: "PromoOI", field: "PromoOI" },
-                { title: "RebatePerUnit", field: "RebatePerUnit" },
-                { title: "ReportingUPC", field: "ReportingUPC" },
-                { title: "SaleCaseCost", field: "SaleCaseCost" },
-                { title: "SaleUnitCost", field: "SaleUnitCost" },
-                { title: "UnitCount", field: "UnitCount" },
-                { title: "UPCA", field: "UPCA" },
-              
-              
+              { title: "Brand", field: "Brand" },
+              { title: "BuyInEnd", field: "BuyInEnd" },
+              { title: "BuyInStart", field: "BuyInStart" },
+              { title: "Category", field: "Category" },
+              { title: "Changes", field: "Changes" },
+              { title: "CoreSetsRound", field: "CoreSetsRound" },
+              { title: "Dept", field: "Dept" },
+              { title: "Description", field: "Description" },
+              { title: "Distributor", field: "Distributor" },
+              { title: "DistributorProductID", field: "DistributorProductID" },
+              { title: "EDLPPrice", field: "EDLPPrice" },
+              { title: "FormattedUPC", field: "FormattedUPC" },
+              { title: "LineNotes", field: "LineNotes" },
+              { title: "Margin", field: "Margin" },
+              { title: "PackSize", field: "PackSize" },
+              { title: "PromoMCB", field: "PromoMCB" },
+              { title: "PromoOI", field: "PromoOI" },
+              { title: "RebatePerUnit", field: "RebatePerUnit" },
+              { title: "ReportingUPC", field: "ReportingUPC" },
+              { title: "SaleCaseCost", field: "SaleCaseCost" },
+              { title: "SaleUnitCost", field: "SaleUnitCost" },
+              { title: "UnitCount", field: "UnitCount" },
+              { title: "UPCA", field: "UPCA" },
             ],
           })
         );
@@ -78,7 +75,6 @@ export default function PriceUpdatesTable() {
   ) : (
     <>
       {" "}
-      
       <div
         id="coreSupportDistributorEntriesTable"
         className="core-support-table"
@@ -87,4 +83,3 @@ export default function PriceUpdatesTable() {
     </>
   );
 }
-

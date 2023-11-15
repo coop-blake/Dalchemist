@@ -17,7 +17,7 @@ export default function AttributeChangesTable() {
   const items = useAppSelector(selectAttributeChanges);
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<AttributeChangeEntry[]>([]);
+  const [data] = useState<AttributeChangeEntry[]>([]);
   useEffect(() => {
     data.splice(0);
     items.forEach((item) => {

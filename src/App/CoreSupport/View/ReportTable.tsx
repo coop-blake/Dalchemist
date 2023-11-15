@@ -9,14 +9,11 @@ import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 import "./resources/css/core-support-table.css";
 
-import saveIcon from "./resources/images/save.svg";
-import { Button } from "../../UI/Button";
-
 export default function CoreSetReportTable() {
   const items = useAppSelector(selectReportEntries);
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<CoreSupportReportEntry[]>([]);
+  const [data] = useState<CoreSupportReportEntry[]>([]);
 
   useEffect(() => {
     data.splice(0);
@@ -87,12 +84,5 @@ export default function CoreSetReportTable() {
         style={{ top: "100px" }}
       />
     </>
-  );
-}
-
-function savePriceUpdateCSV() {
-  window.electron.ipcRenderer.sendMessage(
-    "addDropWindowMessage",
-    "savePriceCostTSV"
   );
 }

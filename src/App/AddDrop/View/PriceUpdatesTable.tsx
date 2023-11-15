@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../Resources/css/slickGrid.scss";
 import { useAppSelector } from "../../View/hooks";
 import { selectPriceUpdates } from "../View/AddDropSlice";
@@ -12,14 +12,11 @@ import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 import "./resources/css/add-drop-table.css";
 import thumbsUpIcon from "./resources/images/thumbs-up.svg";
 
-import saveIcon from "./resources/images/save.svg";
-import { Button } from "../../UI/Button";
-
 export default function PriceUpdatesTable() {
   const items = useAppSelector(selectPriceUpdates);
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<AttributeChangeEntry[]>([]);
+  const [data] = useState<AttributeChangeEntry[]>([]);
 
   useEffect(() => {
     data.splice(0);

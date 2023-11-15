@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 interface Props {
   items: Array<string>;
   toggledItems: Array<string>;

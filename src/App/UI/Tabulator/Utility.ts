@@ -1,4 +1,4 @@
-import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
+import { CellComponent } from "tabulator-tables";
 
 export function styleFormatter(
   cell: CellComponent,

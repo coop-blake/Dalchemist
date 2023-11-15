@@ -5,7 +5,7 @@ import { selectNewItems } from "../View/AddDropSlice";
 
 import { NewItemEntry } from "../../../Google/addDrop/addDrop";
 
-import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
+import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 import thumbsUpIcon from "./resources/images/thumbs-up.svg";
 
@@ -17,7 +17,7 @@ import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
 export default function NewItemsTable() {
   const items = useAppSelector(selectNewItems);
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data, setData] = useState<NewItemEntry[]>([]);
+  const [data] = useState<NewItemEntry[]>([]);
 
   useEffect(() => {
     data.splice(0);
