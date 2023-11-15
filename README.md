@@ -23,27 +23,9 @@ Open a terminal in the 📁**Dalchemist** directory then use **Node Package Mana
 
 `npm install`
 
-## ![Icon](./icon/icon32.png) Run the Desktop App
-
-The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration besides what is presented in the graphical interface. 
-
-Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on variouse platforms. This repository provides the ability to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/)
-
-A google API service certificate is will need to be provided to load the data needed by the interface.
-
-The desktop app can be transpiled and ran in development mode using the following command.
-
-`npm run start:App`
-
-You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
-
-`npm run package:App`
-
-More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
-
 ## ![Icon](./Documentation/resources/terminal.svg) Terminal Interface
 
-Some features are available from the Command line and can be executed without the graphical user interface.
+Some commands are available from the terminal and can be executed without the graphical user interface.
 
 ### 🗒️ Generate File Outputs
 
@@ -65,12 +47,32 @@ To generate all output to [**📁Data**](./Data) / [**📁Outputs**](./Data/Outp
 
 For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
+## ![Icon](./icon/icon32.png) Run the Desktop App
+
+The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration or setup. Aside what is presented in the graphical interface. 
+
+Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on variouse platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) Thanks! 🙏
+
+A google API service certificate is will need to be provided to load the data needed by the interface.
+
+The desktop app can be transpiled and ran in development mode using the following command.
+
+`npm run start:App`
+
+You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
+
+`npm run package:App`
+
+More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
+
+
+
 ## 🧑‍💻 Advanced usage and development
 
 You are free to clone and develop this repoistory to fit your own needs.
 
-[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more.  
-Configured in the [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
+[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug.  
+Repository includes a [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
 
 Below are some commands to get get you started.
 
