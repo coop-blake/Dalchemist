@@ -19,7 +19,7 @@ You could also download a [Zip file from github](https://github.com/coop-blake/D
 
 ### Install npm modules
 
-Open a terminal in the 📁**Dalchemist** directory then use **Node Package Manager** to install the required package dependencies
+Open a terminal in the 📁**Dalchemist** directory then use **Node Package Manager** to install the required package dependencies by entering
 
 `npm install`
 
@@ -49,7 +49,7 @@ For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
 ## ![Icon](./icon/icon32.png) Run the Desktop App
 
-The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration or setup. Aside what is presented in the graphical interface. 
+The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration or setup. Aside what is presented in the graphical interface.
 
 Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on variouse platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) Thanks! 🙏
 
@@ -64,8 +64,6 @@ You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
 `npm run package:App`
 
 More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
-
-
 
 ## 🧑‍💻 Advanced usage and development
 
