@@ -8,7 +8,7 @@ export const handleWindowMessage = async (
   mainWindowMessage: string
 ) => {
   if (mainWindowMessage === "loaded") {
-    //should send the data
+    sendCoreSetsData();
   } else if (mainWindowMessage === "openCoreSetsNCGLink") {
     openCoreSetsNCGLink();
   } else if (mainWindowMessage === "openCoreSetsFile") {

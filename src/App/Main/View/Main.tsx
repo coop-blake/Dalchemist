@@ -91,7 +91,7 @@ export default function MainView() {
 
 function inventoryMenuButtonClicked() {
   console.log("inventoryMenuButtonClicked");
-  window.electron.ipcRenderer.sendMessage(
+  window.main.ipcRenderer.sendMessage(
     "mainWindowMessage",
     "inventoryMenuButtonClicked"
   );
@@ -99,14 +99,14 @@ function inventoryMenuButtonClicked() {
 
 function addDropMenuButtonClicked() {
   console.log("addDropMenuButtonClicked");
-  window.electron.ipcRenderer.sendMessage(
+  window.main.ipcRenderer.sendMessage(
     "mainWindowMessage",
     "addDropMenuButtonClicked"
   );
 }
 function coreSetsMenuButtonClicked() {
   console.log("coreSetsMenuButtonClicked");
-  window.electron.ipcRenderer.sendMessage(
+  window.main.ipcRenderer.sendMessage(
     "mainWindowMessage",
     "coreSetsMenuButtonClicked"
   );
@@ -114,7 +114,7 @@ function coreSetsMenuButtonClicked() {
 
 function closeMenuButtonClicked() {
   console.log("closeMenuButtonClicked");
-  window.electron.ipcRenderer.sendMessage(
+  window.main.ipcRenderer.sendMessage(
     "mainWindowMessage",
     "closeMenuButtonClicked"
   );
@@ -127,9 +127,9 @@ import {
 
 import { store } from "./store";
 
-window.electron.ipcRenderer.on("status", (message: string) => {
+window.main.ipcRenderer.on("status", (message: string) => {
   store.dispatch(setMainStatus(message));
 });
-window.electron.ipcRenderer.on("error", (message: string) => {
+window.main.ipcRenderer.on("error", (message: string) => {
   store.dispatch(setMainErrorMessage(message));
 });

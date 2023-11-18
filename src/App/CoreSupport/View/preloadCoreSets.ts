@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-export type Channels = "coreSets";
+export type Channels = "coreSetsWindowMessage";
 
 type Message = string;
 

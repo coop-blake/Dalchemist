@@ -43,11 +43,8 @@ export default function CoreSetsView() {
   const [subView, setSubView] = useState(SubView.settings);
 
   useEffect(() => {
-    window.electron.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
-  }, [selectedDistributorEntries, subView]);
-
-  useEffect(() => {
     listenToIPCAndSetState();
+    window.coreSets.ipcRenderer.sendMessage("coreSetsWindowMessage", "loaded");
   }, []);
 
   return (
@@ -241,26 +238,26 @@ export default function CoreSetsView() {
 
 //Messages to Main Process
 function selectFileMenuButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  window.coreSets.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "selectFileMenuButtonClicked"
   );
 }
 function openCoreSetsNCGLink() {
-  window.electron.ipcRenderer.sendMessage(
+  window.coreSets.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsNCGLink"
   );
 }
 function saveCoreSetReportButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  window.coreSets.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "saveCoreSetReportButtonClicked"
   );
 }
 
 function openCoreSetsFileButtonClicked() {
-  window.electron.ipcRenderer.sendMessage(
+  window.coreSets.ipcRenderer.sendMessage(
     "coreSetsWindowMessage",
     "openCoreSetsFile"
   );

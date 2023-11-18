@@ -102,7 +102,7 @@ export default function PriceUpdatesTable() {
 }
 
 function savePriceUpdateCSV() {
-  window.electron.ipcRenderer.sendMessage(
+  window.addDrop.ipcRenderer.sendMessage(
     "addDropWindowMessage",
     "savePriceCostTSV"
   );

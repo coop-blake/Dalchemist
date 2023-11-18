@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 declare global {
   // eslint-disable-next-line no-unused-vars
   interface Window {
-    electron: ElectronHandler;
+    main: MainHandler;
   }
 }
 
@@ -22,13 +22,16 @@ export type Channels =
   | "inventoryData"
   | "inventoryDataLastReload";
 
-const electronHandler = {
+type Message = string;
+
+const mainHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, message: string) {
+    sendMessage(channel: Channels, message: Message) {
       ipcRenderer.send(channel, message);
     },
-    on(channel: Channels, func: (message: string) => void) {
-      const subscription = (_event: IpcRendererEvent, message: string) =>
+
+    on(channel: Channels, func: (message: Message) => void) {
+      const subscription = (_event: IpcRendererEvent, message: Message) =>
         func(message);
       ipcRenderer.on(channel, subscription);
 
@@ -36,14 +39,14 @@ const electronHandler = {
         ipcRenderer.removeListener(channel, subscription);
       };
     },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+
+    once(channel: Channels, func: (message: Message) => void) {
+      ipcRenderer.once(channel, (_event, message) => func(message));
     },
   },
 };
-
 //type MessageCallback = (message: string) => void;
 
-contextBridge.exposeInMainWorld("electron", electronHandler);
+contextBridge.exposeInMainWorld("main", mainHandler);
 
-export type ElectronHandler = typeof electronHandler;
+export type MainHandler = typeof mainHandler;

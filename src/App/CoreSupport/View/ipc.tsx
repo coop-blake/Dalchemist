@@ -15,7 +15,7 @@ import {
 } from "../../CoreSupport/shared";
 
 export function listenToIPCAndSetState() {
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetAllEntriesUpdated",
     (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
       console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
@@ -26,7 +26,7 @@ export function listenToIPCAndSetState() {
     }
   );
 
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetSelectedDistributorsEntriesUpdated",
     (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
       console.log(
@@ -41,14 +41,14 @@ export function listenToIPCAndSetState() {
     }
   );
 
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetStatusUpdated",
     (status: CoreSetsStatus) => {
       console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
       store.dispatch(setStatus(status));
     }
   );
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetFilePathUpdated",
     (filePath: string) => {
       console.log("CoreSetStatusUpdated🔴🔴🔴🔴🔴", status);
@@ -56,7 +56,7 @@ export function listenToIPCAndSetState() {
     }
   );
 
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetReportEntries",
     (coreSetReportEntriesArray: Array<CoreSupportReportEntry>) => {
       console.log(
@@ -69,7 +69,7 @@ export function listenToIPCAndSetState() {
       }
     }
   );
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetAllDistributors",
     (availableDistributorsArray: Array<string>) => {
       console.log("availableDistributorsArray", availableDistributorsArray);
@@ -81,7 +81,7 @@ export function listenToIPCAndSetState() {
       }
     }
   );
-  window.electron.ipcRenderer.on(
+  window.coreSets.ipcRenderer.on(
     "CoreSetUserSelectedDistributors",
     (selectedDistributorsArray: Array<string>) => {
       if (typeof selectedDistributorsArray !== "undefined") {

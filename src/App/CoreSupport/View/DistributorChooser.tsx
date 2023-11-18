@@ -22,7 +22,7 @@ export function DistributorChooser() {
 }
 
 export function setCoreSetDistributors(distributors: Array<string>) {
-  window.electron.ipcRenderer.sendMessage(
+  window.coreSets.ipcRenderer.sendMessage(
     "setCoreSetsDistributors",
     distributors
   );
