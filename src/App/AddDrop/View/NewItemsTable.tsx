@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../Main/View/resources/css/slickGrid.scss";
+//import "../../Main/View/resources/css/slickGrid.scss";
 import { useAppSelector } from "../../Main/View/hooks";
 import { selectNewItems } from "../View/AddDropSlice";
 
@@ -8,11 +8,12 @@ import { NewItemEntry } from "../../../Google/addDrop/addDrop";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 import thumbsUpIcon from "./resources/images/thumbs-up.svg";
-
-import "./resources/css/add-drop-table.css";
 import "./resources/css/new-items-table.css";
+
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
+
+import "./resources/css/add-drop-table.css";
 
 export default function NewItemsTable() {
   const items = useAppSelector(selectNewItems);
@@ -31,7 +32,7 @@ export default function NewItemsTable() {
   }, [items]);
 
   function dataUpdated(data: NewItemEntry[] = []) {
-    console.log("inventoryDataUpdated", data);
+    console.log("newItemsDataUpdated", data);
 
     if (data.length > 0) {
       if (table === null) {
@@ -94,7 +95,11 @@ export default function NewItemsTable() {
       <span className="add-drop-title">
         {items.length} New Item Entr{items.length > 1 ? "ies" : "y"}
       </span>
-      <div id="newItemsTable" className="add-drop-table" />
+      <div
+        id="newItemsTable"
+        className="add-drop-table"
+        style={{ top: "100px" }}
+      />
     </>
   );
 }

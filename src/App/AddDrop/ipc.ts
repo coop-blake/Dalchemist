@@ -52,6 +52,7 @@ export const handleAddDropWindowMessage = async (
 ) => {
   if (mainWindowMessage === "loaded") {
     //should send the data
+    sendAddDropData();
   } else if (mainWindowMessage === "savePriceCostTSV") {
     savePriceCostTSVPrompt();
   }

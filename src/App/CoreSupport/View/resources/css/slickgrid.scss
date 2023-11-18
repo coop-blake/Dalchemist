@@ -1,4 +1,4 @@
- @import '@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.lite.scss';
+//  @import '@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.lite.scss';
 
 $sparkline-color: #00b78d;
 // $sparkline-color: #573585;
@@ -21,7 +21,7 @@ $sparkline-color: #00b78d;
   background-color: #ffeae8 !important;
 }
 .simulation-form {
-  input[type=number] {
+  input[type="number"] {
     height: 32px;
     width: 50px;
     border: 1px solid #c0c0c0;
@@ -47,4 +47,3 @@ $sparkline-color: #00b78d;
   // fill: none;
   fill: rgba($sparkline-color, 0.03);
 }
-

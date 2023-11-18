@@ -27,6 +27,9 @@ import { formatTimestampToMinute } from "../../Utility";
 
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
+import "../../Main/View/resources/css/index.css";
+import "./resources/css/addDrop.css";
+import "./resources/css/add-drop-table.css";
 
 import NewItemsTable from "./NewItemsTable";
 import NewItemsInInventoryTable from "./NewItemsInInventoryTable";
@@ -50,13 +53,16 @@ export default function AddDropView() {
   const [subView, setSubView] = useState(SubView.NewItems);
 
   useEffect(() => {
-    window.electron.ipcRenderer.sendMessage("addDropWindowMessage", "loaded");
     window.document.title = `AddDrop: ${status} ${
       status === AddDropStatus.Running
         ? `last retreived: ${formatTimestampToMinute(lastRefresh)}`
         : ""
     }`;
   }, [newItems, lastRefresh, newItemsInInventory]);
+
+  useEffect(() => {
+    window.addDrop.ipcRenderer.sendMessage("addDropWindowMessage", "loaded");
+  }, []);
 
   return (
     <>
@@ -126,7 +132,7 @@ enum SubView {
   PriceUpdates,
   InvalidNewItems,
 }
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "addDropStatus",
   (newItemsArray: AddDropStatus) => {
     if (typeof newItemsArray !== "undefined") {
@@ -136,7 +142,7 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "newItemsArray",
   (newItemsArray: Array<NewItemEntry>) => {
     if (typeof newItemsArray !== "undefined") {
@@ -146,7 +152,7 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "addDropDataLastReload",
   (lastAddDropLastRefresh: number) => {
     window.document.title = `AddDrop last retreived: ${formatTimestampToMinute(
@@ -156,7 +162,7 @@ window.electron.ipcRenderer.on(
   }
 );
 
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "itemsAlreadyInInventory",
   (newItemsInInventoryArray: Array<[NewItemEntry, InventoryEntry]>) => {
     // eslint-disable-next-line no-console
@@ -199,6 +205,7 @@ window.electron.ipcRenderer.on(
           newItemName: newItem.Name,
           newItemUnit: newItem.Unit,
           newItemSubDepartment: newItem.SubDepartment,
+
           newItemQuantity: newItem.Quantity,
           newItemCaseCost: newItem.CaseCost,
           newItemUnitCost: newItem.UnitCost,
@@ -224,7 +231,7 @@ window.electron.ipcRenderer.on(
 );
 
 //Attribute Changes
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "attributeChangeItems",
   (changeItemsArray: Array<AttributeChangeEntry>) => {
     store.dispatch(setAttributeChanges(changeItemsArray));
@@ -232,7 +239,7 @@ window.electron.ipcRenderer.on(
 );
 
 //Prive Changes
-window.electron.ipcRenderer.on(
+window.addDrop.ipcRenderer.on(
   "priceUpdates",
   (priceChangeItemsArray: Array<AttributeChangeEntry>) => {
     // eslint-disable-next-line no-console

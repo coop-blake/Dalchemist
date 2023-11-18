@@ -193,8 +193,6 @@ a {
   }
 }
 
-
-
 #root {
   z-index: 2;
 }
@@ -203,17 +201,53 @@ a {
   z-index: 1;
 }
 
-.centered-div{
+.centered-div {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.large-text{
+.large-text {
   font-size: 30px;
 }
 
-.centered-text{
+.centered-text {
   text-align: center;
+}
+
+.navMenu {
+  background: grey;
+}
+.navButton {
+  position: relative;
+  cursor: pointer;
+  border-right: solid black 2px;
+  display: inline-block;
+  color: rgb(27, 27, 68);
+  padding: 10px;
+  background: grey;
+  margin: 0;
+  -webkit-app-region: no-drag;
+}
+
+.navButton:hover {
+  filter: invert(1);
+}
+
+.mainContent {
+}
+
+.MainContentDiv {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  justify-content: left;
+  background: rgb(175, 159, 184);
+  text-align: left;
+  cursor: auto;
 }

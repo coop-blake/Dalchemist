@@ -9,6 +9,7 @@ declare global {
 
 export type Channels =
   | "status"
+  | "error"
   | "mainWindowMessage"
   | "CoreSetEntriesUpdated"
   | "addDropWindowMessage"
@@ -23,12 +24,12 @@ export type Channels =
 
 const electronHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
-      ipcRenderer.send(channel, ...args);
+    sendMessage(channel: Channels, message: string) {
+      ipcRenderer.send(channel, message);
     },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
+    on(channel: Channels, func: (message: string) => void) {
+      const subscription = (_event: IpcRendererEvent, message: string) =>
+        func(message);
       ipcRenderer.on(channel, subscription);
 
       return () => {

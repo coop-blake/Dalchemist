@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "../../Main/View/resources/css/slickGrid.scss";
+//import "../../Main/View/resources/css/slickGrid.scss";
 import { useAppSelector } from "../../Main/View/hooks";
 import { selectNewItemsInInventory } from "../View/AddDropSlice";
 
-import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
+import {
+  CellComponent,
+  Formatter,
+  EmptyCallback,
+  TabulatorFull as Tabulator,
+} from "tabulator-tables";
 //import { styleFormatter } from "../../UI/Tabulator/Utility";
 import "tabulator-tables/dist/css/tabulator_bootstrap4.css";
 import "tabulator-tables/dist/css/tabulator.min.css"; // Import the CSS file
@@ -49,7 +54,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Brand",
                 field: "newItemBrand",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -58,7 +63,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Name",
                 field: "newItemName",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -67,7 +72,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Unit",
                 field: "newItemUnit",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -77,7 +82,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Brand",
                 field: "inventoryBrand",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -86,7 +91,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Name",
                 field: "inventoryName",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -95,7 +100,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Unit",
                 field: "inventorySize",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -105,7 +110,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Department",
                 field: "newItemDepartment",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -114,7 +119,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New SubDepartment",
                 field: "newItemSubDepartment",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -124,7 +129,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Department",
                 field: "inventoryDepartment",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -133,7 +138,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "SubDepartment",
                 field: "inventorySubDepartment",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -143,7 +148,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Price",
                 field: "newItemBasePrice",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -152,7 +157,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Cost",
                 field: "newItemUnitCost",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -162,7 +167,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Price",
                 field: "inventoryBasePrice",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -171,7 +176,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Cost",
                 field: "inventoryLastCost",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -181,7 +186,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Supplier",
                 field: "newItemSupplier",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -190,7 +195,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New SupItemID",
                 field: "newItemSupplierItemID",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -199,7 +204,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Quantity",
                 field: "newItemQuantity",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -208,7 +213,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New CaseCost",
                 field: "newItemCaseCost",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -217,7 +222,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "New Margin",
                 field: "newItemMARGIN",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: newEntryTextColor,
                   backgroundColor: newEntryBackgroundColor,
@@ -227,7 +232,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Supplier",
                 field: "inventoryDefaultSupplier",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -236,7 +241,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "SupItemID",
                 field: "inventorySupplierUnitID",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -245,7 +250,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Quantity",
                 field: "inventoryQuantity",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -254,7 +259,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "CaseCost",
                 field: "inventoryCaseCost",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -263,7 +268,7 @@ export default function NewItemsInInventoryTable() {
               {
                 title: "Margin",
                 field: "inventoryIdealMargin",
-                formatter: styleFormatter,
+                formatter: styleFormatter as Formatter,
                 formatterParams: {
                   textColor: inventoryEntryTextColor,
                   backgroundColor: inventoryEntryBackgroundColor,
@@ -289,8 +294,9 @@ export default function NewItemsInInventoryTable() {
 
 export function styleFormatter(
   cell: CellComponent,
-  formatterParams: { textColor: string; backgroundColor: string }
-) {
+  formatterParams: { textColor: string; backgroundColor: string },
+  onRendered: EmptyCallback
+): string {
   formatterParams.textColor
     ? (cell.getElement().style.color = formatterParams.textColor)
     : null;
@@ -298,7 +304,8 @@ export function styleFormatter(
     ? (cell.getElement().style.backgroundColor =
         formatterParams.backgroundColor)
     : null;
-  return cell.getValue();
+  onRendered(() => {});
+  return cell.getValue() as string;
 }
 
 type NewItemInEnventory = {

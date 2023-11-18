@@ -1,18 +1,35 @@
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-import { contextBridge, ipcRenderer, IpcRendererEvent} from 'electron';
+import { AddDropStatus } from "../../../Google/addDrop/shared";
 
+export type Channels =
+  | "addDrop"
+  | "newItemsArray"
+  | "addDropDataLastReload"
+  | "itemsAlreadyInInventory"
+  | "attributeChangeItems"
+  | "priceUpdates"
+  | "addDropWindowMessage"
+  | "addDropStatus";
 
-export type Channels = 'addDrop';
+type Message = string | AddDropStatus;
 
-const electronHandler = {
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    addDrop: AddDropHandler;
+  }
+}
+
+const addDropHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
-      ipcRenderer.send(channel, ...args);
+    sendMessage(channel: Channels, message: Message) {
+      ipcRenderer.send(channel, message);
     },
 
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
+    on(channel: Channels, func: (message: Message) => void) {
+      const subscription = (_event: IpcRendererEvent, message: Message) =>
+        func(message);
       ipcRenderer.on(channel, subscription);
 
       return () => {
@@ -20,16 +37,14 @@ const electronHandler = {
       };
     },
 
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    once(channel: Channels, func: (message: Message) => void) {
+      ipcRenderer.once(channel, (_event, message) => func(message));
     },
   },
-}
-
+};
 
 //type MessageCallback = (message: string) => void;
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
+contextBridge.exposeInMainWorld("addDrop", addDropHandler);
 
-
-export type ElectronHandler = typeof electronHandler;
+export type AddDropHandler = typeof addDropHandler;

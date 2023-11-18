@@ -1,6 +1,6 @@
 # Dalchemist
 
-For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG.
+For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from the command line or as automated tasks.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
@@ -10,7 +10,6 @@ You will also need access to a terminal. Terminal commands are represented like 
 
 ### Download repository
 
-You will need the Dalchemist repository on the host.  
 With [git](https://git-scm.com/downloads) installed you can this command in the terminal to clone the repository.
 
 `git clone https://github.com/coop-blake/Dalchemist.git`

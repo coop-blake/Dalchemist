@@ -1,6 +1,6 @@
 #coreSetSettings {
- margin: 0;
- padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 #statusInfo {
@@ -44,35 +44,15 @@
   color: rgb(69, 11, 11);
   font-weight: bold;
 }
-.mainContent{
-  
-}
-#loadedFileStatus{
+
+#loadedFileStatus {
   padding-left: 10px;
 }
 
-#fileName{
+#fileName {
   margin-left: 10px;
-  word-wrap: break-word; 
-    max-width: 100%; 
-}
-.navMenu{
-  background: grey;
-}
-.navButton {
-  position: relative;
-  cursor: pointer;
-  border-right: solid black 2px;
-  display: inline-block;
-  color: rgb(27, 27, 68);
-  padding: 10px;
-  background: grey;
-  margin: 0;
-  -webkit-app-region: no-drag;
-}
-
-.navButton:hover {
-  filter: invert(1);
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .CoreSetsMainDiv {
@@ -94,9 +74,6 @@
   font-style: italic;
 }
 
-
-
 .activeButton {
   background: rgb(175, 159, 184);
-
 }

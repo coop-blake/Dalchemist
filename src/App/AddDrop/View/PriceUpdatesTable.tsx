@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../Main/View/resources/css/slickGrid.scss";
+//import "../../Main/View/resources/css/slickGrid.scss";
 import { useAppSelector } from "../../Main/View/hooks";
 import { selectPriceUpdates } from "../View/AddDropSlice";
 

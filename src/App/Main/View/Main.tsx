@@ -119,3 +119,17 @@ function closeMenuButtonClicked() {
     "closeMenuButtonClicked"
   );
 }
+
+import {
+  setStatus as setMainStatus,
+  setErrorMessage as setMainErrorMessage,
+} from "./MainSlice";
+
+import { store } from "./store";
+
+window.electron.ipcRenderer.on("status", (message: string) => {
+  store.dispatch(setMainStatus(message));
+});
+window.electron.ipcRenderer.on("error", (message: string) => {
+  store.dispatch(setMainErrorMessage(message));
+});

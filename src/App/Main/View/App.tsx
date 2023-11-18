@@ -4,10 +4,17 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { store } from "./store";
 // HTML and CSS
-import MainView from "./Main";
-import CoreSetsView from "../../CoreSupport/View/CoreSets";
-import InventoryView from "../../Inventory/View/Inventory";
-import AddDropView from "../../AddDrop/View/AddDrop";
+const MainView = React.lazy(() => import("./Main"));
+
+const CoreSetsView = React.lazy(
+  () => import("../../CoreSupport/View/CoreSets")
+);
+
+const InventoryView = React.lazy(
+  () => import("../../Inventory/View/Inventory")
+);
+
+const AddDropView = React.lazy(() => import("../../AddDrop/View/AddDrop"));
 import React from "react";
 
 //App

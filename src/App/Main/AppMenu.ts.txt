@@ -51,11 +51,11 @@ export const createAndSetApplicationMenu = async () => {
   //     return false;
   //   }) || [];
 
-  const template: MenuItemConstructorOptions[] = [
-    ...applicationMenuTemplate,
-    ...(appMenu ? [appMenu] : []),
-  ];
+  // const template: MenuItemConstructorOptions[] = [
+  //   ...applicationMenuTemplate,
+  //   ...(appMenu ? [appMenu] : []),
+  // ] as ;
 
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  // const menu = Menu.buildFromTemplate(template);
+  // Menu.setApplicationMenu(menu);
 };

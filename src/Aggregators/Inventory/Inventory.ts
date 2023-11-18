@@ -3,7 +3,7 @@ import { State } from "./State";
 import {
   InventorySheetReader,
   InventorySheetEntry,
-} from "../../Main/View/resources/Inventory/Sheet";
+} from "../../Resources/Inventory/Sheet";
 
 export class Inventory {
   private state = new State();
