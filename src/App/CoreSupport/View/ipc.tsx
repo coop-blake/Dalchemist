@@ -1,6 +1,5 @@
 import { store } from "../../Main/View/store";
 
-import { CoreSetMessage } from "./preloadCoreSets";
 import {
   setStatus,
   setFilePath,
