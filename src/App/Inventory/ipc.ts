@@ -37,7 +37,6 @@ export const handleWindowMessage = async (
   mainWindowMessage: string
 ) => {
   if (mainWindowMessage === "loaded") {
-    //should send the data
     sendInventoryData();
   }
 };
