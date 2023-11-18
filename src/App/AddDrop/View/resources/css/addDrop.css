@@ -11,10 +11,6 @@ h3 {
   display: hidden;
 }
 
-#newItemsTable {
-  max-height: 300px;
-}
-
 #addDropBody {
   background: rgba(59, 44, 92, 0.2);
 }

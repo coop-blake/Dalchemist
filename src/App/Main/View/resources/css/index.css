@@ -234,8 +234,8 @@ a {
 .navButton:hover {
   filter: invert(1);
 }
-
 .mainContent {
+  position: unset;
 }
 
 .MainContentDiv {
