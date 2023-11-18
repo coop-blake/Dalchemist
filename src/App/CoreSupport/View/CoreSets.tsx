@@ -22,7 +22,7 @@ import {
 } from "./CoreSetSlice";
 import { listenToIPCAndSetState } from "./ipc";
 
-import "../../Resources/css/coreSets.css";
+import "../../Main/View/resources/css/coreSets.css";
 
 enum SubView {
   settings,

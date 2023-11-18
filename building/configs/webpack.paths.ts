@@ -3,7 +3,7 @@ import path from "path";
 const rootPath = path.join(__dirname, "../..");
 const srcPath = path.join(rootPath, "src");
 
-const srcRendererPath = path.join(srcPath, "App/Resources/html/");
+const srcRendererPath = path.join(srcPath, "App/Main/View/resources/html/");
 const srcMainPath = path.join(srcPath, "App/");
 
 const buildRendererPath = path.join(rootPath, "build");

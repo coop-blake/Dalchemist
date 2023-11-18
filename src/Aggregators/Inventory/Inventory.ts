@@ -2,8 +2,8 @@ import { Status } from "./shared";
 import { State } from "./State";
 import {
   InventorySheetReader,
-  InventorySheetEntry
-} from "../../Resources/Inventory/Sheet";
+  InventorySheetEntry,
+} from "../../Main/View/resources/Inventory/Sheet";
 
 export class Inventory {
   private state = new State();
