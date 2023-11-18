@@ -1,9 +1,13 @@
 import { Inventory as GoogleInventory } from "../../Google/Inventory/Inventory";
 import path from "path";
 import { resolveHtmlPath } from "../Utility";
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import DalchemistApp from "../DalchemistApp";
-import { sendStateChangesToWindow, sendInventoryData } from "./ipc";
+import {
+  sendStateChangesToWindow,
+  sendInventoryData,
+  handleWindowMessage,
+} from "./ipc";
 /**
  * Inventory
  * Singlton Instance with State that handles the Inventory Main Process for Electron
@@ -72,6 +76,7 @@ export class Inventory {
         this.window = null;
       });
       sendStateChangesToWindow();
+      ipcMain.on("inventoryWindowMessage", handleWindowMessage);
     }
 
     return this.window;

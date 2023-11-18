@@ -1,16 +1,26 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import { InventoryEntry } from "../../../Google/Inventory/shared";
 
-export type Channels = "inventory";
+export type Channels = "inventoryData" | "inventoryDataLastReload";
 
-const electronHandler = {
+type Message = string | InventoryEntry[] | number;
+
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    inventory: InventoryHandler;
+  }
+}
+
+const inventoryHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
-      ipcRenderer.send(channel, ...args);
+    sendMessage(channel: Channels, message: Message) {
+      ipcRenderer.send(channel, message);
     },
 
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
+    on(channel: Channels, func: (message: Message) => void) {
+      const subscription = (_event: IpcRendererEvent, message: Message) =>
+        func(message);
       ipcRenderer.on(channel, subscription);
 
       return () => {
@@ -18,14 +28,14 @@ const electronHandler = {
       };
     },
 
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    }
-  }
+    once(channel: Channels, func: (message: Message) => void) {
+      ipcRenderer.once(channel, (_event, message) => func(message));
+    },
+  },
 };
 
 //type MessageCallback = (message: string) => void;
 
-contextBridge.exposeInMainWorld("electron", electronHandler);
+contextBridge.exposeInMainWorld("inventory", inventoryHandler);
 
-export type ElectronHandler = typeof electronHandler;
+export type InventoryHandler = typeof inventoryHandler;

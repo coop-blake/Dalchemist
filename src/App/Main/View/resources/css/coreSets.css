@@ -15,27 +15,6 @@
   padding-right: 5px;
 }
 
-.interfaceButton {
-  position: relative;
-
-  cursor: pointer;
-  border: solid black 2px;
-  display: inline-block;
-  color: rgb(27, 27, 68);
-  padding: 5px;
-  background: darkgrey;
-  border-radius: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-
-  -webkit-app-region: no-drag;
-}
-.interfaceButton:hover {
-  background: rgb(27, 27, 68);
-  color: darkgrey;
-}
-
 #coreSetsTable {
   height: 300px;
 }
@@ -72,8 +51,4 @@
 .loadingStatus {
   font-weight: bold;
   font-style: italic;
-}
-
-.activeButton {
-  background: rgb(175, 159, 184);
 }

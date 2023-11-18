@@ -1,4 +1,4 @@
-import DalchemistApp from "./DalchemistApp";
+import DalchemistApp from "../DalchemistApp";
 
 export const sendMainWindowStatus = async () => {
   await DalchemistApp.awaitOnReady();

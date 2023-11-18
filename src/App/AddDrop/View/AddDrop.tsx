@@ -67,7 +67,7 @@ export default function AddDropView() {
   return (
     <>
       {status === AddDropStatus.Running ? (
-        <div className="CoreSetsMainDiv">
+        <div className="MainContentDiv">
           <div className="navMenu">
             <Button
               name={"New Items"}

@@ -13,7 +13,7 @@ import { Inventory as GoogleInventory } from "../Google/Inventory/Inventory";
 import { Inventory } from "./Inventory/Inventory";
 import { CoreSets } from "./CoreSupport/CoreSets";
 
-import { sendMainWindowStatus } from "./ipc";
+import { sendMainWindowStatus } from "./Main/ipc";
 export class DalchemistAppState {
   private statusSubject = new BehaviorSubject<DalchemistAppStatus>(
     DalchemistAppStatus.Preparing

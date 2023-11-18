@@ -1,5 +1,6 @@
 import { Inventory as GoogleInventory } from "../../Google/Inventory/Inventory";
 import { Inventory } from "./Inventory";
+import { IpcMainInvokeEvent } from "electron";
 
 export const sendStateChangesToWindow = async () => {
   GoogleInventory.getInstance();
@@ -28,5 +29,15 @@ export const sendInventoryData = async () => {
       "inventoryDataLastReload",
       GoogleInventory.state.lastRefreshCompleted
     );
+  }
+};
+
+export const handleWindowMessage = async (
+  _event: IpcMainInvokeEvent,
+  mainWindowMessage: string
+) => {
+  if (mainWindowMessage === "loaded") {
+    //should send the data
+    sendInventoryData();
   }
 };

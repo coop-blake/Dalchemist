@@ -18,10 +18,17 @@ export default function InventoryView() {
       : (document.title = "Inventory Loading");
   }, [items]);
 
+  useEffect(() => {
+    window.inventory.ipcRenderer.sendMessage(
+      "inventoryWindowMessage",
+      "loaded"
+    );
+  }, []);
+
   return <>{items.length > 0 ? <InventoryTable /> : <LoadingAnimation />}</>;
 }
 
-window.electron.ipcRenderer.on(
+window.inventory.ipcRenderer.on(
   "inventoryData",
   (inventoryItemsArray: Array<InventoryEntry>) => {
     console.log("InventoryEntriesUpdated🟢🟢🟢🟢🟢", inventoryItemsArray);
