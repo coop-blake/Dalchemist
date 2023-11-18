@@ -1,6 +1,6 @@
 //Resources
-import icon from "../Resources/images/Icon.svg";
-import "../Resources/css/index.css";
+import icon from "../../Resources/images/Icon.svg";
+import "../../Resources/css/index.css";
 //State
 import { useAppSelector } from "./hooks";
 

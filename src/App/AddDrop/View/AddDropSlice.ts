@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../View/store";
+import type { RootState } from "../../Main/View/store";
 import {
   AddDropStatus,
   NewItemEntry,

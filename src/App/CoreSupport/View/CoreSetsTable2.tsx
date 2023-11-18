@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { selectAvailableItems } from "./CoreSetSlice";
 import "../../Resources/css/slickGrid.scss";
-import {  CoreSupportEntry } from "../shared";
-import { useAppSelector } from "../../View/hooks";
+import { CoreSupportEntry } from "../shared";
+import { useAppSelector } from "../../Main/View/hooks";
 
-import {
-  Column,
-  GridOption,
-  SlickgridReact,
-} from "slickgrid-react";
+import { Column, GridOption, SlickgridReact } from "slickgrid-react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Props {

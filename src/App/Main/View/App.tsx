@@ -5,9 +5,9 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 // HTML and CSS
 import MainView from "./Main";
-import CoreSetsView from "../CoreSupport/View/CoreSets";
-import InventoryView from "../Inventory/View/Inventory";
-import AddDropView from "../AddDrop/View/AddDrop";
+import CoreSetsView from "../../CoreSupport/View/CoreSets";
+import InventoryView from "../../Inventory/View/Inventory";
+import AddDropView from "../../AddDrop/View/AddDrop";
 import React from "react";
 
 //App

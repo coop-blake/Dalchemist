@@ -4,7 +4,7 @@ import CoreSetsTable from "./CoreSetsTable";
 import CoreSetReportTable from "./ReportTable";
 //import { ipcRenderer } from "electron";
 import "./resources/css/core-support-table.css";
-import { useAppSelector } from "../../View/hooks";
+import { useAppSelector } from "../../Main/View/hooks";
 import { DistributorChooser } from "./DistributorChooser";
 import { CoreSupportReportEntry } from "../../CoreSupport/shared";
 

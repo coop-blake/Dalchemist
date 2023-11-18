@@ -1,4 +1,4 @@
-import { store } from "../../View/store";
+import { store } from "../../Main/View/store";
 import {
   setStatus,
   setFilePath,

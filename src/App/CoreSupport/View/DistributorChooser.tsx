@@ -1,4 +1,4 @@
-import { useAppSelector } from "../../View/hooks";
+import { useAppSelector } from "../../Main/View/hooks";
 import {
   selectAvailableDistributors,
   selectSelectedDistributors,

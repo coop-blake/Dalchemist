@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../View/hooks";
+import { useAppSelector } from "../../Main/View/hooks";
 import {
   setStatus,
   selectStatus,
@@ -12,7 +12,7 @@ import {
   setAttributeChanges,
   setPriceUpdates,
 } from "../View/AddDropSlice";
-import { store } from "../../View/store";
+import { store } from "../../Main/View/store";
 import {
   NewItemEntry,
   AttributeChangeEntry,

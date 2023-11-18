@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useAppSelector } from "../../View/hooks";
+import { useAppSelector } from "../../Main/View/hooks";
 import { setItems } from "../View/InventorySlice";
-import { store } from "../../View/store";
+import { store } from "../../Main/View/store";
 
 import "./resources/css/inventory.css";
 import InventoryTable from "./InventoryTable";

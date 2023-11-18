@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import coreSetsReducer from "../CoreSupport/View/CoreSetSlice";
-import inventoryReducer from "../Inventory/View/InventorySlice";
+import coreSetsReducer from "../../CoreSupport/View/CoreSetSlice";
+import inventoryReducer from "../../Inventory/View/InventorySlice";
 import mainReducer from "./MainSlice";
 
-import addDropReducer from "../AddDrop/View/AddDropSlice";
-import priceChangeWorksheetsReducer from "../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
+import addDropReducer from "../../AddDrop/View/AddDropSlice";
+import priceChangeWorksheetsReducer from "../../PriceChangeWorksheets/View/PriceChangeWorksheetsSlice";
 
 export const store = configureStore({
   reducer: {

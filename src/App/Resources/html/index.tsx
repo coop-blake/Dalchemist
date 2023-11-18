@@ -1,12 +1,12 @@
 import { createRoot } from "react-dom/client";
-import App from "../../View/App";
+import App from "../../Main/View/App";
 
 import {
   setStatus as setMainStatus,
   setErrorMessage as setMainErrorMessage,
-} from "../../View/MainSlice";
+} from "../../Main/View/MainSlice";
 
-import { store } from "../../View/store";
+import { store } from "../../Main/View/store";
 import React from "react";
 
 const container = document.getElementById("root") as HTMLElement;

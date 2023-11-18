@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../Resources/css/slickGrid.scss";
-import { useAppSelector } from "../../View/hooks";
+import { useAppSelector } from "../../Main/View/hooks";
 import { selectNewItemsInInventory } from "../View/AddDropSlice";
 
 import { CellComponent, TabulatorFull as Tabulator } from "tabulator-tables";
