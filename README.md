@@ -64,7 +64,7 @@ You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
 
 More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
 
-## 🧑‍💻 Advanced usage and development
+## 🌟 Advanced usage and development
 
 You are free to clone and develop this repoistory to fit your own needs.
 

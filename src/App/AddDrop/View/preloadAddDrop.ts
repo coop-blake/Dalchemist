@@ -27,8 +27,8 @@ const addDropHandler = {
       ipcRenderer.send(channel, message);
     },
 
-    on(channel: Channels, func: (message: Message) => void) {
-      const subscription = (_event: IpcRendererEvent, message: Message) =>
+    on<T>(channel: Channels, func: (message: T) => void) {
+      const subscription = (_event: IpcRendererEvent, message: T) =>
         func(message);
       ipcRenderer.on(channel, subscription);
 

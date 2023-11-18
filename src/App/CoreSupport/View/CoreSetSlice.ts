@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../Main/View/store";
-import {
-  CoreSupportPriceListEntry,
-  CoreSupportReportEntry,
-} from "electron/CoreSupport/shared";
+import { CoreSupportPriceListEntry, CoreSupportReportEntry } from "../shared";
 
 // Define a type for the slice state
 interface CoreSetsState {

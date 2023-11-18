@@ -7,31 +7,18 @@ declare global {
   }
 }
 
-export type Channels =
-  | "status"
-  | "error"
-  | "mainWindowMessage"
-  | "CoreSetEntriesUpdated"
-  | "addDropWindowMessage"
-  | "CoreSetStatusUpdated"
-  | "PriceChangeWorksheetsStatus"
-  | "PriceChangeWorksheetsFolderPath"
-  | "coreSetsWindowMessage"
-  | "setCoreSetsDistributors"
-  | "CoreSetFilePathUpdated"
-  | "inventoryData"
-  | "inventoryDataLastReload";
+export type Channels = "status" | "error" | "mainWindowMessage";
 
-type Message = string;
+type MainMessage = string;
 
 const mainHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, message: Message) {
+    sendMessage(channel: Channels, message: MainMessage) {
       ipcRenderer.send(channel, message);
     },
 
-    on(channel: Channels, func: (message: Message) => void) {
-      const subscription = (_event: IpcRendererEvent, message: Message) =>
+    on(channel: Channels, func: (message: MainMessage) => void) {
+      const subscription = (_event: IpcRendererEvent, message: MainMessage) =>
         func(message);
       ipcRenderer.on(channel, subscription);
 
@@ -40,7 +27,7 @@ const mainHandler = {
       };
     },
 
-    once(channel: Channels, func: (message: Message) => void) {
+    once(channel: Channels, func: (message: MainMessage) => void) {
       ipcRenderer.once(channel, (_event, message) => func(message));
     },
   },

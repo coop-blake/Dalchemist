@@ -1,7 +1,10 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import { InventoryEntry } from "../../../Google/Inventory/shared";
 
-export type Channels = "inventoryData" | "inventoryDataLastReload";
+export type Channels =
+  | "inventoryData"
+  | "inventoryDataLastReload"
+  | "inventoryWindowMessage";
 
 type Message = string | InventoryEntry[] | number;
 
@@ -18,8 +21,8 @@ const inventoryHandler = {
       ipcRenderer.send(channel, message);
     },
 
-    on(channel: Channels, func: (message: Message) => void) {
-      const subscription = (_event: IpcRendererEvent, message: Message) =>
+    on<T>(channel: Channels, func: (message: T) => void) {
+      const subscription = (_event: IpcRendererEvent, message: T) =>
         func(message);
       ipcRenderer.on(channel, subscription);
 
