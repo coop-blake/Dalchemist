@@ -1,6 +1,6 @@
 {
   "name": "dalchemist",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "scripts": {
     "start:App": "ts-node ./building/scripts/check-port-in-use.ts && npm run start:App:renderer",
