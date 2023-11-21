@@ -3,22 +3,75 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
+  "compounds": [
+    {
+        "name": "🪛 Start Electron and Attach to Chrome",
+        "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
+    }],
   "configurations": [
     {
+      "name": "✅ start:App",
       "type": "node",
       "request": "launch",
-      "name": "Debug Main Process",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-      "program": "${workspaceRoot}/build/electron/startApp.js",
-      "runtimeArgs": [
-        ".",
-        // this args for attaching render process
-        "--remote-debugging-port=9222"
-      ],
-      "windows": {
-        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-      },
-      "protocol": "legacy"
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:App"]
+    },
+    {
+      "name": "🪛 Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}",
+      "timeout": 10000
+     },
+    {
+      "name": "🤖Test-Importer-Sheet",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testImporterSheet"]
+    },
+    {
+      "name": "🤖Test-Inventory",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testInventory"]
+    },
+    {
+      "name": "🤖Test-Inventory-Sheet",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testInventorySheet"]
+    },
+    {
+      "name": "🤖Test-CoreSets",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testCoreSets"]
+    },
+    {
+      "name": "🤖 Test-Importer-Text",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testImporterText"]
+    },
+    {
+      "name": "🤖Test-Importer-XLSX",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "testImporterXLSX"]
     },
     {
       "name": "🌐 Interactive: Main",
@@ -61,28 +114,29 @@
       "runtimeArgs": ["run-script", "googleCheck-addDrop"]
     },
     {
-      "name": "🔨 #1 - Build Electron",
+      "name": "✅ odbcCheck",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electronBuild"]
+      "runtimeArgs": ["run-script", "odbcCheck"]
+    },
+
+    {
+      "name": "✅ Google: PriceChangeData",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "googleUpdate-PriceChangeData"]
     },
     {
-      "name": "🏃‍♀️ #2 - Run Electron",
+      "name": "✅ Google: AltIDs",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electronRun"]
-    },
-    {
-      "name": " 🔨🏃‍♀️ #1&2 - Build and Run Electron",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "electron"]
+      "runtimeArgs": ["run-script", "googleUpdate-AltIds"]
     },
     {
       "name": "✅ Google: AddDrop",
@@ -91,31 +145,32 @@
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck-addDrop"]
-    }, 
+    },
     {
       "name": "✅ Google: Inventory",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "googleCheck-Inventory"]
-    }, {
+      "runtimeArgs": ["run-script", "googleUpdate-Inventory"]
+    },
+    {
       "name": "✅ Google",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "googleCheck"]
-    }
-    , {
+    },
+    {
       "name": "📓 Docs",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "docs"]
-    },{
-
+    },
+    {
       "name": "🎆 Generator: checkDuplicateEntries",
       "type": "node",
       "request": "launch",
@@ -199,4 +254,5 @@
       "runtimeArgs": ["run-script", "googleUpdate-subDepartmentsReport"]
     }
   ]
+
 }

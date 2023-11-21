@@ -1,0 +1,71 @@
+
+.distributor-checkbox-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    max-width: 100%; /* Ensure it doesn't exceed the container's width */
+}
+
+.distributor-checkbox-item {
+    flex: 1;
+    min-width: calc(25% - 10px); /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+.distributor-checkbox-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    max-width: 100%; /* Ensure it doesn't exceed the container's width */
+    height: calc(100vh - 200px);
+    flex-direction: column; 
+}
+
+.distributor-checkbox-item {
+    flex: 1;
+    min-width: calc(25% - 10px); /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+}
+
+.distributor-checkbox-list {
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fill, minmax(25vw, 1fr)); /* Adjust the minimum width as needed */
+    gap: 10px; /* Adjust the gap between columns */
+    flex-direction: column; 
+    height: calc(100vh - 200px);
+
+}
+
+.distributor-checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.distributor-checkbox-list {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    max-width: 100%; /* Ensure it doesn't exceed the container's width */
+    flex-direction: column; 
+    height: 280px;
+}
+
+.distributor-checkbox-item {
+    flex: 1;
+    min-width: calc(25% - 10px); /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+
+    margin-left: 10px;
+}
+
+

@@ -1,0 +1,54 @@
+#coreSetSettings {
+  margin: 0;
+  padding: 0;
+}
+
+#statusInfo {
+  border: solid green 1px;
+}
+#fileIcon {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#slashIcon {
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+#coreSetsTable {
+  height: 300px;
+}
+
+.errorMessage {
+  color: rgb(69, 11, 11);
+  font-weight: bold;
+}
+
+#loadedFileStatus {
+  padding-left: 10px;
+}
+
+#fileName {
+  margin-left: 10px;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.CoreSetsMainDiv {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  justify-content: left;
+  background: rgb(175, 159, 184);
+  text-align: left;
+  cursor: auto;
+}
+
+.loadingStatus {
+  font-weight: bold;
+  font-style: italic;
+}

@@ -1,9 +1,39 @@
 {
   "name": "dalchemist",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
-  "main": "./build/electron/startApp.js",
   "scripts": {
+    "start:App": "ts-node ./building/scripts/check-port-in-use.ts && npm run start:App:renderer",
+    "start:App:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
+    "start:App:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.preload.dev.ts",
+    "start:App:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only -main ./src/App/startDalchemistApp.ts --remote-debugging-port=9222",
+    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
+    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.main.prod.ts",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.prod.ts",
+    "build:dlls": "ts-node ./building/scripts/check-native-dep.ts && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.renderer.dev.dll.ts",
+    "package:App": "ts-node ./building/scripts/clean.ts dist && npm run build && electron-builder build --publish never",
+    "clean": "npm run clean:build && npm run clean:release && npm run clean:docs",
+    "clean:all": "npm run clean && npm run clean:package && npm run clean:node_modules",
+    "clean:docs": "rimraf coverage/ && rimraf docs/",
+    "clean:build": "rimraf build/",
+    "clean:release": "npm run clean:release:dist && npm run clean:release:node_modules",
+    "clean:release:dist": "rimraf release/app/dist/",
+    "clean:release:node_modules": "rimraf release/app/node_modules/",
+    "clean:package": "rimraf release/package/",
+    "clean:node_modules": "rimraf node_modules/",
+    "test": "jest",
+    "test:Importers": "npx jest Tests/Importers/",
+    "test:ImporterBase": "npx jest Tests/Importers/importer.base.test.ts",
+    "test:ImporterText": "npx jest Tests/Importers/importer.textFile.test.ts",
+    "test:ImporterXLSX": "npx jest Tests/Importers/importer.xlsx.test.ts",
+    "test:ImporterSheet": "npx jest Tests/Importers/importer.sheet.test.ts",
+    "test:Inventory": "npx jest Tests/Inventory/inventory.test.ts",
+    "test:InventorySheet": "npx jest Tests/Inventory/inventory.sheet.test.ts",
+    "test:CoreSets": "npx jest Tests/CoreSets/coreSets.test.ts",
+    "lint": "npx eslint .",
+    "docs": "typedoc",
+    "docs-external": "typedoc --out docs/external --excludeInternal --readme ./Documentation/Application.md",
+    "docs-md": "typedoc --plugin typedoc-plugin-markdown --out docs/markdown",
     "outputAll": "npm run inventoryItemsInPricebook && npm run lowerCostsInventoryPricebookComparison && npm run checkPriceChangeWorksheetsAndInventory && npm run checkPriceChangeWorksheetsAndInventory-AllOutput  ",
     "checkDuplicateEntries": "npx babel-node -x .ts -- src/Generators/DuplicateEntriesChecker.ts",
     "checkSubdepartmentMargins": "npx babel-node -x .ts -- src/Generators/checkSubdepartmentMargins.ts",
@@ -18,24 +48,13 @@
     "startPriceUpdate": "nodemon --exec \"babel-node -x .ts\" src/priceChange.ts",
     "startCoreSetCheck": "nodemon --exec \"babel-node -x .ts\" src/Webstarts/coreSupportCheck.ts",
     "googleUpdate-Inventory": "npx babel-node -x .ts -- src/Google/update-Inventory.ts",
+    "googleUpdate-AltIds": "npx babel-node -x .ts -- src/Google/updateAltIds.ts",
+    "googleUpdate-PriceChangeData": "npx babel-node -x .ts -- src/Google/updatePriceChangeData.ts",
     "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
     "googleCheck-addDrop": "babel-node -x .ts src/Google/Tests/addDrop.ts",
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
-    "googleCheck" : "babel-node -x .ts src/Google/Tests/google.ts",
-    "clean": "rimraf build/",
-    "debugElectron": "npx babel-node -x .ts -- src/electron/startApp.ts",
-    "build": "",
-    "copy-files": "copyfiles -E -V -u 1 src/**/*.html src/**/*.css src/**/*.txt src/**/*.vbs src/**/*.js src/**/*.svg src/electron/Resources/css/index.css build",
-    "electronBuild": "tsc  --outDir ./build --target es6 --module commonjs --moduleResolution node --esModuleInterop true --sourceMap true src/electron/startApp.ts && npm run copy-files",
-    "electronRun": "electron .",
-    "electron": "npm run electronBuild && npm run electronRun",
-    "package-win": "npm run electronBuild && electron-packager . Dalchemist --platform=win32 --arch=x64 --out=dist --overwrite",
-    "package-macOS": "npm run electronBuild && electron-packager . Dalchemist --platform=darwin --arch=x64 --out=dist --overwrite",
-    "test": "jest",
-    "lint": "npx eslint .",
-    "docs": "typedoc",
-    "docs-external": "typedoc --out docs/external --excludeInternal --readme ./README.md",
-    "docs-md": "typedoc --plugin typedoc-plugin-markdown --out docs/markdown"
+    "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
+    "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
   },
   "author": "Blake Glanville",
   "license": "BSD-3-Clause",
@@ -43,45 +62,178 @@
     "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.11",
     "@babel/node": "^7.22.10",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/plugin-syntax-import-assertions": "^7.22.5",
+    "@babel/plugin-transform-class-properties": "^7.22.5",
     "@babel/plugin-transform-modules-commonjs": "^7.22.11",
+    "@babel/plugin-transform-object-rest-spread": "^7.22.15",
+    "@babel/plugin-transform-react-jsx": "^7.22.5",
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-typescript": "^7.22.11",
+    "@electron/notarize": "^2.1.0",
+    "@electron/rebuild": "^3.3.0",
+    "@jest/globals": "^29.7.0",
+    "@npmcli/fs": "^3.1.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
+    "@types/detect-port": "^1.3.3",
     "@types/express": "^4.17.17",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "@types/tabulator-tables": "^5.5.1",
+    "@types/webpack-bundle-analyzer": "^4.6.0",
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
+    "bootstrap": "^5.3.2",
+    "chalk": "^4.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^8.2.1",
+    "copy-webpack-plugin": "^11.0.0",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "declaration-bundler-webpack-plugin": "^1.0.3",
+    "detect-port": "^1.5.1",
     "electron": "^26.1.0",
+    "electron-builder": "^24.6.4",
+    "electron-log": "^4.4.8",
     "electron-packager": "^17.1.2",
+    "electron-updater": "^6.1.1",
+    "electronmon": "^2.0.2",
     "eslint": "^8.47.0",
+    "eslint-plugin-import": "^2.29.0",
+    "express": "^4.18.2",
+    "file-loader": "^6.2.0",
+    "font-awesome": "^4.7.0",
+    "googleapis": "^126.0.0",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.3",
+    "ignore-loader": "^0.1.2",
     "jest": "^29.6.4",
+    "mini-css-extract-plugin": "^2.7.6",
+    "node-xlsx": "^0.23.0",
     "nodemon": "^3.0.1",
+    "npm-check-updates": "^16.13.1",
+    "odbc": "^2.4.8",
+    "path-browserify": "^1.0.1",
     "prettier": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.2",
+    "react-router-dom": "^6.16.0",
+    "redux": "^4.2.1",
     "rimraf": "^5.0.1",
+    "sass": "^1.66.1",
+    "sass-loader": "^13.3.2",
+    "slickgrid-react": "^3.2.1",
+    "style-loader": "^3.3.3",
+    "tabulator-tables": "^5.5.2",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typedoc": "^0.24.8",
     "typedoc-plugin-markdown": "^3.15.4",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "url": "^0.11.3",
+    "webpack": "^5.88.2",
+    "webpack-bundle-analyzer": "^4.9.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.9.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
     "utf-8-validate": "^6.0.3"
   },
   "dependencies": {
-    "balek": "0.0.3-pre",
+    "@svgr/webpack": "^8.1.0",
     "electron-store": "^8.1.0",
-    "express": "^4.18.2",
-    "googleapis": "^126.0.0",
-    "node-xlsx": "^0.23.0",
-    "npm-check-updates": "^16.13.1",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "styled-components": "^6.0.8",
+    "url-loader": "^4.1.1"
   },
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
       "html"
+    ]
+  },
+  "electronmon": {
+    "patterns": [
+      "!**/**",
+      "src/App/**"
+    ],
+    "logLevel": "quiet"
+  },
+  "build": {
+    "productName": "Dalchemist",
+    "appId": "org.coop-blake.dalchemist",
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
+    "files": [
+      "dist",
+      "node_modules",
+      "package.json",
+      "icon/*/**"
+    ],
+    "afterSign": "./building/scripts/notarize.js",
+    "mac": {
+      "icon": "./icon/Icon.icns",
+      "target": {
+        "target": "default",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "entitlements": "building/configs/entitlements.mac.plist",
+      "entitlementsInherit": "building/configs/entitlements.mac.plist",
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Development"
+    },
+    "directories": {
+      "app": "release/app",
+      "buildResources": "icon",
+      "output": "release/package"
+    },
+    "extraResources": [
+      {
+        "from": "./icon",
+        "to": "icon"
+      },
+      {
+        "from": "./src/Google/Inventory/CertAndLogs/googleCert.json",
+        "to": "./CertAndLogs/googleCert.json"
+      }
     ]
   }
 }

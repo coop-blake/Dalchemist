@@ -1,0 +1,44 @@
+export type NewItemInEnventory = {
+  ScanCode: string;
+
+  inventoryDefaultSupplier: string;
+  inventoryDepartment: string;
+  inventoryBrand: string;
+  inventoryName: string;
+  inventorySize: string;
+  inventoryReceiptAlias: string;
+  inventoryBasePrice: string;
+  inventoryLastCost: string;
+  inventoryAverageCost: string;
+  inventorySubDepartment: string;
+  inventoryIdealMargin: string;
+  inventoryQuantity: string;
+  inventoryUnit: string;
+  inventorySupplierUnitID: string;
+  inventoryCaseCost: string;
+
+  newItemDate: string;
+  newItemClient: string;
+  newItemScanCode: string;
+  newItemSupplier: string;
+  newItemSupplierItemID: string;
+  newItemBrand: string;
+  newItemName: string;
+  newItemUnit: string;
+  newItemSubDepartment: string;
+  newItemQuantity: string;
+  newItemCaseCost: string;
+  newItemUnitCost: string;
+  newItemMARGIN: string;
+  newItemShippingPercent: string;
+  newItemProposedPrice: string;
+  newItemBasePrice: string;
+  newItemDepartment: string;
+  newItemBottleDepositFlag: string;
+  newItemLocalDirectFlag: string;
+  newItemLocalSixFlag: string;
+  newItemLocalORFlag: string;
+  newItemOGFlag: string;
+  newItemFlipChartAddFlag: string;
+  newItemComments: string;
+};

@@ -1,13 +1,18 @@
 import { google, Auth, sheets_v4, drive_v3 } from "googleapis";
 import { BehaviorSubject, Observable } from "rxjs";
-import Settings from "../electron/Settings";
+import Settings from "../App/Settings";
 
-import * as path from "path";
+import path from "path";
 import * as fs from "fs";
 
-const includedCertPath = path.join(
+const includedCertDevPath = path.join(
   __dirname,
-  "Inventory/CertsAndLogs/googleCert.jsons"
+  "Inventory/CertAndLogs/googleCert.json"
+);
+
+const includedCertProdPath = path.join(
+  __dirname,
+  "../../../CertAndLogs/googleCert.json"
 );
 
 export class Google {
@@ -37,7 +42,6 @@ export class Google {
       version: "v3",
       auth: this.auth,
     });
-
   }
 
   static getInstanceFor(keyFilePath: string): Google {
@@ -54,14 +58,26 @@ export class Google {
     Google.loadedSubject.next(newLoaded);
   }
   static async loadServiceCert() {
-    if (fs.existsSync(includedCertPath)) {
-      console.log("We have an included cert!");
-      Google.getInstanceFor(includedCertPath);
+    if (fs.existsSync(includedCertDevPath)) {
+      console.log("We have a Dev included cert!");
+      Google.getInstanceFor(includedCertDevPath);
+    } else if (fs.existsSync(includedCertProdPath)) {
+      console.log("We have a Production included cert!");
+      Google.getInstanceFor(includedCertProdPath);
     } else {
+      console.log("We DONT have a Dev included cert!", includedCertDevPath);
+
+      console.log(
+        "WeDont have a Production included cert!",
+        includedCertProdPath
+      );
+
       const certPathToUse = (await Settings.loadJsonLocation()) as string;
 
       if (certPathToUse && fs.existsSync(certPathToUse)) {
         Google.getInstanceFor(certPathToUse);
+      } else {
+        throw Error("Cert Path in Settings Invalid");
       }
     }
   }
@@ -82,4 +98,9 @@ export class Google {
   }
 }
 
-Google.loadServiceCert();
+Google.loadServiceCert()
+  .then()
+  .catch((error: Error) => {
+    //todo Add a state and write errors to it
+    console.error(error);
+  });

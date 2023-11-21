@@ -1,8 +1,9 @@
-import { NewItemEntry, AttributeChangeEntry, AddDrop } from "./addDrop";
-import {
-  Inventory,
-  InventoryEntry,
-} from "../Inventory/Inventory";
+import { AddDrop } from "./addDrop";
+
+import { NewItemEntry, AttributeChangeEntry } from "./shared";
+
+import { Inventory } from "../Inventory/Inventory";
+import { InventoryEntry } from "../Inventory/shared";
 
 export function getIndex() {
   const newItems = AddDrop.state.newItems;

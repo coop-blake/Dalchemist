@@ -1,17 +1,20 @@
 {
-  "presets": ["@babel/preset-typescript",
-    ["@babel/preset-env", {
-      "modules": "auto", // Use "auto" to dynamically select module system
-      "targets": {
-        "node": "current"
+  "presets": [
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-env",
+      {
+        "modules": "auto", // Use "auto" to dynamically select module system
+        "targets": {
+          "node": "current"
+        }
       }
-    }]
+    ]
   ],
   "plugins": [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-class-properties",
+    "@babel/plugin-transform-object-rest-spread",
     "@babel/plugin-syntax-import-assertions",
     "@babel/plugin-transform-modules-commonjs"
-
   ]
 }

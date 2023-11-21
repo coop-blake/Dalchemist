@@ -95,8 +95,8 @@ async function start() {
     const SouthSoldDate = SouthInventoryImport.getEntryFromScanCode(
       entry.scanCode
     )?.southLastSoldDate;
-    let SouthDisco = SouthInventoryImport.getEntryFromScanCode(scanCode)
-      ?.invDiscontinued;
+    let SouthDisco =
+      SouthInventoryImport.getEntryFromScanCode(scanCode)?.invDiscontinued;
 
     SouthDisco = SouthDisco == "1" ? "🔴" : "🟢";
     valueArray.push(SouthSoldDate ? SouthSoldDate : "");
@@ -155,11 +155,12 @@ async function start() {
   console.log("Uploading Inventory Google Sheet");
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore 
+  // @ts-ignore
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "Inventory!A:T", //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
+    // valueInputOption: "RAW", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
       values: values,
     },
@@ -174,7 +175,7 @@ async function start() {
   });
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore 
+  // @ts-ignore
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
     range: "Status!B1", //sheet name and range of cells
@@ -187,7 +188,7 @@ async function start() {
   const logLines = await readLastLines(logFilePath, numLinesToRead);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore 
+  // @ts-ignore
 
   sheets.spreadsheets.values.update({
     spreadsheetId,
@@ -200,7 +201,7 @@ async function start() {
 }
 
 async function readLastLines(filePath: string, numLines: number) {
-  const lines : string[] = [];
+  const lines: string[] = [];
   const stream = fs.createReadStream(filePath, { encoding: "utf8" });
   let buffer = "";
 

@@ -1,0 +1,6 @@
+#inventoryTable{
+    position: relative;
+  z-index: 10000;
+  background: rgba(59, 44, 92, 0.5);
+  user-select: text;
+  }

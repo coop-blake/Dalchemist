@@ -27,7 +27,7 @@ northTextFileName = "North.txt"
 southQuery = "SELECT TRIM(inv_scancode) AS inv_scancode, TRIM(brd_name) AS brd_name, TRIM(inv_name) AS inv_name, TRIM(inv_size) AS inv_size, TRIM(inv_receiptalias) inv_receiptalias, inv_discontinued, pi1_description, TRIM(sto_number) AS sto_number, TRIM(dpt_name) AS dpt_name , TRIM(ord_supplierstocknumber) AS ord_supplierstocknumber, ROUND(sib_baseprice,2) AS sib_baseprice,  ord_quantityinorderunit, ROUND(inv_lastcost,2) AS inv_lastcost, ROUND(inv_averagecost,2) AS inv_averagecost, sib_idealmargin, TRIM(ven_companyname) AS ven_companyname, TRIM(oup_name) AS oup_name,  sil_lastsold FROM ecrs.v_InventoryMaster WHERE sto_number = 'RS1' AND NOT inv_scancode LIKE 'zz%' AND ( brd_name <> 'OPEN ITEM' OR brd_name IS NULL) AND dpt_name NOT IN ('18 SPECIAL EVENTS', '25 DEPOSITS / STORE USE', '30 MEMBERSHIP')"
 southTextFileName = "South.txt"
 ' Data Source name as set up in ODBC Data Sources
-dataSourceName = "Catapult Sybase"
+dataSourceName = "Prototype"
 Wscript.Echo "Getting Datasource:" & dataSourceName
 ' Attempt Connection
 Set connection = GetConnection(dataSourceName)

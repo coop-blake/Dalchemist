@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Input Dialog</title>
+</head>
+<style>
+  .scanCodeInput {
+    border: solid black 2px;
+  }
+</style>
+<body>
+  <label for="input-field">Enter Scan Codes:</label>
+  <input type="text" id="input-field" name="input" class="scanCodeInput" autofocus/>
+  <button id="submit-button">Submit</button>
+ 
+  <script>
+    
+  
+    const inputField = document.getElementById('input-field');
+    const submitButton = document.getElementById('submit-button');
+
+
+    function sendInput() {
+      const inputValue = inputField.value;
+      commands.searchInventory(inputValue)
+    }
+
+   submitButton.addEventListener('click', () => {
+      sendInput()
+    });
+    inputField.addEventListener('keydown', () => {
+      if(event.key === 'Enter'){
+        sendInput()
+      }
+    });
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+#alreadyItemsTable {
+  z-index: 10000;
+  user-select: text;
+}

@@ -25,8 +25,9 @@ class InventoryImporter extends TextImporter<InventoryEntry> {
     const values = line.split("\t");
     //Split lines into an array of values
     if (
-      this.lineCount == 1 &&
-      (values[0] == "Scan Code" || values[0] == "inv_scancode")
+      this.lineCount === 1 &&
+      (values[0].localeCompare("Scan Code") ||
+        values[0].localeCompare("inv_scancode"))
     ) {
       //       header line, don't process
     } else {

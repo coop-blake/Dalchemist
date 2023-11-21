@@ -1,14 +1,16 @@
 # Dalchemist
 
-A collection of Typescript modules for assiting POS Tasks that rely on data from Catapult, UNFI, and NCG.
+For assisting POS Tasks that rely on data from domain work specific data sources. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from a terminal or as automated tasks.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
+You will also need access to a terminal. Terminal commands are represented like `this` in the documentation.
 
-You will also need access to a terminal and web browser. Terminal commands are represented like `this` in the documentation.
+## ✨ Getting Started
 
-## Getting Started
-You will need the Dalchemist repository on the host. With [git](https://git-scm.com/downloads) installed you can this command in the terminal to clone the repository.
+### Download repository
+
+With [git](https://git-scm.com/downloads) installed you can run this command in the terminal to clone the repository.
 
 `git clone https://github.com/coop-blake/Dalchemist.git`
 
@@ -16,43 +18,73 @@ You could also download a [Zip file from github](https://github.com/coop-blake/D
 
 ### Install npm modules
 
-Open a terminal in the 📁**Dalchemist** directory then use _Node Package Manager_ to install the required package dependencies  
+Open a terminal in the 📁**Dalchemist** directory then use **Node Package Manager** to install the required package dependencies by entering
+
 `npm install`
 
-### Place your Data files
+## ![Icon](./Documentation/resources/terminal.svg) Terminal Interface
 
-Make sure you have the latest versions of your input data in the [Data](./Data/Readme.md) folder
+Commands available from the terminal that can be executed without the graphical user interface.
+
+### 🗒️ Generate File Outputs
+
+Some terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
+
+#### Place your Data files
+
+Make sure you have the latest versions of your input data in the [📁 Data](./Data/Readme.md) folder
 
 - Catapult Inventory and Price Worksheets
 - Core Cost Support
 - UNFI Pricebook and Pricechange
 
-## Generate File Outputs
+#### Generate Output
 
-To generate all output to the [**Outputs**](./Data/Outputs) 📁 in [**Data**](./Data)  📁:
+To generate all output to [**📁Data**](./Data) / [**📁Outputs**](./Data/Outputs) :
 
 `npm run outputAll`
 
 For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
-## Access through a web browser
+## ![Icon](./icon/icon32.png) Run the Desktop App
 
-To start a [localhost web server on port 4848](http://localhost:4848/)
+The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration or setup. Aside what is presented in the graphical interface.
 
-`npm run start`
+Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on various platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) Thanks! 🙏
 
-This will start all Data Proccessors and Generators which can take a moment or two to initialize.
+A google API service certificate is will need to be provided to load the data needed by the interface.
 
-See the [Services Documentation](./Documentation/Services.md) for more specific options
+The desktop app can be transpiled and ran in development mode using the following command.
 
-## Advanced usage and development
+`npm run start:App`
 
-[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug the above commands and more. Configured in the [__.vscode/launch.json__](./.vscode/launch.json) configuration file.
+You can also build a packaged Desktop App installer for Linux, Mac, or Windows.
 
-### Run the electron app
+`npm run package:App`
 
-`npm run electron`
+More details can be found in [📁 Documentation/](./Documentation)[📝 Application.md](./Documentation/Application.md)
+
+## 🌟 Advanced usage and development
+
+You are free to clone and develop this repository to fit your own needs.
+
+[Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug.  
+Repository includes a [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
+
+Below are some commands to get get you started.
 
 ### Build the development documentation
 
 `npm run docs`
+
+### Run tests
+
+`npm run test`
+
+### Cleaning Generated Files
+
+`npm run clean`
+
+### Cleaning Generated Files and node_modules folder
+
+`npm run clean:all`

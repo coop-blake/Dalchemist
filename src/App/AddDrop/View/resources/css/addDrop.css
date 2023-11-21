@@ -1,0 +1,112 @@
+.mainAddDrop {
+  padding: 0;
+}
+h4 {
+  padding-left: 10px;
+}
+h3 {
+  padding-left: 10px;
+}
+#alreadyInInventoryContainer {
+  display: hidden;
+}
+
+#addDropBody {
+  background: rgba(59, 44, 92, 0.2);
+}
+
+#DownloadButton {
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px;
+}
+#DownloadButton:hover {
+  text-shadow: 0 0 10px #00f; /* Blue glow */
+}
+
+h2 {
+  padding: none;
+  margin: none;
+  display: flex;
+
+  align-items: left;
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+
+  width: 100%;
+}
+
+#numberOfChangeItems {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+#numberOfNewItems {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.spanTitle {
+  padding-right: 20px;
+}
+
+.titleLine {
+  width: 100%;
+  border-top: solid black 2px;
+
+  padding: 0;
+  margin: 0;
+
+  margin-top: 15px;
+  float: left;
+}
+
+#newItemErrors {
+  padding-left: 0;
+  display: none;
+  background-color: rgb(221, 178, 219);
+  padding-top: 5px;
+}
+
+#newItemsDiv {
+  padding-top: 10px;
+  background: rgba(144, 238, 144, 0.514);
+  display: none;
+}
+
+#changeItemsDiv {
+  padding-top: 5px;
+  padding-bottom: 10px;
+
+  background: rgba(126, 165, 217, 0.529);
+  display: none;
+}
+
+#noItemsDiv {
+  color: black;
+  background: lightred;
+  display: none;
+}
+
+#loadingDiv {
+  color: black;
+  background: lightred;
+  display: block;
+}
+
+#priceChangeDiv {
+  display: none;
+}
+
+.CoreSetsMainDiv {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  justify-content: left;
+  background: rgb(175, 159, 184);
+  text-align: left;
+  cursor: auto;
+}
