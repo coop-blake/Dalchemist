@@ -1,6 +1,6 @@
 # Dalchemist
 
-For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from a terminal or as automated tasks.
+For assisting POS Tasks that rely on data from domain work specific data sources. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from a terminal or as automated tasks.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
@@ -28,7 +28,7 @@ Commands available from the terminal that can be executed without the graphical 
 
 ### 🗒️ Generate File Outputs
 
-Most of the terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
+Some terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
 
 #### Place your Data files
 
@@ -50,7 +50,7 @@ For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
 The Desktop App is intended to provide a packaged, end user interface that can be downloaded, installed and used without any additional configuration or setup. Aside what is presented in the graphical interface.
 
-Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on variouse platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) Thanks! 🙏
+Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on various platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) Thanks! 🙏
 
 A google API service certificate is will need to be provided to load the data needed by the interface.
 
@@ -66,7 +66,7 @@ More details can be found in [📁 Documentation/](./Documentation)[📝 Applica
 
 ## 🌟 Advanced usage and development
 
-You are free to clone and develop this repoistory to fit your own needs.
+You are free to clone and develop this repository to fit your own needs.
 
 [Visual Studio Code](https://code.visualstudio.com/Download) can be used to run and debug.  
 Repository includes a [**.vscode/launch.json**](./.vscode/launch.json) configuration file.
