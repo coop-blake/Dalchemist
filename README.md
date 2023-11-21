@@ -1,6 +1,6 @@
 # Dalchemist
 
-For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from the command line or as automated tasks.
+For assiting POS Tasks that rely on data from Catapult, UNFI, and NCG. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from a terminal or as automated tasks.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
@@ -10,7 +10,7 @@ You will also need access to a terminal. Terminal commands are represented like 
 
 ### Download repository
 
-With [git](https://git-scm.com/downloads) installed you can this command in the terminal to clone the repository.
+With [git](https://git-scm.com/downloads) installed you can run this command in the terminal to clone the repository.
 
 `git clone https://github.com/coop-blake/Dalchemist.git`
 
@@ -24,7 +24,7 @@ Open a terminal in the 📁**Dalchemist** directory then use **Node Package Mana
 
 ## ![Icon](./Documentation/resources/terminal.svg) Terminal Interface
 
-Some commands are available from the terminal and can be executed without the graphical user interface.
+Commands available from the terminal that can be executed without the graphical user interface.
 
 ### 🗒️ Generate File Outputs
 

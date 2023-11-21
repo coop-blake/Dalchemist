@@ -10,7 +10,7 @@ import {
 } from "./ipc";
 /**
  * Inventory
- * Singlton Instance with State that handles the Inventory Main Process for Electron
+ * Singleton Instance with State that handles the Inventory Main Process for Electron
  */
 export class Inventory {
   private static instance: Inventory;
@@ -54,7 +54,7 @@ export class Inventory {
       await DalchemistApp.awaitOnReady();
 
       const preloadPath = app.isPackaged
-        ? path.join(__dirname, "preloadCoreSets.js")
+        ? path.join(__dirname, "preloadInventory.js")
         : path.join(
             __dirname,
             "../../../build/Inventory/View/preloadInventory.js"
@@ -66,7 +66,7 @@ export class Inventory {
         height: 800,
         show: false,
         webPreferences: {
-          preload: preloadPath, // Load preload script for the input dialog
+          preload: preloadPath,
           contextIsolation: true,
           nodeIntegration: false,
         },
