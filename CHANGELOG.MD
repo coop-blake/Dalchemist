@@ -1,5 +1,10 @@
 # Dalchemist Change Log
 
+## Version 0.0.2a
+
+- Inventory window bug fixed (Window remained blank if opened after core sets)
+- Refactored for increased stability and efficiency
+
 ## Version 0.0.2
 
 - Integrated Elecron Builder
