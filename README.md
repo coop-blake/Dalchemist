@@ -52,9 +52,9 @@ The Desktop App is intended to provide a packaged, end user interface that can b
 
 Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on various platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/). Thanks! 🙏
 
-A google API service certificate is will need to be provided to load the data needed by the interface.
+A google API service certificate will need to be provided to load the data for the interface.
 
-The desktop app can be transpiled and ran in development mode using the following command.
+The desktop app can be transpiled and ran in debug/development mode using the following command.
 
 `npm run start:App`
 
