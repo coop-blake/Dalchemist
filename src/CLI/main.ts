@@ -1,8 +1,23 @@
 import { program } from "commander";
 import { testGoogle } from "./Google/Test";
+import { testPromos } from "./Promos/Test";
 
 program.description("Dalchemist command line interface").version("0.0.1");
 
+/**
+ * Promo Commands
+ */
+program
+  .command("promos:check")
+  .description("Check promos for consistency")
+  .action(() => {
+    console.log("Checking promos for consistency");
+    testPromos();
+  });
+
+/**
+ * Google Commands
+ */
 program
   .command("google:test <sheetID>")
   .description("Test the Google API on a sheetID")
