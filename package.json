@@ -53,6 +53,9 @@
     "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
     "googleCheck-addDrop": "babel-node -x .ts src/Google/Tests/addDrop.ts",
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
+    "build:google": "babel ./src --extensions '.js,.ts,.tsx' -d ./build/googleUpdater",
+    "build:googleUpdater": "babel ./src/Google/update-Inventory.ts --extensions '.js,.ts,.tsx' -d ./build/",
+    "package:googleUpdater": "pkg ./build/googleUpdate/src/Google/Inventory/odbc.js -o release/cli/googleUpdater",
     "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
     "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
   },
@@ -151,6 +154,7 @@
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
     "electron-store": "^8.1.0",
+    "pkg": "^5.8.1",
     "rxjs": "^7.8.1",
     "styled-components": "^6.0.8",
     "url-loader": "^4.1.1"
@@ -234,6 +238,13 @@
         "from": "./src/Google/Inventory/CertAndLogs/googleCert.json",
         "to": "./CertAndLogs/googleCert.json"
       }
+    ]
+  },
+  "pkg": {
+    "scripts": "./build/**/*.js",
+    "assets": [
+      "./src/Google/Inventory/CertAndLogs/googleCert.json",
+      "./src/Google/Inventory/*.vbs"
     ]
   }
 }
