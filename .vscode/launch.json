@@ -5,9 +5,10 @@
   "version": "0.2.0",
   "compounds": [
     {
-        "name": "🪛 Start Electron and Attach to Chrome",
-        "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
-    }],
+      "name": "🪛 Start Electron and Attach to Chrome",
+      "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
+    }
+  ],
   "configurations": [
     {
       "name": "✅ start:App",
@@ -31,7 +32,20 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start:cli", "google:test", "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"]
+      "runtimeArgs": [
+        "run-script",
+        "start:cli",
+        "google:test",
+        "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"
+      ]
+    },
+    {
+      "name": "✅ start:cli promos:check",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli", "promos:check"]
     },
     {
       "name": "🪛 Attach to Chrome",
@@ -40,7 +54,7 @@
       "type": "chrome",
       "webRoot": "${workspaceFolder}",
       "timeout": 10000
-     },
+    },
     {
       "name": "🤖Test-Importer-Sheet",
       "type": "node",
@@ -270,5 +284,4 @@
       "runtimeArgs": ["run-script", "googleUpdate-subDepartmentsReport"]
     }
   ]
-
 }

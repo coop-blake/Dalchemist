@@ -10,9 +10,10 @@ program.description("Dalchemist command line interface").version("0.0.1");
 program
   .command("promos:check")
   .description("Check promos for consistency")
-  .action(() => {
+  .action(async () => {
     console.log("Checking promos for consistency");
-    testPromos();
+    await testPromos();
+    console.log("Promo Check Complete");
   });
 
 /**
