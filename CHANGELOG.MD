@@ -13,6 +13,7 @@
 - Updated Google Inventory
 - Updated Package Scripts
 - Added CoreSets Electron Front End
+- Fixed high CPU usage on Idle CSS animation bug
 
 ## Version 0.0.1
 
