@@ -1,6 +1,6 @@
 import { google, Auth, sheets_v4, drive_v3 } from "googleapis";
 import { BehaviorSubject, Observable } from "rxjs";
-import Settings from "../App/Settings";
+//import Settings from "../App/Settings";
 
 import path from "path";
 import * as fs from "fs";
@@ -68,17 +68,17 @@ export class Google {
       console.log("We DONT have a Dev included cert!", includedCertDevPath);
 
       console.log(
-        "WeDont have a Production included cert!",
+        "We Dont have a Production included cert!",
         includedCertProdPath
       );
 
-      const certPathToUse = (await Settings.loadJsonLocation()) as string;
+      //   const certPathToUse = (await Settings.loadJsonLocation()) as string;
 
-      if (certPathToUse && fs.existsSync(certPathToUse)) {
-        Google.getInstanceFor(certPathToUse);
-      } else {
-        throw Error("Cert Path in Settings Invalid");
-      }
+      //   if (certPathToUse && fs.existsSync(certPathToUse)) {
+      //     Google.getInstanceFor(certPathToUse);
+      //   } else {
+      //     throw Error("Cert Path in Settings Invalid");
+      //   }
     }
   }
 

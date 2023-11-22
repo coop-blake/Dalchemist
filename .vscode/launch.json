@@ -18,6 +18,22 @@
       "runtimeArgs": ["run-script", "start:App"]
     },
     {
+      "name": "✅ start:cli",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli"]
+    },
+    {
+      "name": "✅ start:cli google:test",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli", "google:test", "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"]
+    },
+    {
       "name": "🪛 Attach to Chrome",
       "port": 9222,
       "request": "attach",
