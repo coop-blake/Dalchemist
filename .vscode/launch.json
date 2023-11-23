@@ -19,7 +19,7 @@
       "runtimeArgs": ["run-script", "start:App"]
     },
     {
-      "name": "✅ start:cli",
+      "name": "👾 start:cli",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -27,7 +27,7 @@
       "runtimeArgs": ["run-script", "start:cli"]
     },
     {
-      "name": "✅ start:cli google:test",
+      "name": "👾 start:cli google:test",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "name": "✅ start:cli promos:check",
+      "name": "👾 start:cli promos:check",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",

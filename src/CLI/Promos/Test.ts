@@ -56,10 +56,10 @@ function checkPromoItemPricing(promoEntries: PromoEntry[]) {
       promoEntries[0].ScanCode
     );
     promoEntries.forEach((promoEntry) => {
-      console.log(
-        `${item?.Brand} ${item?.Name} is on ${promoEntry.Worksheet} at ${promoEntry.Price}`
-      );
-      if (parseFloat(promoEntry.Price) > parseFloat(item?.BasePrice ?? "")) {
+      // console.log(
+      //   `${item?.Brand} ${item?.Name} is on ${promoEntry.Worksheet} at ${promoEntry.Price}`
+      // );
+      if (parseFloat(promoEntry.Price) >= parseFloat(item?.BasePrice ?? "")) {
         console.log("Bad Price");
         promoStatus.salesAreLessThenBase = false;
       }
@@ -67,4 +67,14 @@ function checkPromoItemPricing(promoEntries: PromoEntry[]) {
   }
 
   return promoStatus;
+}
+
+// function that checks if two date ranges overlap
+function checkDateRangeOverlap(a: PromoEntry, b: PromoEntry) {
+  const aStart = new Date(a.Start);
+  const aEnd = new Date(a.End);
+  const bStart = new Date(b.Start);
+  const bEnd = new Date(b.End);
+
+  return aStart <= bEnd && bStart <= aEnd;
 }
