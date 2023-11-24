@@ -48,6 +48,22 @@
       "runtimeArgs": ["run-script", "start:cli", "promos:check"]
     },
     {
+      "name": "👾 start:cli dumpToSheet",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "start:cli",
+        "dumpToSheet",
+        "./src/Google/inventory.sql",
+        "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk",
+        "Inventory",
+        "A:Z"
+      ]
+    },
+    {
       "name": "🪛 Attach to Chrome",
       "port": 9222,
       "request": "attach",

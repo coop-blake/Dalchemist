@@ -39,17 +39,38 @@ program
     }
   });
 
+/**
+ * Update Command
+ */
 program
-  .command("google:update")
-  .description("Retrieves Catapult data and updates the Google sheet")
-  .action(() => {
-    console.log(`Updating google sheet`);
+  .command("dumpToSheet <sqlFile> <sheetID> <sheetName> <sheetRange>")
+  .description("Test the Google API on a sheetID")
+  .action(async (sqlFile, sheetID, sheetName, sheetRange) => {
+    console.log(sheetID);
+
+    if (
+      !sheetID ||
+      sheetID === undefined ||
+      !sqlFile ||
+      sqlFile === undefined ||
+      !sheetName ||
+      sheetName === undefined ||
+      !sheetRange ||
+      sheetRange === undefined
+    ) {
+      console.error(
+        "Error: Missing arguments, expeting: dumpToSheet <sqlFile> <sheetID> <sheetName> <sheetRange>."
+      );
+      process.exit(1);
+    } else {
+      console.log(`Using ${sqlFile} to dump to : ${sheetID}
+      Into ${sheetName} at ${sheetRange}`);
+      try {
+        // await testGoogle(sheetID);
+      } catch (e) {
+        //console.log("Error: ");
+      }
+    }
   });
 
-program
-  .command("catapult:test")
-  .description("Tests Catapult connection")
-  .action(() => {
-    console.log(`Testing catapult connection`);
-  });
 program.parse(process.argv);
