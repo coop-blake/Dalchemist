@@ -2,6 +2,8 @@ import { program } from "commander";
 import { testGoogle } from "./Google/Test";
 import { testPromos } from "./Promos/Test";
 
+import { dumpToSheet } from "./Update/Update";
+
 program.description("Dalchemist command line interface").version("0.0.1");
 
 /**
@@ -43,12 +45,14 @@ program
  * Update Command
  */
 program
-  .command("dumpToSheet <sqlFile> <sheetID> <sheetName> <sheetRange>")
+  .command("dumpToSheet <DSN> <sqlFile> <sheetID> <sheetName> <sheetRange>")
   .description("Test the Google API on a sheetID")
-  .action(async (sqlFile, sheetID, sheetName, sheetRange) => {
+  .action(async (dsn, sqlFile, sheetID, sheetName, sheetRange) => {
     console.log(sheetID);
 
     if (
+      !dsn ||
+      dsn === undefined ||
       !sheetID ||
       sheetID === undefined ||
       !sqlFile ||
@@ -59,14 +63,14 @@ program
       sheetRange === undefined
     ) {
       console.error(
-        "Error: Missing arguments, expeting: dumpToSheet <sqlFile> <sheetID> <sheetName> <sheetRange>."
+        "Error: Missing arguments, expeting: dumpToSheet <DSN> <sqlFile> <sheetID> <sheetName> <sheetRange>."
       );
       process.exit(1);
     } else {
       console.log(`Using ${sqlFile} to dump to : ${sheetID}
       Into ${sheetName} at ${sheetRange}`);
       try {
-        // await testGoogle(sheetID);
+        await dumpToSheet(dsn, sqlFile, sheetID, sheetName, sheetRange);
       } catch (e) {
         //console.log("Error: ");
       }
