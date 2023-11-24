@@ -57,10 +57,10 @@
         "run-script",
         "start:cli",
         "dumpToSheet",
+        "Prototype",
         "./src/Google/inventory.sql",
         "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk",
-        "Inventory",
-        "A:Z"
+        "Inventory!A:T"
       ]
     },
     {

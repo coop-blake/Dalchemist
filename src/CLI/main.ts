@@ -45,9 +45,9 @@ program
  * Update Command
  */
 program
-  .command("dumpToSheet <DSN> <sqlFile> <sheetID> <sheetName> <sheetRange>")
+  .command("dumpToSheet <DSN> <sqlFile> <sheetID> <sheetRange>")
   .description("Test the Google API on a sheetID")
-  .action(async (dsn, sqlFile, sheetID, sheetName, sheetRange) => {
+  .action(async (dsn, sqlFile, sheetID, sheetRange) => {
     console.log(sheetID);
 
     if (
@@ -57,22 +57,28 @@ program
       sheetID === undefined ||
       !sqlFile ||
       sqlFile === undefined ||
-      !sheetName ||
-      sheetName === undefined ||
       !sheetRange ||
       sheetRange === undefined
     ) {
       console.error(
-        "Error: Missing arguments, expeting: dumpToSheet <DSN> <sqlFile> <sheetID> <sheetName> <sheetRange>."
+        "Error: Missing arguments, expeting: dumpToSheet <DSN> <sqlFile> <sheetID> <sheetRange>."
       );
       process.exit(1);
     } else {
       console.log(`Using ${sqlFile} to dump to : ${sheetID}
-      Into ${sheetName} at ${sheetRange}`);
+      Into ${sheetRange} `);
       try {
-        await dumpToSheet(dsn, sqlFile, sheetID, sheetName, sheetRange);
+        const success = await dumpToSheet(dsn, sqlFile, sheetID, sheetRange);
+        if (success) {
+          console.log("Successesful Dump");
+          process.exit(0);
+        } else {
+          console.log("Something Unexpected Happened");
+          process.exit(1);
+        }
       } catch (e) {
-        //console.log("Error: ");
+        console.log("Error: ", e);
+        process.exit(1);
       }
     }
   });

@@ -13,6 +13,8 @@ import checkNodeEnv from "../scripts/check-node-env";
 import deleteSourceMaps from "../scripts/delete-source-maps";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 
+import nodeExternals from "webpack-node-externals";
+
 checkNodeEnv("production");
 deleteSourceMaps();
 
@@ -24,29 +26,31 @@ const configuration: webpack.Configuration = {
   target: "node",
 
   entry: {
-    main: path.join(webpackPaths.srcCLIPath, "main.ts")
+    main: path.join(webpackPaths.srcCLIPath, "main.ts"),
   },
+  externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
+  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
 
   output: {
     path: webpackPaths.distCLIPath,
     filename: "[name].js",
     library: {
-      type: "umd"
-    }
+      type: "umd",
+    },
   },
 
   optimization: {
     minimizer: [
       new TerserPlugin({
-        parallel: true
-      })
-    ]
+        parallel: true,
+      }),
+    ],
   },
 
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === "true" ? "server" : "disabled",
-      analyzerPort: 8888
+      analyzerPort: 8888,
     }),
 
     /**
@@ -61,11 +65,11 @@ const configuration: webpack.Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: "production",
       DEBUG_PROD: false,
-      START_MINIMIZED: false
+      START_MINIMIZED: false,
     }),
 
     new webpack.DefinePlugin({
-      "process.type": '"browser"'
+      "process.type": '"browser"',
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -74,10 +78,10 @@ const configuration: webpack.Configuration = {
             webpackPaths.srcPath,
             "Google/Inventory/CertAndLogs/googleCert.json"
           ),
-          to: path.join(webpackPaths.distCLIPath, "googleCert.json")
-        }
-      ]
-    })
+          to: path.join(webpackPaths.distCLIPath, "googleCert.json"),
+        },
+      ],
+    }),
   ],
 
   /**
@@ -87,8 +91,8 @@ const configuration: webpack.Configuration = {
    */
   node: {
     __dirname: false,
-    __filename: false
-  }
+    __filename: false,
+  },
 };
 
 export default merge(baseConfig, configuration);

@@ -5,8 +5,9 @@
   "author": "Blake Glanville",
   "license": "BSD-3-Clause",
   "main": "./dist/main.js",
- 
-  "dependencies": {},
+  "dependencies": {
+    "odbc": "^2.4.8"
+  },
   "pkg": {
     "scripts": "./dist/**/*.js",
     "assets": [
