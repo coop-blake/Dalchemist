@@ -19,7 +19,7 @@ export async function testPromos(): Promise<boolean> {
     const timeoutId = setTimeout(() => {
       console.log("Could not load API");
       resolve(false);
-    }, 4000);
+    }, 10000);
 
     await Inventory.state.onLoaded();
     clearTimeout(timeoutId);
@@ -42,12 +42,15 @@ export async function testPromos(): Promise<boolean> {
     promoEntries.forEach((itemEntries) => {
       if (itemEntries.length > 1) {
         multipleItems++;
+      }
+
+      if (itemEntries.length === 1) {
         const item = inventoryImporter.getEntryFromScanCode(
           itemEntries[0].ScanCode
         );
         if (item) {
           const itemPromoStatus = checkPromoItemPricing(itemEntries);
-          if (itemPromoStatus.salesAreLessThenBase == false) {
+          if (itemPromoStatus.salesAreLessThenBase === false) {
             console.log(`${item.Name} Price is off`);
           }
         } else {
@@ -63,7 +66,9 @@ export async function testPromos(): Promise<boolean> {
 
 function checkPromoItemPricing(promoEntries: PromoEntry[]) {
   const promoStatus = {
-    salesAreLessThenBase: true
+    salesAreLessThenBase: true,
+    promoIsEqualToBase: false,
+    promoPriceConsitency: true,
   };
 
   if (promoEntries.length > 0) {
@@ -71,13 +76,42 @@ function checkPromoItemPricing(promoEntries: PromoEntry[]) {
       promoEntries[0].ScanCode
     );
     promoEntries.forEach((promoEntry) => {
+      const promoPrice = parseFloat(promoEntry.Price.replace("$", ""));
+      const basePrice = parseFloat(item?.BasePrice.replace("$", "") ?? "");
       // console.log(
       //   `${item?.Brand} ${item?.Name} is on ${promoEntry.Worksheet} at ${promoEntry.Price}`
       // );
-      if (parseFloat(promoEntry.Price) >= parseFloat(item?.BasePrice ?? "")) {
-        console.log("Bad Price");
+      if (promoPrice > basePrice) {
+        console.log(error("Bad Price"), promoPrice, basePrice);
+
         promoStatus.salesAreLessThenBase = false;
+      } else if (promoPrice === basePrice) {
+        if (promoEntry.Discount === "") {
+          console.log(
+            warn("Equal Price"),
+            promoPrice,
+            basePrice,
+            `${item?.Brand} ${item?.Name}`
+          );
+          promoStatus.promoIsEqualToBase = false;
+        }
       }
+
+      promoEntries.forEach((checkPromoEntry) => {
+        const checkPromoPrice = parseFloat(
+          checkPromoEntry.Price.replace("$", "")
+        );
+        if (checkPromoPrice !== promoPrice) {
+          console.log(
+            warn("Promo Inconsitency in Price"),
+            checkPromoPrice,
+            promoPrice,
+            basePrice,
+            `${item?.Brand} ${item?.Name}`
+          );
+          promoStatus.promoPriceConsitency = false;
+        }
+      });
     });
   }
 
