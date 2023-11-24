@@ -3,11 +3,14 @@ import * as fs from "fs";
 import * as path from "path";
 import odbc from "odbc";
 
+import { info, warn, error, good } from "../chalkStyles";
+
 export async function dumpToSheet(
   dsn: string,
   sqlFile: string,
   sheetID: string,
-  sheetRange: string
+  sheetRange: string,
+  googleCert: string
 ) {
   return new Promise((resolve) => {
     //Check that sqlFile exists relative to working dir
@@ -18,9 +21,10 @@ export async function dumpToSheet(
     //Read the Query
     const sqlQuery = fs.readFileSync(sqlFilePath, "utf8");
 
-    console.log("Read SQL, Connecting To Data Source");
+    console.log(info("Read SQL, Connecting To Data Source"));
     //Connect to Data Sourse
     odbc.connect(`DSN=${dsn}`, (error, connection) => {
+      console.log(good(`Requesting data with: \n ${sqlQuery}`));
       connection.query(sqlQuery, (error, result) => {
         if (error) {
           console.error(error);
@@ -29,6 +33,7 @@ export async function dumpToSheet(
         const header = Object.keys(result[0] as object);
 
         const data = result.map((row) => Object.values(row as Array<string>));
+        console.log(info(`Received ${data.length} rows of data:`));
         console.log(header);
 
         uploadArrayToSheet([header, ...data], sheetID, sheetRange).then(() => {

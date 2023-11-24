@@ -38,10 +38,9 @@ export class Inventory {
     Inventory.state = new InventoryState();
     Inventory.state.setStatus(InventoryStatus.Starting);
 
-    console.log("Strarting!");
     this.loadedSubscription = Google.getLoaded().subscribe(
       (loaded: string[]) => {
-        console.log("Inventory Got Loaded cert!", loaded);
+        //     console.log("Inventory Got Loaded cert!", loaded);
 
         if (this.googleInstance === null && loaded.length > 0) {
           this.googleInstance = Google.getInstanceFor(loaded[0]);

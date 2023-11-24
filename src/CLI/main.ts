@@ -46,15 +46,16 @@ program
  * Update Command
  */
 program
-  .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange>")
+  .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange> <googleCert>")
   .description("Query a DSN and dump the result to a sheet")
-  .action(async (dsn, sqlFile, sheetID, sheetRange) => {
+  .action(async (dsn, sqlFile, sheetID, sheetRange, googleCert) => {
     console.log(sheetID);
     console.log(info("Dumping DSN to Sheet"));
     console.log(info("DSN: ", dsn));
     console.log(info("SQL File: ", sqlFile));
     console.log(info("Sheet ID: ", sheetID));
     console.log(info("Sheet Range: ", sheetRange));
+    console.log(info("Google Cert: ", googleCert));
 
     if (
       !dsn ||
@@ -72,7 +73,13 @@ program
       process.exit(1);
     } else {
       try {
-        const success = await dumpToSheet(dsn, sqlFile, sheetID, sheetRange);
+        const success = await dumpToSheet(
+          dsn,
+          sqlFile,
+          sheetID,
+          sheetRange,
+          googleCert
+        );
         if (success) {
           console.log(good("Successesful Dump"));
           process.exit(0);

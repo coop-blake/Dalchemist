@@ -38,22 +38,22 @@ export class Google {
   private static loadedSubject = new BehaviorSubject<string[]>([]);
 
   private constructor(keyFilePath: string) {
-    console.log("Logging into Google with keyFilePath: " + keyFilePath);
+    //console.log("Logging into Google with keyFilePath: " + keyFilePath);
 
     this.auth = new google.auth.GoogleAuth({
       keyFilename: keyFilePath,
       // Scopes can be specified either as an array or as a single, space-delimited string.
-      scopes: ["https://www.googleapis.com/auth/drive"]
+      scopes: ["https://www.googleapis.com/auth/drive"],
     });
 
     this.sheets = google.sheets({
       version: "v4",
-      auth: this.auth
+      auth: this.auth,
     });
 
     this.drive = google.drive({
       version: "v3",
-      auth: this.auth
+      auth: this.auth,
     });
   }
 
