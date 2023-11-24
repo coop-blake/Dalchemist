@@ -23,7 +23,7 @@ const distPath = path.join(appPath, "dist");
 const distMainPath = path.join(distPath, "main");
 const distRendererPath = path.join(distPath, "renderer");
 
-const distCLIPath = path.join(releasePath, "cli");
+const distCLIPath = path.join(releasePath, "cli/dist");
 
 export default {
   rootPath,
@@ -42,20 +42,5 @@ export default {
   distPath,
   distMainPath,
   distCLIPath,
-  distRendererPath,
-  /*
-  dllPath,
-  srcPath,
-  srcMainPath,
-  srcRendererPath,
-  releasePath,
-  appPath,
-  appPackagePath,
-  appNodeModulesPath,
-  srcNodeModulesPath,
-  distPath,
-  distMainPath,
-  distRendererPath,
-  buildPath,
-  */
+  distRendererPath
 };

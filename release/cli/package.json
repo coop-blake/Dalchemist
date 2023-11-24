@@ -1,0 +1,16 @@
+{
+  "name": "dalchemist-electron",
+  "version": "0.0.2a",
+  "description": "Dalchemist Electron",
+  "author": "Blake Glanville",
+  "license": "BSD-3-Clause",
+  "main": "./dist/main.js",
+ 
+  "dependencies": {},
+  "pkg": {
+    "scripts": "./dist/**/*.js",
+    "assets": [
+      "./dist/googleCert.json"
+    ]
+  }
+}

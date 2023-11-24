@@ -13,7 +13,7 @@ src/Google/Inventory/fetches/
 .DS_Store
 
 release/package
-release/cli
+release/cli/dist
 build/
 dist/
 *.js

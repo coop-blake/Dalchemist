@@ -5,15 +5,28 @@ import { BehaviorSubject, Observable } from "rxjs";
 import path from "path";
 import * as fs from "fs";
 
+// Use __filename to get the current script file
+const scriptDir = path.dirname(__filename);
+
+// Use process.cwd() to get the current working directory
+const workingDir = process.cwd();
+
+//const scriptDir = __dirname;
+
+// Use process.cwd() to get the current working directory
+///const workingDir = __dirname;
+
 const includedCertDevPath = path.join(
-  __dirname,
+  scriptDir,
   "Inventory/CertAndLogs/googleCert.json"
 );
 
-const includedCertProdPath = path.join(
-  __dirname,
-  "../../../CertAndLogs/googleCert.json"
-);
+// const includedCertProdPath = path.join(
+//   workingDir,
+//   "../../../CertAndLogs/googleCert.json"
+// );
+
+const includedCertProdPath = path.join(scriptDir, "googleCert.json");
 
 export class Google {
   private static instances: { [keyFilePath: string]: Google } = {};
@@ -30,17 +43,17 @@ export class Google {
     this.auth = new google.auth.GoogleAuth({
       keyFilename: keyFilePath,
       // Scopes can be specified either as an array or as a single, space-delimited string.
-      scopes: ["https://www.googleapis.com/auth/drive"],
+      scopes: ["https://www.googleapis.com/auth/drive"]
     });
 
     this.sheets = google.sheets({
       version: "v4",
-      auth: this.auth,
+      auth: this.auth
     });
 
     this.drive = google.drive({
       version: "v3",
-      auth: this.auth,
+      auth: this.auth
     });
   }
 

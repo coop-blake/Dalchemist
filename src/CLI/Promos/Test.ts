@@ -4,6 +4,13 @@ import { Inventory } from "../../Google/Inventory/Inventory";
 
 import { Google } from "../../Google/google";
 
+import chalk from "chalk";
+
+// Use different colors for different log levels
+const info = chalk.blue;
+const warn = chalk.yellow;
+const error = chalk.red;
+
 const inventoryImporter = Inventory.getInstance();
 
 export async function testPromos(): Promise<boolean> {
@@ -21,8 +28,16 @@ export async function testPromos(): Promise<boolean> {
 
     const promoEntries = Promos.getInstance().promosByScancode;
     console.log(
-      `${promoEntries.size} inventory items from ${promos.length} promo entries`
+      info(
+        `${promoEntries.size} inventory items from ${promos.length} promo entries`
+      )
     );
+
+    const worksheets = Promos.getInstance().getWorksheets();
+    console.log(`${worksheets.length} worksheets`);
+    worksheets.forEach((worksheet) => {
+      console.log(worksheet);
+    });
 
     promoEntries.forEach((itemEntries) => {
       if (itemEntries.length > 1) {
@@ -48,7 +63,7 @@ export async function testPromos(): Promise<boolean> {
 
 function checkPromoItemPricing(promoEntries: PromoEntry[]) {
   const promoStatus = {
-    salesAreLessThenBase: true,
+    salesAreLessThenBase: true
   };
 
   if (promoEntries.length > 0) {

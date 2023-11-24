@@ -14,6 +14,7 @@ program
     console.log("Checking promos for consistency");
     await testPromos();
     console.log("Promo Check Complete");
+    process.exit(0);
   });
 
 /**
