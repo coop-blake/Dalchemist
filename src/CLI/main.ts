@@ -1,8 +1,9 @@
 import { program } from "commander";
 import { testGoogle } from "./Google/Test";
 import { testPromos } from "./Promos/Test";
-
 import { dumpToSheet } from "./Update/Update";
+
+import { info, warn, error } from "./chalkStyles";
 
 program.description("Dalchemist command line interface").version("0.0.1");
 
@@ -45,10 +46,15 @@ program
  * Update Command
  */
 program
-  .command("dumpToSheet <DSN> <sqlFile> <sheetID> <sheetRange>")
-  .description("Test the Google API on a sheetID")
+  .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange>")
+  .description("Query a DSN and dump the result to a sheet")
   .action(async (dsn, sqlFile, sheetID, sheetRange) => {
     console.log(sheetID);
+    console.log(info("Dumping DSN to Sheet"));
+    console.log(info("DSN: ", dsn));
+    console.log(info("SQL File: ", sqlFile));
+    console.log(info("Sheet ID: ", sheetID));
+    console.log(info("Sheet Range: ", sheetRange));
 
     if (
       !dsn ||
@@ -65,15 +71,13 @@ program
       );
       process.exit(1);
     } else {
-      console.log(`Using ${sqlFile} to dump to : ${sheetID}
-      Into ${sheetRange} `);
       try {
         const success = await dumpToSheet(dsn, sqlFile, sheetID, sheetRange);
         if (success) {
-          console.log("Successesful Dump");
+          console.log(good("Successesful Dump"));
           process.exit(0);
         } else {
-          console.log("Something Unexpected Happened");
+          console.log(error("Something Unexpected Happened"));
           process.exit(1);
         }
       } catch (e) {
