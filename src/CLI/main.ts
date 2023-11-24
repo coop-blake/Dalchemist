@@ -3,7 +3,7 @@ import { testGoogle } from "./Google/Test";
 import { testPromos } from "./Promos/Test";
 import { dumpToSheet } from "./Update/Update";
 
-import { info, warn, error } from "./chalkStyles";
+import { info, warn, error, good } from "./chalkStyles";
 
 program.description("Dalchemist command line interface").version("0.0.1");
 
@@ -81,7 +81,7 @@ program
           process.exit(1);
         }
       } catch (e) {
-        console.log("Error: ", e);
+        console.log(error(`Error: ${e}`));
         process.exit(1);
       }
     }
