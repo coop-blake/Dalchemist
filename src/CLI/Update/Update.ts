@@ -10,7 +10,7 @@ export async function dumpToSheet(
   sqlFile: string,
   sheetID: string,
   sheetRange: string,
-  googleCert: string
+  googleCert: string = ""
 ) {
   return new Promise((resolve) => {
     //Check that sqlFile exists relative to working dir
@@ -31,12 +31,15 @@ export async function dumpToSheet(
           resolve(false);
         }
         const header = Object.keys(result[0] as object);
-
         const data = result.map((row) => Object.values(row as Array<string>));
         console.log(info(`Received ${data.length} rows of data:`));
         console.log(header);
-
-        uploadArrayToSheet([header, ...data], sheetID, sheetRange).then(() => {
+        uploadArrayToSheet(
+          [header, ...data],
+          sheetID,
+          sheetRange,
+          googleCert
+        ).then(() => {
           resolve(true);
         });
       });
@@ -47,7 +50,8 @@ export async function dumpToSheet(
 async function uploadArrayToSheet(
   data: Array<Array<string>>,
   sheetID: string,
-  sheetRange: string
+  sheetRange: string,
+  googleCert: string = ""
 ) {
   //Take the result and dump it to the sheet
   return new Promise((resolve) => {
@@ -59,7 +63,8 @@ async function uploadArrayToSheet(
     Google.getLoaded().subscribe(async (loaded: string[]) => {
       clearTimeout(timeoutId);
 
-      const googleInstance = Google.getInstanceFor(loaded[0]);
+      googleCert = googleCert === "" ? loaded[0] : googleCert;
+      const googleInstance = Google.getInstanceFor(googleCert);
 
       // test googleInstance for sheets and drive
       if (googleInstance.getSheets() && googleInstance.getDrive()) {
@@ -71,7 +76,7 @@ async function uploadArrayToSheet(
         try {
           await sheets.spreadsheets.values.clear({
             spreadsheetId: sheetID, // spreadsheet id
-            range: sheetRange, //range of cells to read from.
+            range: sheetRange //range of cells to read from.
           });
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -80,8 +85,8 @@ async function uploadArrayToSheet(
             range: sheetRange, //sheet name and range of cells
             valueInputOption: "RAW", // The information will be passed according to what the usere passes in as date, number or text
             resource: {
-              values: data,
-            },
+              values: data
+            }
           });
           console.log(`Uploaded: ${data.length} Rows`);
 
