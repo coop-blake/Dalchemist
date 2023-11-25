@@ -34,6 +34,18 @@ export type AltIDEntry = {
   Quanity: string;
   ParentScanCode: string;
 };
+
+export type SupplierIDEntry = {
+  ScanCode: string;
+  Vendor: string;
+  SupplierItemID: string;
+  Unit: string;
+  UnitQuantity: string;
+  Quantity: string;
+  PrimaryFlag: string;
+  Default: string;
+  Discontinued: string;
+};
 export const AltIDEntryFromValueArray = function (
   valueArray: Array<string>
 ): AltIDEntry {
