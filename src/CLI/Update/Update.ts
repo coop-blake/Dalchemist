@@ -24,11 +24,17 @@ export async function dumpToSheet(
     console.log(info("Read SQL, Connecting To Data Source"));
     //Connect to Data Sourse
     odbc.connect(`DSN=${dsn}`, (error, connection) => {
+      if (error) {
+        console.error(error);
+        resolve(false);
+        return;
+      }
       console.log(good(`Requesting data with: \n ${sqlQuery}`));
       connection.query(sqlQuery, (error, result) => {
         if (error) {
           console.error(error);
           resolve(false);
+          return;
         }
         const header = Object.keys(result[0] as object);
         const data = result.map((row) => Object.values(row as Array<string>));
@@ -76,7 +82,7 @@ async function uploadArrayToSheet(
         try {
           await sheets.spreadsheets.values.clear({
             spreadsheetId: sheetID, // spreadsheet id
-            range: sheetRange //range of cells to read from.
+            range: sheetRange, //range of cells to read from.
           });
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -85,8 +91,8 @@ async function uploadArrayToSheet(
             range: sheetRange, //sheet name and range of cells
             valueInputOption: "RAW", // The information will be passed according to what the usere passes in as date, number or text
             resource: {
-              values: data
-            }
+              values: data,
+            },
           });
           console.log(`Uploaded: ${data.length} Rows`);
 

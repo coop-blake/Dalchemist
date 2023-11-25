@@ -46,7 +46,7 @@ program
  * Update Command
  */
 program
-  .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange> <googleCert>")
+  .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange> [googleCert]")
   .description("Query a DSN and dump the result to a sheet")
   .action(async (dsn, sqlFile, sheetID, sheetRange, googleCert) => {
     console.log(sheetID);
@@ -55,7 +55,7 @@ program
     console.log(info("SQL File: ", sqlFile));
     console.log(info("Sheet ID: ", sheetID));
     console.log(info("Sheet Range: ", sheetRange));
-    console.log(info("Google Cert: ", googleCert));
+    console.log(info("Google Cert: ", googleCert ? googleCert : "undefined"));
 
     if (
       !dsn ||
