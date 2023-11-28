@@ -84,6 +84,26 @@ export const PromoEntryFromValueArray = function (
   return entry;
 };
 
+export const SupplierIDEntryFromValueArray = function (
+  valueArray: Array<string>
+): SupplierIDEntry {
+  if (valueArray.length !== 9) {
+    valueArray = fillArrayWithEmptyStrings(9, valueArray);
+  }
+  const entry: SupplierIDEntry = {
+    ScanCode: valueArray[0].trim(),
+    Vendor: valueArray[1].trim(),
+    SupplierItemID: valueArray[2].trim(),
+    Unit: valueArray[3].trim(),
+    UnitQuantity: valueArray[4].trim(),
+    Quantity: valueArray[5].trim(),
+    PrimaryFlag: valueArray[6].trim(),
+    Default: valueArray[7].trim(),
+    Discontinued: valueArray[8].trim()
+  };
+  return entry;
+};
+
 function fillArrayWithEmptyStrings(num: number, arr: string[]): string[] {
   if (arr.length >= num) {
     return arr;

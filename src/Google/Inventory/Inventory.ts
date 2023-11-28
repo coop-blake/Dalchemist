@@ -2,7 +2,7 @@ import {
   BehaviorSubject,
   Observable,
   Subscription,
-  firstValueFrom,
+  firstValueFrom
 } from "rxjs";
 import {
   InventoryEntry,
@@ -11,8 +11,11 @@ import {
   AltIDEntryFromValueArray,
   PromoEntry,
   PromoEntryFromValueArray,
+  SupplierIDEntry,
+  SupplierIDEntryFromValueArray
 } from "./shared";
 import { Promos } from "./Promos";
+import { SupplierIDs } from "./SupplierIDs";
 import AltIDs from "./AltIDs";
 import { Google } from "../google";
 
@@ -25,20 +28,21 @@ export class Inventory {
   private inventoryItemsArray: InventoryEntry[] = [];
   private altIDsItemsArray: AltIDEntry[] = [];
   private promoItemsArray: PromoEntry[] = [];
+  private supplierIDsArray: SupplierIDEntry[] = [];
 
   static state: InventoryState;
 
   private loadedSubscription: Subscription; //unwatch in deconstructor
   private googleInstance: Google | null = null;
 
-  private spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA"; //acitive id
-  //  const spreadsheetId = "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"; //dev id
+  //private spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA"; //acitive id
+  private spreadsheetId = "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"; //dev id
 
   private constructor() {
     Inventory.state = new InventoryState();
     Inventory.state.setStatus(InventoryStatus.Starting);
 
-    console.log("Strarting!");
+    console.log("Starting!");
     this.loadedSubscription = Google.getLoaded().subscribe(
       (loaded: string[]) => {
         console.log("Inventory Got Loaded cert!", loaded);
@@ -52,6 +56,8 @@ export class Inventory {
   }
 
   public async refresh() {
+    console.log("Inventory refresh!");
+
     try {
       Inventory.state.setStatus(InventoryStatus.Running);
 
@@ -59,7 +65,7 @@ export class Inventory {
         const sheets = this.googleInstance.getSheets();
         const inventoryItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Inventory!A3:S50000`, // Adjust range as needed
+          range: `Inventory!A3:S50000` // Adjust range as needed
         });
 
         this.inventoryItemsArray = inventoryItemsResponse.data.values
@@ -71,7 +77,7 @@ export class Inventory {
 
         const altIDItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `AltIDs!A2:C5000`, // Adjust range as needed
+          range: `AltIDs!A2:C5000` // Adjust range as needed
         });
 
         this.altIDsItemsArray = altIDItemsResponse.data.values?.map(
@@ -82,7 +88,7 @@ export class Inventory {
 
         const promosResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Promos!A2:F9000`, // Adjust range as needed
+          range: `Promos!A2:F9000` // Adjust range as needed
         });
 
         this.promoItemsArray = promosResponse.data.values?.map((newItemData) =>
@@ -91,6 +97,18 @@ export class Inventory {
 
         const promos = Promos.getInstance();
         promos.loadPromosFrom(this.promoItemsArray);
+
+        const supplierIDsResponse = await sheets.spreadsheets.values.get({
+          spreadsheetId: this.spreadsheetId,
+          range: `SupplierIDs!A2:I50000` // Adjust range as needed
+        });
+
+        this.supplierIDsArray = supplierIDsResponse.data.values?.map(
+          (supplierIDRow) => SupplierIDEntryFromValueArray(supplierIDRow)
+        ) as [SupplierIDEntry];
+
+        const supplierIDs = SupplierIDs.getInstance();
+        supplierIDs.loadSuplierIDsFrom(this.supplierIDsArray);
 
         Inventory.state.setLastRefreshCompleted(Date.now());
 
@@ -185,7 +203,7 @@ const entryFromValueArray = function (
     SouthLSD: valueArray[18].trim(),
 
     //All values as array as received
-    valuesArray: valueArray,
+    valuesArray: valueArray
   };
   return entry;
 };

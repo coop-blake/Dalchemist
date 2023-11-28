@@ -43,7 +43,7 @@ export class AddDrop {
               day: "numeric",
               hour: "2-digit",
               minute: "2-digit",
-              second: "2-digit",
+              second: "2-digit"
             });
             console.log(`Inventory Updated changed: ${formattedDate}`);
             this.refresh();
@@ -62,7 +62,7 @@ export class AddDrop {
         //Read data from New Items Tab
         const newItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `New Items!A3:Y300`, // Adjust range as needed
+          range: `New Items!A3:Y300` // Adjust range as needed
         });
 
         const newItems = newItemsResponse.data.values
@@ -86,6 +86,15 @@ export class AddDrop {
           }) as [[NewItemEntry, InventoryEntry]];
         AddDrop.state.setItemsAlreadyInInventory(itemsAlreadyInInventory ?? []);
 
+        const supplierIDsAlreadyInInventory = newItems?.map((newItem) => {
+          const supplierEntryToCheckID = newItem?.SupplierItemID
+            ? newItem?.SupplierItemID
+            : "";
+          const supplierEntryToCheckSupplier = newItem?.Supplier
+            ? newItem?.Supplier
+            : "";
+        });
+
         /*###################################################################################
 # Process Attribute Updates
 #####################################################################################*/
@@ -94,7 +103,7 @@ export class AddDrop {
 
         const attributeChangesResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Price & Attribute Changes!A3:AC300`, // Adjust range as needed
+          range: `Price & Attribute Changes!A3:AC300` // Adjust range as needed
         });
         const attributeChangeItems = attributeChangesResponse.data.values
           ?.map((attributeChangeItem) =>
@@ -113,22 +122,22 @@ export class AddDrop {
             containsAny(attributeChange?.ChangeOne ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeTwo ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeThree ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ]) ||
             containsAny(attributeChange?.ChangeFour ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only",
+              "Cost Change Only"
             ])
           );
         }) as [AttributeChangeEntry];
@@ -272,7 +281,7 @@ export const newItemEntryFromValueArray = function (
       Comments: valueArray[23].trim() ?? "",
 
       //All values as array as receive
-      valuesArray: valueArray,
+      valuesArray: valueArray
     };
     return entry;
   }
@@ -317,7 +326,7 @@ export const attributeChangeEntryFromValueArray = function (
       BestDateForPriceChange: valueArray[27].trim() ?? "",
       BestTimeForPriceChange: valueArray[28].trim() ?? "",
 
-      valuesArray: valueArray,
+      valuesArray: valueArray
     };
     return entry;
   }

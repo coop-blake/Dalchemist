@@ -1,12 +1,12 @@
-import { SupplierEntry } from "./shared";
+import { SupplierIDEntry } from "./shared";
 export class SupplierIDs {
   private static instance: SupplierIDs;
 
-  private supplierIdsByScanCode = new Map<string, Array<SupplierEntry>>();
+  private supplierIdsByScanCode = new Map<string, Array<SupplierIDEntry>>();
 
   private vendors: Array<string> = [];
   private constructor() {}
-  public loadSuplierIDsFrom(supplierIDs: Array<SupplierEntry>) {
+  public loadSuplierIDsFrom(supplierIDs: Array<SupplierIDEntry>) {
     supplierIDs.forEach((supplierIDEntry) => {
       this.setVendorForItem(supplierIDEntry);
       if (!this.vendors.includes(supplierIDEntry.Vendor)) {
@@ -19,19 +19,19 @@ export class SupplierIDs {
     return this.vendors;
   }
 
-  get supplierIDsByScancode(): Map<string, Array<SupplierEntry>> {
+  get supplierIDsByScancode(): Map<string, Array<SupplierIDEntry>> {
     return this.supplierIdsByScanCode;
   }
 
   getSupplierIDsForItemBy(ScanCode: string) {
     let supplierIDEntries = this.supplierIdsByScanCode.get(ScanCode);
     if (supplierIDEntries === undefined) {
-      supplierIDEntries = new Array<SupplierEntry>();
+      supplierIDEntries = new Array<SupplierIDEntry>();
     }
     return supplierIDEntries;
   }
 
-  setVendorForItem(supplierIDEntry: SupplierEntry) {
+  setVendorForItem(supplierIDEntry: SupplierIDEntry) {
     const promos = this.getSupplierIDsForItemBy(supplierIDEntry.ScanCode);
     promos.push(supplierIDEntry);
     this.supplierIdsByScanCode.set(supplierIDEntry.ScanCode, promos);
