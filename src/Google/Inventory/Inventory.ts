@@ -2,7 +2,7 @@ import {
   BehaviorSubject,
   Observable,
   Subscription,
-  firstValueFrom
+  firstValueFrom,
 } from "rxjs";
 import {
   InventoryEntry,
@@ -12,7 +12,7 @@ import {
   PromoEntry,
   PromoEntryFromValueArray,
   SupplierIDEntry,
-  SupplierIDEntryFromValueArray
+  SupplierIDEntryFromValueArray,
 } from "./shared";
 import { Promos } from "./Promos";
 import { SupplierIDs } from "./SupplierIDs";
@@ -65,7 +65,7 @@ export class Inventory {
         const sheets = this.googleInstance.getSheets();
         const inventoryItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Inventory!A3:S50000` // Adjust range as needed
+          range: `Inventory!A3:S50000`, // Adjust range as needed
         });
 
         this.inventoryItemsArray = inventoryItemsResponse.data.values
@@ -77,7 +77,7 @@ export class Inventory {
 
         const altIDItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `AltIDs!A2:C5000` // Adjust range as needed
+          range: `AltIDs!A2:C5000`, // Adjust range as needed
         });
 
         this.altIDsItemsArray = altIDItemsResponse.data.values?.map(
@@ -88,7 +88,7 @@ export class Inventory {
 
         const promosResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Promos!A2:F9000` // Adjust range as needed
+          range: `Promos!A2:F9000`, // Adjust range as needed
         });
 
         this.promoItemsArray = promosResponse.data.values?.map((newItemData) =>
@@ -100,7 +100,7 @@ export class Inventory {
 
         const supplierIDsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `SupplierIDs!A2:I50000` // Adjust range as needed
+          range: `SupplierIDs!A2:I50000`, // Adjust range as needed
         });
 
         this.supplierIDsArray = supplierIDsResponse.data.values?.map(
@@ -108,7 +108,7 @@ export class Inventory {
         ) as [SupplierIDEntry];
 
         const supplierIDs = SupplierIDs.getInstance();
-        supplierIDs.loadSuplierIDsFrom(this.supplierIDsArray);
+        supplierIDs.loadSupplierIDsFrom(this.supplierIDsArray);
 
         Inventory.state.setLastRefreshCompleted(Date.now());
 
@@ -203,7 +203,7 @@ const entryFromValueArray = function (
     SouthLSD: valueArray[18].trim(),
 
     //All values as array as received
-    valuesArray: valueArray
+    valuesArray: valueArray,
   };
   return entry;
 };

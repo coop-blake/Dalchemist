@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 //import "../../Main/View/resources/css/slickGrid.scss";
 import { useAppSelector } from "../../Main/View/hooks";
-import { selectNewItemsInInventory } from "../View/AddDropSlice";
+import {
+  selectNewItemsInInventory,
+  selectNewItemsInInventoryWithSupplierID,
+} from "../View/AddDropSlice";
 
 import {
   CellComponent,
@@ -17,14 +20,17 @@ import "./resources/css/new-items-already-table.css";
 
 export default function NewItemsInInventoryTable() {
   const items = useAppSelector(selectNewItemsInInventory);
+  const supplierIdItems = useAppSelector(
+    selectNewItemsInInventoryWithSupplierID
+  );
 
   const [table, setTable] = useState<Tabulator | null>(null);
-  const [data] = useState<NewItemInEnventory[]>([]);
+  const [data] = useState<NewItemInInventory[]>([]);
 
   useEffect(() => {
     data.splice(0);
     items.forEach((item) => {
-      data.push({ ...item } as NewItemInEnventory);
+      data.push({ ...item } as NewItemInInventory);
     });
 
     console.log("newItemsInInventoryDataUpdated", data);
@@ -32,7 +38,18 @@ export default function NewItemsInInventoryTable() {
     dataUpdated(data);
   }, [items]);
 
-  function dataUpdated(data: NewItemInEnventory[] = []) {
+  useEffect(() => {
+    data.splice(0);
+    supplierIdItems.forEach((item) => {
+      console.log("item", item);
+    });
+
+    console.log("newItemsInInventoryDataUpdated", data);
+
+    //dataUpdated(data);
+  }, [supplierIdItems]);
+
+  function dataUpdated(data: NewItemInInventory[] = []) {
     console.log("inventoryDataUpdated", data);
 
     if (data.length > 0) {
@@ -308,7 +325,7 @@ export function styleFormatter(
   return cell.getValue() as string;
 }
 
-type NewItemInEnventory = {
+type NewItemInInventory = {
   ScanCode: string;
 
   inventoryDefaultSupplier: string;

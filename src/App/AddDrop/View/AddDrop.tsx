@@ -9,6 +9,8 @@ import {
   selectLastRefresh,
   setNewItemsInInventory,
   selectNewItemsInInventory,
+  selectNewItemsInInventoryWithSupplierID,
+  setItemsAlreadyInInventoryWithSupplierID,
   setAttributeChanges,
   setPriceUpdates,
 } from "../View/AddDropSlice";
@@ -20,7 +22,7 @@ import {
 
 import { AddDropStatus } from "../../../Google/addDrop/shared";
 import { InventoryEntry } from "../../../Google/Inventory/Inventory";
-
+import { SupplierIDEntry } from "../../../Google/Inventory/shared";
 import { LoadingAnimation } from "../../UI/Loading/LoadingAnimation";
 
 import { formatTimestampToMinute } from "../../Utility";
@@ -49,6 +51,9 @@ export default function AddDropView() {
   const newItems = useAppSelector(selectNewItems);
   const lastRefresh = useAppSelector(selectLastRefresh);
   const newItemsInInventory = useAppSelector(selectNewItemsInInventory);
+  const newItemsInInventoryWithSupplierID = useAppSelector(
+    selectNewItemsInInventoryWithSupplierID
+  );
 
   const [subView, setSubView] = useState(SubView.NewItems);
 
@@ -93,9 +98,10 @@ export default function AddDropView() {
                 setSubView(SubView.PriceUpdates);
               }}
             />
-            {newItemsInInventory.length > 0 && (
+            {(newItemsInInventory.length > 0 ||
+              newItemsInInventoryWithSupplierID.length > 0) && (
               <Button
-                name={`Invalid New Items ${newItemsInInventory.length}`}
+                name={`Invalid New Items ${newItemsInInventory.length} Scan Codes: ${newItemsInInventoryWithSupplierID.length} Supplier IDs`}
                 icon={alertIcon}
                 active={subView === SubView.InvalidNewItems}
                 onClick={() => {
@@ -159,6 +165,26 @@ window.addDrop.ipcRenderer.on(
       lastAddDropLastRefresh
     )}`;
     store.dispatch(setLastRefresh(lastAddDropLastRefresh));
+  }
+);
+
+window.addDrop.ipcRenderer.on(
+  "itemsAlreadyInInventoryWithSupplierID",
+  (
+    newItemsInInventoryWithSupplierIDsArray: Array<
+      [NewItemEntry, SupplierIDEntry, InventoryEntry]
+    >
+  ) => {
+    console.log(
+      "itemsAlreadyInInventoryWithSupplierID",
+      newItemsInInventoryWithSupplierIDsArray
+    );
+
+    store.dispatch(
+      setItemsAlreadyInInventoryWithSupplierID(
+        newItemsInInventoryWithSupplierIDsArray
+      )
+    );
   }
 );
 

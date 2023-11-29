@@ -6,6 +6,8 @@ import { AttributeChangeEntry, NewItemEntry, AddDropStatus } from "./shared";
 
 import { Inventory } from "../Inventory/Inventory";
 import { InventoryEntry } from "../Inventory/shared";
+import { SupplierIDs } from "../Inventory/SupplierIDs";
+import { SupplierIDEntry } from "../Inventory/shared";
 
 export class AddDrop {
   private static instance: AddDrop;
@@ -43,7 +45,7 @@ export class AddDrop {
               day: "numeric",
               hour: "2-digit",
               minute: "2-digit",
-              second: "2-digit"
+              second: "2-digit",
             });
             console.log(`Inventory Updated changed: ${formattedDate}`);
             this.refresh();
@@ -62,7 +64,7 @@ export class AddDrop {
         //Read data from New Items Tab
         const newItemsResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `New Items!A3:Y300` // Adjust range as needed
+          range: `New Items!A3:Y300`, // Adjust range as needed
         });
 
         const newItems = newItemsResponse.data.values
@@ -86,14 +88,42 @@ export class AddDrop {
           }) as [[NewItemEntry, InventoryEntry]];
         AddDrop.state.setItemsAlreadyInInventory(itemsAlreadyInInventory ?? []);
 
-        const supplierIDsAlreadyInInventory = newItems?.map((newItem) => {
-          const supplierEntryToCheckID = newItem?.SupplierItemID
-            ? newItem?.SupplierItemID
-            : "";
-          const supplierEntryToCheckSupplier = newItem?.Supplier
-            ? newItem?.Supplier
-            : "";
-        });
+        const supplierIDs = SupplierIDs.getInstance();
+
+        const supplierIDsAlreadyInInventory = newItems
+          ?.map((newItem) => {
+            const supplierEntryToCheckID = newItem?.SupplierItemID
+              ? newItem?.SupplierItemID
+              : "";
+            const supplierEntryToCheckVendor = newItem?.Supplier
+              ? newItem?.Supplier
+              : "";
+
+            const vendorIds = supplierIDs.getSupplierIdsForVendor(
+              supplierEntryToCheckVendor
+            );
+
+            const supplierIDEntry = vendorIds.get(supplierEntryToCheckID);
+
+            const inventoryItem = Inventory.getInstance().getEntryFromScanCode(
+              supplierIDEntry?.ScanCode ? supplierIDEntry?.ScanCode : ""
+            );
+
+            return supplierIDEntry === undefined
+              ? null
+              : [newItem, supplierIDEntry, inventoryItem];
+          })
+          .filter((unavailableSupplierIdItem) => {
+            return unavailableSupplierIdItem ?? false;
+          }) as [[NewItemEntry, SupplierIDEntry, InventoryEntry]];
+
+        console.log(
+          "supplierIDsAlreadyInInventory",
+          supplierIDsAlreadyInInventory
+        );
+        AddDrop.state.setItemsAlreadyInInventoryWithSupplierIDs(
+          supplierIDsAlreadyInInventory ?? []
+        );
 
         /*###################################################################################
 # Process Attribute Updates
@@ -103,7 +133,7 @@ export class AddDrop {
 
         const attributeChangesResponse = await sheets.spreadsheets.values.get({
           spreadsheetId: this.spreadsheetId,
-          range: `Price & Attribute Changes!A3:AC300` // Adjust range as needed
+          range: `Price & Attribute Changes!A3:AC300`, // Adjust range as needed
         });
         const attributeChangeItems = attributeChangesResponse.data.values
           ?.map((attributeChangeItem) =>
@@ -122,22 +152,22 @@ export class AddDrop {
             containsAny(attributeChange?.ChangeOne ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeTwo ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeThree ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ]) ||
             containsAny(attributeChange?.ChangeFour ?? "", [
               "Price & Cost Change",
               "Price Change Only",
-              "Cost Change Only"
+              "Cost Change Only",
             ])
           );
         }) as [AttributeChangeEntry];
@@ -222,6 +252,30 @@ export class AddDropState {
     this.itemsAlreadyInInventorySubject.next(itemsAlreadyInInventory);
   }
 
+  private itemsAlreadyInInventoryWithSupplierIDsSubject = new BehaviorSubject<
+    [NewItemEntry, SupplierIDEntry, InventoryEntry][]
+  >([]);
+
+  public get itemsAlreadyInInventoryWithSupplierIDs(): [
+    NewItemEntry,
+    SupplierIDEntry,
+    InventoryEntry,
+  ][] {
+    return this.itemsAlreadyInInventoryWithSupplierIDsSubject.getValue();
+  }
+  public get itemsAlreadyInInventoryWithSupplierIDs$(): Observable<
+    [NewItemEntry, SupplierIDEntry, InventoryEntry][]
+  > {
+    return this.itemsAlreadyInInventoryWithSupplierIDsSubject.asObservable();
+  }
+  public setItemsAlreadyInInventoryWithSupplierIDs(
+    itemsAlreadyInInventory: [NewItemEntry, SupplierIDEntry, InventoryEntry][]
+  ) {
+    this.itemsAlreadyInInventoryWithSupplierIDsSubject.next(
+      itemsAlreadyInInventory
+    );
+  }
+
   public get attributeChangeItems(): AttributeChangeEntry[] {
     return this.attributeChangeItemsSubject.getValue();
   }
@@ -281,7 +335,7 @@ export const newItemEntryFromValueArray = function (
       Comments: valueArray[23].trim() ?? "",
 
       //All values as array as receive
-      valuesArray: valueArray
+      valuesArray: valueArray,
     };
     return entry;
   }
@@ -326,7 +380,7 @@ export const attributeChangeEntryFromValueArray = function (
       BestDateForPriceChange: valueArray[27].trim() ?? "",
       BestTimeForPriceChange: valueArray[28].trim() ?? "",
 
-      valuesArray: valueArray
+      valuesArray: valueArray,
     };
     return entry;
   }

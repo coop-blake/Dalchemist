@@ -1,4 +1,4 @@
-export type NewItemInEnventory = {
+export type NewItemInInventory = {
   ScanCode: string;
 
   inventoryDefaultSupplier: string;

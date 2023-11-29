@@ -32,6 +32,10 @@ export const sendAddDropData = async () => {
       GoogleAddDrop.state.itemsAlreadyInInventory
     );
     addDropWindow.webContents.send(
+      "itemsAlreadyInInventoryWithSupplierID",
+      GoogleAddDrop.state.itemsAlreadyInInventoryWithSupplierIDs
+    );
+    addDropWindow.webContents.send(
       "attributeChangeItems",
       GoogleAddDrop.state.attributeChangeItems
     );

@@ -6,7 +6,12 @@ import {
   AttributeChangeEntry,
 } from "../../../Google/addDrop/shared";
 
-import { NewItemInEnventory } from "./shared";
+import {
+  SupplierIDEntry,
+  InventoryEntry,
+} from "../../../Google/Inventory/shared";
+
+import { NewItemInInventory } from "./shared";
 
 // Define a type for the slice state
 interface AddDropState {
@@ -14,7 +19,10 @@ interface AddDropState {
   NewItems: Array<NewItemEntry>;
   AttributeChanges: Array<AttributeChangeEntry>;
   lastRefresh: number;
-  newItemsInInventory: Array<NewItemInEnventory>;
+  newItemsInInventory: Array<NewItemInInventory>;
+  itemsAlreadyInInventoryWithSupplierID: Array<
+    [NewItemEntry, SupplierIDEntry, InventoryEntry]
+  >;
   priceUpdates: Array<AttributeChangeEntry>;
 }
 
@@ -25,6 +33,7 @@ const initialState: AddDropState = {
   AttributeChanges: [],
   lastRefresh: 0,
   newItemsInInventory: [],
+  itemsAlreadyInInventoryWithSupplierID: [],
   priceUpdates: [],
 };
 
@@ -52,9 +61,17 @@ export const addDropSlice = createSlice({
     },
     setNewItemsInInventory: (
       state,
-      action: PayloadAction<Array<NewItemInEnventory>>
+      action: PayloadAction<Array<NewItemInInventory>>
     ) => {
       state.newItemsInInventory = action.payload;
+    },
+    setItemsAlreadyInInventoryWithSupplierID: (
+      state,
+      action: PayloadAction<
+        Array<[NewItemEntry, SupplierIDEntry, InventoryEntry]>
+      >
+    ) => {
+      state.itemsAlreadyInInventoryWithSupplierID = action.payload;
     },
     setPriceUpdates: (
       state,
@@ -71,6 +88,7 @@ export const {
   setAttributeChanges,
   setLastRefresh,
   setNewItemsInInventory,
+  setItemsAlreadyInInventoryWithSupplierID,
   setPriceUpdates,
 } = addDropSlice.actions;
 
@@ -84,6 +102,9 @@ export const selectLastRefresh = (state: RootState) =>
 
 export const selectNewItemsInInventory = (state: RootState) =>
   state.AddDrop.newItemsInInventory;
+
+export const selectNewItemsInInventoryWithSupplierID = (state: RootState) =>
+  state.AddDrop.itemsAlreadyInInventoryWithSupplierID;
 
 export const selectPriceUpdates = (state: RootState) =>
   state.AddDrop.priceUpdates;

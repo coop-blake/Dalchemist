@@ -7,6 +7,7 @@ export type Channels =
   | "newItemsArray"
   | "addDropDataLastReload"
   | "itemsAlreadyInInventory"
+  | "itemsAlreadyInInventoryWithSupplierID"
   | "attributeChangeItems"
   | "priceUpdates"
   | "addDropWindowMessage"
