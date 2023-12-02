@@ -300,22 +300,26 @@ export default function NewItemsInInventoryTable() {
     }
   }
 
-  const itemTableStyle = {bottom:supplierIdItems.length > 0 ? "50%" : "0" }
+  const itemTableStyle = { bottom: supplierIdItems.length > 0 ? "50%" : "0" };
   return !(items.length > 0) ? (
     ""
   ) : (
     <>
-      <div id="alreadyItemsTable" className="add-drop-table" style={itemTableStyle} />
-      <div style={{position: "absolute", bottom: "0"}}>  
-     
-            {supplierIdItems.map(([newItemEntry, supplierIDEntry, currentItemEntry ]) => {
-              console.log("newItemEntry", newItemEntry);
-             return <div>{`${newItemEntry.Supplier} ${newItemEntry.SupplierItemID}`}</div>
-            })}
-
-
-            
-</div>
+      <div
+        id="alreadyItemsTable"
+        className="add-drop-table"
+        style={itemTableStyle}
+      />
+      <div style={{ position: "absolute", bottom: "0" }}>
+        {supplierIdItems.map(
+          ([newItemEntry, supplierIDEntry, currentItemEntry]) => {
+            console.log("newItemEntry", newItemEntry);
+            return (
+              <div>{`${newItemEntry.Supplier} ${newItemEntry.SupplierItemID} Already used in ${currentItemEntry.Brand} ${currentItemEntry.Name} ${currentItemEntry.Size} ${newItemEntry.ScanCode}`}</div>
+            );
+          }
+        )}
+      </div>
     </>
   );
 }
