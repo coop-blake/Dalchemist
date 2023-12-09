@@ -89,7 +89,7 @@ async function uploadArrayToSheet(
           await sheets.spreadsheets.values.update({
             spreadsheetId: sheetID, //spreadsheet id
             range: sheetRange, //sheet name and range of cells
-            valueInputOption: "RAW", // The information will be passed according to what the usere passes in as date, number or text
+            valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
             resource: {
               values: data,
             },
