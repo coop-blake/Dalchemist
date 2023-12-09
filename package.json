@@ -247,7 +247,7 @@
   "pkg": {
     "scripts": "./release/cli/**/*.js",
     "assets": [
-      "./release/cli/googleCert.json"
+      "./release/cli/*.json"
     ]
   }
 }
