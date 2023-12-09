@@ -71,17 +71,17 @@ const configuration: webpack.Configuration = {
     new webpack.DefinePlugin({
       "process.type": '"browser"',
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.join(
-            webpackPaths.srcPath,
-            "Google/Inventory/CertAndLogs/googleCert.json"
-          ),
-          to: path.join(webpackPaths.distCLIPath, "googleCert.json"),
-        },
-      ],
-    }),
+    // new CopyWebpackPlugin({
+    //   patterns: [
+    //     {
+    //       from: path.join(
+    //         webpackPaths.srcPath,
+    //         "Google/Inventory/CertAndLogs/googleCert.json"
+    //       ),
+    //       to: path.join(webpackPaths.distCLIPath, "googleCert.json"),
+    //     },
+    //   ],
+    // }),
   ],
 
   /**
