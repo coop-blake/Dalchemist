@@ -56,7 +56,7 @@
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
     "start:cli": "babel-node -x .ts -- src/CLI/main.ts",
     "build:cli": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.cli.prod.ts",
-    "package:cli": "pkg -c ./release/cli/package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
+    "package:cli": "npm run build:cli && pkg -c ./release/cli/package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
     "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
     "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
   },
