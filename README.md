@@ -1,6 +1,8 @@
 # Dalchemist
 
-For assisting POS Tasks that rely on data from domain work specific data sources. This repository provides commands for building and packaging a desktop application for distribution. There are also commands that can be run from a terminal or as automated tasks.
+For assisting POS Tasks that rely on data from domain specific data sources. Dalchemist has been engineered for workflows specific to First Alternative Coop but could be modified to fit your own needs.
+
+This repository provides commands for [building and packaging a desktop application](./Documentation/Application.md) for distribution. There are also commands that can be run from a terminal or as automated tasks using node/npm directly. Some of these commands are also available through a command line application that can be built and distributed.
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 

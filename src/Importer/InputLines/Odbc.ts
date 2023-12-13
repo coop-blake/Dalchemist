@@ -14,27 +14,25 @@ export class OdbcInput implements InputLines {
   }
 
   async getLines() {
-
     return new Promise<Array<Array<string>>>((resolve) => {
-    const returnLines = Array<Array<string>>();
-   
-    odbc.connect(`DSN=${this.dsn}`, (error, connection) => {
-      if (error) {
-        console.error(error);
-        resolve(returnLines);
-      }
+      const returnLines = Array<Array<string>>();
 
-      connection.query(this.sqlQuery, (error, result) => {
+      odbc.connect(`DSN=${this.dsn}`, (error, connection) => {
         if (error) {
           console.error(error);
           resolve(returnLines);
         }
-        const header = Object.keys(result[0] as object);
-        const data = result.map((row) => Object.values(row as Array<string>));
+
+        connection.query(this.sqlQuery, (error, result) => {
+          if (error) {
+            console.error(error);
+            resolve(returnLines);
+          }
+          const header = Object.keys(result[0] as object);
+          const data = result.map((row) => Object.values(row as Array<string>));
           resolve([header, ...data]);
+        });
       });
     });
-  
-  });
+  }
 }
-

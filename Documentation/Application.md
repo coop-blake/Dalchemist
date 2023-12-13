@@ -1,6 +1,6 @@
-# Destktop Application ![Icon](../icon/icon32.png)
+# Desktop Application ![Icon](../icon/icon32.png)
 
-Some of Dalchemist services can be consumed through a Desktop Application
+Some Dalchemist services can be consumed through a Desktop Application
 
 The repository includes scripts for building, running, and packaging a cross-platform desktop application using the [Electron framework](https://www.electronjs.org/).
 
@@ -18,10 +18,10 @@ You can start the Electron application by running `npm run start:App` from the t
 
 The building scripts are used by the packaging process but can be ran from the command line if needed
 
-- build (runs `npm run build:main` and `npm run build:renderer`)
-- build:main ( Webpack production mode main process transpiled using _./building/configs/webpack.config.main.prod.ts_ )
-- build:renderer (Webpack production mode render process transpiled using _./building/configs/webpack.config.renderer.prod.ts_ )
-- build:dlls (Webpack development mode libraries transpiled using _./building/configs/webpack.config.renderer.dev.dll.ts_ )
+- `npm run build` (runs `npm run build:main`and`npm run build:renderer`)
+- `npm run build:main` ( Webpack production mode main process transpiled using _./building/configs/webpack.config.main.prod.ts_ )
+- `npm run  build:renderer` (Webpack production mode render process transpiled using _./building/configs/webpack.config.renderer.prod.ts_ )
+- `npm run build:dlls` (Webpack development mode libraries transpiled using _./building/configs/webpack.config.renderer.dev.dll.ts_ )
 
 ### Packaging
 
@@ -29,4 +29,4 @@ To build a packaged installer run `npm run package:App`
 
 This will run the build process then package an installable application for your platform.
 
-The result can be found in _./release/package_ 📁
+The packaged installer can be found in [_./release/package_ 📁](../release/package/)
