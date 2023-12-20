@@ -40,20 +40,20 @@
       ]
     },
     {
-      "name": "👾 start:cli promos:check",
+      "name": "👾 start:cli Promos:check",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start:cli", "promos:check"]
+      "runtimeArgs": ["run-script", "start:cli", "Promos:check"]
     },
     {
-      "name": "👾 start:cli subDepartments:check",
+      "name": "👾 start:cli SubDepartmentMargins:check",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start:cli", "subDepartments:check"]
+      "runtimeArgs": ["run-script", "start:cli", "SubDepartmentMargins:check"]
     },
     {
       "name": "👾 start:cli dumpDSNToSheet",

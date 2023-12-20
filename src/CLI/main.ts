@@ -13,7 +13,7 @@ program.description("Dalchemist command line interface").version("0.0.1");
  * Promo Commands
  */
 program
-  .command("promos:check  [googleCert]")
+  .command("Promos:check  [googleCert]")
   .description("Check promos for consistency")
   .action(async () => {
     console.log("Checking promos for consistency");
@@ -26,7 +26,7 @@ program
  * Sub Department Margins Commands
  */
 program
-  .command("subDepartments:check  [googleCert]")
+  .command("SubDepartmentMargins:check  [googleCert]")
   .description("Check Sub Departments for consistency")
   .action(async () => {
     console.log("Checking Sub Department Margins for consistency");

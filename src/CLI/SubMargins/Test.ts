@@ -2,19 +2,19 @@ import { Inventory } from "../../Google/Inventory/Inventory";
 
 import { SubDepartmentMargins } from "../../Google/Inventory/SubDepartmentMargins";
 
-import SubMarginsImporter from "../../TextImporters/SubMargins";
+//import SubMarginsImporter from "../../TextImporters/SubMargins";
 
 import { google } from "googleapis";
 
 const inventoryImporter = Inventory.getInstance();
 
-const subMarginsImporter = new SubMarginsImporter();
+//const subMarginsImporter = new SubMarginsImporter();
 
 const subMargins = SubDepartmentMargins.getInstance();
 
 export async function getItemsWithInconsitantSubMargins() {
   await Inventory.state.onLoaded();
-  await subMarginsImporter.start();
+  // await subMarginsImporter.start();
 
   const InventoryItemsToReport = [...inventoryImporter.entries.values()]
     .filter(function (InventoryEntry) {
@@ -74,15 +74,13 @@ export async function testSubMargins() {
   //const authClient = await auth.getClient();
 
   const sheets = google.sheets({ version: "v4", auth: auth });
-  const spreadsheetId = "1HdBg3Ht1ALFTBkCXK1YA1cx0vZ9hPx8Ji9m0qy3YMnA"; //acitive id
-
-  //          const spreadsheetId = "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk";
+  const spreadsheetId = "1ZzDUI3DS5dFlAQnjD3EUYOcZuU29HnsFXiOPw0MHkXE"; //acitive id
 
   console.log("Clearing Inventory Google Sheet");
 
   await sheets.spreadsheets.values.clear({
     spreadsheetId, // spreadsheet id
-    range: "SubMarginsReport!A:G", //range of cells to read from.
+    range: "'Sub Department Margin Inconsistencies'!A:G", //range of cells to read from.
   });
 
   console.log("Uploading Inventory Google Sheet");
@@ -91,7 +89,7 @@ export async function testSubMargins() {
   // @ts-ignore
   await sheets.spreadsheets.values.update({
     spreadsheetId, //spreadsheet id
-    range: "SubMarginsReport!A2:G", //sheet name and range of cells
+    range: "'Sub Department Margin Inconsistencies'!A:G", //sheet name and range of cells
     valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
     resource: {
       values: values,
