@@ -148,8 +148,8 @@ Dalchemist Version ${packageInfo.version}
 
         if (
           expectedMargin &&
-          expectedMargin.substring(0, 30).valueOf() ===
-            currentMargin.substring(0, 30).valueOf()
+          parseInt(expectedMargin.substring(0, 30).valueOf()) ===
+            parseInt(currentMargin.substring(0, 30).valueOf())
         ) {
           return false;
         } else {

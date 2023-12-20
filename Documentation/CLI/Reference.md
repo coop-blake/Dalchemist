@@ -2,9 +2,15 @@
 
 The following commands should be the first argument sent to the command line executable.
 
+# Check Sub Margins Consitency
+
+`SubDepartmentMargins:check`
+
+Check the Sub Deparment Margins for consistency. This command needs a Google service certificate
+
 # Check Promo Pricing Consitency
 
-`promos:check`
+`Promos:check`
 
 Check the promos for pricing consistency. This command needs a Google service certificate
 

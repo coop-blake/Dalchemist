@@ -3,7 +3,7 @@ export enum InventoryStatus {
   NoCertificate = "No Certificate",
   Starting = "Starting",
   Running = "Running",
-  Error = "Error!"
+  Error = "Error!",
 }
 
 export type InventoryEntry = {
@@ -43,7 +43,7 @@ export const AltIDEntryFromValueArray = function (
   const entry: AltIDEntry = {
     ScanCode: valueArray[0].trim(),
     Quanity: valueArray[1].trim(),
-    ParentScanCode: valueArray[2].trim()
+    ParentScanCode: valueArray[2].trim(),
   };
   return entry;
 };
@@ -67,7 +67,25 @@ export const PromoEntryFromValueArray = function (
     Discount: valueArray[2].trim(),
     Worksheet: valueArray[3].trim(),
     Start: valueArray[4].trim(),
-    End: valueArray[5].trim()
+    End: valueArray[5].trim(),
+  };
+  return entry;
+};
+
+export type SubDepartmentMarginEntry = {
+  SubDepartment: string;
+  Margin: string;
+};
+
+export const SubDepartmentMarginEntryFromValueArray = function (
+  valueArray: Array<string>
+): SubDepartmentMarginEntry {
+  if (valueArray.length !== 6) {
+    valueArray = fillArrayWithEmptyStrings(2, valueArray);
+  }
+  const entry: SubDepartmentMarginEntry = {
+    SubDepartment: valueArray[0].trim(),
+    Margin: valueArray[1].trim(),
   };
   return entry;
 };

@@ -48,6 +48,14 @@
       "runtimeArgs": ["run-script", "start:cli", "promos:check"]
     },
     {
+      "name": "👾 start:cli subDepartments:check",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli", "subDepartments:check"]
+    },
+    {
       "name": "👾 start:cli dumpDSNToSheet",
       "type": "node",
       "request": "launch",

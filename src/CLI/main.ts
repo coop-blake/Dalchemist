@@ -1,6 +1,8 @@
 import { program } from "commander";
 import { testGoogle } from "./Google/Test";
 import { testPromos } from "./Promos/Test";
+import { testSubMargins } from "./SubMargins/Test";
+
 import { dumpToSheet } from "./Update/Update";
 
 import { info, warn, error, good } from "./chalkStyles";
@@ -11,12 +13,25 @@ program.description("Dalchemist command line interface").version("0.0.1");
  * Promo Commands
  */
 program
-  .command("promos:check")
+  .command("promos:check  [googleCert]")
   .description("Check promos for consistency")
   .action(async () => {
     console.log("Checking promos for consistency");
     await testPromos();
     console.log("Promo Check Complete");
+    process.exit(0);
+  });
+
+/**
+ * Sub Department Margins Commands
+ */
+program
+  .command("subDepartments:check  [googleCert]")
+  .description("Check Sub Departments for consistency")
+  .action(async () => {
+    console.log("Checking Sub Department Margins for consistency");
+    await testSubMargins();
+    console.log("Sub Department Margin Check Complete");
     process.exit(0);
   });
 
