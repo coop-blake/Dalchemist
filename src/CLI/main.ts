@@ -70,7 +70,9 @@ program
     console.log(info("SQL File: ", sqlFile));
     console.log(info("Sheet ID: ", sheetID));
     console.log(info("Sheet Range: ", sheetRange));
-    console.log(info("Google Cert: ", googleCert ? googleCert : "undefined"));
+    console.log(
+      info("Google Cert: ", googleCert ? googleCert : "googleCert.json")
+    );
 
     if (
       !dsn ||
