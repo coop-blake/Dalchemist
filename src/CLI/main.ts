@@ -1,10 +1,12 @@
 import { program } from "commander";
-import { testGoogle } from "./Google/Test";
-import { testPromos } from "./Promos/Test";
-import { testSubMargins } from "./SubMargins/Test";
-
+//import { testGoogle } from "./Google/Test";
+//import { testPromos } from "./Promos/Test";
+//import { testSubMargins } from "./SubMargins/Test";
+import * as path from "path";
 import { dumpToSheet } from "./Update/Update";
 
+//require(path.join("./node_modules/odbc/lib/bindings/napi-v6/odbc.node"));
+console.log("DUmping TO Sheet");
 import { info, warn, error, good } from "./chalkStyles";
 
 program.description("Dalchemist command line interface").version("0.0.1");
@@ -12,50 +14,50 @@ program.description("Dalchemist command line interface").version("0.0.1");
 /**
  * Promo Commands
  */
-program
-  .command("Promos:check  [googleCert]")
-  .description("Check promos for consistency")
-  .action(async () => {
-    console.log("Checking promos for consistency");
-    await testPromos();
-    console.log("Promo Check Complete");
-    process.exit(0);
-  });
+// program
+//   .command("Promos:check  [googleCert]")
+//   .description("Check promos for consistency")
+//   .action(async () => {
+//     console.log("Checking promos for consistency");
+//     await testPromos();
+//     console.log("Promo Check Complete");
+//     process.exit(0);
+//   });
 
 /**
  * Sub Department Margins Commands
  */
-program
-  .command("SubDepartmentMargins:check  [googleCert]")
-  .description("Check Sub Departments for consistency")
-  .action(async () => {
-    console.log("Checking Sub Department Margins for consistency");
-    await testSubMargins();
-    console.log("Sub Department Margin Check Complete");
-    process.exit(0);
-  });
+// program
+//   .command("SubDepartmentMargins:check  [googleCert]")
+//   .description("Check Sub Departments for consistency")
+//   .action(async () => {
+//     console.log("Checking Sub Department Margins for consistency");
+//     await testSubMargins();
+//     console.log("Sub Department Margin Check Complete");
+//     process.exit(0);
+//   });
 
 /**
  * Google Commands
  */
-program
-  .command("google:test <sheetID>")
-  .description("Test the Google API on a sheetID")
-  .action(async (sheetID) => {
-    console.log(sheetID);
+// program
+//   .command("google:test <sheetID>")
+//   .description("Test the Google API on a sheetID")
+//   .action(async (sheetID) => {
+//     console.log(sheetID);
 
-    if (!sheetID || sheetID === undefined) {
-      console.error("Error: Sheet ID is required.");
-      process.exit(1);
-    } else {
-      console.log(`Testing Google API with Sheet ID: ${sheetID}`);
-      try {
-        await testGoogle(sheetID);
-      } catch (e) {
-        console.log("Error: ");
-      }
-    }
-  });
+//     if (!sheetID || sheetID === undefined) {
+//       console.error("Error: Sheet ID is required.");
+//       process.exit(1);
+//     } else {
+//       console.log(`Testing Google API with Sheet ID: ${sheetID}`);
+//       try {
+//         await testGoogle(sheetID);
+//       } catch (e) {
+//         console.log("Error: ");
+//       }
+//     }
+//   });
 
 /**
  * Update Command

@@ -9,9 +9,9 @@
     "odbc": "^2.4.8"
   },
   "pkg": {
-    "scripts": "./dist/**/*.js",
-    "assets": [
-      "./dist/googleCert.json"
+    "scripts": [
+      "./dist/**/*.js",
+      "./node_modules/*.js"
     ]
   }
 }

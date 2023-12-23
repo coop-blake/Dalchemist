@@ -2,7 +2,7 @@
   "name": "dalchemist",
   "version": "0.0.2",
   "description": "",
-  "bin": "./release/cli/main.js",
+  "bin": "./release/cli/dist/main.js",
   "scripts": {
     "start:App": "ts-node ./building/scripts/check-port-in-use.ts && npm run start:App:renderer",
     "start:App:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
@@ -56,7 +56,8 @@
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
     "start:cli": "babel-node -x .ts -- src/CLI/main.ts",
     "build:cli": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.cli.prod.ts",
-    "package:cli": "npm run build:cli && pkg -c ./release/cli/package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
+    "package:cliold": "npm run build:cli && pkg -c ./release/cli/package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
+    "package:cli": "npm run build:cli && pkg -c ./package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
     "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
     "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
   },
@@ -245,9 +246,15 @@
     ]
   },
   "pkg": {
-    "scripts": "./release/cli/**/*.js",
+    "scripts": [
+      "./release/cli/**/*.js",
+      "./node_modules/odbc/lib/odbc.js"
+    ],
     "assets": [
-      "./release/cli/*.json"
+      "./release/cli/*.json",
+      "./release/cli/**/*",
+      "/node_modules/odbc",
+      "/lib/bindings/napi-v6/odbc.node"
     ]
   }
 }
