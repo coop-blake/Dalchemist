@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import odbc from "odbc";
 
+import { take } from "rxjs";
+
 import { info, warn, error, good } from "../chalkStyles";
 
 export async function dumpToSheet(
@@ -66,42 +68,44 @@ async function uploadArrayToSheet(
       resolve(false);
     }, 10000);
 
-    Google.getLoaded().subscribe(async (loaded: string[]) => {
-      clearTimeout(timeoutId);
+    Google.getLoaded()
+      .pipe(take(1))
+      .subscribe(async (loaded: string[]) => {
+        clearTimeout(timeoutId);
 
-      googleCert = googleCert === "" ? loaded[0] : googleCert;
-      const googleInstance = Google.getInstanceFor(googleCert);
+        googleCert = googleCert === "" ? loaded[0] : googleCert;
+        const googleInstance = Google.getInstanceFor(googleCert);
 
-      // test googleInstance for sheets and drive
-      if (googleInstance.getSheets() && googleInstance.getDrive()) {
-        console.log("Uploading to Sheet ID: ", sheetID);
-        console.log("At Range: ", sheetRange);
+        // test googleInstance for sheets and drive
+        if (googleInstance.getSheets() && googleInstance.getDrive()) {
+          console.log("Uploading to Sheet ID: ", sheetID);
+          console.log("At Range: ", sheetRange);
 
-        const sheets = googleInstance.getSheets();
+          const sheets = googleInstance.getSheets();
 
-        try {
-          await sheets.spreadsheets.values.clear({
-            spreadsheetId: sheetID, // spreadsheet id
-            range: sheetRange, //range of cells to read from.
-          });
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          await sheets.spreadsheets.values.update({
-            spreadsheetId: sheetID, //spreadsheet id
-            range: sheetRange, //sheet name and range of cells
-            valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
-            resource: {
-              values: data,
-            },
-          });
-          console.log(`Uploaded: ${data.length} Rows`);
+          try {
+            await sheets.spreadsheets.values.clear({
+              spreadsheetId: sheetID, // spreadsheet id
+              range: sheetRange, //range of cells to read from.
+            });
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            await sheets.spreadsheets.values.update({
+              spreadsheetId: sheetID, //spreadsheet id
+              range: sheetRange, //sheet name and range of cells
+              valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
+              resource: {
+                values: data,
+              },
+            });
+            console.log(`Uploaded: ${data.length} Rows`);
 
-          resolve(true);
-        } catch (e) {
-          console.log(`Error ${e}`);
-          resolve(false);
+            resolve(true);
+          } catch (e) {
+            console.log(`Error ${e}`);
+            resolve(false);
+          }
         }
-      }
-    });
+      });
   });
 }
