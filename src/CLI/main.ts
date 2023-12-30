@@ -14,15 +14,15 @@ program.description("Dalchemist command line interface").version("0.0.1");
 /**
  * Promo Commands
  */
-// program
-//   .command("Promos:check  [googleCert]")
-//   .description("Check promos for consistency")
-//   .action(async () => {
-//     console.log("Checking promos for consistency");
-//     await testPromos();
-//     console.log("Promo Check Complete");
-//     process.exit(0);
-//   });
+program
+  .command("Promos:check  [googleCert]")
+  .description("Check promos for consistency")
+  .action(async () => {
+    console.log("Checking promos for consistency");
+    await testPromos();
+    console.log("Promo Check Complete");
+    process.exit(0);
+  });
 
 /**
  * Sub Department Margins Commands
