@@ -47,8 +47,8 @@ export async function dumpToSheet(
           sheetID,
           sheetRange,
           googleCert
-        ).then(() => {
-          resolve(true);
+        ).then((result) => {
+          resolve(result);
         });
       });
     });
