@@ -2,11 +2,9 @@ import { program } from "commander";
 //import { testGoogle } from "./Google/Test";
 //import { testPromos } from "./Promos/Test";
 //import { testSubMargins } from "./SubMargins/Test";
-import * as path from "path";
+//import * as path from "path";
 import { dumpToSheet } from "./Update/Update";
 
-//require(path.join("./node_modules/odbc/lib/bindings/napi-v6/odbc.node"));
-console.log("DUmping TO Sheet");
 import { info, warn, error, good } from "./chalkStyles";
 
 program.description("Dalchemist command line interface").version("0.0.1");
@@ -14,15 +12,15 @@ program.description("Dalchemist command line interface").version("0.0.1");
 /**
  * Promo Commands
  */
-program
-  .command("Promos:check  [googleCert]")
-  .description("Check promos for consistency")
-  .action(async () => {
-    console.log("Checking promos for consistency");
-    await testPromos();
-    console.log("Promo Check Complete");
-    process.exit(0);
-  });
+// program
+//   .command("Promos:check  [googleCert]")
+//   .description("Check promos for consistency")
+//   .action(async () => {
+//     console.log("Checking promos for consistency");
+//     await testPromos();
+//     console.log("Promo Check Complete");
+//     process.exit(0);
+//   });
 
 /**
  * Sub Department Margins Commands
@@ -87,7 +85,7 @@ program
       sheetRange === undefined
     ) {
       console.error(
-        "Error: Missing arguments, expeting: dumpToSheet <DSN> <sqlFile> <sheetID> <sheetRange>."
+        "Error: Missing arguments, expecting: dumpToSheet <DSN> <sqlFile> <sheetID> <sheetRange> [googleCert]."
       );
       process.exit(1);
     } else {
@@ -99,7 +97,7 @@ program
           sheetRange,
           googleCert
         );
-        if (success) {
+        if (success === true) {
           console.log(good("Successesful Dump"));
           process.exit(0);
         } else {
