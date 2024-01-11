@@ -43,17 +43,17 @@ export class Google {
     this.auth = new google.auth.GoogleAuth({
       keyFilename: keyFilePath,
       // Scopes can be specified either as an array or as a single, space-delimited string.
-      scopes: ["https://www.googleapis.com/auth/drive"],
+      scopes: ["https://www.googleapis.com/auth/drive"]
     });
 
     this.sheets = google.sheets({
       version: "v4",
-      auth: this.auth,
+      auth: this.auth
     });
 
     this.drive = google.drive({
       version: "v3",
-      auth: this.auth,
+      auth: this.auth
     });
   }
 
@@ -72,26 +72,11 @@ export class Google {
   }
   static async loadServiceCert() {
     if (fs.existsSync(includedCertDevPath)) {
-      console.log("We have a Dev included cert!");
+      //console.log("We have a Dev included cert!");
       Google.getInstanceFor(includedCertDevPath);
     } else if (fs.existsSync(includedCertProdPath)) {
-      console.log("We have a Production included cert!");
+      //console.log("We have a Production included cert!");
       Google.getInstanceFor(includedCertProdPath);
-    } else {
-      console.log("We DONT have a Dev included cert!", includedCertDevPath);
-
-      console.log(
-        "We Dont have a Production included cert!",
-        includedCertProdPath
-      );
-
-      //   const certPathToUse = (await Settings.loadJsonLocation()) as string;
-
-      //   if (certPathToUse && fs.existsSync(certPathToUse)) {
-      //     Google.getInstanceFor(certPathToUse);
-      //   } else {
-      //     throw Error("Cert Path in Settings Invalid");
-      //   }
     }
   }
 
