@@ -41,7 +41,7 @@ export async function dumpToSheet(
         const header = Object.keys(result[0] as object);
         const data = result.map((row) => Object.values(row as Array<string>));
         console.log(info(`Received ${data.length} rows of data:`));
-        console.log(header);
+        console.log(info(`${header.join("|")}`));
         uploadArrayToSheet(
           [header, ...data],
           sheetID,
@@ -86,7 +86,7 @@ async function uploadArrayToSheet(
           try {
             await sheets.spreadsheets.values.clear({
               spreadsheetId: sheetID, // spreadsheet id
-              range: sheetRange, //range of cells to read from.
+              range: sheetRange //range of cells to read from.
             });
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -95,8 +95,8 @@ async function uploadArrayToSheet(
               range: sheetRange, //sheet name and range of cells
               valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
               resource: {
-                values: data,
-              },
+                values: data
+              }
             });
             console.log(`Uploaded: ${data.length} Rows`);
 

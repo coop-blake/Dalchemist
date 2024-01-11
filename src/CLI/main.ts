@@ -64,7 +64,6 @@ program
   .command("dumpDSNToSheet <DSN> <sqlFile> <sheetID> <sheetRange> [googleCert]")
   .description("Query a DSN and dump the result to a sheet")
   .action(async (dsn, sqlFile, sheetID, sheetRange, googleCert) => {
-    console.log(sheetID);
     console.log(info("Dumping DSN Query to Sheet"));
     console.log(info("DSN: ", dsn));
     console.log(info("SQL File: ", sqlFile));
