@@ -7,7 +7,10 @@ import { dumpToSheet } from "./Update/Update";
 
 import { info, warn, error, good } from "./chalkStyles";
 
-program.description("Dalchemist command line interface").version("0.0.1");
+program
+  .description("Dalchemist command line interface")
+  .version("0.0.1")
+  .usage("<command> [options]");
 
 /**
  * Promo Commands
