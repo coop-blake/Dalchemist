@@ -25,7 +25,7 @@ export async function dumpToSheet(
 
     console.log(info("Read SQL, Connecting To Data Source"));
     //Connect to Data Sourse
-    odbc.connect(`DSN=${dsn}`, (error, connection) => {
+    odbc.connect(`DSN=${dsn};CHARSET=UTF-8`, (error, connection) => {
       if (error) {
         console.error(error);
         resolve(false);
