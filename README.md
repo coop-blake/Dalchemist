@@ -56,7 +56,7 @@ Dalchemist uses the [Electron framework](https://www.electronjs.org/), which pac
 
 A google API service certificate will need to be provided in order to load the data needed by the interface.
 
-The desktop app can be transpiled and ran in development mode using the following command.
+The desktop app can be transpiled and ran in debug/development mode using the following command.
 
 `npm run start:App`
 
