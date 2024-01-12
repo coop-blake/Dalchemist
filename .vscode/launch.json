@@ -5,9 +5,10 @@
   "version": "0.2.0",
   "compounds": [
     {
-        "name": "🪛 Start Electron and Attach to Chrome",
-        "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
-    }],
+      "name": "🪛 Start Electron and Attach to Chrome",
+      "configurations": ["✅ start:App", "🪛 Attach to Chrome"]
+    }
+  ],
   "configurations": [
     {
       "name": "✅ start:App",
@@ -18,13 +19,66 @@
       "runtimeArgs": ["run-script", "start:App"]
     },
     {
+      "name": "👾 start:cli",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli"]
+    },
+    {
+      "name": "👾 start:cli google:test",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "start:cli",
+        "google:test",
+        "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk"
+      ]
+    },
+    {
+      "name": "👾 start:cli Promos:check",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli", "Promos:check"]
+    },
+    {
+      "name": "👾 start:cli SubDepartmentMargins:check",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:cli", "SubDepartmentMargins:check"]
+    },
+    {
+      "name": "👾 start:cli dumpDSNToSheet",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "start:cli",
+        "dumpDSNToSheet",
+        "Prototype",
+        "./src/CLI/inventory.sql",
+        "1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk",
+        "Inventory!A:S"
+      ]
+    },
+    {
       "name": "🪛 Attach to Chrome",
       "port": 9222,
       "request": "attach",
       "type": "chrome",
       "webRoot": "${workspaceFolder}",
       "timeout": 10000
-     },
+    },
     {
       "name": "🤖Test-Importer-Sheet",
       "type": "node",
@@ -254,5 +308,4 @@
       "runtimeArgs": ["run-script", "googleUpdate-subDepartmentsReport"]
     }
   ]
-
 }

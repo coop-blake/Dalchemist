@@ -4,9 +4,12 @@ export class Promos {
 
   private promosByScanCode = new Map<string, Array<PromoEntry>>();
 
+  private promos: Array<PromoEntry> = [];
+
   private worksheets: Array<string> = [];
   private constructor() {}
   public loadPromosFrom(promos: Array<PromoEntry>) {
+    this.promos = promos;
     promos.forEach((promo) => {
       this.setPromoForItem(promo);
       if (!this.worksheets.includes(promo.Worksheet)) {
@@ -21,6 +24,10 @@ export class Promos {
 
   get promosByScancode(): Map<string, Array<PromoEntry>> {
     return this.promosByScanCode;
+  }
+
+  getPromosArray() {
+    return this.promos;
   }
 
   getPromosForItemBy(ScanCode: string) {

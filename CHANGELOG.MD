@@ -1,5 +1,9 @@
 # Dalchemist Change Log
 
+## Version 0.0.3
+
+- Pkg added for cli building
+
 ## Version 0.0.2a
 
 - Inventory window bug fixed (Window remained blank if opened after core sets)

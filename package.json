@@ -1,7 +1,8 @@
 {
   "name": "dalchemist",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
+  "bin": "./release/cli/dist/main.js",
   "scripts": {
     "start:App": "ts-node ./building/scripts/check-port-in-use.ts && npm run start:App:renderer",
     "start:App:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./building/configs/webpack.config.renderer.dev.ts",
@@ -53,6 +54,10 @@
     "googleUpdate-subDepartmentsReport": "npx babel-node -x .ts -- src/Google/update-subDepartmentsReport.ts",
     "googleCheck-addDrop": "babel-node -x .ts src/Google/Tests/addDrop.ts",
     "googleCheck-Inventory": "babel-node -x .ts src/Google/Tests/inventory.ts",
+    "start:cli": "babel-node -x .ts -- src/CLI/main.ts",
+    "build:cli": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./building/configs/webpack.config.cli.prod.ts",
+    "package:cliold": "npm run build:cli && pkg -c ./release/cli/package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
+    "package:cli": "npm run build:cli && pkg -c ./package.json  -o release/package/cli/dalchemist ./release/cli/dist/main.js",
     "googleCheck": "babel-node -x .ts src/Google/Tests/google.ts",
     "odbcCheck": "babel-node -x .ts  src/Google/Inventory/odbc.ts"
   },
@@ -76,6 +81,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@reduxjs/toolkit": "^1.9.5",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
+    "@types/chalk": "^2.2.0",
     "@types/detect-port": "^1.3.3",
     "@types/express": "^4.17.17",
     "@types/react": "^18.2.22",
@@ -88,6 +94,7 @@
     "bootstrap": "^5.3.2",
     "chalk": "^4.1.2",
     "clean-webpack-plugin": "^4.0.0",
+    "commander": "^11.1.0",
     "concurrently": "^8.2.1",
     "copy-webpack-plugin": "^11.0.0",
     "copyfiles": "^2.4.1",
@@ -142,7 +149,8 @@
     "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
-    "webpack-merge": "^5.9.0"
+    "webpack-merge": "^5.9.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
@@ -151,6 +159,7 @@
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
     "electron-store": "^8.1.0",
+    "pkg": "^5.8.1",
     "rxjs": "^7.8.1",
     "styled-components": "^6.0.8",
     "url-loader": "^4.1.1"
@@ -234,6 +243,18 @@
         "from": "./src/Google/Inventory/CertAndLogs/googleCert.json",
         "to": "./CertAndLogs/googleCert.json"
       }
+    ]
+  },
+  "pkg": {
+    "scripts": [
+      "./release/cli/**/*.js",
+      "./node_modules/odbc/lib/odbc.js"
+    ],
+    "assets": [
+      "./release/cli/*.json",
+      "./release/cli/**/*",
+      "/node_modules/odbc",
+      "/lib/bindings/napi-v6/odbc.node"
     ]
   }
 }

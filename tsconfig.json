@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2021",
+    "target": "ESNext",
     "module": "CommonJS",
     "lib": ["dom", "es2021"],
     "jsx": "react-jsx",
@@ -13,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "build/dll",
+    "outDir": "build/dll"
   },
   "exclude": ["test", "release/build", "release/app/dist", "build/dll"],
   "include": [

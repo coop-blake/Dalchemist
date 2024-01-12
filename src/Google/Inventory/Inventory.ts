@@ -11,8 +11,12 @@ import {
   AltIDEntryFromValueArray,
   PromoEntry,
   PromoEntryFromValueArray,
+  SubDepartmentMarginEntry,
+  SubDepartmentMarginEntryFromValueArray,
 } from "./shared";
 import { Promos } from "./Promos";
+
+import { SubDepartmentMargins } from "./SubDepartmentMargins";
 import AltIDs from "./AltIDs";
 import { Google } from "../google";
 
@@ -25,6 +29,7 @@ export class Inventory {
   private inventoryItemsArray: InventoryEntry[] = [];
   private altIDsItemsArray: AltIDEntry[] = [];
   private promoItemsArray: PromoEntry[] = [];
+  private subDepartmentMarginsArray: SubDepartmentMarginEntry[] = [];
 
   static state: InventoryState;
 
@@ -38,10 +43,9 @@ export class Inventory {
     Inventory.state = new InventoryState();
     Inventory.state.setStatus(InventoryStatus.Starting);
 
-    console.log("Strarting!");
     this.loadedSubscription = Google.getLoaded().subscribe(
       (loaded: string[]) => {
-        console.log("Inventory Got Loaded cert!", loaded);
+        //     console.log("Inventory Got Loaded cert!", loaded);
 
         if (this.googleInstance === null && loaded.length > 0) {
           this.googleInstance = Google.getInstanceFor(loaded[0]);
@@ -91,6 +95,22 @@ export class Inventory {
 
         const promos = Promos.getInstance();
         promos.loadPromosFrom(this.promoItemsArray);
+
+        const subDepartmentMarginsResponse =
+          await sheets.spreadsheets.values.get({
+            spreadsheetId: this.spreadsheetId,
+            range: `SubDepartmentMargins!A2:B9000`, // Adjust range as needed
+          });
+
+        this.subDepartmentMarginsArray =
+          subDepartmentMarginsResponse.data.values?.map((newItemData) =>
+            SubDepartmentMarginEntryFromValueArray(newItemData)
+          ) as [SubDepartmentMarginEntry];
+
+        const subDepartmentMargins = SubDepartmentMargins.getInstance();
+        subDepartmentMargins.loadSubDepartmentMarginsFrom(
+          this.subDepartmentMarginsArray
+        );
 
         Inventory.state.setLastRefreshCompleted(Date.now());
 
