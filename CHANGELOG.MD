@@ -1,6 +1,6 @@
 # Dalchemist Change Log
 
-## Current work
+## Version 0.0.3
 
 - Pkg added for cli building
 
