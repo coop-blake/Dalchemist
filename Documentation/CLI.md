@@ -21,6 +21,7 @@ The building scripts are used by the packaging process to transpile the Typescri
 
 To package the Javascript into a CLI executable use `npm run package:cli`
 
-The packaged installer can be found in [_./release/package_ 📁](../release/package/)
+The packaged installer can be found in [_/release/package/cli_ 📁](../release/package/cli/)
 
 ### Utilizing
+You can run from the [_/release/package/cli_ 📁](../release/package/cli/) or copy the dalchemist.exe to another directory. For a list of commands see the [CLI Reference](./CLI/Reference.md)
