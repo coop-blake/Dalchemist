@@ -1,3 +1,26 @@
 .tabulator-frozen {
   color: rgb(44, 13, 128);
 }
+
+.toolbar-button {
+  height: 14px;
+  line-height: 14px;
+  display: inline-block;
+  background: rgb(116, 102, 116);
+  cursor: pointer;
+  border: solid rgb(95, 61, 96) 2px;
+  padding: 2px;
+  margin-left: 3px;
+  border-radius: 3px;
+}
+
+.toolbar-button:hover {
+  background: white;
+}
+
+.toolbar {
+  display: block;
+  height: 22px;
+  text-align: left;
+  cursor: default;
+}

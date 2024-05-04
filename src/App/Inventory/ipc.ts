@@ -1,6 +1,6 @@
 import { Inventory as GoogleInventory } from "../../Google/Inventory/Inventory";
 import { Inventory } from "./Inventory";
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent, clipboard } from "electron";
 
 export const sendStateChangesToWindow = async () => {
   GoogleInventory.getInstance();
@@ -32,11 +32,18 @@ export const sendInventoryData = async () => {
   }
 };
 
+export const writeToClipboard = async (data: string) => {
+  clipboard.writeText(data);
+};
+
 export const handleWindowMessage = async (
   _event: IpcMainInvokeEvent,
-  mainWindowMessage: string
+  mainWindowMessage: string,
+  options?: { text: string }
 ) => {
   if (mainWindowMessage === "loaded") {
     sendInventoryData();
+  } else if (mainWindowMessage === "writeToClipboard" && options) {
+    writeToClipboard(options.text);
   }
 };

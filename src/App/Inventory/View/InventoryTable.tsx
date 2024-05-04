@@ -31,11 +31,77 @@ export default function InventoryTable() {
     ""
   ) : (
     <>
+      <div className={`toolbar`}>
+        <div className={`toolbar-button`} onClick={copyUPCList}>
+          📋List
+        </div>
+        <div className={`toolbar-button`} onClick={copyUPCColumn}>
+          📋Column
+        </div>
+        <div className={`toolbar-button`} onClick={copyGrid}>
+          📋Grid
+        </div>
+      </div>
       <div
         id="inventoryTable"
         style={{ height: "100vh", padding: 0, margin: 0 }}
       />
     </>
+  );
+}
+
+function copyUPCList() {
+  const data = inventoryTable?.getData("active");
+  let output = "";
+  data?.forEach((row) => {
+    output += row["ScanCode"] + ",";
+  });
+  output = output.slice(0, -1);
+  writeToClipboard(output);
+}
+
+function copyUPCColumn() {
+  const data = inventoryTable?.getData("active");
+  let output = "";
+  data?.forEach((row) => {
+    output += row["ScanCode"] + "\n";
+  });
+  output = output.slice(0, -1);
+  writeToClipboard(output);
+}
+
+function copyGrid() {
+  const data = inventoryTable?.getData("active");
+  let output = "";
+  if (data) {
+    console.log(data);
+    Object.keys(data[0])
+      .slice(0, -1)
+      .forEach((col) => {
+        output += col + "\t";
+      });
+    output = output.slice(0, -1);
+    output += "\n";
+    data?.forEach((row) => {
+      let rowString = "";
+      Object.values(row)
+        .slice(0, -1)
+        .forEach((field) => {
+          rowString += field + "\t";
+        });
+      rowString = rowString.slice(0, -1);
+      output += rowString + "\n";
+    });
+    output = output.slice(0, -1);
+    writeToClipboard(output);
+  }
+}
+
+function writeToClipboard(data: string) {
+  window.inventory.ipcRenderer.sendMessage(
+    "inventoryWindowMessage",
+    "writeToClipboard",
+    { text: data }
   );
 }
 
@@ -120,7 +186,7 @@ function inventoryDataUpdated(data: InventoryEntry[] = []) {
         ],
       });
     } else {
-      console.log("check", [...data]);
+      //  console.log("check", [...data]);
 
       inventoryTable.setData([...data]);
     }
