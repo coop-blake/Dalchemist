@@ -31,6 +31,11 @@ export default function InventoryTable() {
     ""
   ) : (
     <>
+      <div
+        id="inventoryTable"
+        style={{ height: "100vh", padding: 0, margin: 0 }}
+      />
+
       <div className={`toolbar`}>
         <div className={`toolbar-button`} onClick={copyUPCList}>
           📋List
@@ -42,10 +47,6 @@ export default function InventoryTable() {
           📋Grid
         </div>
       </div>
-      <div
-        id="inventoryTable"
-        style={{ height: "100vh", padding: 0, margin: 0 }}
-      />
     </>
   );
 }
