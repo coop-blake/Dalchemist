@@ -17,7 +17,14 @@ declare global {
 
 const inventoryHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, message: Message) {
+    sendMessage(
+      channel: Channels,
+      message: Message,
+      options?: { text: string }
+    ) {
+      if (options) {
+        ipcRenderer.send(channel, message, options);
+      }
       ipcRenderer.send(channel, message);
     },
 
