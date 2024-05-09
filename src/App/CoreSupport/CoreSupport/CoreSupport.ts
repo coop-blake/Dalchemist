@@ -12,6 +12,7 @@ import { CoreSupportPriceListEntry } from "./shared";
 import Settings from "../../Settings";
 import { CoreSupportState } from "./State";
 import { CoreSupportPriceList } from "./CoreSupportPriceList";
+import { CoreSetsAndBasicsPriceList } from "./CoreSetsAndBasicsPriceList";
 
 export class CoreSupport {
   // notOurWarehouse = new Array<CoreSupportPriceListEntry>();
@@ -22,6 +23,7 @@ export class CoreSupport {
   private state = new CoreSupportState();
 
   private CoreSupportPriceList = new CoreSupportPriceList();
+  private CoreSetsAndBasicsPriceList = new CoreSetsAndBasicsPriceList();
   //private filePath = "";
   getState(): CoreSupportState {
     return this.state;
@@ -72,6 +74,9 @@ export class CoreSupport {
     const notOurItems = Array<CoreSupportPriceListEntry>();
     try {
       const entries = await this.CoreSupportPriceList.getEntriesFor(
+        Settings.getCoreSetsExcelFilePath()
+      );
+      const moreEntries = await this.CoreSetsAndBasicsPriceList.getEntriesFor(
         Settings.getCoreSetsExcelFilePath()
       );
       entries.forEach((entry: CoreSupportPriceListEntry) => {

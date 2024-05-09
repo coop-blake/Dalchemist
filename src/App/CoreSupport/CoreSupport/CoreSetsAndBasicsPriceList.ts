@@ -12,7 +12,9 @@ export class CoreSetsAndBasicsPriceList {
   private lastLoadedFileStat: Stats | undefined = undefined;
   private lastExtraction: CoreSetsAndBasicsPriceListEntry[] = [];
 
-  public async read(filePath: string): Promise<CoreSetsAndBasicsPriceListEntry[]> {
+  public async read(
+    filePath: string
+  ): Promise<CoreSetsAndBasicsPriceListEntry[]> {
     const coreSupportInput = new XlsxInput(filePath);
     const importer = new Importer(
       coreSupportPriceListLineReader,
@@ -75,8 +77,26 @@ const entryFromValueArray = function (
       Program: valueArray[0],
       CostVariation: valueArray[1],
       StockingRequired: valueArray[2],
-      Start: valueArray[3],
-      End: valueArray[4],
+      Start: valueArray[3]
+        ? convertExcelDate(parseFloat(valueArray[3])).toLocaleDateString(
+            "en-us",
+            {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+            }
+          )
+        : "",
+      End: valueArray[4]
+        ? convertExcelDate(parseFloat(valueArray[4])).toLocaleDateString(
+            "en-us",
+            {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+            }
+          )
+        : "",
       Distributor: valueArray[5],
       DistributorProductID: valueArray[6],
       UPCA: valueArray[7],
@@ -87,20 +107,19 @@ const entryFromValueArray = function (
       Count: valueArray[12],
       Size: valueArray[13],
       UOM: valueArray[14],
-      OI: valueArray[],
-      MCB: valueArray[],
-      UnitRebate: valueArray[],
-      CaseCost: valueArray[],
-      UnitCost: valueArray[],
-      PriceCeiling: valueArray[],
-      Margin: valueArray[],
-      LineNotes: valueArray[],
-      Changes: valueArray[],
-      Department: valueArray[],
-      Subdepartment: valueArray[],
-      Category: valueArray[],
-      Subcategory: valueArray[],
-    
+      OI: valueArray[15],
+      MCB: valueArray[16],
+      UnitRebate: valueArray[17],
+      CaseCost: valueArray[18],
+      UnitCost: valueArray[19],
+      PriceCeiling: valueArray[20],
+      Margin: valueArray[21],
+      LineNotes: valueArray[22],
+      Changes: valueArray[23],
+      Department: valueArray[24],
+      Subdepartment: valueArray[25],
+      Category: valueArray[26],
+      Subcategory: valueArray[27],
 
       id: valueArray[8] + valueArray[5] + valueArray[6],
     };
@@ -108,7 +127,7 @@ const entryFromValueArray = function (
     if (
       entry.Brand === "Brand" &&
       entry.Description === "Description" &&
-      entry.EDLPPrice === "EDLP Price"
+      entry.Count === "Count"
     ) {
       return null;
     }
