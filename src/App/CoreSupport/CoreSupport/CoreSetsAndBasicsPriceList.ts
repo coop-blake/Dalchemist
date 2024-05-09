@@ -58,12 +58,21 @@ const coreSupportPriceListLineReader = new CoreSetsAndBasicsPriceListLineReader(
   CoreSetsAndBasicsPriceListAssimilator
 );
 
-function convertExcelDate(excelDateNumber: number) {
-  const baseDate = new Date(Date.UTC(1899, 11, 30)); // Excel's base date
+// function convertExcelDate(excelDateNumber: number) {
+//   const baseDate = new Date(Date.UTC(1899, 11, 30)); // Excel's base date
 
+//   // Calculate the milliseconds for the given Excel date number
+//   const dateMilliseconds =
+//     baseDate.getTime() + (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
+
+//   // Create a new Date object for the calculated date
+//   return new Date(dateMilliseconds);
+// }
+function convertExcelDate(excelDateNumber: number) {
+ 
   // Calculate the milliseconds for the given Excel date number
   const dateMilliseconds =
-    baseDate.getTime() + (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
+    (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
 
   // Create a new Date object for the calculated date
   return new Date(dateMilliseconds);

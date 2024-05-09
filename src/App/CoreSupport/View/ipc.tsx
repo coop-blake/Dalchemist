@@ -11,14 +11,14 @@ import {
 } from "./CoreSetSlice";
 import {
   CoreSetsStatus,
-  CoreSupportPriceListEntry,
+  CoreSetsAndBasicsPriceListEntry,
   CoreSupportReportEntry,
 } from "../../CoreSupport/shared";
 
 export function listenToIPCAndSetState() {
   window.coreSets.ipcRenderer.on(
     "CoreSetAllEntriesUpdated",
-    (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
+    (coreSetItemsArray: Array<CoreSetsAndBasicsPriceListEntry>) => {
       console.log("CoreSetAllEntriesUpdated", event, coreSetItemsArray);
       if (typeof coreSetItemsArray !== "undefined") {
         console.log(coreSetItemsArray);
@@ -29,7 +29,7 @@ export function listenToIPCAndSetState() {
 
   window.coreSets.ipcRenderer.on(
     "CoreSetSelectedDistributorsEntriesUpdated",
-    (coreSetItemsArray: Array<CoreSupportPriceListEntry>) => {
+    (coreSetItemsArray: Array<CoreSetsAndBasicsPriceListEntry>) => {
       console.log(
         "CoreSetSelectedDistributorsEntriesUpdated",
         event,

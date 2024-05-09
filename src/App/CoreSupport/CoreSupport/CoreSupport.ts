@@ -8,17 +8,13 @@
  */
 
 //toDO this file needs to be converted to use Importer after updating importer XLSX inputlines
-import { CoreSetsAndBasicsPriceListEntry } from "./shared";
+import { CoreSetsAndBasicsPriceListEntry } from "../shared";
 import Settings from "../../Settings";
 import { CoreSupportState } from "./State";
 //import { CoreSupportPriceList } from "./CoreSupportPriceList";
 import { CoreSetsAndBasicsPriceList } from "./CoreSetsAndBasicsPriceList";
 
 export class CoreSupport {
-  // notOurWarehouse = new Array<CoreSupportPriceListEntry>();
-
-  // ourCoreItems = new Map<string, CoreSupportPriceListEntry>();
-  // private entries = new Array<CoreSupportPriceListEntry>();
 
   private state = new CoreSupportState();
 

@@ -47,20 +47,21 @@ export default function CoreSetReportTable() {
             movableColumns: true, //allow column order to be changed
             columns: [
               // { title: "Date", field: "Date"},
+              { title: "Program", field: "Program", frozen: true },
               { title: "UPC", field: "UPC", frozen: true },
               { title: "Brand", field: "Brand", frozen: true },
               { title: "Description", field: "Description", frozen: true },
-              { title: "Subdepart", field: "Subdepart" },
-              { title: "CurrentBasePrice", field: "CurrentBasePrice" },
+              { title: "Sub Department", field: "Subdepart" },
+              { title: "Base Price", field: "BasePrice" },
               {
-                title: "LowestPrice",
+                title: "Lowest Price",
                 field: "LowestPrice",
               },
               {
-                title: "CoreSetRetail",
-                field: "CoreSetRetail",
+                title: "Price Ceiling",
+                field: "PriceCeiling",
               },
-              { title: "DesiredRetail", field: "DesiredRetail" },
+              { title: "Desired Retail", field: "DesiredRetail" },
               { title: "NCGNotes", field: "NCGNotes" },
               { title: "Notes", field: "Notes" },
               { title: "Dept", field: "Dept" },
