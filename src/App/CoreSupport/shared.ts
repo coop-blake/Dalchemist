@@ -41,7 +41,6 @@ export type CoreSetsAndBasicsPriceListEntry = {
   id: string;
 };
 
-
 export type CoreSupportPriceListEntry = {
   CoreSetsRound: string;
   BuyInStart: string;

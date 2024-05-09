@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
-import { CoreSupportPriceListEntry } from "./shared";
+import { CoreSetsAndBasicsPriceListEntry } from "./shared";
 
 export class CoreSupportState {
   private lastRefreshedSubject = new BehaviorSubject<number>(0);
@@ -75,21 +75,21 @@ export class CoreSupportState {
    * Our Items ##########################################################
    */
   private selectedDistributorsEntriesSubject = new BehaviorSubject<
-    Array<CoreSupportPriceListEntry>
+    Array<CoreSetsAndBasicsPriceListEntry>
   >([]);
 
   public get selectedDistributorsEntries$(): Observable<
-    Array<CoreSupportPriceListEntry>
+    Array<CoreSetsAndBasicsPriceListEntry>
   > {
     return this.selectedDistributorsEntriesSubject.asObservable();
   }
 
-  public get selectedDistributorsEntries(): Array<CoreSupportPriceListEntry> {
+  public get selectedDistributorsEntries(): Array<CoreSetsAndBasicsPriceListEntry> {
     return this.selectedDistributorsEntriesSubject.getValue();
   }
 
   public setSelectedDistributorEntries(
-    selectedDistributorsEntries: Array<CoreSupportPriceListEntry>
+    selectedDistributorsEntries: Array<CoreSetsAndBasicsPriceListEntry>
   ) {
     this.selectedDistributorsEntriesSubject.next(selectedDistributorsEntries);
   }
@@ -98,18 +98,18 @@ export class CoreSupportState {
    * All Entries ##########################################################
    */
   private allEntriesSubject = new BehaviorSubject<
-    Array<CoreSupportPriceListEntry>
+    Array<CoreSetsAndBasicsPriceListEntry>
   >([]);
 
-  public get allEntries$(): Observable<Array<CoreSupportPriceListEntry>> {
+  public get allEntries$(): Observable<Array<CoreSetsAndBasicsPriceListEntry>> {
     return this.allEntriesSubject.asObservable();
   }
 
-  public get allEntries(): Array<CoreSupportPriceListEntry> {
+  public get allEntries(): Array<CoreSetsAndBasicsPriceListEntry> {
     return this.allEntriesSubject.getValue();
   }
 
-  public setAllEntries(allEntries: Array<CoreSupportPriceListEntry>) {
+  public setAllEntries(allEntries: Array<CoreSetsAndBasicsPriceListEntry>) {
     this.allEntriesSubject.next(allEntries);
   }
 }

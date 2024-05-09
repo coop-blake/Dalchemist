@@ -8,10 +8,10 @@
  */
 
 //toDO this file needs to be converted to use Importer after updating importer XLSX inputlines
-import { CoreSupportPriceListEntry } from "./shared";
+import { CoreSetsAndBasicsPriceListEntry } from "./shared";
 import Settings from "../../Settings";
 import { CoreSupportState } from "./State";
-import { CoreSupportPriceList } from "./CoreSupportPriceList";
+//import { CoreSupportPriceList } from "./CoreSupportPriceList";
 import { CoreSetsAndBasicsPriceList } from "./CoreSetsAndBasicsPriceList";
 
 export class CoreSupport {
@@ -22,7 +22,7 @@ export class CoreSupport {
 
   private state = new CoreSupportState();
 
-  private CoreSupportPriceList = new CoreSupportPriceList();
+  //private CoreSupportPriceList = new CoreSupportPriceList();
   private CoreSetsAndBasicsPriceList = new CoreSetsAndBasicsPriceList();
   //private filePath = "";
   getState(): CoreSupportState {
@@ -70,16 +70,16 @@ export class CoreSupport {
   async start() {
     const distributors: Set<string> = new Set<string>();
     const selectedDistributors = Settings.getCoreSetDistributors();
-    const ourDistributorsEntries = Array<CoreSupportPriceListEntry>();
-    const notOurItems = Array<CoreSupportPriceListEntry>();
+    const ourDistributorsEntries = Array<CoreSetsAndBasicsPriceListEntry>();
+    const notOurItems = Array<CoreSetsAndBasicsPriceListEntry>();
     try {
-      const entries = await this.CoreSupportPriceList.getEntriesFor(
+      // const entries = await this.CoreSupportPriceList.getEntriesFor(
+      //   Settings.getCoreSetsExcelFilePath()
+      // );
+      const entries = await this.CoreSetsAndBasicsPriceList.getEntriesFor(
         Settings.getCoreSetsExcelFilePath()
       );
-      const moreEntries = await this.CoreSetsAndBasicsPriceList.getEntriesFor(
-        Settings.getCoreSetsExcelFilePath()
-      );
-      entries.forEach((entry: CoreSupportPriceListEntry) => {
+      entries.forEach((entry: CoreSetsAndBasicsPriceListEntry) => {
         if (selectedDistributors.includes(entry.Distributor)) {
           ourDistributorsEntries.push(entry);
         } else {
@@ -103,7 +103,7 @@ export class CoreSupport {
   }
 
   //Supplier Matches to filter out our items
-  entryIsOurDistributor = (entry: CoreSupportPriceListEntry) => {
+  entryIsOurDistributor = (entry: CoreSetsAndBasicsPriceListEntry) => {
     const ourDistributors = Array.from(this.state.selectedDistributors);
     if (ourDistributors.includes(entry.Distributor)) {
       return true;
