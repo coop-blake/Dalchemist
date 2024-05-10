@@ -69,10 +69,8 @@ const coreSupportPriceListLineReader = new CoreSetsAndBasicsPriceListLineReader(
 //   return new Date(dateMilliseconds);
 // }
 function convertExcelDate(excelDateNumber: number) {
- 
   // Calculate the milliseconds for the given Excel date number
-  const dateMilliseconds =
-    (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
+  const dateMilliseconds = (excelDateNumber - 1) * 24 * 60 * 60 * 1000;
 
   // Create a new Date object for the calculated date
   return new Date(dateMilliseconds);
@@ -106,29 +104,29 @@ const entryFromValueArray = function (
             }
           )
         : "",
-      Distributor: valueArray[5],
-      DistributorProductID: valueArray[6],
-      UPCA: valueArray[7],
-      CatapultUPC: valueArray[8],
-      SMSUPC: valueArray[9],
-      Brand: valueArray[10],
-      Description: valueArray[11],
-      Count: valueArray[12],
-      Size: valueArray[13],
-      UOM: valueArray[14],
-      OI: valueArray[15],
-      MCB: valueArray[16],
-      UnitRebate: valueArray[17],
-      CaseCost: valueArray[18],
-      UnitCost: valueArray[19],
-      PriceCeiling: valueArray[20],
-      Margin: valueArray[21],
-      LineNotes: valueArray[22],
-      Changes: valueArray[23],
-      Department: valueArray[24],
-      Subdepartment: valueArray[25],
-      Category: valueArray[26],
-      Subcategory: valueArray[27],
+      Distributor: String(valueArray[5]),
+      DistributorProductID: String(valueArray[6]),
+      UPCA: String(valueArray[7]),
+      CatapultUPC: String(valueArray[8]),
+      SMSUPC: String(valueArray[9]),
+      Brand: String(valueArray[10]),
+      Description: String(valueArray[11]),
+      Count: String(valueArray[12]),
+      Size: String(valueArray[13]),
+      UOM: String(valueArray[14]),
+      OI: String(valueArray[15]),
+      MCB: String(valueArray[16]),
+      UnitRebate: String(valueArray[17]),
+      CaseCost: String(valueArray[18]),
+      UnitCost: String(valueArray[19]),
+      PriceCeiling: String(valueArray[20]),
+      Margin: String(valueArray[21]),
+      LineNotes: String(valueArray[22] ?? ""),
+      Changes: String(valueArray[23] ?? ""),
+      Department: String(valueArray[24]),
+      Subdepartment: String(valueArray[25]),
+      Category: String(valueArray[26]),
+      Subcategory: String(valueArray[27]),
 
       id: valueArray[8] + valueArray[5] + valueArray[6],
     };

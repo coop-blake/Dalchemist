@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { dialog } from "electron";
-import { CoreSetsAndBasicsPriceListEntry, CoreSupportReportEntry } from "./shared";
+import {
+  CoreSetsAndBasicsPriceListEntry,
+  CoreSupportReportEntry,
+} from "./shared";
 import { CoreSets } from "./CoreSets";
 import { Promos } from "../../Google/Inventory/Promos";
 import { Inventory } from "../../Google/Inventory/Inventory";
@@ -34,50 +37,80 @@ export const processReportEntries = async function () {
   await Inventory.state.onLoaded();
   const selectedDistributorsEntries =
     CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
-  selectedDistributorsEntries.forEach((coreSetsAndBasicsPriceListEntry: CoreSetsAndBasicsPriceListEntry) => {
-    const inventoryEntry = inventoryImporter.getEntryFromScanCode(
-      coreSetsAndBasicsPriceListEntry.CatapultUPC
-    );
+  selectedDistributorsEntries.forEach(
+    (coreSetsAndBasicsPriceListEntry: CoreSetsAndBasicsPriceListEntry) => {
+      const inventoryEntry = inventoryImporter.getEntryFromScanCode(
+        coreSetsAndBasicsPriceListEntry.CatapultUPC
+      );
 
-    if (inventoryEntry !== undefined) {
-      let lowestPricedWorksheetName = "Base Price";
-      //Create an export Array for the entry
-      let lowestPrice = parseFloat(inventoryEntry.BasePrice.replace("$", ""));
-      const priceChanges = promoEntries.get(inventoryEntry.ScanCode);
-      if (priceChanges != null) {
-        Array.from(priceChanges.values()).forEach((priceChange) => {
-          if(priceChange.Worksheet.toLowerCase().includes("basics")){
-            if (lowestPrice > parseFloat(priceChange.Price.replace("$", ""))) {
-              lowestPrice = parseFloat(priceChange.Price.replace("$", ""));
-              lowestPricedWorksheetName = priceChange.Worksheet;
+      if (inventoryEntry !== undefined) {
+        let lowestPricedWorksheetName = "Base Price";
+        //Create an export Array for the entry
+        let lowestPrice = parseFloat(inventoryEntry.BasePrice.replace("$", ""));
+        const priceChanges = promoEntries.get(inventoryEntry.ScanCode);
+        if (priceChanges != null) {
+          Array.from(priceChanges.values()).forEach((priceChange) => {
+            if (priceChange.Worksheet.toLowerCase().includes("basics")) {
+              if (
+                lowestPrice > parseFloat(priceChange.Price.replace("$", ""))
+              ) {
+                lowestPrice = parseFloat(priceChange.Price.replace("$", ""));
+                lowestPricedWorksheetName = priceChange.Worksheet;
+              }
             }
-          }
-         
-        });
-      }
+          });
+        }
 
-      const reportItem: CoreSupportReportEntry = {
-        Program: coreSetsAndBasicsPriceListEntry.Program,
-        UPC: inventoryEntry.ScanCode,
-        Brand: inventoryEntry.Brand,
-        Description: inventoryEntry.Name,
-        Subdepart: inventoryEntry.SubDepartment,
-        BasePrice: inventoryEntry.BasePrice,
-        LowestPrice: lowestPrice.toString(),
-        PriceCeiling: coreSetsAndBasicsPriceListEntry.PriceCeiling,
-        NCGNotes: coreSetsAndBasicsPriceListEntry.LineNotes,
-        DesiredRetail: "",
-        Notes: lowestPricedWorksheetName,
-        Dept: inventoryEntry.Department,
-        Difference: (
-          lowestPrice - parseFloat(coreSetsAndBasicsPriceListEntry.PriceCeiling)
-        ).toFixed(2),
-      };
-      returnEntries.push(reportItem);
+        const reportItem: CoreSupportReportEntry = {
+          Program: coreSetsAndBasicsPriceListEntry.Program,
+          CostVariation: coreSetsAndBasicsPriceListEntry.CostVariation,
+          StockingRequired: coreSetsAndBasicsPriceListEntry.StockingRequired,
+          Start: coreSetsAndBasicsPriceListEntry.Start,
+          End: coreSetsAndBasicsPriceListEntry.End,
+          Distributor: coreSetsAndBasicsPriceListEntry.Distributor,
+          UPC: inventoryEntry.ScanCode,
+          Brand: inventoryEntry.Brand,
+          Description: inventoryEntry.Name,
+          Subdepart: inventoryEntry.SubDepartment,
+          BasePrice: inventoryEntry.BasePrice,
+          LowestPrice: lowestPrice.toString(),
+          PriceCeiling: coreSetsAndBasicsPriceListEntry.PriceCeiling,
+          NCGNotes: combineNotes(coreSetsAndBasicsPriceListEntry),
+
+          DesiredRetail: "",
+          Notes: lowestPricedWorksheetName,
+          Dept: inventoryEntry.Department,
+          Difference: (
+            lowestPrice -
+            parseFloat(coreSetsAndBasicsPriceListEntry.PriceCeiling)
+          ).toFixed(2),
+        };
+        returnEntries.push(reportItem);
+      }
     }
-  });
+  );
 
   CoreSets.state.setReportEntries(returnEntries);
+};
+
+const combineNotes = function (
+  coreSetsAndBasicsPriceListEntry: CoreSetsAndBasicsPriceListEntry
+) {
+  if (
+    coreSetsAndBasicsPriceListEntry.LineNotes !== "" &&
+    coreSetsAndBasicsPriceListEntry.Changes !== ""
+  ) {
+    return (
+      coreSetsAndBasicsPriceListEntry.LineNotes +
+      " : " +
+      coreSetsAndBasicsPriceListEntry.Changes
+    );
+  } else {
+    return (
+      coreSetsAndBasicsPriceListEntry.LineNotes +
+      coreSetsAndBasicsPriceListEntry.Changes
+    );
+  }
 };
 
 export const reportEntriesAsTSVString = function () {
@@ -85,6 +118,11 @@ export const reportEntriesAsTSVString = function () {
 
   const exportArrayHeader = [
     "Program",
+    "CostVariation",
+    "StockingRequired",
+    "Start",
+    "End",
+    "Distributor",
     "UPC",
     "Brand",
     "Description",
@@ -104,6 +142,11 @@ export const reportEntriesAsTSVString = function () {
   reportEntries.forEach((entry) => {
     const exportArray = [
       entry.Program,
+      entry.CostVariation,
+      entry.StockingRequired,
+      entry.Start,
+      entry.End,
+      entry.Distributor,
       entry.UPC,
       entry.Brand,
       entry.Description,
@@ -129,6 +172,11 @@ export const reportEntriesAsXLSX = function () {
 
   const exportArrayHeader = [
     "Program",
+    "CostVariation",
+    "StockingRequired",
+    "Start",
+    "End",
+    "Distributor",
     "UPC",
     "Brand",
     "Description",
@@ -146,6 +194,11 @@ export const reportEntriesAsXLSX = function () {
   const data = [exportArrayHeader];
 
   let ProgramWidth = 10;
+  let CostVariationWidth = 10;
+  let StockingRequiredWidth = 10;
+  let StartWidth = 10;
+  let EndWidth = 10;
+  let DistributorWidth = 10;
   let UPCWidth = 3;
   let BrandWidth = 5;
   let DescriptionWidth = 14;
@@ -172,6 +225,11 @@ export const reportEntriesAsXLSX = function () {
   items.forEach((entry) => {
     const exportArray = [
       entry.Program,
+      entry.CostVariation,
+      entry.StockingRequired,
+      entry.Start,
+      entry.End,
+      entry.Distributor,
       entry.UPC,
       entry.Brand,
       entry.Description,
@@ -187,6 +245,17 @@ export const reportEntriesAsXLSX = function () {
     ];
 
     ProgramWidth = Math.max(ProgramWidth, entry.UPC?.length);
+    CostVariationWidth = Math.max(
+      CostVariationWidth,
+      entry.CostVariation?.length
+    );
+    StockingRequiredWidth = Math.max(
+      StockingRequiredWidth,
+      entry.StockingRequired?.length
+    );
+    StartWidth = Math.max(StartWidth, entry.Start?.length);
+    EndWidth = Math.max(EndWidth, entry.End?.length);
+    DistributorWidth = Math.max(DistributorWidth, entry.Distributor?.length);
     UPCWidth = Math.max(UPCWidth, entry.UPC?.length);
     BrandWidth = Math.max(BrandWidth, entry.Brand?.length);
     DescriptionWidth = Math.max(DescriptionWidth, entry.Description?.length);
@@ -217,6 +286,11 @@ export const reportEntriesAsXLSX = function () {
 
   const reportSheetColWidths = [
     { wch: ProgramWidth },
+    { wch: CostVariationWidth },
+    { wch: StockingRequiredWidth },
+    { wch: StartWidth },
+    { wch: EndWidth },
+    { wch: DistributorWidth },
     { wch: UPCWidth },
     { wch: BrandWidth },
     { wch: DescriptionWidth },
@@ -280,7 +354,6 @@ export const reportEntriesAsXLSX = function () {
 };
 
 const getDistributorItemsNotInInventory = function () {
-  
   let ProgramWidth = 10;
   let CostVariationWidth = 10;
   let StockingRequiredWidth = 10;
@@ -310,7 +383,6 @@ const getDistributorItemsNotInInventory = function () {
   let CategoryWidth = 10;
   let SubcategoryWidth = 10;
 
-
   const selectedDistributorsEntries =
     CoreSets.CoreSupportPriceListState.selectedDistributorsEntries;
   const reportEntries = CoreSets.state.reportEntries;
@@ -327,64 +399,78 @@ const getDistributorItemsNotInInventory = function () {
     return UPCMap.get(item.FormattedUPC) === undefined;
   });
 
-  const exportArrayHeader = 
-[
-  "Program",
-  "CostVariation",
-  "StockingRequired",
-  "Start",
-  "End",
-  "Distributor",
-  "DistributorProductID",
-  "UPCA",
-  "CatapultUPC",
-  "SMSUPC",
-  "Brand",
-  "Description",
-  "Count",
-  "Size",
-  "UOM",
-  "OI",
-  "MCB",
-  "UnitRebate",
-  "CaseCost",
-  "UnitCost",
-  "PriceCeiling",
-  "Margin",
-  "LineNotes",
-  "Changes",
-  "Department",
-  "Subdepartment",
-  "Category",
-  "Subcategory",
-];
+  const exportArrayHeader = [
+    "Program",
+    "CostVariation",
+    "StockingRequired",
+    "Start",
+    "End",
+    "Distributor",
+    "DistributorProductID",
+    "UPCA",
+    "CatapultUPC",
+    "SMSUPC",
+    "Brand",
+    "Description",
+    "Count",
+    "Size",
+    "UOM",
+    "OI",
+    "MCB",
+    "UnitRebate",
+    "CaseCost",
+    "UnitCost",
+    "PriceCeiling",
+    "Margin",
+    "LineNotes",
+    "Changes",
+    "Department",
+    "Subdepartment",
+    "Category",
+    "Subcategory",
+  ];
 
   const data = [exportArrayHeader];
 
   itemsNotInInventory.forEach((entry: CoreSetsAndBasicsPriceListEntry) => {
-    ProgramWidth = Math.max(
-      ProgramWidth,
-      entry.Program?.length ?? 0
+    ProgramWidth = Math.max(ProgramWidth, entry.Program?.length ?? 0);
+    CostVariationWidth = Math.max(
+      CostVariationWidth,
+      entry.CostVariation?.length ?? 0
     );
-    CostVariationWidth = Math.max(CostVariationWidth, entry.CostVariation?.length ?? 0);
-    StockingRequiredWidth = Math.max(StockingRequiredWidth, entry.StockingRequired?.length ?? 0);
+    StockingRequiredWidth = Math.max(
+      StockingRequiredWidth,
+      entry.StockingRequired?.length ?? 0
+    );
     StartWidth = Math.max(StartWidth, entry.Start?.length ?? 0);
-    EndWidth = Math.max(EndWidth, entry.End?.length ?? 0)
-    CatapultUPCWidth = Math.max(CatapultUPCWidth, entry.CatapultUPC?.length ?? 0)
-    SMSUPCWidth = Math.max(SMSUPCWidth, entry.SMSUPC?.length ?? 0)
-    CountWidth = Math.max(CountWidth, entry.Count?.length ?? 0)
-    SizeWidth = Math.max(SizeWidth, entry.Size?.length ?? 0)
-    UOMWidth = Math.max(UOMWidth, entry.UOM?.length ?? 0)
-    OIWidth = Math.max(OIWidth, entry.OI?.length ?? 0)
-    MCBWidth = Math.max(MCBWidth, entry.MCB?.length ?? 0)
-    UnitRebateWidth = Math.max(UnitRebateWidth, entry.UnitRebate?.length ?? 0)
-    CaseCostWidth = Math.max(CaseCostWidth, entry.CaseCost?.length ?? 0)
-    UnitCostWidth = Math.max(UnitCostWidth, entry.UnitCost?.length ?? 0)
-    PriceCeilingWidth = Math.max(PriceCeilingWidth, entry.PriceCeiling?.length ?? 0)
-    DepartmentWidth = Math.max(DepartmentWidth, entry.Department?.length ?? 0)
-    SubdepartmentWidth = Math.max(SubdepartmentWidth, entry.Subdepartment?.length ?? 0)
-    SubcategoryWidth = Math.max(SubcategoryWidth, entry.Subcategory?.length ?? 0)
-    
+    EndWidth = Math.max(EndWidth, entry.End?.length ?? 0);
+    CatapultUPCWidth = Math.max(
+      CatapultUPCWidth,
+      entry.CatapultUPC?.length ?? 0
+    );
+    SMSUPCWidth = Math.max(SMSUPCWidth, entry.SMSUPC?.length ?? 0);
+    CountWidth = Math.max(CountWidth, entry.Count?.length ?? 0);
+    SizeWidth = Math.max(SizeWidth, entry.Size?.length ?? 0);
+    UOMWidth = Math.max(UOMWidth, entry.UOM?.length ?? 0);
+    OIWidth = Math.max(OIWidth, entry.OI?.length ?? 0);
+    MCBWidth = Math.max(MCBWidth, entry.MCB?.length ?? 0);
+    UnitRebateWidth = Math.max(UnitRebateWidth, entry.UnitRebate?.length ?? 0);
+    CaseCostWidth = Math.max(CaseCostWidth, entry.CaseCost?.length ?? 0);
+    UnitCostWidth = Math.max(UnitCostWidth, entry.UnitCost?.length ?? 0);
+    PriceCeilingWidth = Math.max(
+      PriceCeilingWidth,
+      entry.PriceCeiling?.length ?? 0
+    );
+    DepartmentWidth = Math.max(DepartmentWidth, entry.Department?.length ?? 0);
+    SubdepartmentWidth = Math.max(
+      SubdepartmentWidth,
+      entry.Subdepartment?.length ?? 0
+    );
+    SubcategoryWidth = Math.max(
+      SubcategoryWidth,
+      entry.Subcategory?.length ?? 0
+    );
+
     CategoryWidth = Math.max(CategoryWidth, entry.Category?.length ?? 0);
     DistributorWidth = Math.max(
       DistributorWidth,
@@ -395,77 +481,76 @@ const getDistributorItemsNotInInventory = function () {
       entry.DistributorProductID?.length ?? 0
     );
     UPCAWidth = Math.max(UPCAWidth, entry.UPCA?.length ?? 0);
-  
+
     BrandWidth = Math.max(BrandWidth, entry.Brand?.length ?? 0);
     DescriptionWidth = Math.max(
       DescriptionWidth,
       entry.Description?.length ?? 0
     );
-   
+
     MarginWidth = Math.max(MarginWidth, entry.Margin?.length ?? 0);
     LineNotesWidth = Math.max(LineNotesWidth, entry.LineNotes?.length ?? 0);
     ChangesWidth = Math.max(ChangesWidth, entry.Changes?.length ?? 0);
-data.push([
-    `${entry.Program ?? ""}`,
-    `${entry.CostVariation ?? ""}`,
-    `${entry.StockingRequired ?? ""}`,
-    `${entry.Start ?? ""}`,
-    `${entry.End ?? ""}`,
-    `${entry.Distributor ?? ""}`,
-    `${entry.DistributorProductID ?? ""}`,
-    `${entry.UPCA ?? ""}`,
-    `${entry.CatapultUPC ?? ""}`,
-    `${entry.SMSUPC ?? ""}`,
-    `${entry.Brand ?? ""}`,
-    `${entry.Description ?? ""}`,
-    `${entry.Count ?? ""}`,
-    `${entry.Size ?? ""}`,
-    `${entry.UOM ?? ""}`,
-    `${entry.OI ?? ""}`,
-    `${entry.MCB ?? ""}`,
-    `${entry.UnitRebate ?? ""}`,
-    `${entry.CaseCost ?? ""}`,
-    `${entry.UnitCost ?? ""}`,
-    `${entry.PriceCeiling ?? ""}`,
-    `${entry.Margin ?? ""}`,
-    `${entry.LineNotes ?? ""}`,
-    `${entry.Changes ?? ""}`,
-    `${entry.Department ?? ""}`,
-    `${entry.Subdepartment ?? ""}`,
-    `${entry.Category ?? ""}`,
-    `${entry.Subcategory ?? ""}`,
-])
-
+    data.push([
+      `${entry.Program ?? ""}`,
+      `${entry.CostVariation ?? ""}`,
+      `${entry.StockingRequired ?? ""}`,
+      `${entry.Start ?? ""}`,
+      `${entry.End ?? ""}`,
+      `${entry.Distributor ?? ""}`,
+      `${entry.DistributorProductID ?? ""}`,
+      `${entry.UPCA ?? ""}`,
+      `${entry.CatapultUPC ?? ""}`,
+      `${entry.SMSUPC ?? ""}`,
+      `${entry.Brand ?? ""}`,
+      `${entry.Description ?? ""}`,
+      `${entry.Count ?? ""}`,
+      `${entry.Size ?? ""}`,
+      `${entry.UOM ?? ""}`,
+      `${entry.OI ?? ""}`,
+      `${entry.MCB ?? ""}`,
+      `${entry.UnitRebate ?? ""}`,
+      `${entry.CaseCost ?? ""}`,
+      `${entry.UnitCost ?? ""}`,
+      `${entry.PriceCeiling ?? ""}`,
+      `${entry.Margin ?? ""}`,
+      `${entry.LineNotes ?? ""}`,
+      `${entry.Changes ?? ""}`,
+      `${entry.Department ?? ""}`,
+      `${entry.Subdepartment ?? ""}`,
+      `${entry.Category ?? ""}`,
+      `${entry.Subcategory ?? ""}`,
+    ]);
   });
   const colWidths = [
-  { wch: ProgramWidth },
-  { wch: CostVariationWidth },
-  { wch: StockingRequiredWidth },
-  { wch: StartWidth },
-  { wch: EndWidth },
-  { wch: DistributorWidth },
-  { wch: DistributorProductIDWidth },
-  { wch: UPCAWidth },
-  { wch: CatapultUPCWidth },
-  { wch: SMSUPCWidth },
-  { wch: BrandWidth },
-  { wch: DescriptionWidth },
-  { wch: CountWidth },
-  { wch: SizeWidth },
-  { wch: UOMWidth },
-  { wch: OIWidth },
-  { wch: MCBWidth },
-  { wch: UnitRebateWidth },
-  { wch: CaseCostWidth },
-  { wch: UnitCostWidth },
-  { wch: PriceCeilingWidth },
-  { wch: MarginWidth },
-  { wch: LineNotesWidth },
-  { wch: ChangesWidth },
-  { wch: DepartmentWidth },
-  { wch: SubdepartmentWidth },
-  { wch: CategoryWidth },
-  { wch: SubcategoryWidth },
+    { wch: ProgramWidth },
+    { wch: CostVariationWidth },
+    { wch: StockingRequiredWidth },
+    { wch: StartWidth },
+    { wch: EndWidth },
+    { wch: DistributorWidth },
+    { wch: DistributorProductIDWidth },
+    { wch: UPCAWidth },
+    { wch: CatapultUPCWidth },
+    { wch: SMSUPCWidth },
+    { wch: BrandWidth },
+    { wch: DescriptionWidth },
+    { wch: CountWidth },
+    { wch: SizeWidth },
+    { wch: UOMWidth },
+    { wch: OIWidth },
+    { wch: MCBWidth },
+    { wch: UnitRebateWidth },
+    { wch: CaseCostWidth },
+    { wch: UnitCostWidth },
+    { wch: PriceCeilingWidth },
+    { wch: MarginWidth },
+    { wch: LineNotesWidth },
+    { wch: ChangesWidth },
+    { wch: DepartmentWidth },
+    { wch: SubdepartmentWidth },
+    { wch: CategoryWidth },
+    { wch: SubcategoryWidth },
   ];
 
   return { data: data, colWidths: colWidths };

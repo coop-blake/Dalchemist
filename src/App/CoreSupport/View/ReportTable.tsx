@@ -48,6 +48,15 @@ export default function CoreSetReportTable() {
             columns: [
               // { title: "Date", field: "Date"},
               { title: "Program", field: "Program", frozen: true },
+              { title: "CostVariation", field: "CostVariation", frozen: true },
+              {
+                title: "StockingRequired",
+                field: "StockingRequired",
+                frozen: true,
+              },
+              { title: "Start", field: "Start", frozen: true },
+              { title: "End", field: "End", frozen: true },
+              { title: "Distributor", field: "Distributor", frozen: true },
               { title: "UPC", field: "UPC", frozen: true },
               { title: "Brand", field: "Brand", frozen: true },
               { title: "Description", field: "Description", frozen: true },

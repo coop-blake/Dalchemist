@@ -41,9 +41,15 @@ export type CoreSetsAndBasicsPriceListEntry = {
   id: string;
 };
 
-
 export type CoreSupportReportEntry = {
   Program: string;
+
+  CostVariation: string;
+  StockingRequired: string;
+  Start: string;
+  End: string;
+  Distributor: string;
+
   UPC: string;
   Brand: string;
   Description: string;
