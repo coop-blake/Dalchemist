@@ -2,7 +2,12 @@
 
 For assisting POS Tasks that rely on data from domain specific data sources. Dalchemist has been engineered for workflows specific to First Alternative Coop but could be modified to fit your own needs.
 
-This repository provides commands for [building and packaging a desktop application](./Documentation/Application.md) for distribution. There are also commands that can be run from a terminal or as automated tasks using node/npm directly. Some of these commands are also available through a [command line application that can be built and distributed](./Documentation/CLI.md).
+This repository provides commands for [building and packaging a desktop application](./Documentation/Application.md) for distribution. 
+
+This app that is built will be tied specifically to our Google sheets which it will be unable to access without a service certificate. You could point it at your own sheets and use your own service certificate. 
+
+Some terminal commands to help you build your own inventory sheets, that were orinally originally developed in this repository, have been refactored in Rust and can be found in [this other repository](https://github.com/coop-blake/DSN2Sheet). These are helpful in getting your data out of a DSN and into a Google Sheet.
+
 
 To run the npm commands below, you'll need [Node.js](https://nodejs.org/en/download/) installed on a host machine of your choosing.
 
@@ -24,29 +29,6 @@ Open a terminal in the 📁**Dalchemist** directory then use **Node Package Mana
 
 `npm install`
 
-## ![Icon](./Documentation/resources/terminal.svg) Terminal Interface
-
-Commands available from the terminal that can be executed without the graphical user interface.
-
-### 🗒️ Generate File Outputs
-
-Some terminal commands require configuration or data files placed in the [📁 Data](./Data) folder.
-
-#### Place your Data files
-
-Make sure you have the latest versions of your input data in the [📁 Data](./Data/Readme.md) folder
-
-- Catapult Inventory and Price Worksheets
-- Core Cost Support
-- UNFI Pricebook and Pricechange
-
-#### Generate Output
-
-To generate all output to [**📁Data**](./Data) / [**📁Outputs**](./Data/Outputs) :
-
-`npm run outputAll`
-
-For other outputs see the [Outputs Documentation](./Documentation/Outputs.md)
 
 ## ![Icon](./icon/icon32.png) Run the Desktop App
 
@@ -54,7 +36,7 @@ The Desktop App is intended to provide a packaged, end user interface that can b
 
 Dalchemist uses the [Electron framework](https://www.electronjs.org/), which packages Dalchemist as a Desktop Application on various platforms. This repository provides commands to run and package the Desktop App. Some of this configuration was borrowed from the [Electron React Boilerplate](https://electron-react-boilerplate.js.org/) . Thanks! 🙏
 
-A google API service certificate will need to be provided in order to load the data needed by the interface.
+A google API service certificate will need to be provided in order to load the data needed by the interface. This certificate should be placed in `./src/Google/Inventory/CertAndLogs/googelCert.json`
 
 The desktop app can be transpiled and ran in debug/development mode using the following command.
 
