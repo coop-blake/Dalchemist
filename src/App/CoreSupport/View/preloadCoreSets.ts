@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { CoreSupportPriceListEntry } from "../shared";
+import { CoreSetsAndBasicsPriceListEntry } from "../shared";
 
 export type Channels =
   | "coreSetsWindowMessage"
@@ -12,7 +12,7 @@ export type Channels =
   | "CoreSetUserSelectedDistributors"
   | "setCoreSetsDistributors";
 
-export type CoreSetMessage = string | string[] | CoreSupportPriceListEntry[];
+export type CoreSetMessage = string | string[] | CoreSetsAndBasicsPriceListEntry[];
 
 declare global {
   // eslint-disable-next-line no-unused-vars

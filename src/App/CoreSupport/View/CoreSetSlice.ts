@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../Main/View/store";
-import { CoreSupportPriceListEntry, CoreSupportReportEntry } from "../shared";
+import { CoreSetsAndBasicsPriceListEntry, CoreSupportReportEntry } from "../shared";
 
 // Define a type for the slice state
 interface CoreSetsState {
   status: string;
   filePath: string;
   errorMessage: string;
-  allEntries: Array<CoreSupportPriceListEntry>;
-  selectedDistributorEntries: Array<CoreSupportPriceListEntry>;
-  selectedItemsInInventoryEntries: Array<CoreSupportPriceListEntry>;
+  allEntries: Array<CoreSetsAndBasicsPriceListEntry>;
+  selectedDistributorEntries: Array<CoreSetsAndBasicsPriceListEntry>;
+  selectedItemsInInventoryEntries: Array<CoreSetsAndBasicsPriceListEntry>;
   reportEntries: Array<CoreSupportReportEntry>;
   availableDistributors: Array<string>;
   selectedDistributors: Array<string>;
@@ -44,14 +44,14 @@ export const coreSetSlice = createSlice({
     },
     setAllEntries: (
       state,
-      action: PayloadAction<Array<CoreSupportPriceListEntry>>
+      action: PayloadAction<Array<CoreSetsAndBasicsPriceListEntry>>
     ) => {
       state.allEntries = action.payload;
     },
 
     setSelectedDistributorEntries: (
       state,
-      action: PayloadAction<Array<CoreSupportPriceListEntry>>
+      action: PayloadAction<Array<CoreSetsAndBasicsPriceListEntry>>
     ) => {
       state.selectedDistributorEntries = action.payload;
     },

@@ -8,42 +8,55 @@ export enum CoreSetsStatus {
   Error = "Error!",
 }
 
-export type CoreSupportPriceListEntry = {
-  CoreSetsRound: string;
-  BuyInStart: string;
-  BuyInEnd: string;
-  Dept: string;
-  Category: string;
+export type CoreSetsAndBasicsPriceListEntry = {
+  Program: string;
+  CostVariation: string;
+  StockingRequired: string;
+  Start: string;
+  End: string;
   Distributor: string;
   DistributorProductID: string;
   UPCA: string;
-  FormattedUPC: string;
-  ReportingUPC: string;
+  CatapultUPC: string;
+  SMSUPC: string;
   Brand: string;
   Description: string;
-  UnitCount: string;
-  PackSize: string;
-  PromoOI: string;
-  PromoMCB: string;
-  RebatePerUnit: string;
-  SaleCaseCost: string;
-  SaleUnitCost: string;
-  EDLPPrice: string;
+  Count: string;
+  Size: string;
+  UOM: string;
+  OI: string;
+  MCB: string;
+  UnitRebate: string;
+  CaseCost: string;
+  UnitCost: string;
+  PriceCeiling: string;
   Margin: string;
   LineNotes: string;
   Changes: string;
+  Department: string;
+  Subdepartment: string;
+  Category: string;
+  Subcategory: string;
 
   id: string;
 };
 
 export type CoreSupportReportEntry = {
+  Program: string;
+
+  CostVariation: string;
+  StockingRequired: string;
+  Start: string;
+  End: string;
+  Distributor: string;
+
   UPC: string;
   Brand: string;
   Description: string;
   Subdepart: string;
-  CurrentBasePrice: string;
+  BasePrice: string;
   LowestPrice: string;
-  CoreSetRetail: string;
+  PriceCeiling: string;
   DesiredRetail: string;
   NCGNotes: string;
   Notes: string;
