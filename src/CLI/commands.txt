@@ -1,4 +1,0 @@
-.\dalchemist.exe  dumpDSNToSheet Prototype ./inventory.sql 1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk Inventory!A:T 
-.\dalchemist.exe  dumpDSNToSheet Prototype ./promos.sql 1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk Promos!A:T
-.\dalchemist.exe  dumpDSNToSheet Prototype ./altIDs.sql 1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk AltIds!A:T
-.\dalchemist.exe  dumpDSNToSheet Prototype ./supplierIDs.sql 1aMcYYPwlH1sllW_DxUWVS-lT0t0QWwTTO3pm7WY4UJk SupplierIDs!A:T
