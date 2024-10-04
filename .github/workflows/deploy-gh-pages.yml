@@ -29,7 +29,7 @@ jobs:
           mkdir -p public
           pandoc README.md -s --no-highlight --template building/html/index.html -o public/index.html
           sed -i 's/\.md"/\.html"/g' "public/index.html"
-          pandoc Documentation/Application.md -p -s --no-highlight --template documentation/html/index.html -o public/Documentation.html   
+          pandoc Documentation/Application.md -p -s --no-highlight --template building/html/index.html -o public/Documentation/Application.html   
           
          
       - name: Copy CSS
