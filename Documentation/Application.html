@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <h1 id="desktop-application-icon">Desktop Application <img src="../icon/icon32.png" alt="Icon" /></h1>
+        <p>Some Dalchemist services can be consumed through a Desktop Application</p>
+        <p>The repository includes scripts for building, running, and packaging a cross-platform desktop application using the <a href="https://www.electronjs.org/">Electron framework</a>.</p>
+        <h3 id="running">Running</h3>
+        <p>You can start the Electron application by running <code>npm run start:App</code> from the terminal which will:</p>
+        <ul>
+        <li><strong>Check that port 4848 is available</strong> ( <em>./building/scripts/check-port-in-use.ts</em> )</li>
+        <li><strong>Starts Render Process with Webpack</strong> (<code>npm run start:App:renderer</code>)</li>
+        <li><strong>Builds dlls</strong> ( <em>./building/configs/webpack.config.renderer.dev.ts</em> calls <code>npm run build:dlls</code> when loaded)</li>
+        <li><strong>Builds Preload Typescript files</strong> ( <em>./building/configs/webpack.config.renderer.dev.ts</em> calls <code>npm run start:App:preload</code> in <strong>setupMiddlewares()</strong> )</li>
+        <li><strong>Starts Main Process</strong> ( <em>./building/configs/webpack.config.renderer.dev.ts</em> calls <code>npm run start:App:main</code> in <strong>setupMiddlewares()</strong> )</li>
+        </ul>
+        <h3 id="building">Building</h3>
+        <p>The building scripts are used by the packaging process but can be ran from the command line if needed</p>
+        <ul>
+        <li><code>npm run build</code> (runs <code>npm run build:main</code>and<code>npm run build:renderer</code>)</li>
+        <li><code>npm run build:main</code> ( Webpack production mode main process transpiled using <em>./building/configs/webpack.config.main.prod.ts</em> )</li>
+        <li><code>npm run  build:renderer</code> (Webpack production mode render process transpiled using <em>./building/configs/webpack.config.renderer.prod.ts</em> )</li>
+        <li><code>npm run build:dlls</code> (Webpack development mode libraries transpiled using <em>./building/configs/webpack.config.renderer.dev.dll.ts</em> )</li>
+        </ul>
+        <h3 id="packaging">Packaging</h3>
+        <p>To build a packaged installer run <code>npm run package:App</code></p>
+        <p>This will run the build process then package an installable application for your platform.</p>
+        <p>The packaged installer can be found in <a href="../release/package/"><em>./release/package</em> 📁</a></p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Blake Glanville</p>
+        <p>
+            <a href="https://github.com/coop-blake/Dalchemist">
+                <img src="https://img.shields.io/github/license/coop-blake/DSN2Sheet?color=blue&label=License&style=flat-square" 
+                     alt="BSD-3-Clause License">
+            </a>
+        </p>
+    </footer>
+</body>
+</html>
